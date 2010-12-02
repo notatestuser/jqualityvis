@@ -1,31 +1,25 @@
+/*
+ * UIMain.java (JavaVis)
+ * Copyright 2010 Luke Plaster. All rights reserved.
+ */
 package org.lukep.javavis.ui;
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
 import java.awt.BorderLayout;
-
-import javax.swing.JInternalFrame;
-import javax.swing.JSplitPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JPanel;
-import javax.swing.JDesktopPane;
-import javax.swing.UIManager;
-
 import java.awt.Color;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JTree;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.DefaultMutableTreeNode;
-import java.awt.event.ActionListener;
+import java.awt.Component;
+import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class UIMain {
+import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 
-	private JFrame frmJavavis;
-	private JDesktopPane desktopPane;
+public class UIMain implements IProgramStatusReporter {
+
+	protected JFrame frmJavavis;
+	protected JTabbedPane mainTabbedPane;
+	protected JLabel mainStatusBar;
 
 	/**
 	 * Launch the application.
@@ -47,27 +41,44 @@ public class UIMain {
 
 	/**
 	 * Create the application.
+	 * @throws Exception 
 	 */
-	public UIMain() {
+	public UIMain() throws Exception {
 		initialize();
 		addChildFrame();
 	}
 
 	/**
 	 * Initialize the contents of the frame.
+	 * @throws Exception 
 	 */
-	private void initialize() {
+	private void initialize() throws Exception {
 		frmJavavis = new JFrame();
 		frmJavavis.setTitle("JavaVis Software Quality Visualiser");
-		frmJavavis.setBounds(100, 100, 800, 600);
+		frmJavavis.setBounds(100, 100, 1024, 768);
 		frmJavavis.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		frmJavavis.setVisible(true);
 		frmJavavis.getContentPane().setLayout(new BorderLayout(0, 0));
 		
-		JSplitPane splitPane = new JSplitPane();
-		frmJavavis.getContentPane().add(splitPane, BorderLayout.CENTER);
+		mainTabbedPane = new JTabbedPane();
+		frmJavavis.getContentPane().add(mainTabbedPane);
+		mainTabbedPane.setBackground(Color.LIGHT_GRAY);
+		VisualisationDesktopPane visDesktop = new VisualisationDesktopPane(this);
+		mainTabbedPane.add( visDesktop );
+		mainTabbedPane.setTitleAt(0, "Workspace 1");
+		
+		JInternalFrame layeredPane = new JInternalFrame();
+		layeredPane.setTitle("Toolbox");
+		layeredPane.setIconifiable(true);
+		layeredPane.setResizable(true);
+		layeredPane.setBounds(11, 11, 200, 300);
+		layeredPane.setVisible(true);
+		visDesktop.add(layeredPane);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		splitPane.setLeftComponent(tabbedPane);
+		tabbedPane.setBounds(0, 0, 81, 516);
+		layeredPane.getContentPane().add(tabbedPane);
 		
 		JPanel panel = new JPanel();
 		tabbedPane.addTab("Code Overview", null, panel, null);
@@ -104,12 +115,8 @@ public class UIMain {
 		JPanel panel_1 = new JPanel();
 		tabbedPane.addTab("Applied Metrics", null, panel_1, null);
 		
-		desktopPane = new JDesktopPane();
-		desktopPane.setBackground(Color.LIGHT_GRAY);
-		splitPane.setRightComponent(desktopPane);
-		
-		frmJavavis.setVisible(true);
-		splitPane.setDividerLocation(.25);
+		mainStatusBar = new JLabel("Ready");
+		frmJavavis.getContentPane().add(mainStatusBar, BorderLayout.SOUTH);
 		
 		JMenuBar menuBar = new JMenuBar();
 		frmJavavis.setJMenuBar(menuBar);
@@ -126,6 +133,20 @@ public class UIMain {
 		mnFile.add(mntmNewCanvas);
 		
 		JMenuItem mntmOpenCodeDirectory = new JMenuItem("Open code directory...");
+		mntmOpenCodeDirectory.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JFileChooser fc = new JFileChooser();
+				fc.setDialogTitle("Select a root directory containing source code");
+				fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				fc.setMultiSelectionEnabled(false);
+				int returnVal = fc.showOpenDialog(null); // TODO: modify parent
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					Component selectedWorkspace = mainTabbedPane.getSelectedComponent();
+					VisualisationDesktopPane selectedVdp = (VisualisationDesktopPane)selectedWorkspace;
+					selectedVdp.loadCodeBase(fc.getSelectedFile());
+				}
+			}
+		});
 		mnFile.add(mntmOpenCodeDirectory);
 		
 		JMenuItem mntmExit = new JMenuItem("Exit");
@@ -145,12 +166,11 @@ public class UIMain {
 	
 	private void addChildFrame()
 	{
-		JInternalFrame frame = new JInternalFrame();
-		frame.setSize(500, 500);
-		frame.setMaximizable(true);
-		frame.setResizable(true);
-		frame.setClosable(true);
-		frame.setVisible(true);
-		desktopPane.add( frame );
+	}
+
+	@Override
+	public synchronized void setProgramStatus(String status) {
+		mainStatusBar.setText(status);
+		mainStatusBar.repaint();
 	}
 }

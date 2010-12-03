@@ -68,53 +68,6 @@ public class UIMain implements IProgramStatusReporter {
 		mainTabbedPane.add( visDesktop );
 		mainTabbedPane.setTitleAt(0, "Workspace 1");
 		
-		JInternalFrame layeredPane = new JInternalFrame();
-		layeredPane.setTitle("Toolbox");
-		layeredPane.setIconifiable(true);
-		layeredPane.setResizable(true);
-		layeredPane.setBounds(11, 11, 200, 300);
-		layeredPane.setVisible(true);
-		visDesktop.add(layeredPane);
-		
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(0, 0, 81, 516);
-		layeredPane.getContentPane().add(tabbedPane);
-		
-		JPanel panel = new JPanel();
-		tabbedPane.addTab("Code Overview", null, panel, null);
-		panel.setLayout(new BorderLayout(0, 0));
-		
-		JTree tree = new JTree();
-		tree.setModel(new DefaultTreeModel(
-			new DefaultMutableTreeNode("com.test") {
-				{
-					DefaultMutableTreeNode node_1;
-					node_1 = new DefaultMutableTreeNode("abc");
-						node_1.add(new DefaultMutableTreeNode("a.java"));
-						node_1.add(new DefaultMutableTreeNode("b.java"));
-						node_1.add(new DefaultMutableTreeNode("c.java"));
-						node_1.add(new DefaultMutableTreeNode("d.java"));
-					add(node_1);
-					node_1 = new DefaultMutableTreeNode("def");
-						node_1.add(new DefaultMutableTreeNode("a.java"));
-						node_1.add(new DefaultMutableTreeNode("b.java"));
-						node_1.add(new DefaultMutableTreeNode("c.java"));
-						node_1.add(new DefaultMutableTreeNode("d.java"));
-					add(node_1);
-					node_1 = new DefaultMutableTreeNode("ghi");
-						node_1.add(new DefaultMutableTreeNode("a.java"));
-						node_1.add(new DefaultMutableTreeNode("b.java"));
-						node_1.add(new DefaultMutableTreeNode("c.java"));
-						node_1.add(new DefaultMutableTreeNode("d.java"));
-					add(node_1);
-				}
-			}
-		));
-		panel.add(tree, BorderLayout.CENTER);
-		
-		JPanel panel_1 = new JPanel();
-		tabbedPane.addTab("Applied Metrics", null, panel_1, null);
-		
 		mainStatusBar = new JLabel("Ready");
 		frmJavavis.getContentPane().add(mainStatusBar, BorderLayout.SOUTH);
 		

@@ -6,11 +6,19 @@ package org.lukep.javavis.visualisation.java;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Locale;
 
-import javax.tools.*;
+import javax.annotation.processing.AbstractProcessor;
+import javax.tools.DiagnosticCollector;
+import javax.tools.JavaCompiler;
 import javax.tools.JavaCompiler.CompilationTask;
+import javax.tools.JavaFileObject;
+import javax.tools.StandardJavaFileManager;
+import javax.tools.ToolProvider;
 
+import org.lukep.javavis.program.java.JavaCodeProcessor;
+import org.lukep.javavis.ui.IProgramSourceObserver;
 import org.lukep.javavis.util.io.FileSystemUtils;
 import org.lukep.javavis.util.io.IFileSystemScanObserver;
 import org.lukep.javavis.visualisation.ISourceLoaderThread;
@@ -21,11 +29,13 @@ public class JavaSourceLoaderThread implements ISourceLoaderThread {
 	
 	protected StandardJavaFileManager fileManager;
 	protected DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
+	protected IProgramSourceObserver observer;
 	protected File selectedDirectory;
 	protected int directoryCount;
 	
-	public JavaSourceLoaderThread(File selectedDirectory) {
+	public JavaSourceLoaderThread(File selectedDirectory, IProgramSourceObserver observer) {
 		this.selectedDirectory = selectedDirectory;
+		this.observer = observer;
 	}
 
 	@Override
@@ -57,10 +67,15 @@ public class JavaSourceLoaderThread implements ISourceLoaderThread {
 		notifyStatusChange("Compiling " + inputFiles.size() + " source files in " + directoryCount + " directories...");
 		CompilationTask compilationTask = compiler.getTask(null, fileManager, diagnostics, 
 															null, null, compilationUnits);
+		LinkedList<AbstractProcessor> processors = new LinkedList<AbstractProcessor>();
+		processors.add( new JavaCodeProcessor(observer) );
+		compilationTask.setProcessors(processors);
 		notifyStatusChange(compilationTask.call() 
 						? "Compiled " + inputFiles.size() + " source files in " + directoryCount + " directories successfully." 
 						: "Compilation failed (" + diagnostics.getDiagnostics().get(0).getMessage(Locale.ENGLISH) + ").");
 		// TODO: fix crash when 0 source files discovered
+		
+		
 		
 		statusFinished();
 	}

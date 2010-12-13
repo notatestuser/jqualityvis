@@ -4,15 +4,11 @@
  */
 package org.lukep.javavis.ui;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.io.File;
 import java.util.Enumeration;
 
-import javax.swing.JInternalFrame;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-import javax.swing.JTree;
+import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
@@ -23,7 +19,7 @@ import com.sun.tools.javac.code.Symbol.ClassSymbol;
 public class VisualisationDesktopPane extends StatefulWorkspacePane implements IProgramSourceObserver {
 	
 	private JTree programTree;
-	private JPanel codeOverviewPanel;
+	private JScrollPane codeOverviewPanel;
 	private JTabbedPane tabbedPane;
 
 	public VisualisationDesktopPane(IProgramStatusReporter statusTarget) throws Exception {
@@ -44,13 +40,13 @@ public class VisualisationDesktopPane extends StatefulWorkspacePane implements I
 		tabbedPane.setBounds(0, 0, 81, 516);
 		layeredPane.getContentPane().add(tabbedPane);
 		
-		codeOverviewPanel = new JPanel();
+		codeOverviewPanel = new JScrollPane();
 		tabbedPane.addTab("Code Overview", null, codeOverviewPanel, null);
-		codeOverviewPanel.setLayout(new BorderLayout(0, 0));
+		codeOverviewPanel.setLayout(new ScrollPaneLayout());
 		
 		programTree = new JTree();
 		programTree.setModel( new DefaultTreeModel( new DefaultMutableTreeNode("Program") ) );
-		codeOverviewPanel.add(programTree, BorderLayout.CENTER);
+		codeOverviewPanel.setViewportView(programTree);
 		
 		JPanel panel_1 = new JPanel();
 		tabbedPane.addTab("Applied Metrics", null, panel_1, null);

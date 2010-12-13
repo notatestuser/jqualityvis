@@ -20,6 +20,7 @@ public class UIMain implements IProgramStatusReporter {
 	protected JFrame frmJavavis;
 	protected JTabbedPane mainTabbedPane;
 	protected JLabel mainStatusBar;
+	protected int workspaces = 0;
 
 	/**
 	 * Launch the application.
@@ -64,9 +65,6 @@ public class UIMain implements IProgramStatusReporter {
 		mainTabbedPane = new JTabbedPane();
 		frmJavavis.getContentPane().add(mainTabbedPane);
 		mainTabbedPane.setBackground(Color.LIGHT_GRAY);
-		VisualisationDesktopPane visDesktop = new VisualisationDesktopPane(this);
-		mainTabbedPane.add( visDesktop );
-		mainTabbedPane.setTitleAt(0, "Workspace 1");
 		
 		mainStatusBar = new JLabel("Ready");
 		frmJavavis.getContentPane().add(mainStatusBar, BorderLayout.SOUTH);
@@ -119,6 +117,14 @@ public class UIMain implements IProgramStatusReporter {
 	
 	private void addChildFrame()
 	{
+		VisualisationDesktopPane visDesktop = null;
+		try {
+			visDesktop = new VisualisationDesktopPane(this);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		mainTabbedPane.addTab( "Workspace " + (++workspaces), visDesktop );
 	}
 
 	@Override

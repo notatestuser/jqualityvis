@@ -6,15 +6,20 @@ package org.lukep.javavis.util.io;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.util.AbstractQueue;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.Stack;
+import java.util.concurrent.ArrayBlockingQueue;
 
 public final class FileSystemUtils {
 
 	public static ArrayList<File> ListFilesRecursive(File rootDirectory, final String[] extensions, IFileSystemScanObserver observer) {
 		File currentDirectory;
 		ArrayList<File> results = new ArrayList<File>();
-		Stack<File> directoriesToScan = new Stack<File>();
+		PriorityQueue<File> directoriesToScan = new PriorityQueue<File>();
 		directoriesToScan.add(rootDirectory);
 		FileFilter filter = new FileFilter() {
 			
@@ -31,7 +36,7 @@ public final class FileSystemUtils {
 		};
 		
 		while (directoriesToScan.size() > 0) {
-			currentDirectory = directoriesToScan.pop();
+			currentDirectory = directoriesToScan.remove();
 			
 			// alert observer about directory change
 			if (observer != null)
@@ -41,8 +46,8 @@ public final class FileSystemUtils {
 			if (files != null) {
 				for (File f : files) {
 					if (f.isDirectory()) {
-						// push dirs onto the directoriesToScan stack
-						directoriesToScan.push(f);
+						// push dir onto the directoriesToScan queue
+						directoriesToScan.add(f);
 					} else {
 						// files are added to the results array
 						results.add(f);

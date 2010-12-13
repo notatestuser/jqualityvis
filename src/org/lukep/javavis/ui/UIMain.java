@@ -75,16 +75,29 @@ public class UIMain implements IProgramStatusReporter {
 		JMenu mnFile = new JMenu("File");
 		menuBar.add(mnFile);
 		
-		JMenuItem mntmNewCanvas = new JMenuItem("New canvas");
+		JMenuItem mntmNewCanvas = new JMenuItem("New Workspace");
 		mntmNewCanvas.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				addChildFrame();
 			}
 		});
 		mnFile.add(mntmNewCanvas);
 		
-		JMenuItem mntmOpenCodeDirectory = new JMenuItem("Open code directory...");
+		JMenuItem mntmCloseWorkspace = new JMenuItem("Close Workspace");
+		mntmCloseWorkspace.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int response = JOptionPane.showConfirmDialog(null, "Are you sure you'd like to close this Workspace?");
+				if (response == JOptionPane.YES_OPTION)
+					mainTabbedPane.removeTabAt(mainTabbedPane.getSelectedIndex());
+			}
+		});
+		mnFile.add(mntmCloseWorkspace);
+		
+		JMenuItem mntmOpenCodeDirectory = new JMenuItem("Import Program Sources...");
 		mntmOpenCodeDirectory.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				JFileChooser fc = new JFileChooser();
 				fc.setDialogTitle("Select a root directory containing source code");
@@ -125,7 +138,7 @@ public class UIMain implements IProgramStatusReporter {
 			e.printStackTrace();
 		}
 		mainTabbedPane.addTab( "Workspace " + (++workspaces), visDesktop );
-		mainTabbedPane.setSelectedIndex(workspaces-1);
+		mainTabbedPane.setSelectedIndex(mainTabbedPane.getTabCount()-1);
 	}
 
 	@Override

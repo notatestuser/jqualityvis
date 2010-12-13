@@ -125,6 +125,7 @@ public class UIMain implements IProgramStatusReporter {
 			e.printStackTrace();
 		}
 		mainTabbedPane.addTab( "Workspace " + (++workspaces), visDesktop );
+		mainTabbedPane.setSelectedIndex(workspaces-1);
 	}
 
 	@Override

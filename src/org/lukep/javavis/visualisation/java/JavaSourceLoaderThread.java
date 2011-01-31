@@ -8,6 +8,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Locale;
+import java.util.Vector;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.tools.DiagnosticCollector;
@@ -29,13 +30,12 @@ public class JavaSourceLoaderThread implements ISourceLoaderThread {
 	
 	protected StandardJavaFileManager fileManager;
 	protected DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
-	protected IProgramSourceObserver observer;
+	protected Vector<IProgramSourceObserver> observers = new Vector<IProgramSourceObserver>();
 	protected File selectedDirectory;
 	protected int directoryCount;
 	
-	public JavaSourceLoaderThread(File selectedDirectory, IProgramSourceObserver observer) {
+	public JavaSourceLoaderThread(File selectedDirectory) {
 		this.selectedDirectory = selectedDirectory;
-		this.observer = observer;
 	}
 
 	@Override
@@ -68,7 +68,7 @@ public class JavaSourceLoaderThread implements ISourceLoaderThread {
 		CompilationTask compilationTask = compiler.getTask(null, fileManager, diagnostics, 
 															null, null, compilationUnits);
 		LinkedList<AbstractProcessor> processors = new LinkedList<AbstractProcessor>();
-		processors.add( new JavaCodeProcessor(observer) );
+		processors.add( new JavaCodeProcessor(observers) );
 		compilationTask.setProcessors(processors);
 		notifyStatusChange(compilationTask.call() 
 						? "Compiled " + inputFiles.size() + " source files in " + directoryCount + " directories successfully." 
@@ -88,6 +88,10 @@ public class JavaSourceLoaderThread implements ISourceLoaderThread {
 	@Override
 	public void statusFinished() {
 		// override in caller
+	}
+	
+	public void addObserver(IProgramSourceObserver observer) {
+		observers.add(observer);
 	}
 	
 }

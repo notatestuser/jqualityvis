@@ -4,10 +4,12 @@
  */
 package org.lukep.javavis.ui;
 
-import com.sun.tools.javac.code.Symbol.ClassSymbol;
+import org.lukep.javavis.program.generic.models.ClassInfo;
+import org.lukep.javavis.program.generic.models.MethodInfo;
 
 public interface IProgramSourceObserver {
 
-	public void notifyFindClass(ClassSymbol clazz);
+	public void notifyFindClass(ClassInfo clazz);
+	public void notifyFindMethod(MethodInfo method);
 	
 }

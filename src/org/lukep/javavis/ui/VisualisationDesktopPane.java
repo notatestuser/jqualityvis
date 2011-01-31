@@ -10,22 +10,32 @@ import java.io.File;
 import java.util.Enumeration;
 import java.util.HashMap;
 
-import javax.swing.*;
+import javax.swing.JInternalFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTree;
+import javax.swing.ScrollPaneLayout;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
+import org.lukep.javavis.program.generic.models.ClassInfo;
+import org.lukep.javavis.program.generic.models.ClassModelMap;
+import org.lukep.javavis.program.generic.models.MethodInfo;
 import org.lukep.javavis.visualisation.java.JavaSourceLoaderThread;
 
 import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.view.mxGraph;
-import com.sun.tools.javac.code.Symbol.ClassSymbol;
 
 public class VisualisationDesktopPane extends StatefulWorkspacePane implements IProgramSourceObserver {
 	
 	private JTree programTree;
 	private JScrollPane codeOverviewPanel;
 	private JTabbedPane tabbedPane;
+	
+	private ClassModelMap classModel;
+	
 	private mxGraph graph;
 	
 	private int cellX = 250;
@@ -36,6 +46,8 @@ public class VisualisationDesktopPane extends StatefulWorkspacePane implements I
 		
 		this.setBackground(Color.WHITE);
 		this.setLayout(null);
+		
+		classModel = new ClassModelMap();
 		
 		graph = new mxGraph();
 		JPanel graphCanvas = new JPanel( new BorderLayout() );
@@ -68,8 +80,8 @@ public class VisualisationDesktopPane extends StatefulWorkspacePane implements I
 	}
 
 	public void loadCodeBase(File selectedDirectory) {
-		new Thread(new JavaSourceLoaderThread(selectedDirectory, this) {
-
+		JavaSourceLoaderThread jslt = new JavaSourceLoaderThread(selectedDirectory) {
+			
 			@Override
 			public void notifyStatusChange(String message) {
 				setProgramStatus(message);
@@ -80,13 +92,16 @@ public class VisualisationDesktopPane extends StatefulWorkspacePane implements I
 				// TODO Auto-generated method stub
 			}
 			
-		}).start();
+		};
+		jslt.addObserver(this);
+		jslt.addObserver(classModel);
+		new Thread(jslt).start();
 	}
 
 	@Override
-	public void notifyFindClass(ClassSymbol clazz) {
+	public void notifyFindClass(ClassInfo clazz) {
 		DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode) programTree.getModel().getRoot();
-		String classQualName = clazz.getQualifiedName().toString();
+		String classQualName = clazz.getQualifiedName();
 		int lastDotIndex = classQualName.lastIndexOf('.');
 		if (lastDotIndex != -1) { // class is member of a named package (non-default)
 			String packageName = classQualName.substring(0, lastDotIndex);
@@ -108,6 +123,12 @@ public class VisualisationDesktopPane extends StatefulWorkspacePane implements I
 			}
 		}
 		((DefaultTreeModel)programTree.getModel()).reload();
+	}
+	
+	@Override
+	public void notifyFindMethod(MethodInfo method) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	private HashMap<String, mxCell> packageMap = new HashMap<String, mxCell>();

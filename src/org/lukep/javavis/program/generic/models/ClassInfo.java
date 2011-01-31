@@ -11,6 +11,7 @@ public class ClassInfo {
 	protected String simpleName;
 	protected String qualifiedName;
 	protected Vector<MethodInfo> methods = new Vector<MethodInfo>();
+	protected MethodInfo constructorMethod;
 
 	public ClassInfo(String simpleName, String qualifiedName) {
 		super();
@@ -36,6 +37,18 @@ public class ClassInfo {
 	
 	public void addMethod(MethodInfo method) {
 		methods.add(method);
+	}
+	
+	public int getMethodCount() {
+		return methods.size();
+	}
+
+	public MethodInfo getConstructorMethod() {
+		return constructorMethod;
+	}
+
+	public void setConstructorMethod(MethodInfo constructorMethod) {
+		this.constructorMethod = constructorMethod;
 	}
 	
 }

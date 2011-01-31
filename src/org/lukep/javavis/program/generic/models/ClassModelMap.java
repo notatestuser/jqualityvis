@@ -10,6 +10,7 @@ import java.util.Observable;
 import java.util.logging.Logger;
 
 import org.lukep.javavis.ui.IProgramSourceObserver;
+import org.lukep.javavis.util.JavaVisConstants;
 
 public class ClassModelMap extends Observable implements IProgramSourceObserver {
 	
@@ -44,10 +45,17 @@ public class ClassModelMap extends Observable implements IProgramSourceObserver 
 	@Override
 	public void notifyFindMethod(MethodInfo method) {
 		if (lastClass != null) {
-			lastClass.addMethod(method);
+			if (method.getName().equals(JavaVisConstants.DEFAULT_CONSTRUCTOR_NAME)) {
+				lastClass.setConstructorMethod(method);
+				log.info("Added constructor method to " + lastClass.getSimpleName());
+			} else {
+				lastClass.addMethod(method);
+				log.info("Added method to " + lastClass.getSimpleName()
+														+ ": " + method.getName());
+			}
+				
 			method.setParentClass(lastClass);
 		}
-		log.info("Added method: " + method.getName());
 	}
     
 }

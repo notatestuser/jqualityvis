@@ -18,14 +18,20 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
-public class UIMain implements IProgramStatusReporter {
+public class UIMain implements IProgramStatusReporter, ChangeListener {
 
 	protected JFrame frmJavavis;
 	protected JTabbedPane mainTabbedPane;
+	protected JPanel bottomPanel;
 	protected JLabel mainStatusBar;
+	protected JSlider zoomSlider;
 	protected int workspaces = 0;
 
 	/**
@@ -68,19 +74,27 @@ public class UIMain implements IProgramStatusReporter {
 		frmJavavis.setVisible(true);
 		frmJavavis.getContentPane().setLayout(new BorderLayout(0, 0));
 		
+		// initialize main tabbed pane
 		mainTabbedPane = new JTabbedPane();
 		frmJavavis.getContentPane().add(mainTabbedPane);
 		mainTabbedPane.setBackground(Color.LIGHT_GRAY);
 		
+		// initialize bottom panel
+		bottomPanel = new JPanel( new BorderLayout() );
 		mainStatusBar = new JLabel("Ready");
-		frmJavavis.getContentPane().add(mainStatusBar, BorderLayout.SOUTH);
+		bottomPanel.add(mainStatusBar, BorderLayout.CENTER);
+		zoomSlider = new JSlider(0, 100, 100);
+		zoomSlider.addChangeListener(this);
+		bottomPanel.add(zoomSlider, BorderLayout.EAST);
+		frmJavavis.getContentPane().add(bottomPanel, BorderLayout.SOUTH);
 		
+		// initialize menu bar and actions
 		JMenuBar menuBar = new JMenuBar();
 		frmJavavis.setJMenuBar(menuBar);
-		
+		// ... File menu
 		JMenu mnFile = new JMenu("File");
 		menuBar.add(mnFile);
-		
+		// ... File > New Workspace
 		JMenuItem mntmNewCanvas = new JMenuItem("New Workspace");
 		mntmNewCanvas.addActionListener(new ActionListener() {
 			@Override
@@ -89,7 +103,7 @@ public class UIMain implements IProgramStatusReporter {
 			}
 		});
 		mnFile.add(mntmNewCanvas);
-		
+		// ... File > Close Workspace
 		JMenuItem mntmCloseWorkspace = new JMenuItem("Close Workspace");
 		mntmCloseWorkspace.addActionListener(new ActionListener() {
 			@Override
@@ -100,7 +114,7 @@ public class UIMain implements IProgramStatusReporter {
 			}
 		});
 		mnFile.add(mntmCloseWorkspace);
-		
+		// ... File > Import Program Sources...
 		JMenuItem mntmOpenCodeDirectory = new JMenuItem("Import Program Sources...");
 		mntmOpenCodeDirectory.addActionListener(new ActionListener() {
 			@Override
@@ -118,7 +132,7 @@ public class UIMain implements IProgramStatusReporter {
 			}
 		});
 		mnFile.add(mntmOpenCodeDirectory);
-		
+		// ... File > Exit
 		JMenuItem mntmExit = new JMenuItem("Exit");
 		mntmExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -126,10 +140,10 @@ public class UIMain implements IProgramStatusReporter {
 			}
 		});
 		mnFile.add(mntmExit);
-		
+		// ... Help menu
 		JMenu mnHelp = new JMenu("Help");
 		menuBar.add(mnHelp);
-		
+		// ... Help > About
 		JMenuItem mntmAbout = new JMenuItem("About");
 		mnHelp.add(mntmAbout);
 	}
@@ -151,5 +165,14 @@ public class UIMain implements IProgramStatusReporter {
 	public synchronized void setProgramStatus(String status) {
 		mainStatusBar.setText(status);
 		mainStatusBar.repaint();
+	}
+
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		if (zoomSlider == e.getSource()) {
+			VisualisationDesktopPane selectedVdp = 
+				(VisualisationDesktopPane) mainTabbedPane.getSelectedComponent();
+			selectedVdp.setGraphScale((double)zoomSlider.getValue() / 100);
+		}
 	}
 }

@@ -62,7 +62,7 @@ public class UIMain implements IProgramStatusReporter {
 	private void initialize() throws Exception {
 		frmJavavis = new JFrame();
 		frmJavavis.setTitle("JavaVis Software Quality Visualiser");
-		frmJavavis.setBounds(100, 100, 1024, 768);
+		frmJavavis.setBounds(100, 100, 1280, 768);
 		frmJavavis.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		frmJavavis.setVisible(true);

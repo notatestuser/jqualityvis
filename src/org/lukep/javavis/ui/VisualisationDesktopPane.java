@@ -11,9 +11,9 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTree;
 import javax.swing.ScrollPaneLayout;
@@ -55,50 +55,46 @@ public class VisualisationDesktopPane extends StatefulWorkspacePane implements I
 		super(statusTarget);
 		
 		this.setBackground(Color.WHITE);
-		this.setLayout(null);
+		this.setLayout(  new BorderLayout() );
 		
 		classModel = new ClassModelStore();
 		classVertexMap = new HashMap<ClassInfo, mxCell>();
 		
+		// initialize the mxGraph, its container component and the circle layout
 		graph = new mxGraph();
 		graphComponent = new mxGraphComponent(graph);
 		graphLayout = new jvmxCircleLayout(graph);
 		((mxCircleLayout)(graphLayout)).setMoveCircle(true);
-		((mxCircleLayout)(graphLayout)).setX0(40);
-		((mxCircleLayout)(graphLayout)).setY0(250);
-		/*((mxOrganicLayout)(graphLayout)).setOptimizeBorderLine(true);
-		((mxOrganicLayout)(graphLayout)).setOptimizeEdgeCrossing(true);
-		((mxOrganicLayout)(graphLayout)).setOptimizeEdgeDistance(true);
-		((mxOrganicLayout)(graphLayout)).setOptimizeEdgeLength(true);
-		((mxOrganicLayout)(graphLayout)).setOptimizeNodeDistribution(true);*/
+		((mxCircleLayout)(graphLayout)).setX0(20);
+		((mxCircleLayout)(graphLayout)).setY0(20);
 		
-		JPanel graphCanvas = new JPanel( new BorderLayout() );
-		graphCanvas.add(graphComponent, BorderLayout.CENTER);
-		graphCanvas.setSize(1000, 666);
-		this.add(graphCanvas, DEFAULT_LAYER);
+		// create a panel to contain the left side of the JSplitPane's components
+		JPanel leftPane = new JPanel( new BorderLayout() );
+		leftPane.setVisible(true);
 		
-		JInternalFrame layeredPane = new JInternalFrame();
-		layeredPane.setTitle("Toolbox");
-		layeredPane.setIconifiable(true);
-		layeredPane.setResizable(true);
-		layeredPane.setBounds(11, 11, 200, 300);
-		layeredPane.setVisible(true);
-		this.add(layeredPane, PALETTE_LAYER);
+		// create the outer split pane that contains the left (inner) split pane and the graph
+		// component on the right side of the window
+		JSplitPane outerSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPane, 
+				graphComponent);
+		outerSplitPane.setOneTouchExpandable(true);
+		outerSplitPane.setDividerLocation(200);
+		outerSplitPane.setDividerSize(6);
+		outerSplitPane.setBorder(null);
+		this.add(outerSplitPane, BorderLayout.CENTER);
 		
+		// create the tabbed pane on the left split
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(0, 0, 81, 516);
-		layeredPane.getContentPane().add(tabbedPane);
+		leftPane.add(tabbedPane, BorderLayout.CENTER);
 		
+		// create the "Code Overview" tab
 		codeOverviewPanel = new JScrollPane();
 		tabbedPane.addTab("Code Overview", null, codeOverviewPanel, null);
 		codeOverviewPanel.setLayout(new ScrollPaneLayout());
 		
+		// create the program tree
 		programTree = new JTree();
 		programTree.setModel( new DefaultTreeModel( new DefaultMutableTreeNode("Program") ) );
 		codeOverviewPanel.setViewportView(programTree);
-		
-		JPanel panel_1 = new JPanel();
-		tabbedPane.addTab("Applied Metrics", null, panel_1, null);
 	}
 
 	public void loadCodeBase(File selectedDirectory) {
@@ -188,7 +184,7 @@ public class VisualisationDesktopPane extends StatefulWorkspacePane implements I
 		
 	}
 	
-	private HashMap<String, mxCell> packageMap = new HashMap<String, mxCell>();
+	//private HashMap<String, mxCell> packageMap = new HashMap<String, mxCell>();
 	private void addClass(ClassInfo clazz, String packageName) {
 		mxCell cell = null;
 		/*if (packageMap.containsKey(packageName))

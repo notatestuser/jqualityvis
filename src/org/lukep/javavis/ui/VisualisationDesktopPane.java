@@ -35,7 +35,6 @@ import com.mxgraph.swing.util.mxMorphing;
 import com.mxgraph.util.mxEvent;
 import com.mxgraph.util.mxEventObject;
 import com.mxgraph.util.mxEventSource.mxIEventListener;
-import com.mxgraph.util.mxRectangle;
 import com.mxgraph.view.mxGraph;
 
 public class VisualisationDesktopPane extends StatefulWorkspacePane implements IProgramSourceObserver {
@@ -51,9 +50,6 @@ public class VisualisationDesktopPane extends StatefulWorkspacePane implements I
 	private mxGraphLayout graphLayout;
 	
 	private HashMap<ClassInfo, mxCell> classVertexMap;
-	
-	//private int cellX = 250;
-	//private int cellY = 100;
 
 	public VisualisationDesktopPane(IProgramStatusReporter statusTarget) throws Exception {
 		super(statusTarget);
@@ -203,11 +199,6 @@ public class VisualisationDesktopPane extends StatefulWorkspacePane implements I
 		}*/
 		cell = (mxCell) graph.insertVertex(graph.getDefaultParent(), null, clazz, 250, 100, 150, 80);
 		classVertexMap.put(clazz, cell);
-		mxRectangle bounds = graphLayout.getVertexBounds(cell);
-		System.out.println(bounds.toString());
-		//cellX += 50;
-		//cellY += 50;
-		//graphLayout.execute(graph.getDefaultParent());
 	}
 
 }

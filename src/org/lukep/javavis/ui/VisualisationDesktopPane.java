@@ -193,7 +193,7 @@ public class VisualisationDesktopPane extends StatefulWorkspacePane implements I
 			parent = (mxCell) graph.insertVertex(null, null, packageName, 250, 100, 150, 80);
 			packageMap.put(packageName, parent);
 		}*/
-		cell = (mxCell) graph.insertVertex(graph.getDefaultParent(), null, clazz, 250, 100, 150, 50);
+		cell = (mxCell) graph.insertVertex(graph.getDefaultParent(), null, clazz, 20, 20, 150, 50);
 		classVertexMap.put(clazz, cell);
 	}
 	

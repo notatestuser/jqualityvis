@@ -4,14 +4,16 @@
  */
 package org.lukep.javavis.program.generic.models;
 
+import java.io.Serializable;
 import java.util.Vector;
 
-public class ClassInfo {
+public class ClassInfo implements Serializable {
 
 	protected String simpleName;
 	protected String qualifiedName;
-	protected Vector<MethodInfo> methods = new Vector<MethodInfo>();
 	protected MethodInfo constructorMethod;
+	protected Vector<MethodInfo> methods = new Vector<MethodInfo>();
+	protected Vector<VariableInfo> variables = new Vector<VariableInfo>();
 
 	public ClassInfo(String simpleName, String qualifiedName) {
 		super();
@@ -34,6 +36,14 @@ public class ClassInfo {
 	public void setQualifiedName(String qualifiedName) {
 		this.qualifiedName = qualifiedName;
 	}
+
+	public MethodInfo getConstructorMethod() {
+		return constructorMethod;
+	}
+
+	public void setConstructorMethod(MethodInfo constructorMethod) {
+		this.constructorMethod = constructorMethod;
+	}
 	
 	public void addMethod(MethodInfo method) {
 		methods.add(method);
@@ -42,13 +52,18 @@ public class ClassInfo {
 	public int getMethodCount() {
 		return methods.size();
 	}
-
-	public MethodInfo getConstructorMethod() {
-		return constructorMethod;
+	
+	public void addVariable(VariableInfo variable) {
+		variables.add(variable);
+	}
+	
+	public int getVariableCount() {
+		return variables.size();
 	}
 
-	public void setConstructorMethod(MethodInfo constructorMethod) {
-		this.constructorMethod = constructorMethod;
+	@Override
+	public String toString() {
+		return simpleName;
 	}
 	
 }

@@ -4,7 +4,9 @@
  */
 package org.lukep.javavis.program.generic.models;
 
-public class MethodInfo {
+import java.io.Serializable;
+
+public class MethodInfo implements Serializable {
 
 	protected String name;
 	protected ClassInfo parentClass;
@@ -28,6 +30,11 @@ public class MethodInfo {
 
 	public void setParentClass(ClassInfo parentClass) {
 		this.parentClass = parentClass;
+	}
+
+	@Override
+	public String toString() {
+		return "MethodInfo [name=" + name + ", parentClass=" + parentClass + "]";
 	}
 	
 }

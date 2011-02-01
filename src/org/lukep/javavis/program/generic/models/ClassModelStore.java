@@ -14,7 +14,8 @@ import org.lukep.javavis.ui.IProgramSourceObserver;
 
 public class ClassModelStore extends Observable implements IProgramSourceObserver {
 	
-	protected final static Logger log = Logger.getLogger("GenericClassModelMap");
+	protected final static Logger log = 
+		Logger.getLogger(ClassModelStore.class.getSimpleName());
 	
 	// keeps track of all instances of the ClassModelStore (for global class lookups)
 	protected final static Vector<ClassModelStore> instances = new Vector<ClassModelStore>();

@@ -57,6 +57,10 @@ public class ClassInfo implements Serializable {
 		variables.add(variable);
 	}
 	
+	public Vector<VariableInfo> getVariables() {
+		return variables;
+	}
+	
 	public int getVariableCount() {
 		return variables.size();
 	}

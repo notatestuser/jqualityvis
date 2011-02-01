@@ -6,10 +6,10 @@ package org.lukep.javavis.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Rectangle;
 import java.io.File;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
@@ -23,12 +23,19 @@ import javax.swing.tree.DefaultTreeModel;
 import org.lukep.javavis.program.generic.models.ClassInfo;
 import org.lukep.javavis.program.generic.models.ClassModelStore;
 import org.lukep.javavis.program.generic.models.MethodInfo;
+import org.lukep.javavis.program.generic.models.VariableInfo;
 import org.lukep.javavis.visualisation.java.JavaSourceLoaderThread;
+import org.lukep.javavis.visualisation.mxgraph.jvmxCircleLayout;
 
-import com.mxgraph.layout.mxIGraphLayout;
-import com.mxgraph.layout.mxOrganicLayout;
+import com.mxgraph.layout.mxCircleLayout;
+import com.mxgraph.layout.mxGraphLayout;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.mxGraphComponent;
+import com.mxgraph.swing.util.mxMorphing;
+import com.mxgraph.util.mxEvent;
+import com.mxgraph.util.mxEventObject;
+import com.mxgraph.util.mxEventSource.mxIEventListener;
+import com.mxgraph.util.mxRectangle;
 import com.mxgraph.view.mxGraph;
 
 public class VisualisationDesktopPane extends StatefulWorkspacePane implements IProgramSourceObserver {
@@ -40,10 +47,13 @@ public class VisualisationDesktopPane extends StatefulWorkspacePane implements I
 	private ClassModelStore classModel;
 	
 	private mxGraph graph;
-	private mxIGraphLayout graphLayout;
+	private mxGraphComponent graphComponent;
+	private mxGraphLayout graphLayout;
 	
-	private int cellX = 250;
-	private int cellY = 100;
+	private HashMap<ClassInfo, mxCell> classVertexMap;
+	
+	//private int cellX = 250;
+	//private int cellY = 100;
 
 	public VisualisationDesktopPane(IProgramStatusReporter statusTarget) throws Exception {
 		super(statusTarget);
@@ -52,17 +62,22 @@ public class VisualisationDesktopPane extends StatefulWorkspacePane implements I
 		this.setLayout(null);
 		
 		classModel = new ClassModelStore();
+		classVertexMap = new HashMap<ClassInfo, mxCell>();
 		
 		graph = new mxGraph();
-		graphLayout = new mxOrganicLayout(graph, new Rectangle(200, 200));
-		((mxOrganicLayout)(graphLayout)).setOptimizeBorderLine(true);
+		graphComponent = new mxGraphComponent(graph);
+		graphLayout = new jvmxCircleLayout(graph);
+		((mxCircleLayout)(graphLayout)).setMoveCircle(true);
+		((mxCircleLayout)(graphLayout)).setX0(40);
+		((mxCircleLayout)(graphLayout)).setY0(250);
+		/*((mxOrganicLayout)(graphLayout)).setOptimizeBorderLine(true);
 		((mxOrganicLayout)(graphLayout)).setOptimizeEdgeCrossing(true);
 		((mxOrganicLayout)(graphLayout)).setOptimizeEdgeDistance(true);
 		((mxOrganicLayout)(graphLayout)).setOptimizeEdgeLength(true);
-		((mxOrganicLayout)(graphLayout)).setOptimizeNodeDistribution(true);
+		((mxOrganicLayout)(graphLayout)).setOptimizeNodeDistribution(true);*/
 		
 		JPanel graphCanvas = new JPanel( new BorderLayout() );
-		graphCanvas.add(new mxGraphComponent(graph), BorderLayout.CENTER);
+		graphCanvas.add(graphComponent, BorderLayout.CENTER);
 		graphCanvas.setSize(1000, 666);
 		this.add(graphCanvas, DEFAULT_LAYER);
 		
@@ -100,7 +115,42 @@ public class VisualisationDesktopPane extends StatefulWorkspacePane implements I
 
 			@Override
 			public void statusFinished() {
-				graphLayout.execute(graph.getDefaultParent());
+				graph.getModel().beginUpdate();
+				
+				try {
+					// route edges between classes that have variables of a type we know of
+					for (Map.Entry<String, ClassInfo> classEntry : classModel.getClassMap().entrySet()) {
+						ClassInfo sourceClass = classEntry.getValue();
+						mxCell sourceCell = classVertexMap.get(sourceClass);
+						assert(sourceCell != null);
+						if (sourceClass.getVariableCount() > 0) {
+							ClassInfo targetClass;
+							for (VariableInfo varInfo : sourceClass.getVariables()) {
+								targetClass = varInfo.getTypeInternalClass();
+								if (targetClass != null 
+										&& classVertexMap.containsKey(targetClass)) {
+									
+									graph.insertEdge(graph.getDefaultParent(), null, 
+											varInfo.getName(), sourceCell, classVertexMap.get(targetClass));
+								}
+							}
+						}
+					}
+					
+					graphLayout.execute(graph.getDefaultParent());
+				} finally {
+					mxMorphing morph = new mxMorphing(graphComponent, 20, 1.2, 20);
+					
+					morph.addListener(mxEvent.DONE, new mxIEventListener() {
+						
+						@Override
+						public void invoke(Object sender, mxEventObject evt) {
+							graph.getModel().endUpdate();
+						}
+					});
+					
+					morph.startAnimation();
+				}
 			}
 			
 		};
@@ -144,14 +194,17 @@ public class VisualisationDesktopPane extends StatefulWorkspacePane implements I
 	
 	private HashMap<String, mxCell> packageMap = new HashMap<String, mxCell>();
 	private void addClass(ClassInfo clazz, String packageName) {
-		/*mxCell parent = null;
-		if (packageMap.containsKey(packageName))
+		mxCell cell = null;
+		/*if (packageMap.containsKey(packageName))
 			parent = packageMap.get(packageName);
 		else {
 			parent = (mxCell) graph.insertVertex(null, null, packageName, 250, 100, 150, 80);
 			packageMap.put(packageName, parent);
 		}*/
-		graph.insertVertex(graph.getDefaultParent(), null, clazz, 250, 100, 150, 80);
+		cell = (mxCell) graph.insertVertex(graph.getDefaultParent(), null, clazz, 250, 100, 150, 80);
+		classVertexMap.put(clazz, cell);
+		mxRectangle bounds = graphLayout.getVertexBounds(cell);
+		System.out.println(bounds.toString());
 		//cellX += 50;
 		//cellY += 50;
 		//graphLayout.execute(graph.getDefaultParent());

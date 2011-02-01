@@ -6,6 +6,7 @@ package org.lukep.javavis.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Rectangle;
 import java.io.File;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -20,10 +21,12 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
 import org.lukep.javavis.program.generic.models.ClassInfo;
-import org.lukep.javavis.program.generic.models.ClassModelMap;
+import org.lukep.javavis.program.generic.models.ClassModelStore;
 import org.lukep.javavis.program.generic.models.MethodInfo;
 import org.lukep.javavis.visualisation.java.JavaSourceLoaderThread;
 
+import com.mxgraph.layout.mxIGraphLayout;
+import com.mxgraph.layout.mxOrganicLayout;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.view.mxGraph;
@@ -34,9 +37,10 @@ public class VisualisationDesktopPane extends StatefulWorkspacePane implements I
 	private JScrollPane codeOverviewPanel;
 	private JTabbedPane tabbedPane;
 	
-	private ClassModelMap classModel;
+	private ClassModelStore classModel;
 	
 	private mxGraph graph;
+	private mxIGraphLayout graphLayout;
 	
 	private int cellX = 250;
 	private int cellY = 100;
@@ -47,9 +51,16 @@ public class VisualisationDesktopPane extends StatefulWorkspacePane implements I
 		this.setBackground(Color.WHITE);
 		this.setLayout(null);
 		
-		classModel = new ClassModelMap();
+		classModel = new ClassModelStore();
 		
 		graph = new mxGraph();
+		graphLayout = new mxOrganicLayout(graph, new Rectangle(200, 200));
+		((mxOrganicLayout)(graphLayout)).setOptimizeBorderLine(true);
+		((mxOrganicLayout)(graphLayout)).setOptimizeEdgeCrossing(true);
+		((mxOrganicLayout)(graphLayout)).setOptimizeEdgeDistance(true);
+		((mxOrganicLayout)(graphLayout)).setOptimizeEdgeLength(true);
+		((mxOrganicLayout)(graphLayout)).setOptimizeNodeDistribution(true);
+		
 		JPanel graphCanvas = new JPanel( new BorderLayout() );
 		graphCanvas.add(new mxGraphComponent(graph), BorderLayout.CENTER);
 		graphCanvas.setSize(1000, 666);
@@ -89,7 +100,7 @@ public class VisualisationDesktopPane extends StatefulWorkspacePane implements I
 
 			@Override
 			public void statusFinished() {
-				// TODO Auto-generated method stub
+				graphLayout.execute(graph.getDefaultParent());
 			}
 			
 		};
@@ -112,14 +123,14 @@ public class VisualisationDesktopPane extends StatefulWorkspacePane implements I
 				DefaultMutableTreeNode element = (DefaultMutableTreeNode) rootNodeChildren.nextElement();
 				if (element.toString().equals(packageName)) { // check if existing package node exists
 					element.add( new DefaultMutableTreeNode( clazz.getSimpleName() ) ); // yes, add it to that one
-					addClass( clazz.getSimpleName().toString(), packageName ); // create cell graph
+					addClass( clazz, packageName ); // create cell graph
 					addedToExistingNode = true;
 				}
 			}
 			if (!addedToExistingNode) {
 				rootNode.add( newPackageNode ); // add new package node
 				newPackageNode.add( new DefaultMutableTreeNode( clazz.getSimpleName() ) ); // add class sub-node
-				addClass( clazz.getSimpleName().toString(), packageName ); // create cell graph
+				addClass( clazz, packageName ); // create cell graph
 			}
 		}
 		((DefaultTreeModel)programTree.getModel()).reload();
@@ -132,17 +143,18 @@ public class VisualisationDesktopPane extends StatefulWorkspacePane implements I
 	}
 	
 	private HashMap<String, mxCell> packageMap = new HashMap<String, mxCell>();
-	private void addClass(String className, String packageName) {
-		Object parent = null;
+	private void addClass(ClassInfo clazz, String packageName) {
+		/*mxCell parent = null;
 		if (packageMap.containsKey(packageName))
 			parent = packageMap.get(packageName);
 		else {
-			parent = graph.insertVertex(null, null, packageName, 250, 100, 150, 80);
-			packageMap.put(packageName, (mxCell)parent);
-		}
-		graph.insertVertex(parent, null, className, 250, 100, 150, 80);
-		cellX += 50;
-		cellY += 50;
+			parent = (mxCell) graph.insertVertex(null, null, packageName, 250, 100, 150, 80);
+			packageMap.put(packageName, parent);
+		}*/
+		graph.insertVertex(graph.getDefaultParent(), null, clazz, 250, 100, 150, 80);
+		//cellX += 50;
+		//cellY += 50;
+		//graphLayout.execute(graph.getDefaultParent());
 	}
 
 }

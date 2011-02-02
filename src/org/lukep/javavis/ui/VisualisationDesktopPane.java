@@ -181,10 +181,8 @@ public class VisualisationDesktopPane extends StatefulWorkspacePane implements I
 	@Override
 	public void notifyFindClass(ClassInfo clazz) {
 		DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode) programTree.getModel().getRoot();
-		String classQualName = clazz.getQualifiedName();
-		int lastDotIndex = classQualName.lastIndexOf('.');
-		if (lastDotIndex != -1) { // class is member of a named package (non-default)
-			String packageName = classQualName.substring(0, lastDotIndex);
+		String packageName = clazz.getPackageName();
+		if (packageName.length() > 0) { // class is member of a named package (non-default)
 			DefaultMutableTreeNode newPackageNode = new DefaultMutableTreeNode( packageName );
 			Enumeration rootNodeChildren = rootNode.children();
 			boolean addedToExistingNode = false;

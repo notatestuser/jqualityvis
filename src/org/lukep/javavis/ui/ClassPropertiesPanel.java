@@ -17,17 +17,16 @@ import org.lukep.javavis.program.generic.models.measurable.MeasurableClassInfo;
 
 public class ClassPropertiesPanel extends JPanel {
 	
-	protected MeasurableClassInfo currentClass;
+	protected JLabel contentLabel;
 	
-	JLabel titleLabel;
-	JLabel contentLabel;
+	protected MeasurableClassInfo currentClass;
 
 	public ClassPropertiesPanel() {
 		super( new BorderLayout() );
 		
 		// create title label
-		titleLabel = new JLabel("Selected Class Properties");
-		add(titleLabel, BorderLayout.NORTH);
+		//JLabel titleLabel = new JLabel("Selected Class Properties");
+		//add(titleLabel, BorderLayout.NORTH);
 		
 		// create content label
 		contentLabel = new JLabel();
@@ -42,6 +41,9 @@ public class ClassPropertiesPanel extends JPanel {
 		
 		// build up the html content string
 		StringBuilder sb = new StringBuilder("<html>");
+		// ... include package name
+		sb.append(clazz.getPackageName() + "<br />");
+		// ... include class's simple name
 		sb.append("<h2>" + clazz.getSimpleName() + "</h2>");
 		// ... include methods
 		if (clazz.getMethodCount() > 0) {

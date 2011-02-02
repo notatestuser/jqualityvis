@@ -36,6 +36,14 @@ public class ClassInfo implements Serializable {
 	public void setQualifiedName(String qualifiedName) {
 		this.qualifiedName = qualifiedName;
 	}
+	
+	public String getPackageName() {
+		int lastDotIndex = qualifiedName.lastIndexOf('.');
+		if (lastDotIndex != -1) // class is member of a named package (non-default)
+			return qualifiedName.substring(0, lastDotIndex);
+		else
+			return "<default package>";
+	}
 
 	public MethodInfo getConstructorMethod() {
 		return constructorMethod;

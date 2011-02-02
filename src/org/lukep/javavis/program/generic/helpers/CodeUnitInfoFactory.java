@@ -76,6 +76,11 @@ public class CodeUnitInfoFactory {
 				s.lastClass.addVariable(newVariableInfo);
 				newVariableInfo.setParentClass(s.lastClass);
 				
+				// if the enclosing element is our last class, then it's a class attribute!
+				if (e.getEnclosingElement().getQualifiedName().toString().equals(
+						s.lastClass.getQualifiedName()))
+					newVariableInfo.setClassAttribute(true);
+				
 				// set the variable's internal type target if we've got a generic of that type stored
 				ClassInfo typeInternal = ClassModelStore.lookupClassGlobal(qualifiedTypeName);
 				if (typeInternal != null)

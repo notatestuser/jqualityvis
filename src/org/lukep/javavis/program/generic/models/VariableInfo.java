@@ -12,6 +12,7 @@ public class VariableInfo implements Serializable {
 	protected String typeName;
 	protected ClassInfo typeInternalClass;
 	protected ClassInfo parentClass;
+	protected boolean isClassAttribute;
 	
 	public VariableInfo(String name, String typeName) {
 		super();
@@ -51,11 +52,19 @@ public class VariableInfo implements Serializable {
 		this.parentClass = parentClass;
 	}
 
+	public boolean isClassAttribute() {
+		return isClassAttribute;
+	}
+
+	public void setClassAttribute(boolean isClassAttribute) {
+		this.isClassAttribute = isClassAttribute;
+	}
+
 	@Override
 	public String toString() {
 		return "VariableInfo [name=" + name + ", typeName=" + typeName
 				+ ", typeInternalClass=" + typeInternalClass + ", parentClass="
-				+ parentClass + "]";
+				+ parentClass + ", isClassAttribute=" + isClassAttribute + "]";
 	}
 	
 }

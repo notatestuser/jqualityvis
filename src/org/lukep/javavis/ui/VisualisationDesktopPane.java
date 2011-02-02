@@ -24,7 +24,7 @@ import org.lukep.javavis.program.generic.models.ClassInfo;
 import org.lukep.javavis.program.generic.models.ClassModelStore;
 import org.lukep.javavis.program.generic.models.MethodInfo;
 import org.lukep.javavis.program.generic.models.VariableInfo;
-import org.lukep.javavis.visualisation.java.JavaSourceLoaderThread;
+import org.lukep.javavis.program.java.JavaSourceLoaderThread;
 import org.lukep.javavis.visualisation.mxgraph.jvmxCircleLayout;
 
 import com.mxgraph.layout.mxCircleLayout;
@@ -72,9 +72,22 @@ public class VisualisationDesktopPane extends StatefulWorkspacePane implements I
 		JPanel leftPane = new JPanel( new BorderLayout() );
 		leftPane.setVisible(true);
 		
+		// create a panel to show the properties of the currently selected class
+		JPanel propertiesPane = new ClassPropertiesPanel();
+		propertiesPane.setVisible(true);
+		
+		// create the inner split pane that contains the top and bottom panels on the left side
+		// of the workspace
+		JSplitPane innerSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, leftPane, 
+				propertiesPane);
+		innerSplitPane.setDividerLocation(320);
+		innerSplitPane.setResizeWeight(1);
+		innerSplitPane.setDividerSize(6);
+		innerSplitPane.setBorder(null);
+		
 		// create the outer split pane that contains the left (inner) split pane and the graph
 		// component on the right side of the window
-		JSplitPane outerSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPane, 
+		JSplitPane outerSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, innerSplitPane, 
 				graphComponent);
 		outerSplitPane.setOneTouchExpandable(true);
 		outerSplitPane.setDividerLocation(200);
@@ -122,6 +135,7 @@ public class VisualisationDesktopPane extends StatefulWorkspacePane implements I
 								if (targetClass != null 
 										&& classVertexMap.containsKey(targetClass)) {
 									
+									// insert a connecting edge between the source and the target cells
 									graph.insertEdge(graph.getDefaultParent(), null, 
 											varInfo.getName(), sourceCell, classVertexMap.get(targetClass));
 								}

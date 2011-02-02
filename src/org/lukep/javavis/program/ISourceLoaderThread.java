@@ -2,7 +2,7 @@
  * ISourceLoaderThread.java (JavaVis)
  * Copyright 2010 Luke Plaster. All rights reserved.
  */
-package org.lukep.javavis.visualisation;
+package org.lukep.javavis.program;
 
 public interface ISourceLoaderThread extends Runnable {
 

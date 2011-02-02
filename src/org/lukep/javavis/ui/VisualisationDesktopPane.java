@@ -234,22 +234,13 @@ public class VisualisationDesktopPane extends StatefulWorkspacePane implements I
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				mxCell currentSelectionCell = (mxCell)graphComponent.getCellAt(e.getX(), e.getY());
-				if (currentSelectionCell != null) {
+				if (currentSelectionCell != null && graph.getModel().isVertex(currentSelectionCell)) {
 					MeasurableClassInfo mclass = (MeasurableClassInfo) currentSelectionCell.getValue();
 					propertiesPane.setCurrentClass(mclass);
 				}
 				super.mouseClicked(e);
 			}
 			
-		});
-		graphComponent.addListener(mxEvent.MARK, new mxIEventListener() {
-			
-			@Override
-			public void invoke(Object sender, mxEventObject evt) {
-				mxCell currentSelectionCell = (mxCell) graph.getSelectionCell();
-				if (currentSelectionCell != null)
-					propertiesPane.setCurrentClass((MeasurableClassInfo) currentSelectionCell.getValue());
-			}
 		});
 	}
 

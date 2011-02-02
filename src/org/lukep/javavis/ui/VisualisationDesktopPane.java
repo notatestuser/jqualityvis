@@ -90,7 +90,7 @@ public class VisualisationDesktopPane extends StatefulWorkspacePane implements I
 		JSplitPane outerSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, innerSplitPane, 
 				graphComponent);
 		outerSplitPane.setOneTouchExpandable(true);
-		outerSplitPane.setDividerLocation(200);
+		outerSplitPane.setDividerLocation(250);
 		outerSplitPane.setDividerSize(6);
 		outerSplitPane.setBorder(null);
 		this.add(outerSplitPane, BorderLayout.CENTER);

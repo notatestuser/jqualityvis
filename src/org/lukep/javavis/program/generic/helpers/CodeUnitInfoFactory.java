@@ -10,6 +10,7 @@ import javax.lang.model.element.TypeElement;
 
 import org.lukep.javavis.program.generic.models.ClassInfo;
 import org.lukep.javavis.program.generic.models.ClassModelStore;
+import org.lukep.javavis.program.generic.models.GenericModelSourceLang;
 import org.lukep.javavis.program.generic.models.MethodInfo;
 import org.lukep.javavis.program.generic.models.VariableInfo;
 import org.lukep.javavis.program.generic.models.measurable.MeasurableClassInfo;
@@ -36,6 +37,7 @@ public class CodeUnitInfoFactory {
 			return null;
 		
 		MeasurableClassInfo newClassModel = new MeasurableClassInfo(
+											GenericModelSourceLang.JAVA,
 											e.getSimpleName().toString(),
 											e.getQualifiedName().toString());
 		s.lastClass = newClassModel;
@@ -45,7 +47,8 @@ public class CodeUnitInfoFactory {
 	public static MethodInfo createMethodInfo(CodeUnitInfoFactoryState s, 
 			MethodTree methodTree, TreePath path, Trees trees) {
 		
-		MethodInfo newMethodInfo = new MethodInfo(methodTree.getName().toString());
+		MethodInfo newMethodInfo = new MethodInfo(GenericModelSourceLang.JAVA,
+				methodTree.getName().toString());
 		
 		if (newMethodInfo.getName().equals(JavaVisConstants.DEFAULT_CONSTRUCTOR_NAME)) {
 			s.lastClass.setConstructorMethod(newMethodInfo);
@@ -67,9 +70,11 @@ public class CodeUnitInfoFactory {
 		
 		VarSymbol e = (VarSymbol) trees.getElement(path);
 		VariableInfo newVariableInfo = null;
+		
 		if (e != null) {
 			String qualifiedTypeName = e.type.toString();
-			newVariableInfo = new VariableInfo(e.getQualifiedName().toString(), qualifiedTypeName);
+			newVariableInfo = new VariableInfo(GenericModelSourceLang.JAVA,
+					e.getQualifiedName().toString(), qualifiedTypeName);
 			
 			// add this information to the last parsed class (if it exists)
 			if (s.lastClass != null) {

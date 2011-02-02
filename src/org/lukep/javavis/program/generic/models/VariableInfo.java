@@ -4,9 +4,8 @@
  */
 package org.lukep.javavis.program.generic.models;
 
-import java.io.Serializable;
 
-public class VariableInfo implements Serializable {
+public class VariableInfo extends GenericModel {
 
 	protected String name;
 	protected String typeName;
@@ -14,8 +13,8 @@ public class VariableInfo implements Serializable {
 	protected ClassInfo parentClass;
 	protected boolean isClassAttribute;
 	
-	public VariableInfo(String name, String typeName) {
-		super();
+	public VariableInfo(GenericModelSourceLang lang, String name, String typeName) {
+		super(lang);
 		this.name = name;
 		this.typeName = typeName;
 	}

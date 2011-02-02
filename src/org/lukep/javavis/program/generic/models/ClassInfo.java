@@ -4,10 +4,9 @@
  */
 package org.lukep.javavis.program.generic.models;
 
-import java.io.Serializable;
 import java.util.Vector;
 
-public class ClassInfo implements Serializable {
+public class ClassInfo extends GenericModel {
 
 	protected String simpleName;
 	protected String qualifiedName;
@@ -15,8 +14,8 @@ public class ClassInfo implements Serializable {
 	protected Vector<MethodInfo> methods = new Vector<MethodInfo>();
 	protected Vector<VariableInfo> variables = new Vector<VariableInfo>();
 
-	public ClassInfo(String simpleName, String qualifiedName) {
-		super();
+	public ClassInfo(GenericModelSourceLang lang, String simpleName, String qualifiedName) {
+		super(lang);
 		this.simpleName = simpleName;
 		this.qualifiedName = qualifiedName;
 	}

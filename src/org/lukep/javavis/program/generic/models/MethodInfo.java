@@ -4,15 +4,19 @@
  */
 package org.lukep.javavis.program.generic.models;
 
-import java.io.Serializable;
 
-public class MethodInfo implements Serializable {
+public class MethodInfo extends GenericModel {
 
+	class SourceLangDependentAttributes {
+		public Object rootStatementBlock;
+	}
+	
 	protected String name;
 	protected ClassInfo parentClass;
+	protected SourceLangDependentAttributes extraAttributes;
 
-	public MethodInfo(String name) {
-		super();
+	public MethodInfo(GenericModelSourceLang lang, String name) {
+		super(lang);
 		this.name = name;
 	}
 

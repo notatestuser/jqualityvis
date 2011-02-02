@@ -9,11 +9,12 @@ import org.lukep.javavis.metrics.MetricAttribute;
 import org.lukep.javavis.metrics.MetricMeasurement;
 import org.lukep.javavis.metrics.MetricRegistry;
 import org.lukep.javavis.program.generic.models.ClassInfo;
+import org.lukep.javavis.program.generic.models.GenericModelSourceLang;
 
 public class MeasurableClassInfo extends ClassInfo implements IMeasurable {
 
-	public MeasurableClassInfo(String simpleName, String qualifiedName) {
-		super(simpleName, qualifiedName);
+	public MeasurableClassInfo(GenericModelSourceLang lang, String simpleName, String qualifiedName) {
+		super(lang, simpleName, qualifiedName);
 	}
 	
 	@Override

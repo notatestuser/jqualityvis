@@ -6,6 +6,7 @@ package org.lukep.javavis.metrics;
 
 public interface IMeasurable {
 
-	public MetricMeasurement getMetricMeasurement(MetricAttribute metric);
+	public int getMetricMeasurementVal(MetricAttribute attribute);
+	public MetricMeasurement getMetricMeasurement(MetricAttribute attribute);
 	
 }

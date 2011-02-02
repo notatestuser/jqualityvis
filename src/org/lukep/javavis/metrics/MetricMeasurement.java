@@ -38,4 +38,8 @@ public class MetricMeasurement {
 		return resultSet;
 	}
 	
+	public void refreshResult() {
+		setResult(target.getMetricMeasurementVal(metric));
+	}
+	
 }

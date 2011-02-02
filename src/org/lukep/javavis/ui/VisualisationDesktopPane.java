@@ -6,6 +6,8 @@ package org.lukep.javavis.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -24,6 +26,7 @@ import org.lukep.javavis.program.generic.models.ClassInfo;
 import org.lukep.javavis.program.generic.models.ClassModelStore;
 import org.lukep.javavis.program.generic.models.MethodInfo;
 import org.lukep.javavis.program.generic.models.VariableInfo;
+import org.lukep.javavis.program.generic.models.measurable.MeasurableClassInfo;
 import org.lukep.javavis.program.java.JavaSourceLoaderThread;
 import org.lukep.javavis.visualisation.mxgraph.jvmxCircleLayout;
 
@@ -42,6 +45,7 @@ public class VisualisationDesktopPane extends StatefulWorkspacePane implements I
 	private JTree programTree;
 	private JScrollPane codeOverviewPanel;
 	private JTabbedPane tabbedPane;
+	private ClassPropertiesPanel propertiesPane;
 	
 	private ClassModelStore classModel;
 	
@@ -62,18 +66,27 @@ public class VisualisationDesktopPane extends StatefulWorkspacePane implements I
 		
 		// initialize the mxGraph, its container component and the circle layout
 		graph = new mxGraph();
+		
+		// initialize the containing mxGraphComponent
 		graphComponent = new mxGraphComponent(graph);
+		graphComponent.getViewport().setOpaque(false);
+		graphComponent.setBackground( new Color(0xF9FFFB) );
+		
+		// initialize graph layout algorithm
 		graphLayout = new jvmxCircleLayout(graph);
 		((mxCircleLayout)(graphLayout)).setMoveCircle(true);
 		((mxCircleLayout)(graphLayout)).setX0(20);
 		((mxCircleLayout)(graphLayout)).setY0(20);
+		
+		// bind mxGraph events
+		bindGraphEvents();
 		
 		// create a panel to contain the left side of the JSplitPane's components
 		JPanel leftPane = new JPanel( new BorderLayout() );
 		leftPane.setVisible(true);
 		
 		// create a panel to show the properties of the currently selected class
-		JPanel propertiesPane = new ClassPropertiesPanel();
+		propertiesPane = new ClassPropertiesPanel();
 		propertiesPane.setVisible(true);
 		
 		// create the inner split pane that contains the top and bottom panels on the left side
@@ -198,6 +211,10 @@ public class VisualisationDesktopPane extends StatefulWorkspacePane implements I
 		
 	}
 	
+	public void setGraphScale(double scale) {
+		graph.getView().setScale(scale);
+	}
+	
 	//private HashMap<String, mxCell> packageMap = new HashMap<String, mxCell>();
 	private void addClass(ClassInfo clazz, String packageName) {
 		mxCell cell = null;
@@ -211,8 +228,29 @@ public class VisualisationDesktopPane extends StatefulWorkspacePane implements I
 		classVertexMap.put(clazz, cell);
 	}
 	
-	public void setGraphScale(double scale) {
-		graph.getView().setScale(scale);
+	private void bindGraphEvents() {
+		graphComponent.getGraphControl().addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				mxCell currentSelectionCell = (mxCell)graphComponent.getCellAt(e.getX(), e.getY());
+				if (currentSelectionCell != null) {
+					MeasurableClassInfo mclass = (MeasurableClassInfo) currentSelectionCell.getValue();
+					propertiesPane.setCurrentClass(mclass);
+				}
+				super.mouseClicked(e);
+			}
+			
+		});
+		graphComponent.addListener(mxEvent.MARK, new mxIEventListener() {
+			
+			@Override
+			public void invoke(Object sender, mxEventObject evt) {
+				mxCell currentSelectionCell = (mxCell) graph.getSelectionCell();
+				if (currentSelectionCell != null)
+					propertiesPane.setCurrentClass((MeasurableClassInfo) currentSelectionCell.getValue());
+			}
+		});
 	}
 
 }

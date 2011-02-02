@@ -12,6 +12,7 @@ import org.lukep.javavis.program.generic.models.ClassInfo;
 import org.lukep.javavis.program.generic.models.ClassModelStore;
 import org.lukep.javavis.program.generic.models.MethodInfo;
 import org.lukep.javavis.program.generic.models.VariableInfo;
+import org.lukep.javavis.program.generic.models.measurable.MeasurableClassInfo;
 import org.lukep.javavis.util.JavaVisConstants;
 
 import com.sun.source.tree.ClassTree;
@@ -34,9 +35,9 @@ public class CodeUnitInfoFactory {
 		if (e == null)
 			return null;
 		
-		ClassInfo newClassModel = new ClassInfo(
-									e.getSimpleName().toString(),
-									e.getQualifiedName().toString());
+		MeasurableClassInfo newClassModel = new MeasurableClassInfo(
+											e.getSimpleName().toString(),
+											e.getQualifiedName().toString());
 		s.lastClass = newClassModel;
 		return newClassModel;
 	}

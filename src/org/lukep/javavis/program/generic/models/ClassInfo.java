@@ -49,6 +49,10 @@ public class ClassInfo implements Serializable {
 		methods.add(method);
 	}
 	
+	public Vector<MethodInfo> getMethods() {
+		return methods;
+	}
+	
 	public int getMethodCount() {
 		return methods.size();
 	}

@@ -39,7 +39,9 @@ public class MeasurableClassInfo extends ClassInfo implements IMeasurable {
 		
 		// nope - create a new one and set the result
 		measurement = new MetricMeasurement(this, attribute);
-		measurement.setResult( getMetricMeasurementVal(attribute) );
+		int measurementVal = getMetricMeasurementVal(attribute);
+		if (measurementVal != -1)
+			measurement.setResult( measurementVal );
 		
 		// add measurement to the MetricRegistry
 		MetricRegistry.getInstance().setMetric(this, attribute, measurement);

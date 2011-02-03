@@ -6,8 +6,8 @@ package org.lukep.javavis.metrics;
 
 public interface IMeasurable {
 
-	public int getMetricMeasurementVal(MetricAttribute attribute);
+	public float getMetricMeasurementVal(MetricAttribute attribute);
 	public MetricMeasurement getMetricMeasurement(MetricAttribute attribute);
-	void accept(IMeasurableVisitor visitor);
+	public MetricMeasurement accept(IMeasurableVisitor visitor);
 	
 }

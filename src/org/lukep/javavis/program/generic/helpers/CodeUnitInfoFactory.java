@@ -37,6 +37,7 @@ public class CodeUnitInfoFactory {
 		if (e == null)
 			return null;
 		
+		// create the new generic class object
 		MeasurableClassInfo newClassModel = new MeasurableClassInfo(
 											GenericModelSourceLang.JAVA,
 											e.getSimpleName().toString(),
@@ -48,9 +49,14 @@ public class CodeUnitInfoFactory {
 	public static MethodInfo createMethodInfoFromJava(CodeUnitInfoFactoryState s, 
 			MethodTree methodTree, TreePath path, Trees trees) {
 		
+		// create the new generic method object
 		MethodInfo newMethodInfo = new MeasurableMethodInfo(GenericModelSourceLang.JAVA,
 											methodTree.getName().toString());
 		
+		// set the method's BlockTree entry point
+		newMethodInfo.setRootStatementBlock(methodTree.getBody());
+		
+		// set constructor method or just add to the parent class's list of methods
 		if (newMethodInfo.getName().equals(JavaVisConstants.DEFAULT_CONSTRUCTOR_NAME)) {
 			s.lastClass.setConstructorMethod(newMethodInfo);
 			

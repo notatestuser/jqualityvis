@@ -7,6 +7,7 @@ package org.lukep.javavis.metrics;
 public enum MetricAttribute {
 
 	NUMBER_OF_METHODS,
+	MCCABE_CYCLOMATIC_COMPLEXITY,
 	COUPLING,
 	COHESION
 	

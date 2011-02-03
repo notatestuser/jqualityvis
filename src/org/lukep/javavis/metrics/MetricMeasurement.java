@@ -8,7 +8,7 @@ public class MetricMeasurement {
 
 	protected IMeasurable target;
 	protected MetricAttribute metric;
-	protected int result = -1;
+	protected float result = -1;
 	protected boolean resultSet = false;
 	
 	public MetricMeasurement(IMeasurable target, MetricAttribute metric) {
@@ -25,11 +25,11 @@ public class MetricMeasurement {
 		this.metric = metric;
 	}
 	
-	public int getResult() {
+	public float getResult() {
 		return result;
 	}
 
-	public void setResult(int result) {
+	public void setResult(float result) {
 		this.result = result;
 		resultSet = true;
 	}

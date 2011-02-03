@@ -11,6 +11,7 @@ import org.lukep.javavis.metrics.MetricMeasurement;
 import org.lukep.javavis.metrics.MetricRegistry;
 import org.lukep.javavis.program.generic.models.ClassInfo;
 import org.lukep.javavis.program.generic.models.GenericModelSourceLang;
+import org.lukep.javavis.program.generic.models.MethodInfo;
 
 public class MeasurableClassInfo extends ClassInfo implements IMeasurable {
 
@@ -19,11 +20,13 @@ public class MeasurableClassInfo extends ClassInfo implements IMeasurable {
 	}
 	
 	@Override
-	public int getMetricMeasurementVal(MetricAttribute attribute) {
+	public float getMetricMeasurementVal(MetricAttribute attribute) {
 		
 		switch (attribute) {
 		case NUMBER_OF_METHODS:
 			return this.getMethodCount();
+		case MCCABE_CYCLOMATIC_COMPLEXITY:
+			return getAvgCyclomaticComplexity();
 		case COHESION:
 		case COUPLING:
 			return 0; // TODO: associate a real value here
@@ -37,8 +40,27 @@ public class MeasurableClassInfo extends ClassInfo implements IMeasurable {
 	}
 
 	@Override
-	public void accept(IMeasurableVisitor visitor) {
-		visitor.visit(this);
+	public MetricMeasurement accept(IMeasurableVisitor visitor) {
+		return visitor.visit(this);
+	}
+	
+	private float getAvgCyclomaticComplexity() {
+		int count = 0;
+		float avgComplexity = 0;
+		MetricMeasurement result;
+		
+		for (MethodInfo method : methods) {
+			if (method instanceof MeasurableMethodInfo) {
+				result = ((MeasurableMethodInfo)(method)).getMetricMeasurement(
+						MetricAttribute.MCCABE_CYCLOMATIC_COMPLEXITY);
+				avgComplexity += result.getResult();
+				count++;
+			}
+		}
+		if (count > 0)
+			avgComplexity /= count;
+		
+		return avgComplexity;
 	}
 	
 }

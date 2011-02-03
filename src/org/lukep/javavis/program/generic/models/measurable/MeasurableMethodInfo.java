@@ -9,6 +9,7 @@ import org.lukep.javavis.metrics.IMeasurableVisitor;
 import org.lukep.javavis.metrics.MetricAttribute;
 import org.lukep.javavis.metrics.MetricMeasurement;
 import org.lukep.javavis.metrics.MetricRegistry;
+import org.lukep.javavis.metrics.algorithms.CyclomaticComplexityVisitor;
 import org.lukep.javavis.program.generic.models.GenericModelSourceLang;
 import org.lukep.javavis.program.generic.models.MethodInfo;
 
@@ -19,10 +20,11 @@ public class MeasurableMethodInfo extends MethodInfo implements IMeasurable {
 	}
 
 	@Override
-	public int getMetricMeasurementVal(MetricAttribute attribute) {
+	public float getMetricMeasurementVal(MetricAttribute attribute) {
 		
 		switch (attribute) {
-		
+		case MCCABE_CYCLOMATIC_COMPLEXITY:
+			return accept( new CyclomaticComplexityVisitor() ).getResult();
 		}
 		return -1;
 	}
@@ -33,8 +35,8 @@ public class MeasurableMethodInfo extends MethodInfo implements IMeasurable {
 	}
 
 	@Override
-	public void accept(IMeasurableVisitor visitor) {
-		visitor.visit(this);
+	public MetricMeasurement accept(IMeasurableVisitor visitor) {
+		return visitor.visit(this);
 	}
 
 }

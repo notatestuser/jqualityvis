@@ -61,7 +61,7 @@ public class MetricRegistry { // singleton
 		
 		// nope - create a new one and set the result
 		measurement = new MetricMeasurement(target, attribute);
-		int measurementVal = target.getMetricMeasurementVal(attribute);
+		float measurementVal = target.getMetricMeasurementVal(attribute);
 		if (measurementVal != -1)
 			measurement.setResult( measurementVal );
 		

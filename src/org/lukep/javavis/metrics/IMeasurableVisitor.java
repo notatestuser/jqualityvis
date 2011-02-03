@@ -4,8 +4,12 @@
  */
 package org.lukep.javavis.metrics;
 
+import org.lukep.javavis.program.generic.models.measurable.MeasurableClassInfo;
+import org.lukep.javavis.program.generic.models.measurable.MeasurableMethodInfo;
+
 public interface IMeasurableVisitor {
 
-	void visit(IMeasurable measurable);
+	MetricMeasurement visit(MeasurableClassInfo clazz);
+	MetricMeasurement visit(MeasurableMethodInfo method);
 	
 }

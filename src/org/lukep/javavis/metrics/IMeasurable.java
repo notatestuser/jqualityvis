@@ -8,5 +8,6 @@ public interface IMeasurable {
 
 	public int getMetricMeasurementVal(MetricAttribute attribute);
 	public MetricMeasurement getMetricMeasurement(MetricAttribute attribute);
+	void accept(IMeasurableVisitor visitor);
 	
 }

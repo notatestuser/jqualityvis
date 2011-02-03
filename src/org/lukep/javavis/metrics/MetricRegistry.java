@@ -52,4 +52,23 @@ public class MetricRegistry { // singleton
 		foundMeasurementMap.put(attribute, measurement);
 	}
 	
+	public MetricMeasurement getMetricCached(IMeasurable target, MetricAttribute attribute) {
+
+		// search for an existing measurement in the MetricRegistry
+		MetricMeasurement measurement = getInstance().getMetric(target, attribute);
+		if (measurement != null)
+			return measurement;
+		
+		// nope - create a new one and set the result
+		measurement = new MetricMeasurement(target, attribute);
+		int measurementVal = target.getMetricMeasurementVal(attribute);
+		if (measurementVal != -1)
+			measurement.setResult( measurementVal );
+		
+		// add measurement to the MetricRegistry
+		getInstance().setMetric(target, attribute, measurement);
+		
+		return measurement;
+	}
+	
 }

@@ -1,6 +1,6 @@
 /*
- * JavaSourceLoaderThread.java (JavaVis)
- * Copyright 2010 Luke Plaster. All rights reserved.
+ * JavaSourceLoaderThread.java (JMetricVis)
+ * Copyright 2011 Luke Plaster. All rights reserved.
  */
 package org.lukep.javavis.program.java;
 

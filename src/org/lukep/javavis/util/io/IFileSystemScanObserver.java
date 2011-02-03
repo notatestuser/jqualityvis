@@ -1,6 +1,6 @@
 /*
- * IFileSystemScanObserver.java (JavaVis)
- * Copyright 2010 Luke Plaster. All rights reserved.
+ * IFileSystemScanObserver.java (JMetricVis)
+ * Copyright 2011 Luke Plaster. All rights reserved.
  */
 package org.lukep.javavis.util.io;
 

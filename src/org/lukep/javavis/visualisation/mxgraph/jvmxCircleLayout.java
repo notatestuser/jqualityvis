@@ -1,5 +1,5 @@
 /*
- * jvmxCircleLayout.java (JavaVis)
+ * jvmxCircleLayout.java (JMetricVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
 package org.lukep.javavis.visualisation.mxgraph;
@@ -19,7 +19,7 @@ public class jvmxCircleLayout extends mxCircleLayout {
 	 */
 	public void circle(Object[] vertices, double r, double left, double top)
 	{
-		r = (r / 3) * 2;
+		r = r / 2;
 		super.circle(vertices, r, left, top);
 	}
 

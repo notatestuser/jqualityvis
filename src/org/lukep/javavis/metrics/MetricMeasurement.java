@@ -6,6 +6,8 @@ package org.lukep.javavis.metrics;
 
 public class MetricMeasurement {
 
+	public static final float DEFAULT_RESULT = -1;
+	
 	protected IMeasurable target;
 	protected MetricAttribute metric;
 	protected float result = -1;

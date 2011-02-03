@@ -13,6 +13,7 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 
 import org.lukep.javavis.metrics.MetricAttribute;
+import org.lukep.javavis.metrics.MetricMeasurement;
 import org.lukep.javavis.program.generic.models.measurable.MeasurableClassInfo;
 
 public class ClassPropertiesPanel extends JPanel {
@@ -24,10 +25,6 @@ public class ClassPropertiesPanel extends JPanel {
 
 	public ClassPropertiesPanel() {
 		setLayout( new GridLayout(1, 0, 3, 0) );
-		
-		// create title label
-		//JLabel titleLabel = new JLabel("Selected Class Properties");
-		//add(titleLabel, BorderLayout.NORTH);
 		
 		// create content label
 		contentLabel = new JLabel();
@@ -57,11 +54,14 @@ public class ClassPropertiesPanel extends JPanel {
 				sb.append(method.getName() + "<br />");
 		}*/
 		// ... include metrics
-		sb.append("<h3>Metrics</h3>");
-		for (MetricAttribute attribute : MetricAttribute.values())
-			sb.append("<strong>" + attribute.toString() + "</strong>" 
-					+ " = " + clazz.getMetricMeasurementVal(attribute)
-					+ "<br />");
+		//sb.append("<h3>Metrics</h3>");
+		float result;
+		for (MetricAttribute attribute : MetricAttribute.values()) {
+			result = clazz.getMetricMeasurementVal(attribute);
+			if (result != MetricMeasurement.DEFAULT_RESULT)
+				sb.append("<strong>" + attribute.toString() + "</strong>" 
+						+ " = " + result + "<br />");
+		}
 		// ... end
 		sb.append("</html>");
 		

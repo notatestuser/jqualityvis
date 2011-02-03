@@ -35,7 +35,7 @@ public class JavaCodeTreeVisitor extends TreePathScanner<Object, Trees> {
 	public Object visitClass(ClassTree classTree, Trees trees) {
 		TreePath path = getCurrentPath();
 		ClassInfo newClassModel = 
-			CodeUnitInfoFactory.createClassInfo(codeUnitState, classTree, path, trees);
+			CodeUnitInfoFactory.createClassInfoFromJava(codeUnitState, classTree, path, trees);
 		
 		// notify observers
 		if (newClassModel != null) {
@@ -50,7 +50,7 @@ public class JavaCodeTreeVisitor extends TreePathScanner<Object, Trees> {
 	public Object visitMethod(MethodTree methodTree, Trees trees) {
 		TreePath path = getCurrentPath();
 		MethodInfo newMethodInfo = 
-			CodeUnitInfoFactory.createMethodInfo(codeUnitState, methodTree, path, trees);
+			CodeUnitInfoFactory.createMethodInfoFromJava(codeUnitState, methodTree, path, trees);
 		
 		// notify observers
 		for (IProgramSourceObserver observer : observers)
@@ -62,11 +62,19 @@ public class JavaCodeTreeVisitor extends TreePathScanner<Object, Trees> {
 	@Override
 	public Object visitVariable(VariableTree variableTree, Trees trees) {
 		TreePath path = getCurrentPath();
-		VariableInfo newVariableInfo = CodeUnitInfoFactory.createVariableInfo(
+		VariableInfo newVariableInfo = CodeUnitInfoFactory.createVariableInfoFromJava(
 				codeUnitState, variableTree, path, trees);
 		// TODO: do something here
 		return super.visitVariable(variableTree, trees);
 	}
+
+	/*@Override
+	public Object visitIdentifier(IdentifierTree identifierTree, Trees trees) {
+		JCIdent identifier = (JCIdent) identifierTree;
+		if (identifier != null)
+			System.out.println(identifier.getName().toString());
+		return super.visitIdentifier(identifierTree, trees);
+	}*/
 
 	/*@Override
 	public Object visitNewClass(NewClassTree newClassTree, Trees trees) {

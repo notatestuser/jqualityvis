@@ -14,6 +14,7 @@ import org.lukep.javavis.program.generic.models.GenericModelSourceLang;
 import org.lukep.javavis.program.generic.models.MethodInfo;
 import org.lukep.javavis.program.generic.models.VariableInfo;
 import org.lukep.javavis.program.generic.models.measurable.MeasurableClassInfo;
+import org.lukep.javavis.program.generic.models.measurable.MeasurableMethodInfo;
 import org.lukep.javavis.util.JavaVisConstants;
 
 import com.sun.source.tree.ClassTree;
@@ -28,7 +29,7 @@ public class CodeUnitInfoFactory {
 	protected final static Logger log = 
 		Logger.getLogger(CodeUnitInfoFactory.class.getSimpleName());
 	
-	public static ClassInfo createClassInfo(CodeUnitInfoFactoryState s, 
+	public static ClassInfo createClassInfoFromJava(CodeUnitInfoFactoryState s, 
 			ClassTree classTree, TreePath path, Trees trees) {
 		
 		TypeElement e = (TypeElement) trees.getElement(path);
@@ -44,11 +45,11 @@ public class CodeUnitInfoFactory {
 		return newClassModel;
 	}
 	
-	public static MethodInfo createMethodInfo(CodeUnitInfoFactoryState s, 
+	public static MethodInfo createMethodInfoFromJava(CodeUnitInfoFactoryState s, 
 			MethodTree methodTree, TreePath path, Trees trees) {
 		
-		MethodInfo newMethodInfo = new MethodInfo(GenericModelSourceLang.JAVA,
-				methodTree.getName().toString());
+		MethodInfo newMethodInfo = new MeasurableMethodInfo(GenericModelSourceLang.JAVA,
+											methodTree.getName().toString());
 		
 		if (newMethodInfo.getName().equals(JavaVisConstants.DEFAULT_CONSTRUCTOR_NAME)) {
 			s.lastClass.setConstructorMethod(newMethodInfo);
@@ -65,7 +66,7 @@ public class CodeUnitInfoFactory {
 		return newMethodInfo;
 	}
 	
-	public static VariableInfo createVariableInfo(CodeUnitInfoFactoryState s,
+	public static VariableInfo createVariableInfoFromJava(CodeUnitInfoFactoryState s,
 			VariableTree variableTree, TreePath path, Trees trees) {
 		
 		VarSymbol e = (VarSymbol) trees.getElement(path);

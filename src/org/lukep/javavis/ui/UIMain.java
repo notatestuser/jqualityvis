@@ -83,7 +83,7 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 		bottomPanel = new JPanel( new BorderLayout() );
 		mainStatusBar = new JLabel("Ready");
 		bottomPanel.add(mainStatusBar, BorderLayout.CENTER);
-		zoomSlider = new JSlider(0, 100, 100);
+		zoomSlider = new JSlider(0, 1000, 1000);
 		zoomSlider.addChangeListener(this);
 		bottomPanel.add(zoomSlider, BorderLayout.EAST);
 		frmJavavis.getContentPane().add(bottomPanel, BorderLayout.SOUTH);
@@ -172,7 +172,7 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 		if (zoomSlider == e.getSource()) {
 			VisualisationDesktopPane selectedVdp = 
 				(VisualisationDesktopPane) mainTabbedPane.getSelectedComponent();
-			selectedVdp.setGraphScale((double)zoomSlider.getValue() / 100);
+			selectedVdp.setGraphScale((double)zoomSlider.getValue() / 1000);
 		}
 	}
 }

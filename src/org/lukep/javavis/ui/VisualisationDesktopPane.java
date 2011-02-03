@@ -132,6 +132,7 @@ public class VisualisationDesktopPane extends StatefulWorkspacePane implements I
 
 			@Override
 			public void statusFinished() {
+				((DefaultTreeModel)programTree.getModel()).reload();
 				graph.getModel().beginUpdate();
 				
 				try {
@@ -199,7 +200,6 @@ public class VisualisationDesktopPane extends StatefulWorkspacePane implements I
 				addClass( clazz, packageName ); // create cell graph
 			}
 		}
-		((DefaultTreeModel)programTree.getModel()).reload();
 	}
 	
 	@Override

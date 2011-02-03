@@ -89,19 +89,18 @@ public class VisualisationDesktopPane extends StatefulWorkspacePane implements I
 		propertiesPane = new ClassPropertiesPanel();
 		propertiesPane.setVisible(true);
 		
-		// create the inner split pane that contains the top and bottom panels on the left side
-		// of the workspace
-		JSplitPane innerSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, leftPane, 
-				propertiesPane);
-		innerSplitPane.setDividerLocation(320);
-		innerSplitPane.setResizeWeight(1);
-		innerSplitPane.setDividerSize(6);
-		innerSplitPane.setBorder(null);
+		// create the right split pane that contains the graph component on the top and the class
+		// properties pane on the bottom
+		JSplitPane rightSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, graphComponent, propertiesPane);
+		rightSplitPane.setOneTouchExpandable(true);
+		rightSplitPane.setDividerLocation(500);
+		rightSplitPane.setResizeWeight(1);
+		rightSplitPane.setDividerSize(6);
+		rightSplitPane.setBorder(null);
 		
 		// create the outer split pane that contains the left (inner) split pane and the graph
 		// component on the right side of the window
-		JSplitPane outerSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, innerSplitPane, 
-				graphComponent);
+		JSplitPane outerSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPane, rightSplitPane);
 		outerSplitPane.setOneTouchExpandable(true);
 		outerSplitPane.setDividerLocation(250);
 		outerSplitPane.setDividerSize(6);
@@ -114,7 +113,7 @@ public class VisualisationDesktopPane extends StatefulWorkspacePane implements I
 		
 		// create the "Code Overview" tab
 		codeOverviewPanel = new JScrollPane();
-		tabbedPane.addTab("Code Overview", null, codeOverviewPanel, null);
+		tabbedPane.addTab("Project Explorer", null, codeOverviewPanel, null);
 		codeOverviewPanel.setLayout(new ScrollPaneLayout());
 		
 		// create the program tree

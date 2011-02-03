@@ -14,7 +14,7 @@ import org.lukep.javavis.program.generic.models.GenericModelSourceLang;
 import org.lukep.javavis.program.generic.models.MethodInfo;
 
 public class MeasurableClassInfo extends ClassInfo implements IMeasurable {
-
+	
 	public MeasurableClassInfo(GenericModelSourceLang lang, String simpleName, String qualifiedName) {
 		super(lang, simpleName, qualifiedName);
 	}
@@ -25,8 +25,10 @@ public class MeasurableClassInfo extends ClassInfo implements IMeasurable {
 		switch (attribute) {
 		case NUMBER_OF_METHODS:
 			return this.getMethodCount();
-		case MCCABE_CYCLOMATIC_COMPLEXITY:
+		case MCCABE_CYCLOMATIC_COMPLEXITY_AVG:
 			return getAvgCyclomaticComplexity();
+		case MCCABE_CYCLOMATIC_COMPLEXITY_MAX:
+			return getMaxCyclomaticComplexity();
 		case COHESION:
 		case COUPLING:
 			return 0; // TODO: associate a real value here
@@ -61,6 +63,22 @@ public class MeasurableClassInfo extends ClassInfo implements IMeasurable {
 			avgComplexity /= count;
 		
 		return avgComplexity;
+	}
+	
+	private float getMaxCyclomaticComplexity() {
+		float maxComplexity = 0;
+		MetricMeasurement result;
+		
+		for (MethodInfo method : methods) {
+			if (method instanceof MeasurableMethodInfo) {
+				result = ((MeasurableMethodInfo)(method)).getMetricMeasurement(
+						MetricAttribute.MCCABE_CYCLOMATIC_COMPLEXITY);
+				if (result.getResult() > maxComplexity)
+					maxComplexity = result.getResult();
+			}
+		}
+		
+		return maxComplexity;
 	}
 	
 }

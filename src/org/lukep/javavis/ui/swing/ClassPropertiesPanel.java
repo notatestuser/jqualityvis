@@ -4,8 +4,11 @@
  */
 package org.lukep.javavis.ui.swing;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -21,6 +24,8 @@ public class ClassPropertiesPanel extends JPanel {
 	protected JLabel contentLabel;
 	protected JTable methodTable;
 	
+	ClassCompositionComponent classCompositionComponent;
+	
 	protected MeasurableClassInfo currentClass;
 
 	public ClassPropertiesPanel() {
@@ -29,8 +34,16 @@ public class ClassPropertiesPanel extends JPanel {
 		// create content label
 		contentLabel = new JLabel();
 		contentLabel.setVerticalAlignment(SwingConstants.TOP);
-		JScrollPane contentLabelPane = new JScrollPane(contentLabel);
+		contentLabel.setBorder( BorderFactory.createEmptyBorder(5, 10, 0, 0) );
+		JPanel contentPanel = new JPanel( new BorderLayout() );
+		JScrollPane contentLabelPane = new JScrollPane(contentPanel);
+		contentPanel.add(contentLabel, BorderLayout.CENTER);
 		add(contentLabelPane);
+		
+		// add class composition component
+		classCompositionComponent = new ClassCompositionComponent(null);
+		classCompositionComponent.setPreferredSize( new Dimension(100, 100) );
+		contentPanel.add(classCompositionComponent, BorderLayout.WEST);
 		
 		// create method listing table
 		methodTable = new JTable( new ClassPropertiesTableModel(null) );
@@ -70,6 +83,9 @@ public class ClassPropertiesPanel extends JPanel {
 		
 		// update method listing table
 		((ClassPropertiesTableModel)(methodTable.getModel())).setSubject(clazz);
+		
+		// update class composition component
+		classCompositionComponent.setCurrentClass(clazz);
 	}
 	
 }

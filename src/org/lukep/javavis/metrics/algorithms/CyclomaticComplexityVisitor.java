@@ -4,8 +4,6 @@
  */
 package org.lukep.javavis.metrics.algorithms;
 
-import java.util.List;
-
 import org.lukep.javavis.metrics.IMeasurableVisitor;
 import org.lukep.javavis.metrics.MetricAttribute;
 import org.lukep.javavis.metrics.MetricMeasurement;
@@ -23,13 +21,13 @@ import com.sun.source.tree.EnhancedForLoopTree;
 import com.sun.source.tree.ForLoopTree;
 import com.sun.source.tree.IfTree;
 import com.sun.source.tree.ReturnTree;
-import com.sun.source.tree.StatementTree;
 import com.sun.source.tree.ThrowTree;
 import com.sun.source.tree.TryTree;
 import com.sun.source.tree.WhileLoopTree;
 import com.sun.source.util.TreeScanner;
 
-public class CyclomaticComplexityVisitor extends TreeScanner<Object, Object> implements IMeasurableVisitor {
+public class CyclomaticComplexityVisitor extends TreeScanner<Object, Object> 
+		implements IMeasurableVisitor {
 
 	protected static final MetricAttribute METRIC_ATTRIBUTE = 
 		MetricAttribute.MCCABE_CYCLOMATIC_COMPLEXITY;
@@ -55,14 +53,8 @@ public class CyclomaticComplexityVisitor extends TreeScanner<Object, Object> imp
 	private MetricMeasurement calculateForJavaMethod(MeasurableMethodInfo method) {
 		MetricMeasurement result = new MetricMeasurement(method, METRIC_ATTRIBUTE);
 		BlockTree methodTree = (BlockTree) method.getRootStatementBlock();
-		if (methodTree != null) {
-			List<? extends StatementTree> treeList = methodTree.getStatements();
-			if (treeList != null && treeList.size() > 0) {
-				for (StatementTree tree : treeList) {
-					tree.accept(this, null);
-				}
-			}
-		}
+		if (methodTree != null)
+			methodTree.accept(this, null);
 		result.setResult(complexity);
 		return result;
 	}

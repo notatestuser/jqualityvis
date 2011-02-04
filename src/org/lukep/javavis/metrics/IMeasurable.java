@@ -8,7 +8,8 @@ public interface IMeasurable {
 
 	public static final MetricAttribute[] SUPPORTED_METRICS_CLASS = 
 	{ 
-		MetricAttribute.NUMBER_OF_METHODS, 
+		MetricAttribute.NUMBER_OF_METHODS,
+		MetricAttribute.NUMBER_OF_STATEMENTS,
 		MetricAttribute.MCCABE_CYCLOMATIC_COMPLEXITY_AVG,
 		MetricAttribute.MCCABE_CYCLOMATIC_COMPLEXITY_MAX,
 		MetricAttribute.COHESION,
@@ -16,8 +17,9 @@ public interface IMeasurable {
 	};
 	
 	public static final MetricAttribute[] SUPPORTED_METRICS_METHOD = 
-	{ 
-		MetricAttribute.MCCABE_CYCLOMATIC_COMPLEXITY, 
+	{
+		MetricAttribute.NUMBER_OF_STATEMENTS,
+		MetricAttribute.MCCABE_CYCLOMATIC_COMPLEXITY
 	};
 	
 	public float getMetricMeasurementVal(MetricAttribute attribute);

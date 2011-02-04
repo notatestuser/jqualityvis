@@ -10,6 +10,7 @@ import org.lukep.javavis.metrics.MetricAttribute;
 import org.lukep.javavis.metrics.MetricMeasurement;
 import org.lukep.javavis.metrics.MetricRegistry;
 import org.lukep.javavis.metrics.algorithms.CyclomaticComplexityVisitor;
+import org.lukep.javavis.metrics.algorithms.StatementCountVisitor;
 import org.lukep.javavis.program.generic.models.GenericModelSourceLang;
 import org.lukep.javavis.program.generic.models.MethodInfo;
 
@@ -23,6 +24,8 @@ public class MeasurableMethodInfo extends MethodInfo implements IMeasurable {
 	public float getMetricMeasurementVal(MetricAttribute attribute) {
 		
 		switch (attribute) {
+		case NUMBER_OF_STATEMENTS:
+			return accept( new StatementCountVisitor() ).getResult();
 		case MCCABE_CYCLOMATIC_COMPLEXITY:
 			return accept( new CyclomaticComplexityVisitor() ).getResult();
 		}

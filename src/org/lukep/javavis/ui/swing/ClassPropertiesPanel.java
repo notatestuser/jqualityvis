@@ -2,7 +2,7 @@
  * ClassPropertiesPanel.java (JMetricVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
-package org.lukep.javavis.ui;
+package org.lukep.javavis.ui.swing;
 
 import java.awt.GridLayout;
 

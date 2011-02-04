@@ -2,7 +2,7 @@
  * VisualisationDesktopPane.java (JMetricVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
-package org.lukep.javavis.ui;
+package org.lukep.javavis.ui.swing;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -28,6 +28,8 @@ import org.lukep.javavis.program.generic.models.MethodInfo;
 import org.lukep.javavis.program.generic.models.VariableInfo;
 import org.lukep.javavis.program.generic.models.measurable.MeasurableClassInfo;
 import org.lukep.javavis.program.java.JavaSourceLoaderThread;
+import org.lukep.javavis.ui.IProgramSourceObserver;
+import org.lukep.javavis.ui.IProgramStatusReporter;
 import org.lukep.javavis.visualisation.mxgraph.jvmxCircleLayout;
 
 import com.mxgraph.layout.mxCircleLayout;
@@ -77,6 +79,7 @@ public class VisualisationDesktopPane extends StatefulWorkspacePane implements I
 		((mxCircleLayout)(graphLayout)).setMoveCircle(true);
 		((mxCircleLayout)(graphLayout)).setX0(20);
 		((mxCircleLayout)(graphLayout)).setY0(20);
+		//graphLayout = new mxStackLayout(graph, false);
 		
 		// bind mxGraph events
 		bindGraphEvents();
@@ -209,17 +212,17 @@ public class VisualisationDesktopPane extends StatefulWorkspacePane implements I
 	}
 	
 	public void setGraphScale(double scale) {
-		graph.getView().setScale(scale);
+		graphComponent.zoomTo(scale, true);
 	}
 	
-	//private HashMap<String, mxCell> packageMap = new HashMap<String, mxCell>();
+	private HashMap<String, mxCell> packageMap = new HashMap<String, mxCell>();
 	private void addClass(ClassInfo clazz, String packageName) {
 		mxCell cell = null;
 		/*if (packageMap.containsKey(packageName))
-			parent = packageMap.get(packageName);
+			cell = packageMap.get(packageName);
 		else {
-			parent = (mxCell) graph.insertVertex(null, null, packageName, 250, 100, 150, 80);
-			packageMap.put(packageName, parent);
+			cell = (mxCell) graph.insertVertex(graph.getDefaultParent(), null, packageName, 250, 100, 150, 80);
+			packageMap.put(packageName, cell);
 		}*/
 		cell = (mxCell) graph.insertVertex(graph.getDefaultParent(), null, clazz, 20, 20, 150, 50);
 		classVertexMap.put(clazz, cell);

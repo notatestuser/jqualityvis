@@ -25,6 +25,8 @@ import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.lukep.javavis.ui.swing.VisualisationDesktopPane;
+
 public class UIMain implements IProgramStatusReporter, ChangeListener {
 
 	protected JFrame frmJavavis;

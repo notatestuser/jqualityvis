@@ -4,11 +4,10 @@
  */
 package org.lukep.javavis.metrics.algorithms;
 
-import org.lukep.javavis.metrics.IMeasurableVisitor;
 import org.lukep.javavis.metrics.MetricAttribute;
 import org.lukep.javavis.metrics.MetricMeasurement;
-import org.lukep.javavis.program.generic.models.measurable.MeasurableClassInfo;
-import org.lukep.javavis.program.generic.models.measurable.MeasurableMethodInfo;
+import org.lukep.javavis.program.generic.models.ClassModel;
+import org.lukep.javavis.program.generic.models.MethodModel;
 
 import com.sun.source.tree.AssertTree;
 import com.sun.source.tree.BlockTree;
@@ -28,20 +27,18 @@ import com.sun.source.tree.ThrowTree;
 import com.sun.source.tree.TryTree;
 import com.sun.source.tree.VariableTree;
 import com.sun.source.tree.WhileLoopTree;
-import com.sun.source.util.TreeScanner;
 
-public class StatementCountVisitor extends TreeScanner<Object, Object> implements 
-		IMeasurableVisitor {
+public class StatementCountVisitor extends AbstractMeasurableVisitor {
 	
 	protected int statementCount = 0;
 	
 	@Override
-	public MetricMeasurement visit(MetricAttribute metric, MeasurableClassInfo clazz) {
+	public MetricMeasurement visit(MetricAttribute metric, ClassModel clazz) {
 		return new MetricMeasurement(clazz, metric, clazz.getTotalNumberOfStatements());
 	}
 
 	@Override
-	public MetricMeasurement visit(MetricAttribute metric, MeasurableMethodInfo method) {
+	public MetricMeasurement visit(MetricAttribute metric, MethodModel method) {
 		
 		switch (method.getSourceLang()) {
 		case JAVA:
@@ -50,7 +47,7 @@ public class StatementCountVisitor extends TreeScanner<Object, Object> implement
 		return null;
 	}
 	
-	private MetricMeasurement calculateForJavaMethod(MetricAttribute metric, MeasurableMethodInfo method) {
+	private MetricMeasurement calculateForJavaMethod(MetricAttribute metric, MethodModel method) {
 		MetricMeasurement result = new MetricMeasurement(method, metric);
 		BlockTree methodTree = (BlockTree) method.getRootStatementBlock();
 		if (methodTree != null)
@@ -63,7 +60,9 @@ public class StatementCountVisitor extends TreeScanner<Object, Object> implement
 		statementCount++;
 	}
 	
-	// Tree visitor implementations
+	/*
+	 * Tree Visitor Implementations
+	 */
 
 	@Override
 	public Object visitAssert(AssertTree arg0, Object arg1) {

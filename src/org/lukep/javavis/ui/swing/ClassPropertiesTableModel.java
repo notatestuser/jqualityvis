@@ -10,20 +10,20 @@ import javax.swing.table.AbstractTableModel;
 
 import org.lukep.javavis.metrics.MetricAttribute;
 import org.lukep.javavis.metrics.MetricRegistry;
+import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.MethodModel;
-import org.lukep.javavis.program.generic.models.measurable.MeasurableClassInfo;
-import org.lukep.javavis.program.generic.models.measurable.MeasurableMethodInfo;
+import org.lukep.javavis.util.JavaVisConstants;
 
 public class ClassPropertiesTableModel extends AbstractTableModel {
 
-	protected MeasurableClassInfo subject;
+	protected ClassModel subject;
 
-	public ClassPropertiesTableModel(MeasurableClassInfo subject) {
+	public ClassPropertiesTableModel(ClassModel subject) {
 		super();
 		this.subject = subject;
 	}
 
-	public void setSubject(MeasurableClassInfo subject) {
+	public void setSubject(ClassModel subject) {
 		this.subject = subject;
 		fireTableDataChanged();
 	}
@@ -38,7 +38,7 @@ public class ClassPropertiesTableModel extends AbstractTableModel {
 	@Override
 	public int getColumnCount() {
 		return MetricRegistry.getInstance().getSupportedMetricCount(
-				MeasurableMethodInfo.APPLIES_TO_STR) + 1;
+				JavaVisConstants.METRIC_APPLIES_TO_METHOD) + 1;
 	}
 	
 	@Override
@@ -48,7 +48,7 @@ public class ClassPropertiesTableModel extends AbstractTableModel {
 		} else {
 			Vector<MetricAttribute> supportMap = 
 				MetricRegistry.getInstance().getSupportedMetrics(
-						MeasurableMethodInfo.APPLIES_TO_STR);
+						JavaVisConstants.METRIC_APPLIES_TO_METHOD);
 			return supportMap.get(column - 1).getName();
 		}
 	}
@@ -59,18 +59,15 @@ public class ClassPropertiesTableModel extends AbstractTableModel {
 			return null;
 		
 		MethodModel method = subject.getMethods().get(rowIndex);
-		if (method instanceof MeasurableMethodInfo) {
-			if (columnIndex == 0) {
-				return method.getName();
-			} else {
-				Vector<MetricAttribute> supportMap = 
+		if (columnIndex == 0) {
+			return method.getName();
+		} else {
+			Vector<MetricAttribute> supportMap = 
 					MetricRegistry.getInstance().getSupportedMetrics(
-							MeasurableMethodInfo.APPLIES_TO_STR);
-				return ((MeasurableMethodInfo)(method)).getMetricMeasurement(
+							JavaVisConstants.METRIC_APPLIES_TO_METHOD);
+			return  method.getMetricMeasurement(
 						supportMap.get(columnIndex - 1)).getResult();
-			}
 		}
-		return "unknown";
 	}
 
 	@Override

@@ -6,6 +6,10 @@ package org.lukep.javavis.program.generic.models;
 
 import java.util.Vector;
 
+import org.lukep.javavis.metrics.IMeasurableVisitor;
+import org.lukep.javavis.metrics.MetricAttribute;
+import org.lukep.javavis.metrics.MetricMeasurement;
+import org.lukep.javavis.metrics.MetricRegistry;
 import org.lukep.javavis.util.JavaVisConstants;
 
 public class ClassModel extends GenericModel {
@@ -17,10 +21,68 @@ public class ClassModel extends GenericModel {
 	protected Vector<VariableModel> variables = new Vector<VariableModel>();
 
 	public ClassModel(GenericModelSourceLang lang, String simpleName, String qualifiedName) {
-		super(lang);
+		super(lang, JavaVisConstants.METRIC_APPLIES_TO_CLASS);
 		this.simpleName = simpleName;
 		this.qualifiedName = qualifiedName;
 	}
+	
+	///////////////////////////////////////////////////////
+	
+	@Override
+	public MetricMeasurement accept(MetricAttribute metric, IMeasurableVisitor visitor) {
+		return visitor.visit(metric, this);
+	}
+	
+	///////////////////////////////////////////////////////
+	
+	public int getTotalNumberOfStatements() {
+		int totalStatements = 0;
+		MetricMeasurement result;
+		
+		for (MethodModel method : methods) {
+			result = method.getMetricMeasurement(
+						MetricRegistry.getInstance().getMetricAttribute(
+							JavaVisConstants.METRIC_NUM_OF_STATEMENTS));
+			totalStatements += result.getResult();
+		}
+		
+		return totalStatements;
+	}
+	
+	public float getAvgCyclomaticComplexity() {
+		int count = 0;
+		float avgComplexity = 0;
+		MetricMeasurement result;
+		
+		for (MethodModel method : methods) {
+				result = method.getMetricMeasurement(
+							MetricRegistry.getInstance().getMetricAttribute(
+								JavaVisConstants.METRIC_CYCLO_COMPLEX));
+				avgComplexity += result.getResult();
+				count++;
+		}
+		if (count > 0)
+			avgComplexity /= count;
+		
+		return avgComplexity;
+	}
+	
+	public float getMaxCyclomaticComplexity() {
+		float maxComplexity = 0;
+		MetricMeasurement result;
+		
+		for (MethodModel method : methods) {
+				result = method.getMetricMeasurement(
+							MetricRegistry.getInstance().getMetricAttribute(
+								JavaVisConstants.METRIC_CYCLO_COMPLEX));
+				if (result.getResult() > maxComplexity)
+					maxComplexity = result.getResult();
+		}
+		
+		return maxComplexity;
+	}
+	
+	///////////////////////////////////////////////////////
 
 	public String getSimpleName() {
 		return simpleName;

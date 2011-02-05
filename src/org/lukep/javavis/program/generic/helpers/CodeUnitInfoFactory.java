@@ -13,8 +13,6 @@ import org.lukep.javavis.program.generic.models.ClassModelStore;
 import org.lukep.javavis.program.generic.models.GenericModelSourceLang;
 import org.lukep.javavis.program.generic.models.MethodModel;
 import org.lukep.javavis.program.generic.models.VariableModel;
-import org.lukep.javavis.program.generic.models.measurable.MeasurableClassInfo;
-import org.lukep.javavis.program.generic.models.measurable.MeasurableMethodInfo;
 import org.lukep.javavis.util.JavaVisConstants;
 
 import com.sun.source.tree.ClassTree;
@@ -38,10 +36,10 @@ public class CodeUnitInfoFactory {
 			return null;
 		
 		// create the new generic class object
-		MeasurableClassInfo newClassModel = new MeasurableClassInfo(
-											GenericModelSourceLang.JAVA,
-											e.getSimpleName().toString(),
-											e.getQualifiedName().toString());
+		ClassModel newClassModel = new ClassModel(
+				GenericModelSourceLang.JAVA,
+				e.getSimpleName().toString(),
+				e.getQualifiedName().toString());
 		s.lastClass = newClassModel;
 		return newClassModel;
 	}
@@ -50,7 +48,7 @@ public class CodeUnitInfoFactory {
 			MethodTree methodTree, TreePath path, Trees trees) {
 		
 		// create the new generic method object
-		MethodModel newMethodInfo = new MeasurableMethodInfo(GenericModelSourceLang.JAVA,
+		MethodModel newMethodInfo = new MethodModel(GenericModelSourceLang.JAVA,
 											methodTree.getName().toString());
 		
 		// set the method's BlockTree entry point

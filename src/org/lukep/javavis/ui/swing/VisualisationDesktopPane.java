@@ -26,7 +26,6 @@ import javax.swing.tree.DefaultTreeModel;
 import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.ClassModelStore;
 import org.lukep.javavis.program.generic.models.MethodModel;
-import org.lukep.javavis.program.generic.models.measurable.MeasurableClassInfo;
 import org.lukep.javavis.program.java.JavaSourceLoaderThread;
 import org.lukep.javavis.ui.IProgramSourceObserver;
 import org.lukep.javavis.ui.IProgramStatusReporter;
@@ -94,7 +93,7 @@ public class VisualisationDesktopPane extends StatefulWorkspacePane implements I
 		classModel = new ClassModelStore();
 		classVertexMap = new HashMap<ClassModel, mxCell>();
 		
-		// initialize the mxGraph, its container component and the circle layout
+		// initialise the mxGraph, its container component and the circle layout
 		graph = new mxGraph()
 		{
 			public void drawState(mxICanvas canvas, mxCellState state,
@@ -106,17 +105,17 @@ public class VisualisationDesktopPane extends StatefulWorkspacePane implements I
 				if (getModel().isVertex(state.getCell())
 						&& canvas instanceof mxImageCanvas
 						&& ((mxImageCanvas) canvas).getGraphicsCanvas() instanceof SwingCanvas
-						&& cell.getValue() instanceof MeasurableClassInfo)
+						&& cell.getValue() instanceof ClassModel)
 				{
 					((SwingCanvas) ((mxImageCanvas) canvas).getGraphicsCanvas())
-							.drawVertex(state, new ClassCompositionComponent( (MeasurableClassInfo) cell.getValue() ));
+							.drawVertex(state, new ClassCompositionComponent( (ClassModel) cell.getValue() ));
 				}
 				// Redirection of drawing vertices in SwingCanvas
 				else if (getModel().isVertex(state.getCell())
 						&& canvas instanceof SwingCanvas
-						&& cell.getValue() instanceof MeasurableClassInfo)
+						&& cell.getValue() instanceof ClassModel)
 				{
-					((SwingCanvas) canvas).drawVertex(state, new ClassCompositionComponent( (MeasurableClassInfo) cell.getValue() ));
+					((SwingCanvas) canvas).drawVertex(state, new ClassCompositionComponent( (ClassModel) cell.getValue() ));
 				}
 				else
 				{
@@ -330,8 +329,8 @@ public class VisualisationDesktopPane extends StatefulWorkspacePane implements I
 			public void mouseReleased(MouseEvent e) {
 				mxCell currentSelectionCell = (mxCell)graphComponent.getCellAt(e.getX(), e.getY());
 				if (currentSelectionCell != null && graph.getModel().isVertex(currentSelectionCell)
-						&& currentSelectionCell.getValue() instanceof MeasurableClassInfo) {
-					MeasurableClassInfo mclass = (MeasurableClassInfo) currentSelectionCell.getValue();
+						&& currentSelectionCell.getValue() instanceof ClassModel) {
+					ClassModel mclass = (ClassModel) currentSelectionCell.getValue();
 					propertiesPane.setCurrentClass(mclass);
 				}
 				super.mouseClicked(e);

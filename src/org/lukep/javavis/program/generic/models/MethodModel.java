@@ -6,6 +6,11 @@ package org.lukep.javavis.program.generic.models;
 
 import java.io.Serializable;
 
+import org.lukep.javavis.metrics.IMeasurableVisitor;
+import org.lukep.javavis.metrics.MetricAttribute;
+import org.lukep.javavis.metrics.MetricMeasurement;
+import org.lukep.javavis.util.JavaVisConstants;
+
 public class MethodModel extends GenericModel {
 
 	class SourceLangDependentAttributes implements Serializable {
@@ -17,11 +22,20 @@ public class MethodModel extends GenericModel {
 	protected SourceLangDependentAttributes extraAttributes;
 
 	public MethodModel(GenericModelSourceLang lang, String name) {
-		super(lang);
+		super(lang, JavaVisConstants.METRIC_APPLIES_TO_METHOD);
 		this.name = name;
 		extraAttributes = new SourceLangDependentAttributes();
 	}
 
+	///////////////////////////////////////////////////////
+	
+	@Override
+	public MetricMeasurement accept(MetricAttribute metric, IMeasurableVisitor visitor) {
+		return visitor.visit(metric, this);
+	}
+	
+	///////////////////////////////////////////////////////
+	
 	public String getName() {
 		return name;
 	}

@@ -4,11 +4,10 @@
  */
 package org.lukep.javavis.metrics.algorithms;
 
-import org.lukep.javavis.metrics.IMeasurableVisitor;
 import org.lukep.javavis.metrics.MetricAttribute;
 import org.lukep.javavis.metrics.MetricMeasurement;
-import org.lukep.javavis.program.generic.models.measurable.MeasurableClassInfo;
-import org.lukep.javavis.program.generic.models.measurable.MeasurableMethodInfo;
+import org.lukep.javavis.program.generic.models.ClassModel;
+import org.lukep.javavis.program.generic.models.MethodModel;
 import org.lukep.javavis.util.JavaVisConstants;
 
 import com.sun.source.tree.BinaryTree;
@@ -25,15 +24,13 @@ import com.sun.source.tree.ReturnTree;
 import com.sun.source.tree.ThrowTree;
 import com.sun.source.tree.TryTree;
 import com.sun.source.tree.WhileLoopTree;
-import com.sun.source.util.TreeScanner;
 
-public class CyclomaticComplexityVisitor extends TreeScanner<Object, Object> implements 
-		IMeasurableVisitor {
+public class CyclomaticComplexityVisitor extends AbstractMeasurableVisitor {
 	
 	protected float complexity = 1; // we always start out with 1 path through a method
 	
 	@Override
-	public MetricMeasurement visit(MetricAttribute metric, MeasurableClassInfo clazz) {
+	public MetricMeasurement visit(MetricAttribute metric, ClassModel clazz) {
 
 		// if we're dealing with a class - we just return its total or avg complexity
 		if (metric.getInternalName().equals(JavaVisConstants.METRIC_CYCLO_COMPLEX_AVG)) {
@@ -47,7 +44,7 @@ public class CyclomaticComplexityVisitor extends TreeScanner<Object, Object> imp
 	}
 
 	@Override
-	public MetricMeasurement visit(MetricAttribute metric, MeasurableMethodInfo method) {
+	public MetricMeasurement visit(MetricAttribute metric, MethodModel method) {
 		
 		switch (method.getSourceLang()) {
 		case JAVA:
@@ -56,7 +53,7 @@ public class CyclomaticComplexityVisitor extends TreeScanner<Object, Object> imp
 		return null;
 	}
 	
-	private MetricMeasurement calculateForJavaMethod(MetricAttribute metric, MeasurableMethodInfo method) {
+	private MetricMeasurement calculateForJavaMethod(MetricAttribute metric, MethodModel method) {
 		MetricMeasurement result = new MetricMeasurement(method, metric);
 		BlockTree methodTree = (BlockTree) method.getRootStatementBlock();
 		if (methodTree != null)
@@ -65,7 +62,9 @@ public class CyclomaticComplexityVisitor extends TreeScanner<Object, Object> imp
 		return result;
 	}
 	
-	// Tree visitor implementations
+	/*
+	 * Tree Visitor Implementations
+	 */
 
 	@Override
 	public Object visitBinary(BinaryTree arg0, Object arg1) {

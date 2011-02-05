@@ -10,8 +10,8 @@ import java.awt.Graphics;
 import javax.swing.JComponent;
 
 import org.lukep.javavis.metrics.MetricRegistry;
-import org.lukep.javavis.program.generic.models.measurable.MeasurableClassInfo;
-import org.lukep.javavis.program.generic.models.measurable.MeasurableMethodInfo;
+import org.lukep.javavis.program.generic.models.ClassModel;
+import org.lukep.javavis.program.generic.models.MethodModel;
 import org.lukep.javavis.util.JavaVisConstants;
 
 public class ClassCompositionComponent extends JComponent {
@@ -20,14 +20,14 @@ public class ClassCompositionComponent extends JComponent {
 	private static final Color BORDER_COLOR = Color.black;
 	private static final Color LABEL_COLOR	= Color.white;
 	
-	protected MeasurableClassInfo currentClass;
+	protected ClassModel currentClass;
 
-	public ClassCompositionComponent(MeasurableClassInfo currentClass) {
+	public ClassCompositionComponent(ClassModel currentClass) {
 		super();
 		this.currentClass = currentClass;
 	}
 	
-	public void setCurrentClass(MeasurableClassInfo clazz) {
+	public void setCurrentClass(ClassModel clazz) {
 		currentClass = clazz;
 		repaint();
 	}
@@ -47,10 +47,10 @@ public class ClassCompositionComponent extends JComponent {
 					(int) Math.ceil(getHeight() / (double)pixelsPerStatement) : getHeight();
 			
 			int rectY, rectHeight, lastY = 0;
-			MeasurableMethodInfo method;
+			MethodModel method;
 			float complexity;
 			for (int i = 0; i < currentClass.getMethodCount(); i++) {
-				method = (MeasurableMethodInfo)currentClass.getMethods().get(i);
+				method = (MethodModel) currentClass.getMethods().get(i);
 				rectHeight = (int)(pixelsPerStatement * 
 						method.getMetricMeasurement(
 								MetricRegistry.getInstance().getMetricAttribute(

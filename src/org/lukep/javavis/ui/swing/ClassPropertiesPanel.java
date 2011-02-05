@@ -18,7 +18,7 @@ import javax.swing.SwingConstants;
 import org.lukep.javavis.metrics.MetricAttribute;
 import org.lukep.javavis.metrics.MetricMeasurement;
 import org.lukep.javavis.metrics.MetricRegistry;
-import org.lukep.javavis.program.generic.models.measurable.MeasurableClassInfo;
+import org.lukep.javavis.program.generic.models.ClassModel;
 
 public class ClassPropertiesPanel extends JPanel {
 	
@@ -27,7 +27,7 @@ public class ClassPropertiesPanel extends JPanel {
 	
 	ClassCompositionComponent classCompositionComponent;
 	
-	protected MeasurableClassInfo currentClass;
+	protected ClassModel currentClass;
 
 	public ClassPropertiesPanel() {
 		setLayout( new GridLayout(1, 0, 3, 0) );
@@ -52,7 +52,7 @@ public class ClassPropertiesPanel extends JPanel {
 		add(methodTableScrollPane);
 	}
 	
-	public void setCurrentClass(MeasurableClassInfo clazz) {
+	public void setCurrentClass(ClassModel clazz) {
 		currentClass = clazz;
 		
 		// build up the html content string

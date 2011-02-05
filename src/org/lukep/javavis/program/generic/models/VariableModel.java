@@ -4,6 +4,11 @@
  */
 package org.lukep.javavis.program.generic.models;
 
+import org.lukep.javavis.metrics.IMeasurableVisitor;
+import org.lukep.javavis.metrics.MetricAttribute;
+import org.lukep.javavis.metrics.MetricMeasurement;
+import org.lukep.javavis.util.JavaVisConstants;
+
 public class VariableModel extends GenericModel {
 
 	protected String name;
@@ -13,10 +18,19 @@ public class VariableModel extends GenericModel {
 	protected boolean isClassAttribute;
 	
 	public VariableModel(GenericModelSourceLang lang, String name, String typeName) {
-		super(lang);
+		super(lang, JavaVisConstants.METRIC_APPLIES_TO_VAR);
 		this.name = name;
 		this.typeName = typeName;
 	}
+	
+	///////////////////////////////////////////////////////
+	
+	@Override
+	public MetricMeasurement accept(MetricAttribute metric, IMeasurableVisitor visitor) {
+		return visitor.visit(metric, this);
+	}
+	
+	///////////////////////////////////////////////////////
 
 	public String getName() {
 		return name;

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Document    : metrics.xsd
+	Author      : Luke Plaster
+	Description : XML Schema for metrics.xml.
+-->
+<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:element name="metrics">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element minOccurs="0" maxOccurs="unbounded" name="metric">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="type" type="xsd:string" />
+              <xsd:element name="applies_to">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element minOccurs="1" maxOccurs="unbounded" name="measurable" type="xsd:string" />
+                  </xsd:sequence>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="visitor" type="xsd:string" />
+              <xsd:element name="cold" type="xsd:float" />
+              <xsd:element name="hot" type="xsd:float" />
+            </xsd:sequence>
+            <xsd:attribute name="name" type="xsd:string" />
+            <xsd:attribute name="internal_name" type="xsd:string" />
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>

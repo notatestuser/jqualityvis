@@ -9,6 +9,7 @@ import org.lukep.javavis.metrics.MetricAttribute;
 import org.lukep.javavis.metrics.MetricMeasurement;
 import org.lukep.javavis.program.generic.models.measurable.MeasurableClassInfo;
 import org.lukep.javavis.program.generic.models.measurable.MeasurableMethodInfo;
+import org.lukep.javavis.util.JavaVisConstants;
 
 import com.sun.source.tree.BinaryTree;
 import com.sun.source.tree.BlockTree;
@@ -26,32 +27,37 @@ import com.sun.source.tree.TryTree;
 import com.sun.source.tree.WhileLoopTree;
 import com.sun.source.util.TreeScanner;
 
-public class CyclomaticComplexityVisitor extends TreeScanner<Object, Object> 
-		implements IMeasurableVisitor {
-
-	protected static final MetricAttribute METRIC_ATTRIBUTE = 
-		MetricAttribute.MCCABE_CYCLOMATIC_COMPLEXITY;
+public class CyclomaticComplexityVisitor extends TreeScanner<Object, Object> implements 
+		IMeasurableVisitor {
 	
 	protected float complexity = 1; // we always start out with 1 path through a method
 	
 	@Override
-	public MetricMeasurement visit(MeasurableClassInfo clazz) {
-		// we'll never end up here because the MeasurableMethodInfo class does the calculation for us
-		return null;
+	public MetricMeasurement visit(MetricAttribute metric, MeasurableClassInfo clazz) {
+
+		// if we're dealing with a class - we just return its total or avg complexity
+		if (metric.getInternalName().equals(JavaVisConstants.METRIC_CYCLO_COMPLEX_AVG)) {
+			complexity = clazz.getAvgCyclomaticComplexity();
+		} else if (metric.getInternalName().equals(JavaVisConstants.METRIC_CYCLO_COMPLEX_MAX)) {
+			complexity = clazz.getMaxCyclomaticComplexity();
+		} else {
+			return null;
+		}
+		return new MetricMeasurement(clazz, metric, complexity);
 	}
 
 	@Override
-	public MetricMeasurement visit(MeasurableMethodInfo method) {
+	public MetricMeasurement visit(MetricAttribute metric, MeasurableMethodInfo method) {
 		
 		switch (method.getSourceLang()) {
 		case JAVA:
-			return calculateForJavaMethod(method);
+			return calculateForJavaMethod(metric, method);
 		}
 		return null;
 	}
 	
-	private MetricMeasurement calculateForJavaMethod(MeasurableMethodInfo method) {
-		MetricMeasurement result = new MetricMeasurement(method, METRIC_ATTRIBUTE);
+	private MetricMeasurement calculateForJavaMethod(MetricAttribute metric, MeasurableMethodInfo method) {
+		MetricMeasurement result = new MetricMeasurement(method, metric);
 		BlockTree methodTree = (BlockTree) method.getRootStatementBlock();
 		if (methodTree != null)
 			methodTree.accept(this, null);
@@ -160,7 +166,7 @@ public class CyclomaticComplexityVisitor extends TreeScanner<Object, Object>
 
 		// +1 for a return that isn't the last statement of a method
 		// TODO remedy the fact that this doesn't take into account returns as the last statement in a method
-		complexity += 1;
+		//complexity += 1;
 		
 		return super.visitReturn(arg0, arg1);
 	}

@@ -18,6 +18,11 @@ public class MetricMeasurement {
 		this.target = target;
 		this.metric = metric;
 	}
+	
+	public MetricMeasurement(IMeasurable target, MetricAttribute metric, float result) {
+		this(target, metric);
+		setResult(result);
+	}
 
 	public MetricAttribute getMetric() {
 		return metric;

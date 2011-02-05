@@ -9,9 +9,10 @@ import java.awt.Graphics;
 
 import javax.swing.JComponent;
 
-import org.lukep.javavis.metrics.MetricAttribute;
+import org.lukep.javavis.metrics.MetricRegistry;
 import org.lukep.javavis.program.generic.models.measurable.MeasurableClassInfo;
 import org.lukep.javavis.program.generic.models.measurable.MeasurableMethodInfo;
+import org.lukep.javavis.util.JavaVisConstants;
 
 public class ClassCompositionComponent extends JComponent {
 
@@ -40,7 +41,8 @@ public class ClassCompositionComponent extends JComponent {
 			
 			// add the blocks representing methods
 			int pixelsPerStatement = (int) Math.ceil(currentClass.getMetricMeasurement(
-					MetricAttribute.NUMBER_OF_STATEMENTS).getResult());
+					MetricRegistry.getInstance().getMetricAttribute(
+						JavaVisConstants.METRIC_NUM_OF_STATEMENTS)).getResult());
 			pixelsPerStatement = pixelsPerStatement > 0 ? 
 					(int) Math.ceil(getHeight() / (double)pixelsPerStatement) : getHeight();
 			
@@ -50,14 +52,18 @@ public class ClassCompositionComponent extends JComponent {
 			for (int i = 0; i < currentClass.getMethodCount(); i++) {
 				method = (MeasurableMethodInfo)currentClass.getMethods().get(i);
 				rectHeight = (int)(pixelsPerStatement * 
-						method.getMetricMeasurement(MetricAttribute.NUMBER_OF_STATEMENTS).getResult());
+						method.getMetricMeasurement(
+								MetricRegistry.getInstance().getMetricAttribute(
+									JavaVisConstants.METRIC_NUM_OF_STATEMENTS)).getResult());
 				rectY = lastY;
 				lastY += rectHeight;
 				g.setColor(BORDER_COLOR);
 				g.drawRect(0, rectY, getWidth() - 1, rectHeight);
 				
 				// TODO revise this awfulness - move metrics to XML
-				complexity = method.getMetricMeasurement(MetricAttribute.MCCABE_CYCLOMATIC_COMPLEXITY).getResult();
+				complexity = method.getMetricMeasurement(
+						MetricRegistry.getInstance().getMetricAttribute(
+							JavaVisConstants.METRIC_CYCLO_COMPLEX)).getResult();
 				g.setColor( new Color(Math.min((int)((complexity / 30.0) * 255), 255), 170, 109) );
 				g.fillRect(0 + 1 , rectY + 1 , getWidth() - 2, rectHeight - 1);
 			}

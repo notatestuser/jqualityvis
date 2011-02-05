@@ -4,6 +4,7 @@
  */
 package org.lukep.javavis.program.generic.models;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
@@ -20,9 +21,10 @@ public class ClassModelStore extends Observable implements IProgramSourceObserve
 	// keeps track of all instances of the ClassModelStore (for global class lookups)
 	protected final static Vector<ClassModelStore> instances = new Vector<ClassModelStore>();
 	
-    protected Map<String, ClassModel> classMap = new HashMap<String, ClassModel>();
+    protected Map<String, ClassModel> classMap;
 
     public ClassModelStore() {
+    	classMap = Collections.synchronizedMap(new HashMap<String, ClassModel>());
     	instances.add(this);
     }
 

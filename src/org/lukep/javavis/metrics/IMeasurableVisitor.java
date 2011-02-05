@@ -9,7 +9,7 @@ import org.lukep.javavis.program.generic.models.measurable.MeasurableMethodInfo;
 
 public interface IMeasurableVisitor {
 
-	MetricMeasurement visit(MeasurableClassInfo clazz);
-	MetricMeasurement visit(MeasurableMethodInfo method);
+	MetricMeasurement visit(MetricAttribute metric, MeasurableClassInfo clazz);
+	MetricMeasurement visit(MetricAttribute metric, MeasurableMethodInfo method);
 	
 }

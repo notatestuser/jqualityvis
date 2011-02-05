@@ -30,33 +30,28 @@ import com.sun.source.tree.VariableTree;
 import com.sun.source.tree.WhileLoopTree;
 import com.sun.source.util.TreeScanner;
 
-public class StatementCountVisitor extends TreeScanner<Object, Object> 
-		implements IMeasurableVisitor {
-	
-	// TODO abstract this class to make this generic?
-	protected static final MetricAttribute METRIC_ATTRIBUTE = 
-		MetricAttribute.NUMBER_OF_STATEMENTS;
+public class StatementCountVisitor extends TreeScanner<Object, Object> implements 
+		IMeasurableVisitor {
 	
 	protected int statementCount = 0;
 	
 	@Override
-	public MetricMeasurement visit(MeasurableClassInfo clazz) {
-		// TODO Auto-generated method stub
-		return null;
+	public MetricMeasurement visit(MetricAttribute metric, MeasurableClassInfo clazz) {
+		return new MetricMeasurement(clazz, metric, clazz.getTotalNumberOfStatements());
 	}
 
 	@Override
-	public MetricMeasurement visit(MeasurableMethodInfo method) {
+	public MetricMeasurement visit(MetricAttribute metric, MeasurableMethodInfo method) {
 		
 		switch (method.getSourceLang()) {
 		case JAVA:
-			return calculateForJavaMethod(method);
+			return calculateForJavaMethod(metric, method);
 		}
 		return null;
 	}
 	
-	private MetricMeasurement calculateForJavaMethod(MeasurableMethodInfo method) {
-		MetricMeasurement result = new MetricMeasurement(method, METRIC_ATTRIBUTE);
+	private MetricMeasurement calculateForJavaMethod(MetricAttribute metric, MeasurableMethodInfo method) {
+		MetricMeasurement result = new MetricMeasurement(method, metric);
 		BlockTree methodTree = (BlockTree) method.getRootStatementBlock();
 		if (methodTree != null)
 			methodTree.accept(this, null);

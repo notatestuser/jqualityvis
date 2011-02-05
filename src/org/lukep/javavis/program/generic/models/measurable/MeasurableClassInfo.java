@@ -12,8 +12,11 @@ import org.lukep.javavis.metrics.MetricRegistry;
 import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.GenericModelSourceLang;
 import org.lukep.javavis.program.generic.models.MethodModel;
+import org.lukep.javavis.util.JavaVisConstants;
 
 public class MeasurableClassInfo extends ClassModel implements IMeasurable {
+	
+	public static final String APPLIES_TO_STR = "class";
 	
 	public MeasurableClassInfo(GenericModelSourceLang lang, String simpleName, 
 			String qualifiedName) {
@@ -23,40 +26,38 @@ public class MeasurableClassInfo extends ClassModel implements IMeasurable {
 	@Override
 	public float getMetricMeasurementVal(MetricAttribute attribute) {
 		
-		switch (attribute) {
-		case NUMBER_OF_METHODS:
-			return this.getMethodCount();
-		case NUMBER_OF_STATEMENTS:
-			return getTotalNumberOfStatements();
-		case MCCABE_CYCLOMATIC_COMPLEXITY_AVG:
-			return getAvgCyclomaticComplexity();
-		case MCCABE_CYCLOMATIC_COMPLEXITY_MAX:
-			return getMaxCyclomaticComplexity();
-		case COHESION:
-		case COUPLING:
-			return 0; // TODO: associate a real value here
+		try {
+		
+			// if the metric applies to a class - run it!
+			if (attribute.testAppliesTo(APPLIES_TO_STR))
+				return accept( attribute, attribute.getVisitor() ).getResult();
+		
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+		
 		return -1;
 	}
 	
 	@Override
 	public MetricMeasurement getMetricMeasurement(MetricAttribute attribute) {
-		return MetricRegistry.getInstance().getMetricCached(this, attribute);
+		return MetricRegistry.getInstance().getCachedMeasurement(this, attribute);
 	}
 
 	@Override
-	public MetricMeasurement accept(IMeasurableVisitor visitor) {
-		return visitor.visit(this);
+	public MetricMeasurement accept(MetricAttribute metric, IMeasurableVisitor visitor) {
+		return visitor.visit(metric, this);
 	}
 	
-	private int getTotalNumberOfStatements() {
+	public int getTotalNumberOfStatements() {
 		int totalStatements = 0;
 		MetricMeasurement result;
 		
 		for (MethodModel method : methods) {
 			if (method instanceof MeasurableMethodInfo) {
 				result = ((MeasurableMethodInfo)(method)).getMetricMeasurement(
-						MetricAttribute.NUMBER_OF_STATEMENTS);
+						MetricRegistry.getInstance().getMetricAttribute(
+								JavaVisConstants.METRIC_NUM_OF_STATEMENTS));
 				totalStatements += result.getResult();
 			}
 		}
@@ -64,7 +65,7 @@ public class MeasurableClassInfo extends ClassModel implements IMeasurable {
 		return totalStatements;
 	}
 	
-	private float getAvgCyclomaticComplexity() {
+	public float getAvgCyclomaticComplexity() {
 		int count = 0;
 		float avgComplexity = 0;
 		MetricMeasurement result;
@@ -72,7 +73,8 @@ public class MeasurableClassInfo extends ClassModel implements IMeasurable {
 		for (MethodModel method : methods) {
 			if (method instanceof MeasurableMethodInfo) {
 				result = ((MeasurableMethodInfo)(method)).getMetricMeasurement(
-						MetricAttribute.MCCABE_CYCLOMATIC_COMPLEXITY);
+						MetricRegistry.getInstance().getMetricAttribute(
+								JavaVisConstants.METRIC_CYCLO_COMPLEX));
 				avgComplexity += result.getResult();
 				count++;
 			}
@@ -83,14 +85,15 @@ public class MeasurableClassInfo extends ClassModel implements IMeasurable {
 		return avgComplexity;
 	}
 	
-	private float getMaxCyclomaticComplexity() {
+	public float getMaxCyclomaticComplexity() {
 		float maxComplexity = 0;
 		MetricMeasurement result;
 		
 		for (MethodModel method : methods) {
 			if (method instanceof MeasurableMethodInfo) {
 				result = ((MeasurableMethodInfo)(method)).getMetricMeasurement(
-						MetricAttribute.MCCABE_CYCLOMATIC_COMPLEXITY);
+						MetricRegistry.getInstance().getMetricAttribute(
+								JavaVisConstants.METRIC_CYCLO_COMPLEX));
 				if (result.getResult() > maxComplexity)
 					maxComplexity = result.getResult();
 			}

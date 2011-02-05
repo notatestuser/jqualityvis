@@ -17,6 +17,7 @@ import javax.swing.SwingConstants;
 
 import org.lukep.javavis.metrics.MetricAttribute;
 import org.lukep.javavis.metrics.MetricMeasurement;
+import org.lukep.javavis.metrics.MetricRegistry;
 import org.lukep.javavis.program.generic.models.measurable.MeasurableClassInfo;
 
 public class ClassPropertiesPanel extends JPanel {
@@ -69,10 +70,10 @@ public class ClassPropertiesPanel extends JPanel {
 		// ... include metrics
 		//sb.append("<h3>Metrics</h3>");
 		float result;
-		for (MetricAttribute attribute : MetricAttribute.values()) {
+		for (MetricAttribute attribute : MetricRegistry.getInstance().getMetricAttributes()) {
 			result = clazz.getMetricMeasurementVal(attribute);
 			if (result != MetricMeasurement.DEFAULT_RESULT)
-				sb.append("<strong>" + attribute.toString() + "</strong>" 
+				sb.append("<strong>" + attribute.getName() + "</strong>" 
 						+ " = " + result + "<br />");
 		}
 		// ... end

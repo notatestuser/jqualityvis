@@ -4,9 +4,12 @@
  */
 package org.lukep.javavis.ui.swing;
 
+import java.util.Vector;
+
 import javax.swing.table.AbstractTableModel;
 
-import org.lukep.javavis.metrics.IMeasurable;
+import org.lukep.javavis.metrics.MetricAttribute;
+import org.lukep.javavis.metrics.MetricRegistry;
 import org.lukep.javavis.program.generic.models.MethodModel;
 import org.lukep.javavis.program.generic.models.measurable.MeasurableClassInfo;
 import org.lukep.javavis.program.generic.models.measurable.MeasurableMethodInfo;
@@ -34,14 +37,20 @@ public class ClassPropertiesTableModel extends AbstractTableModel {
 
 	@Override
 	public int getColumnCount() {
-		return IMeasurable.SUPPORTED_METRICS_METHOD.length + 1;
+		return MetricRegistry.getInstance().getSupportedMetricCount(
+				MeasurableMethodInfo.APPLIES_TO_STR) + 1;
 	}
 	
 	@Override
 	public String getColumnName(int column) {
-		if (column == 0)
+		if (column == 0) {
 			return "Method Name";
-		else return IMeasurable.SUPPORTED_METRICS_METHOD[column - 1].toString();
+		} else {
+			Vector<MetricAttribute> supportMap = 
+				MetricRegistry.getInstance().getSupportedMetrics(
+						MeasurableMethodInfo.APPLIES_TO_STR);
+			return supportMap.get(column - 1).getName();
+		}
 	}
 
 	@Override
@@ -51,11 +60,15 @@ public class ClassPropertiesTableModel extends AbstractTableModel {
 		
 		MethodModel method = subject.getMethods().get(rowIndex);
 		if (method instanceof MeasurableMethodInfo) {
-			if (columnIndex == 0)
+			if (columnIndex == 0) {
 				return method.getName();
-			else
+			} else {
+				Vector<MetricAttribute> supportMap = 
+					MetricRegistry.getInstance().getSupportedMetrics(
+							MeasurableMethodInfo.APPLIES_TO_STR);
 				return ((MeasurableMethodInfo)(method)).getMetricMeasurement(
-						IMeasurable.SUPPORTED_METRICS_METHOD[columnIndex - 1]).getResult();
+						supportMap.get(columnIndex - 1)).getResult();
+			}
 		}
 		return "unknown";
 	}

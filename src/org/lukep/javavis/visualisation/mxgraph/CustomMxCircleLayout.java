@@ -7,9 +7,9 @@ package org.lukep.javavis.visualisation.mxgraph;
 import com.mxgraph.layout.mxCircleLayout;
 import com.mxgraph.view.mxGraph;
 
-public class jvmxCircleLayout extends mxCircleLayout {
+public class CustomMxCircleLayout extends mxCircleLayout {
 
-	public jvmxCircleLayout(mxGraph graph) {
+	public CustomMxCircleLayout(mxGraph graph) {
 		super(graph);
 	}
 	

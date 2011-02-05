@@ -22,8 +22,9 @@ public interface IMeasurable {
 		MetricAttribute.MCCABE_CYCLOMATIC_COMPLEXITY
 	};
 	
+	public MetricMeasurement accept(IMeasurableVisitor visitor);
+	
 	public float getMetricMeasurementVal(MetricAttribute attribute);
 	public MetricMeasurement getMetricMeasurement(MetricAttribute attribute);
-	public MetricMeasurement accept(IMeasurableVisitor visitor);
 	
 }

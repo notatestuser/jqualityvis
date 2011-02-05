@@ -20,35 +20,35 @@ public class ClassModelStore extends Observable implements IProgramSourceObserve
 	// keeps track of all instances of the ClassModelStore (for global class lookups)
 	protected final static Vector<ClassModelStore> instances = new Vector<ClassModelStore>();
 	
-    protected Map<String, ClassInfo> classMap = new HashMap<String, ClassInfo>();
+    protected Map<String, ClassModel> classMap = new HashMap<String, ClassModel>();
 
     public ClassModelStore() {
     	instances.add(this);
     }
 
-    public Map<String, ClassInfo> getClassMap() {
+    public Map<String, ClassModel> getClassMap() {
         return classMap;
     }
 
-    public ClassInfo getClassInfo(String className) {
+    public ClassModel getClassInfo(String className) {
         return classMap.get(className);
     }
 
-    public void addClass(String className, ClassInfo classInfo) {
+    public void addClass(String className, ClassModel classInfo) {
         classMap.put(className, classInfo);
         log.info("Added class: " + className);
     }
     
-    public ClassInfo lookupClass(String qualifiedName) {
+    public ClassModel lookupClass(String qualifiedName) {
     	if (classMap.size() > 0 && classMap.containsKey(qualifiedName))
     		return classMap.get(qualifiedName);
     	return null;
     }
     
-    public static ClassInfo lookupClassGlobal(String qualifiedName) {
+    public static ClassModel lookupClassGlobal(String qualifiedName) {
     	// check all instances of ClassModelStore that we know about
     	if (instances.size() > 0) {
-    		ClassInfo clazz = null;
+    		ClassModel clazz = null;
     		for (ClassModelStore cms : instances) {
     			clazz = cms.lookupClass(qualifiedName);
     			if (clazz != null)
@@ -59,12 +59,12 @@ public class ClassModelStore extends Observable implements IProgramSourceObserve
     }
 
 	@Override
-	public void notifyFindClass(ClassInfo clazz) {
+	public void notifyFindClass(ClassModel clazz) {
 		addClass(clazz.getQualifiedName(), clazz);
 	}
 
 	@Override
-	public void notifyFindMethod(MethodInfo method) {
+	public void notifyFindMethod(MethodModel method) {
 		// TODO Auto-generated method stub
 		
 	}

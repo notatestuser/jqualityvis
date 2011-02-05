@@ -4,10 +4,10 @@
  */
 package org.lukep.javavis.program.generic.helpers;
 
-import org.lukep.javavis.program.generic.models.ClassInfo;
+import org.lukep.javavis.program.generic.models.ClassModel;
 
 public class CodeUnitInfoFactoryState {
 
-	public ClassInfo lastClass = null;
+	public ClassModel lastClass = null;
 	
 }

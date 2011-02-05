@@ -9,11 +9,11 @@ import org.lukep.javavis.metrics.IMeasurableVisitor;
 import org.lukep.javavis.metrics.MetricAttribute;
 import org.lukep.javavis.metrics.MetricMeasurement;
 import org.lukep.javavis.metrics.MetricRegistry;
-import org.lukep.javavis.program.generic.models.ClassInfo;
+import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.GenericModelSourceLang;
-import org.lukep.javavis.program.generic.models.MethodInfo;
+import org.lukep.javavis.program.generic.models.MethodModel;
 
-public class MeasurableClassInfo extends ClassInfo implements IMeasurable {
+public class MeasurableClassInfo extends ClassModel implements IMeasurable {
 	
 	public MeasurableClassInfo(GenericModelSourceLang lang, String simpleName, 
 			String qualifiedName) {
@@ -53,7 +53,7 @@ public class MeasurableClassInfo extends ClassInfo implements IMeasurable {
 		int totalStatements = 0;
 		MetricMeasurement result;
 		
-		for (MethodInfo method : methods) {
+		for (MethodModel method : methods) {
 			if (method instanceof MeasurableMethodInfo) {
 				result = ((MeasurableMethodInfo)(method)).getMetricMeasurement(
 						MetricAttribute.NUMBER_OF_STATEMENTS);
@@ -69,7 +69,7 @@ public class MeasurableClassInfo extends ClassInfo implements IMeasurable {
 		float avgComplexity = 0;
 		MetricMeasurement result;
 		
-		for (MethodInfo method : methods) {
+		for (MethodModel method : methods) {
 			if (method instanceof MeasurableMethodInfo) {
 				result = ((MeasurableMethodInfo)(method)).getMetricMeasurement(
 						MetricAttribute.MCCABE_CYCLOMATIC_COMPLEXITY);
@@ -87,7 +87,7 @@ public class MeasurableClassInfo extends ClassInfo implements IMeasurable {
 		float maxComplexity = 0;
 		MetricMeasurement result;
 		
-		for (MethodInfo method : methods) {
+		for (MethodModel method : methods) {
 			if (method instanceof MeasurableMethodInfo) {
 				result = ((MeasurableMethodInfo)(method)).getMetricMeasurement(
 						MetricAttribute.MCCABE_CYCLOMATIC_COMPLEXITY);

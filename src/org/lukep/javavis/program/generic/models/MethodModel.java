@@ -6,17 +6,17 @@ package org.lukep.javavis.program.generic.models;
 
 import java.io.Serializable;
 
-public class MethodInfo extends GenericModel {
+public class MethodModel extends GenericModel {
 
 	class SourceLangDependentAttributes implements Serializable {
 		public Object rootStatementBlock;
 	}
 	
 	protected String name;
-	protected ClassInfo parentClass;
+	protected ClassModel parentClass;
 	protected SourceLangDependentAttributes extraAttributes;
 
-	public MethodInfo(GenericModelSourceLang lang, String name) {
+	public MethodModel(GenericModelSourceLang lang, String name) {
 		super(lang);
 		this.name = name;
 		extraAttributes = new SourceLangDependentAttributes();
@@ -30,11 +30,11 @@ public class MethodInfo extends GenericModel {
 		this.name = name;
 	}
 
-	public ClassInfo getParentClass() {
+	public ClassModel getParentClass() {
 		return parentClass;
 	}
 
-	public void setParentClass(ClassInfo parentClass) {
+	public void setParentClass(ClassModel parentClass) {
 		this.parentClass = parentClass;
 	}
 	

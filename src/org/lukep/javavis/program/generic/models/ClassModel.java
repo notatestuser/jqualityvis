@@ -8,15 +8,15 @@ import java.util.Vector;
 
 import org.lukep.javavis.util.JavaVisConstants;
 
-public class ClassInfo extends GenericModel {
+public class ClassModel extends GenericModel {
 
 	protected String simpleName;
 	protected String qualifiedName;
-	protected MethodInfo constructorMethod;
-	protected Vector<MethodInfo> methods = new Vector<MethodInfo>();
-	protected Vector<VariableInfo> variables = new Vector<VariableInfo>();
+	protected MethodModel constructorMethod;
+	protected Vector<MethodModel> methods = new Vector<MethodModel>();
+	protected Vector<VariableModel> variables = new Vector<VariableModel>();
 
-	public ClassInfo(GenericModelSourceLang lang, String simpleName, String qualifiedName) {
+	public ClassModel(GenericModelSourceLang lang, String simpleName, String qualifiedName) {
 		super(lang);
 		this.simpleName = simpleName;
 		this.qualifiedName = qualifiedName;
@@ -46,19 +46,19 @@ public class ClassInfo extends GenericModel {
 			return JavaVisConstants.DEFAULT_PACKAGE_NAME;
 	}
 
-	public MethodInfo getConstructorMethod() {
+	public MethodModel getConstructorMethod() {
 		return constructorMethod;
 	}
 
-	public void setConstructorMethod(MethodInfo constructorMethod) {
+	public void setConstructorMethod(MethodModel constructorMethod) {
 		this.constructorMethod = constructorMethod;
 	}
 	
-	public void addMethod(MethodInfo method) {
+	public void addMethod(MethodModel method) {
 		methods.add(method);
 	}
 	
-	public Vector<MethodInfo> getMethods() {
+	public Vector<MethodModel> getMethods() {
 		return methods;
 	}
 	
@@ -66,11 +66,11 @@ public class ClassInfo extends GenericModel {
 		return methods.size();
 	}
 	
-	public void addVariable(VariableInfo variable) {
+	public void addVariable(VariableModel variable) {
 		variables.add(variable);
 	}
 	
-	public Vector<VariableInfo> getVariables() {
+	public Vector<VariableModel> getVariables() {
 		return variables;
 	}
 	

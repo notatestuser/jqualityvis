@@ -8,11 +8,11 @@ import java.util.logging.Logger;
 
 import javax.lang.model.element.TypeElement;
 
-import org.lukep.javavis.program.generic.models.ClassInfo;
+import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.ClassModelStore;
 import org.lukep.javavis.program.generic.models.GenericModelSourceLang;
-import org.lukep.javavis.program.generic.models.MethodInfo;
-import org.lukep.javavis.program.generic.models.VariableInfo;
+import org.lukep.javavis.program.generic.models.MethodModel;
+import org.lukep.javavis.program.generic.models.VariableModel;
 import org.lukep.javavis.program.generic.models.measurable.MeasurableClassInfo;
 import org.lukep.javavis.program.generic.models.measurable.MeasurableMethodInfo;
 import org.lukep.javavis.util.JavaVisConstants;
@@ -29,7 +29,7 @@ public class CodeUnitInfoFactory {
 	protected final static Logger log = 
 		Logger.getLogger(CodeUnitInfoFactory.class.getSimpleName());
 	
-	public static ClassInfo createClassInfoFromJava(CodeUnitInfoFactoryState s, 
+	public static ClassModel createClassInfoFromJava(CodeUnitInfoFactoryState s, 
 			ClassTree classTree, TreePath path, Trees trees) {
 		
 		TypeElement e = (TypeElement) trees.getElement(path);
@@ -46,11 +46,11 @@ public class CodeUnitInfoFactory {
 		return newClassModel;
 	}
 	
-	public static MethodInfo createMethodInfoFromJava(CodeUnitInfoFactoryState s, 
+	public static MethodModel createMethodInfoFromJava(CodeUnitInfoFactoryState s, 
 			MethodTree methodTree, TreePath path, Trees trees) {
 		
 		// create the new generic method object
-		MethodInfo newMethodInfo = new MeasurableMethodInfo(GenericModelSourceLang.JAVA,
+		MethodModel newMethodInfo = new MeasurableMethodInfo(GenericModelSourceLang.JAVA,
 											methodTree.getName().toString());
 		
 		// set the method's BlockTree entry point
@@ -72,15 +72,15 @@ public class CodeUnitInfoFactory {
 		return newMethodInfo;
 	}
 	
-	public static VariableInfo createVariableInfoFromJava(CodeUnitInfoFactoryState s,
+	public static VariableModel createVariableInfoFromJava(CodeUnitInfoFactoryState s,
 			VariableTree variableTree, TreePath path, Trees trees) {
 		
 		VarSymbol e = (VarSymbol) trees.getElement(path);
-		VariableInfo newVariableInfo = null;
+		VariableModel newVariableInfo = null;
 		
 		if (e != null) {
 			String qualifiedTypeName = e.type.toString();
-			newVariableInfo = new VariableInfo(GenericModelSourceLang.JAVA,
+			newVariableInfo = new VariableModel(GenericModelSourceLang.JAVA,
 					e.getQualifiedName().toString(), qualifiedTypeName);
 			
 			// add this information to the last parsed class (if it exists)
@@ -94,7 +94,7 @@ public class CodeUnitInfoFactory {
 					newVariableInfo.setClassAttribute(true);
 				
 				// set the variable's internal type target if we've got a generic of that type stored
-				ClassInfo typeInternal = ClassModelStore.lookupClassGlobal(qualifiedTypeName);
+				ClassModel typeInternal = ClassModelStore.lookupClassGlobal(qualifiedTypeName);
 				if (typeInternal != null)
 					newVariableInfo.setTypeInternalClass(typeInternal);
 			}

@@ -12,9 +12,9 @@ import org.lukep.javavis.metrics.MetricRegistry;
 import org.lukep.javavis.metrics.algorithms.CyclomaticComplexityVisitor;
 import org.lukep.javavis.metrics.algorithms.StatementCountVisitor;
 import org.lukep.javavis.program.generic.models.GenericModelSourceLang;
-import org.lukep.javavis.program.generic.models.MethodInfo;
+import org.lukep.javavis.program.generic.models.MethodModel;
 
-public class MeasurableMethodInfo extends MethodInfo implements IMeasurable {
+public class MeasurableMethodInfo extends MethodModel implements IMeasurable {
 
 	public MeasurableMethodInfo(GenericModelSourceLang lang, String name) {
 		super(lang, name);

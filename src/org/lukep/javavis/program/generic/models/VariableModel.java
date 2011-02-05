@@ -4,15 +4,15 @@
  */
 package org.lukep.javavis.program.generic.models;
 
-public class VariableInfo extends GenericModel {
+public class VariableModel extends GenericModel {
 
 	protected String name;
 	protected String typeName;
-	protected ClassInfo typeInternalClass;
-	protected ClassInfo parentClass;
+	protected ClassModel typeInternalClass;
+	protected ClassModel parentClass;
 	protected boolean isClassAttribute;
 	
-	public VariableInfo(GenericModelSourceLang lang, String name, String typeName) {
+	public VariableModel(GenericModelSourceLang lang, String name, String typeName) {
 		super(lang);
 		this.name = name;
 		this.typeName = typeName;
@@ -34,19 +34,19 @@ public class VariableInfo extends GenericModel {
 		this.typeName = typeName;
 	}
 
-	public ClassInfo getTypeInternalClass() {
+	public ClassModel getTypeInternalClass() {
 		return typeInternalClass;
 	}
 
-	public void setTypeInternalClass(ClassInfo typeInternalClass) {
+	public void setTypeInternalClass(ClassModel typeInternalClass) {
 		this.typeInternalClass = typeInternalClass;
 	}
 
-	public ClassInfo getParentClass() {
+	public ClassModel getParentClass() {
 		return parentClass;
 	}
 
-	public void setParentClass(ClassInfo parentClass) {
+	public void setParentClass(ClassModel parentClass) {
 		this.parentClass = parentClass;
 	}
 

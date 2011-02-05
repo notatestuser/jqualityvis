@@ -8,9 +8,9 @@ import java.util.Vector;
 
 import org.lukep.javavis.program.generic.helpers.CodeUnitInfoFactory;
 import org.lukep.javavis.program.generic.helpers.CodeUnitInfoFactoryState;
-import org.lukep.javavis.program.generic.models.ClassInfo;
-import org.lukep.javavis.program.generic.models.MethodInfo;
-import org.lukep.javavis.program.generic.models.VariableInfo;
+import org.lukep.javavis.program.generic.models.ClassModel;
+import org.lukep.javavis.program.generic.models.MethodModel;
+import org.lukep.javavis.program.generic.models.VariableModel;
 import org.lukep.javavis.ui.IProgramSourceObserver;
 
 import com.sun.source.tree.ClassTree;
@@ -34,7 +34,7 @@ public class JavaCodeTreeVisitor extends TreePathScanner<Object, Trees> {
 	@Override
 	public Object visitClass(ClassTree classTree, Trees trees) {
 		TreePath path = getCurrentPath();
-		ClassInfo newClassModel = 
+		ClassModel newClassModel = 
 			CodeUnitInfoFactory.createClassInfoFromJava(codeUnitState, classTree, path, trees);
 		
 		// notify observers
@@ -49,7 +49,7 @@ public class JavaCodeTreeVisitor extends TreePathScanner<Object, Trees> {
 	@Override
 	public Object visitMethod(MethodTree methodTree, Trees trees) {
 		TreePath path = getCurrentPath();
-		MethodInfo newMethodInfo = 
+		MethodModel newMethodInfo = 
 			CodeUnitInfoFactory.createMethodInfoFromJava(codeUnitState, methodTree, path, trees);
 		
 		// notify observers
@@ -62,7 +62,7 @@ public class JavaCodeTreeVisitor extends TreePathScanner<Object, Trees> {
 	@Override
 	public Object visitVariable(VariableTree variableTree, Trees trees) {
 		TreePath path = getCurrentPath();
-		VariableInfo newVariableInfo = CodeUnitInfoFactory.createVariableInfoFromJava(
+		VariableModel newVariableInfo = CodeUnitInfoFactory.createVariableInfoFromJava(
 				codeUnitState, variableTree, path, trees);
 		// TODO: do something here
 		return super.visitVariable(variableTree, trees);

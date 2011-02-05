@@ -7,7 +7,7 @@ package org.lukep.javavis.ui.swing;
 import javax.swing.table.AbstractTableModel;
 
 import org.lukep.javavis.metrics.IMeasurable;
-import org.lukep.javavis.program.generic.models.MethodInfo;
+import org.lukep.javavis.program.generic.models.MethodModel;
 import org.lukep.javavis.program.generic.models.measurable.MeasurableClassInfo;
 import org.lukep.javavis.program.generic.models.measurable.MeasurableMethodInfo;
 
@@ -49,7 +49,7 @@ public class ClassPropertiesTableModel extends AbstractTableModel {
 		if (subject == null)
 			return null;
 		
-		MethodInfo method = subject.getMethods().get(rowIndex);
+		MethodModel method = subject.getMethods().get(rowIndex);
 		if (method instanceof MeasurableMethodInfo) {
 			if (columnIndex == 0)
 				return method.getName();

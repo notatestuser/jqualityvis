@@ -23,9 +23,9 @@ import javax.swing.ScrollPaneLayout;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
-import org.lukep.javavis.program.generic.models.ClassInfo;
+import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.ClassModelStore;
-import org.lukep.javavis.program.generic.models.MethodInfo;
+import org.lukep.javavis.program.generic.models.MethodModel;
 import org.lukep.javavis.program.generic.models.measurable.MeasurableClassInfo;
 import org.lukep.javavis.program.java.JavaSourceLoaderThread;
 import org.lukep.javavis.ui.IProgramSourceObserver;
@@ -59,7 +59,7 @@ public class VisualisationDesktopPane extends StatefulWorkspacePane implements I
 	private mxGraphLayout graphLayout;
 	
 	private HashMap<String, mxCell> packageMap = new HashMap<String, mxCell>();
-	private HashMap<ClassInfo, mxCell> classVertexMap;
+	private HashMap<ClassModel, mxCell> classVertexMap;
 
 	public class SwingCanvas extends mxInteractiveCanvas
 	{
@@ -92,7 +92,7 @@ public class VisualisationDesktopPane extends StatefulWorkspacePane implements I
 		this.setLayout(  new BorderLayout() );
 		
 		classModel = new ClassModelStore();
-		classVertexMap = new HashMap<ClassInfo, mxCell>();
+		classVertexMap = new HashMap<ClassModel, mxCell>();
 		
 		// initialize the mxGraph, its container component and the circle layout
 		graph = new mxGraph()
@@ -253,7 +253,7 @@ public class VisualisationDesktopPane extends StatefulWorkspacePane implements I
 	}
 
 	@Override
-	public void notifyFindClass(ClassInfo clazz) {
+	public void notifyFindClass(ClassModel clazz) {
 		DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode) programTree.getModel().getRoot();
 		String packageName = clazz.getPackageName();
 		if (packageName.length() > 0) { // class is member of a named package (non-default)
@@ -278,7 +278,7 @@ public class VisualisationDesktopPane extends StatefulWorkspacePane implements I
 	}
 	
 	@Override
-	public void notifyFindMethod(MethodInfo method) {
+	public void notifyFindMethod(MethodModel method) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -315,7 +315,7 @@ public class VisualisationDesktopPane extends StatefulWorkspacePane implements I
 		return curPackageCell;
 	}
 	
-	private void addClass(ClassInfo clazz, String packageName) {
+	private void addClass(ClassModel clazz, String packageName) {
 		mxCell parent = getOrCreatePackageCell(packageName), 
 			   cell = null;
 		cell = (mxCell) graph.insertVertex(graph.getDefaultParent(), null, clazz, 20, 20, 150, 50);

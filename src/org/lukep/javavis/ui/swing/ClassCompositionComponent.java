@@ -15,7 +15,9 @@ import org.lukep.javavis.program.generic.models.measurable.MeasurableMethodInfo;
 
 public class ClassCompositionComponent extends JComponent {
 
+	private static final Color BACK_COLOR	= Color.gray;
 	private static final Color BORDER_COLOR = Color.black;
+	private static final Color LABEL_COLOR	= Color.white;
 	
 	protected MeasurableClassInfo currentClass;
 
@@ -32,6 +34,11 @@ public class ClassCompositionComponent extends JComponent {
 	@Override
 	public void paint(Graphics g) {
 		if (currentClass != null) {
+			// start out with a blank canvas
+			g.setColor(BACK_COLOR);
+			g.fillRect(0, 0, getWidth() - 1, getHeight() - 1);
+			
+			// add the blocks representing methods
 			int pixelsPerStatement = (int) Math.ceil(currentClass.getMetricMeasurement(
 					MetricAttribute.NUMBER_OF_STATEMENTS).getResult());
 			pixelsPerStatement = pixelsPerStatement > 0 ? 
@@ -56,6 +63,10 @@ public class ClassCompositionComponent extends JComponent {
 			}
 			g.setColor(BORDER_COLOR);
 			g.drawRect(0, 0, getWidth() - 1, getHeight() - 1);
+			
+			// draw class name
+			g.setColor(LABEL_COLOR);
+			g.drawString(currentClass.getSimpleName(), 5, 10);
 		}
 		super.paint(g);
 	}

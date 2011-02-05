@@ -6,6 +6,8 @@ package org.lukep.javavis.program.generic.models;
 
 import java.util.Vector;
 
+import org.lukep.javavis.util.JavaVisConstants;
+
 public class ClassInfo extends GenericModel {
 
 	protected String simpleName;
@@ -38,10 +40,10 @@ public class ClassInfo extends GenericModel {
 	
 	public String getPackageName() {
 		int lastDotIndex = qualifiedName.lastIndexOf('.');
-		if (lastDotIndex != -1) // class is member of a named package (non-default)
+		if (qualifiedName.length() > 0 && lastDotIndex != -1) // class is member of a named package (non-default)
 			return qualifiedName.substring(0, lastDotIndex);
 		else
-			return "<default package>";
+			return JavaVisConstants.DEFAULT_PACKAGE_NAME;
 	}
 
 	public MethodInfo getConstructorMethod() {

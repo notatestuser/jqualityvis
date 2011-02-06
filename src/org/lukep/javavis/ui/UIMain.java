@@ -25,7 +25,7 @@ import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.lukep.javavis.ui.swing.VisualisationDesktopPane;
+import org.lukep.javavis.ui.swing.mxGraphWorkspacePane;
 
 public class UIMain implements IProgramStatusReporter, ChangeListener {
 
@@ -128,7 +128,7 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 				int returnVal = fc.showOpenDialog(null); // TODO: modify parent
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					Component selectedWorkspace = mainTabbedPane.getSelectedComponent();
-					VisualisationDesktopPane selectedVdp = (VisualisationDesktopPane)selectedWorkspace;
+					mxGraphWorkspacePane selectedVdp = (mxGraphWorkspacePane)selectedWorkspace;
 					selectedVdp.loadCodeBase(fc.getSelectedFile());
 				}
 			}
@@ -152,9 +152,9 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 	
 	private void addChildFrame()
 	{
-		VisualisationDesktopPane visDesktop = null;
+		mxGraphWorkspacePane visDesktop = null;
 		try {
-			visDesktop = new VisualisationDesktopPane(this);
+			visDesktop = new mxGraphWorkspacePane(this);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -172,8 +172,8 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 	@Override
 	public void stateChanged(ChangeEvent e) {
 		if (zoomSlider == e.getSource()) {
-			VisualisationDesktopPane selectedVdp = 
-				(VisualisationDesktopPane) mainTabbedPane.getSelectedComponent();
+			mxGraphWorkspacePane selectedVdp = 
+				(mxGraphWorkspacePane) mainTabbedPane.getSelectedComponent();
 			selectedVdp.setGraphScale((double)zoomSlider.getValue() / 1000);
 		}
 	}

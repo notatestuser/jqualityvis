@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 import org.lukep.javavis.generated.jaxb.Metrics;
 import org.lukep.javavis.generated.jaxb.Metrics.Metric;
 import org.lukep.javavis.program.generic.models.ClassModelStore;
+import org.lukep.javavis.util.JavaVisConstants;
 import org.lukep.javavis.util.config.ConfigurationManager;
 
 public class MetricRegistry { // singleton
@@ -45,33 +46,37 @@ public class MetricRegistry { // singleton
 		
 		// load the MetricAttributes from configuration data source
 		Metrics metrics = ConfigurationManager.getInstance().getMetrics();
-		MetricAttribute newMetric;
-		try {
-			for (Metric metric : metrics.getMetric()) {
-				newMetric = new MetricAttribute(metric, this);
-				metricMap.put(newMetric.getInternalName(), newMetric);
-				
-				// add the support info
-				Vector<MetricAttribute> curSupportMap;
-				for (String applicableMeasurable : newMetric.getAppliesTo()) {
+		if (metrics != null) {
+			MetricAttribute newMetric;
+			try {
+				for (Metric metric : metrics.getMetric()) {
+					newMetric = new MetricAttribute(metric, this);
+					metricMap.put(newMetric.getInternalName(), newMetric);
 					
-					// get or create the list of supported metric attributes
-					if (metricSupportMap.containsKey(applicableMeasurable)) {
-						curSupportMap = metricSupportMap.get(applicableMeasurable);
-					} else {
-						curSupportMap = new Vector<MetricAttribute>();
-						metricSupportMap.put(applicableMeasurable, curSupportMap);
+					// add the support info
+					Vector<MetricAttribute> curSupportMap;
+					for (String applicableMeasurable : newMetric.getAppliesTo()) {
+						
+						// get or create the list of supported metric attributes
+						if (metricSupportMap.containsKey(applicableMeasurable)) {
+							curSupportMap = metricSupportMap.get(applicableMeasurable);
+						} else {
+							curSupportMap = new Vector<MetricAttribute>();
+							metricSupportMap.put(applicableMeasurable, curSupportMap);
+						}
+						
+						// add our entry to the list!
+						curSupportMap.add(newMetric);
 					}
 					
-					// add our entry to the list!
-					curSupportMap.add(newMetric);
+					log.info("New metric: " + newMetric.toString());
 				}
-				
-				log.info("New metric: " + newMetric.toString());
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
+		else
+			log.warning("No metrics loaded. Check " + JavaVisConstants.METRICS_FILE_NAME);
 	}
 	
 	public static MetricRegistry getInstance() {

@@ -28,22 +28,25 @@ abstract class GenericModel implements Serializable, IMeasurable {
 	@Override
 	public float getMetricMeasurementVal(MetricAttribute attribute) {
 		
-		try {
-		
-			// if the metric applies to a class - run it!
-			if (attribute.testAppliesTo(APPLIES_TO_STR))
-				return accept( attribute, attribute.getVisitor() ).getResult();
-		
-		} catch (Exception e) {
-			e.printStackTrace();
+		if (attribute != null) {
+			try {
+			
+				// if the metric applies to a class - run it!
+				if (attribute.testAppliesTo(APPLIES_TO_STR))
+					return accept( attribute, attribute.getVisitor() ).getResult();
+			
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
-		
 		return -1;
 	}
 	
 	@Override
 	public MetricMeasurement getMetricMeasurement(MetricAttribute attribute) {
-		return MetricRegistry.getInstance().getCachedMeasurement(this, attribute);
+		if (attribute != null)
+			return MetricRegistry.getInstance().getCachedMeasurement(this, attribute);
+		return null;
 	}
 	
 	///////////////////////////////////////////////////////

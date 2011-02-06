@@ -16,54 +16,54 @@
 		   cold          : Minimum metric value to be concerned with.
 		   hot           : Maximum metric value to be concerned with. This isn't a hard limit.
 	-->
-		<metric name="Number of Methods" internal_name="NUM_OF_METHODS">
-			<type>WEIGHTED_CLASS</type>
-			<applies_to>
-				<measurable>class</measurable>
-			</applies_to>
-			<visitor>org.lukep.javavis.metrics.algorithms.MethodCountVisitor</visitor>
-			<cold>0.0</cold>
-			<hot>100.0</hot>
-		</metric>
-		
-		<metric name="Number of Statements" internal_name="NUM_OF_STMTS">
-			<type>WEIGHTED_METHOD</type>
-			<applies_to>
-				<measurable>class</measurable>
-				<measurable>method</measurable>
-			</applies_to>
-			<visitor>org.lukep.javavis.metrics.algorithms.StatementCountVisitor</visitor>
-			<cold>0.0</cold>
-			<hot>100.0</hot>
-		</metric>
-		
-		<metric name="Cyclomatic Complexity" internal_name="CC">
-			<type>WEIGHTED_METHOD</type>
-			<applies_to>
-				<measurable>method</measurable>
-			</applies_to>
-			<visitor>org.lukep.javavis.metrics.algorithms.CyclomaticComplexityVisitor</visitor>
-			<cold>0.0</cold>
-			<hot>30.0</hot>
-		</metric>
-		
-		<metric name="Cyclomatic Complexity Avg" internal_name="CC_AVG">
-			<type>WEIGHTED_CLASS</type>
-			<applies_to>
-				<measurable>class</measurable>
-			</applies_to>
-			<visitor>org.lukep.javavis.metrics.algorithms.CyclomaticComplexityVisitor</visitor>
-			<cold>0.0</cold>
-			<hot>30.0</hot>
-		</metric>
-		
-		<metric name="Cyclomatic Complexity Max" internal_name="CC_MAX">
-			<type>WEIGHTED_CLASS</type>
-			<applies_to>
-				<measurable>class</measurable>
-			</applies_to>
-			<visitor>org.lukep.javavis.metrics.algorithms.CyclomaticComplexityVisitor</visitor>
-			<cold>0.0</cold>
-			<hot>30.0</hot>
-		</metric>
+	<metric name="Number of Methods" internal_name="NUM_OF_METHODS">
+		<type>WEIGHTED_CLASS</type>
+		<applies_to>
+			<measurable>class</measurable>
+		</applies_to>
+		<visitor>org.lukep.javavis.metrics.algorithms.MethodCountVisitor</visitor>
+		<cold>0.0</cold>
+		<hot>100.0</hot>
+	</metric>
+	
+	<metric name="Number of Statements" internal_name="NUM_OF_STMTS">
+		<type>WEIGHTED_METHOD</type>
+		<applies_to>
+			<measurable>class</measurable>
+			<measurable>method</measurable>
+		</applies_to>
+		<visitor>org.lukep.javavis.metrics.algorithms.StatementCountVisitor</visitor>
+		<cold>0.0</cold>
+		<hot>100.0</hot>
+	</metric>
+	
+	<metric name="Cyclomatic Complexity" internal_name="CC">
+		<type>WEIGHTED_METHOD</type>
+		<applies_to>
+			<measurable>method</measurable>
+		</applies_to>
+		<visitor>org.lukep.javavis.metrics.algorithms.CyclomaticComplexityVisitor</visitor>
+		<cold>0.0</cold>
+		<hot>30.0</hot>
+	</metric>
+	
+	<metric name="Cyclomatic Complexity Avg" internal_name="CC_AVG">
+		<type>WEIGHTED_CLASS</type>
+		<applies_to>
+			<measurable>class</measurable>
+		</applies_to>
+		<visitor>org.lukep.javavis.metrics.algorithms.CyclomaticComplexityVisitor</visitor>
+		<cold>0.0</cold>
+		<hot>30.0</hot>
+	</metric>
+	
+	<metric name="Cyclomatic Complexity Max" internal_name="CC_MAX">
+		<type>WEIGHTED_CLASS</type>
+		<applies_to>
+			<measurable>class</measurable>
+		</applies_to>
+		<visitor>org.lukep.javavis.metrics.algorithms.CyclomaticComplexityVisitor</visitor>
+		<cold>0.0</cold>
+		<hot>30.0</hot>
+	</metric>
 </metrics>

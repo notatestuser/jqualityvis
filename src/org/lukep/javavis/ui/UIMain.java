@@ -11,6 +11,7 @@ import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -69,7 +70,7 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 	 */
 	private void initialize() throws Exception {
 		frmJavavis = new JFrame();
-		frmJavavis.setTitle("JavaVis Software Quality Visualiser");
+		frmJavavis.setTitle("JMetricVis Software Quality Visualiser");
 		frmJavavis.setBounds(100, 100, 1280, 768);
 		frmJavavis.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -83,7 +84,8 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 		
 		// initialize bottom panel
 		bottomPanel = new JPanel( new BorderLayout() );
-		mainStatusBar = new JLabel("Ready");
+		mainStatusBar = new JLabel("Ready!");
+		mainStatusBar.setBorder( BorderFactory.createEmptyBorder(0, 10, 0, 0) );
 		bottomPanel.add(mainStatusBar, BorderLayout.CENTER);
 		zoomSlider = new JSlider(0, 1000, 1000);
 		zoomSlider.addChangeListener(this);

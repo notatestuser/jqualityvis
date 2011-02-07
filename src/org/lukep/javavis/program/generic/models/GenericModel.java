@@ -33,7 +33,8 @@ abstract class GenericModel implements Serializable, IMeasurable {
 			
 				// if the metric applies to a class - run it!
 				if (attribute.testAppliesTo(APPLIES_TO_STR))
-					return accept( attribute, attribute.getVisitor() ).getResult();
+					return accept( attribute, 
+							attribute.getVisitorClass().newInstance() ).getResult();
 			
 			} catch (Exception e) {
 				e.printStackTrace();

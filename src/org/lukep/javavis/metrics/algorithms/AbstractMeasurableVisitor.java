@@ -29,8 +29,7 @@ abstract class AbstractMeasurableVisitor extends TreeScanner<Object, Object>
 	}
 
 	@Override
-	public MetricMeasurement visit(MetricAttribute metric,
-			VariableModel variable) {
+	public MetricMeasurement visit(MetricAttribute metric, VariableModel variable) {
 		// implemented in child visitor class
 		return null;
 	}

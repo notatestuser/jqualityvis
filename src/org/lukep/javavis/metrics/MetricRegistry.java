@@ -31,18 +31,14 @@ public class MetricRegistry { // singleton
 	private Map<IMeasurable, Map<MetricAttribute, MetricMeasurement>> measurementMap;
 	
 	private MetricRegistry() {
-		typeMap = 
-			Collections.synchronizedMap(
-				new HashMap<String, MetricType>());
-		metricMap = 
-			Collections.synchronizedMap(
-				new HashMap<String, MetricAttribute>());
-		metricSupportMap =
-			Collections.synchronizedMap(
-				new HashMap<String, Vector<MetricAttribute>>());
-		measurementMap = 
-			Collections.synchronizedMap(
-				new HashMap<IMeasurable, Map<MetricAttribute,MetricMeasurement>>());
+		typeMap = Collections.synchronizedMap(
+					new HashMap<String, MetricType>());
+		metricMap = Collections.synchronizedMap(
+					new HashMap<String, MetricAttribute>());
+		metricSupportMap = Collections.synchronizedMap(
+					new HashMap<String, Vector<MetricAttribute>>());
+		measurementMap = Collections.synchronizedMap(
+					new HashMap<IMeasurable, Map<MetricAttribute,MetricMeasurement>>());
 		
 		// load the MetricAttributes from configuration data source
 		Metrics metrics = ConfigurationManager.getInstance().getMetrics();
@@ -98,6 +94,10 @@ public class MetricRegistry { // singleton
 		if (mt == null)
 			mt = new MetricType(typeName);
 		return mt;
+	}
+	
+	public Set<String> getMetricTypes() {
+		return typeMap.keySet();
 	}
 	
 	// Metric Attributes

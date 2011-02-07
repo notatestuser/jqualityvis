@@ -50,8 +50,8 @@ public class MetricAttribute {
 		return appliesTo.contains(measurableName);
 	}
 
-	public IMeasurableVisitor getVisitor() throws InstantiationException, IllegalAccessException {
-		return visitor.newInstance();
+	public Class<IMeasurableVisitor> getVisitorClass() {
+		return visitor;
 	}
 
 	public float getCold() {

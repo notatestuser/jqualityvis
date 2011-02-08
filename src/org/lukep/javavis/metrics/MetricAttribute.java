@@ -11,7 +11,7 @@ import org.lukep.javavis.generated.jaxb.Metrics.Metric;
 public class MetricAttribute {
 	
 	protected String name;
-	protected String name_internal;
+	protected String nameInternal;
 	protected MetricType type;
 	protected List<String> appliesTo;
 	protected Class<IMeasurableVisitor> visitor;
@@ -22,7 +22,7 @@ public class MetricAttribute {
 		
 		// set the fields in our new MetricAttribute object from the data source object
 		name = sourceMetric.getName();
-		name_internal = sourceMetric.getInternalName();
+		nameInternal = sourceMetric.getInternalName();
 		type = registry.getOrSetMetricType(sourceMetric.getType());
 		appliesTo = sourceMetric.getAppliesTo().getMeasurable();
 		visitor = (Class<IMeasurableVisitor>) Class.forName(sourceMetric.getVisitor());
@@ -35,7 +35,7 @@ public class MetricAttribute {
 	}
 
 	public String getInternalName() {
-		return name_internal;
+		return nameInternal;
 	}
 
 	public MetricType getType() {
@@ -64,11 +64,9 @@ public class MetricAttribute {
 
 	@Override
 	public String toString() {
-		return "MetricAttribute [name=" + name + ", name_internal="
-				+ name_internal + ", type=" + type + ", appliesTo=" + appliesTo
-				+ ", visitor=" + visitor + ", cold=" + cold + ", hot=" + hot
-				+ "]";
+		return "MetricAttribute [name=" + name + ", nameInternal="
+				+ nameInternal + ", type=" + type + ", appliesTo=" + appliesTo
+				+ ", visitor=" + visitor + ", cold=" + cold + ", hot=" + hot + "]";
 	}
 	
 }
-

@@ -11,7 +11,7 @@ import org.lukep.javavis.metrics.MetricAttribute;
 import org.lukep.javavis.metrics.MetricMeasurement;
 import org.lukep.javavis.util.JavaVisConstants;
 
-public class MethodModel extends GenericModel {
+public class MethodModel extends AbstractModel {
 
 	class SourceLangDependentAttributes implements Serializable {
 		public Object rootStatementBlock;
@@ -21,7 +21,7 @@ public class MethodModel extends GenericModel {
 	protected ClassModel parentClass;
 	protected SourceLangDependentAttributes extraAttributes;
 
-	public MethodModel(GenericModelSourceLang lang, String name) {
+	public MethodModel(AbstractModelSourceLang lang, String name) {
 		super(lang, JavaVisConstants.METRIC_APPLIES_TO_METHOD);
 		this.name = name;
 		extraAttributes = new SourceLangDependentAttributes();

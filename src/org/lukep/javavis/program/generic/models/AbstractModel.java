@@ -11,13 +11,13 @@ import org.lukep.javavis.metrics.MetricAttribute;
 import org.lukep.javavis.metrics.MetricMeasurement;
 import org.lukep.javavis.metrics.MetricRegistry;
 
-abstract class GenericModel implements Serializable, IMeasurable {
+abstract class AbstractModel implements Serializable, IMeasurable {
 
 	public String APPLIES_TO_STR = "generic";
 	
-	protected GenericModelSourceLang sourceLang;
+	protected AbstractModelSourceLang sourceLang;
 
-	public GenericModel(GenericModelSourceLang sourceLang, String appliesToString) {
+	public AbstractModel(AbstractModelSourceLang sourceLang, String appliesToString) {
 		super();
 		this.sourceLang = sourceLang;
 		APPLIES_TO_STR = appliesToString;
@@ -52,7 +52,7 @@ abstract class GenericModel implements Serializable, IMeasurable {
 	
 	///////////////////////////////////////////////////////
 
-	public GenericModelSourceLang getSourceLang() {
+	public AbstractModelSourceLang getSourceLang() {
 		return sourceLang;
 	}
 	

@@ -10,7 +10,7 @@ import javax.lang.model.element.TypeElement;
 
 import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.ClassModelStore;
-import org.lukep.javavis.program.generic.models.GenericModelSourceLang;
+import org.lukep.javavis.program.generic.models.AbstractModelSourceLang;
 import org.lukep.javavis.program.generic.models.MethodModel;
 import org.lukep.javavis.program.generic.models.VariableModel;
 import org.lukep.javavis.util.JavaVisConstants;
@@ -37,7 +37,7 @@ public class CodeUnitInfoFactory {
 		
 		// create the new generic class object
 		ClassModel newClassModel = new ClassModel(
-				GenericModelSourceLang.JAVA,
+				AbstractModelSourceLang.JAVA,
 				e.getSimpleName().toString(),
 				e.getQualifiedName().toString());
 		s.lastClass = newClassModel;
@@ -48,7 +48,7 @@ public class CodeUnitInfoFactory {
 			MethodTree methodTree, TreePath path, Trees trees) {
 		
 		// create the new generic method object
-		MethodModel newMethodInfo = new MethodModel(GenericModelSourceLang.JAVA,
+		MethodModel newMethodInfo = new MethodModel(AbstractModelSourceLang.JAVA,
 											methodTree.getName().toString());
 		
 		// set the method's BlockTree entry point
@@ -78,7 +78,7 @@ public class CodeUnitInfoFactory {
 		
 		if (e != null) {
 			String qualifiedTypeName = e.type.toString();
-			newVariableInfo = new VariableModel(GenericModelSourceLang.JAVA,
+			newVariableInfo = new VariableModel(AbstractModelSourceLang.JAVA,
 					e.getQualifiedName().toString(), qualifiedTypeName);
 			
 			// add this information to the last parsed class (if it exists)

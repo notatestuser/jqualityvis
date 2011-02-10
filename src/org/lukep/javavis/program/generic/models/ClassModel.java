@@ -12,7 +12,7 @@ import org.lukep.javavis.metrics.MetricMeasurement;
 import org.lukep.javavis.metrics.MetricRegistry;
 import org.lukep.javavis.util.JavaVisConstants;
 
-public class ClassModel extends GenericModel {
+public class ClassModel extends AbstractModel {
 
 	protected String simpleName;
 	protected String qualifiedName;
@@ -20,7 +20,7 @@ public class ClassModel extends GenericModel {
 	protected Vector<MethodModel> methods = new Vector<MethodModel>();
 	protected Vector<VariableModel> variables = new Vector<VariableModel>();
 
-	public ClassModel(GenericModelSourceLang lang, String simpleName, String qualifiedName) {
+	public ClassModel(AbstractModelSourceLang lang, String simpleName, String qualifiedName) {
 		super(lang, JavaVisConstants.METRIC_APPLIES_TO_CLASS);
 		this.simpleName = simpleName;
 		this.qualifiedName = qualifiedName;

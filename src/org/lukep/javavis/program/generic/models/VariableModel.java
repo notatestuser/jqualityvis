@@ -9,7 +9,7 @@ import org.lukep.javavis.metrics.MetricAttribute;
 import org.lukep.javavis.metrics.MetricMeasurement;
 import org.lukep.javavis.util.JavaVisConstants;
 
-public class VariableModel extends GenericModel {
+public class VariableModel extends AbstractModel {
 
 	protected String name;
 	protected String typeName;
@@ -17,7 +17,7 @@ public class VariableModel extends GenericModel {
 	protected ClassModel parentClass;
 	protected boolean isClassAttribute;
 	
-	public VariableModel(GenericModelSourceLang lang, String name, String typeName) {
+	public VariableModel(AbstractModelSourceLang lang, String name, String typeName) {
 		super(lang, JavaVisConstants.METRIC_APPLIES_TO_VAR);
 		this.name = name;
 		this.typeName = typeName;

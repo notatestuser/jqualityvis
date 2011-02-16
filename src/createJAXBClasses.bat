@@ -1,2 +1,2 @@
-xjc -p org.lukep.javavis.generated.jaxb metrics.xsd
+xjc -p org.lukep.javavis.generated.jaxb metrics.xsd visualisations.xsd
 pause

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Document    : visualisations.xml
+	Author      : Luke Plaster
+	Description : Defines the visualisations utilized by the JMetricVis tool to display quality metrics.
+-->
+<visualisations>
+	<!--
+		Visualisations
+		   name          : Friendly name to display in the user interface.
+		   type          : This groups metrics to visualisations. They can be made up.
+		   visitor       : The internal visitor class implementing IVisualisationVisitor that is used to 
+		                   display this visualisation.
+		   arguments:	 : The arguments to pass to the view.
+	-->
+	<visualisation name="Class Hierarchy w/Methods">
+		<type>WEIGHTED_METHOD</type>
+		<visitor>org.lukep.javavis.visualisation.views.ClassHierarchyView</visitor>
+		<arguments>
+			<argument>ShowSplitClasses</argument>
+		</arguments>
+	</visualisation>
+</visualisations>

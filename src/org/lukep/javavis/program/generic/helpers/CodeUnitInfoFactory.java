@@ -4,14 +4,18 @@
  */
 package org.lukep.javavis.program.generic.helpers;
 
+import java.util.Map;
 import java.util.logging.Logger;
 
+import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 
-import org.lukep.javavis.program.generic.models.ClassModel;
-import org.lukep.javavis.program.generic.models.ClassModelStore;
+import org.lukep.javavis.metrics.IMeasurable;
 import org.lukep.javavis.program.generic.models.AbstractModelSourceLang;
+import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.MethodModel;
+import org.lukep.javavis.program.generic.models.PackageModel;
+import org.lukep.javavis.program.generic.models.ProgramModelStore;
 import org.lukep.javavis.program.generic.models.VariableModel;
 import org.lukep.javavis.util.JavaVisConstants;
 
@@ -41,6 +45,26 @@ public class CodeUnitInfoFactory {
 				e.getSimpleName().toString(),
 				e.getQualifiedName().toString());
 		s.lastClass = newClassModel;
+		
+		// set the class's parent element
+		IMeasurable parent = null;
+		Element enclosingElement = e.getEnclosingElement();
+		
+		switch (enclosingElement.getKind()) {
+		
+		case PACKAGE:
+			parent = getOrCreatePackage(e.getQualifiedName().toString(), s);
+			break;
+			
+		case CLASS:
+			parent = s.programStore.getClassInfo(e.getQualifiedName().toString());
+			break;
+		}
+		if (parent != null) {
+			parent.addChild(newClassModel);
+			newClassModel.setParent(parent);
+		}
+		
 		return newClassModel;
 	}
 	
@@ -60,7 +84,9 @@ public class CodeUnitInfoFactory {
 			
 			log.info("Added constructor method to " + s.lastClass.getSimpleName());
 		} else if (s.lastClass != null) {
+			// add method to previous class as a method
 			s.lastClass.addMethod(newMethodInfo);
+			//s.lastClass.addChild(newMethodInfo);
 			newMethodInfo.setParentClass(s.lastClass);
 			
 			log.info("Added method to " + s.lastClass.getSimpleName()
@@ -92,7 +118,7 @@ public class CodeUnitInfoFactory {
 					newVariableInfo.setClassAttribute(true);
 				
 				// set the variable's internal type target if we've got a generic of that type stored
-				ClassModel typeInternal = ClassModelStore.lookupClassGlobal(qualifiedTypeName);
+				ClassModel typeInternal = ProgramModelStore.lookupClassGlobal(qualifiedTypeName);
 				if (typeInternal != null)
 					newVariableInfo.setTypeInternalClass(typeInternal);
 			}
@@ -101,6 +127,40 @@ public class CodeUnitInfoFactory {
 		}
 		
 		return newVariableInfo;
+	}
+	
+	
+	private static PackageModel getOrCreatePackage(String packageName, Map<String, PackageModel> pkgMap) {
+		
+		// return the package if we already have it
+		if (pkgMap.containsKey(packageName))
+			return pkgMap.get(packageName);
+		
+		// parent package exists?
+		int lastDotIndex = packageName.lastIndexOf('.');
+		String parentPackageName;
+		PackageModel parentPackage = null;
+		if (packageName.length() > 0 && lastDotIndex != -1) { // class is member of a named package (non-default)
+			parentPackageName = packageName.substring(0, lastDotIndex);
+			parentPackage = getOrCreatePackage(parentPackageName, pkgMap);
+		} else {
+			// we're at the root
+		}
+		
+		// create the current package cell and link it up to the parent
+		PackageModel curPackage = new PackageModel(AbstractModelSourceLang.JAVA, packageName);
+		if (parentPackage != null)
+			curPackage.setParent(parentPackage);
+		
+		pkgMap.put(packageName, curPackage);
+		
+		log.info("New " + curPackage.toString());
+		
+		return curPackage;
+	}
+	
+	private static PackageModel getOrCreatePackage(String packageName, CodeUnitInfoFactoryState s) {
+		return getOrCreatePackage(packageName, s.programStore.getPackageMap());
 	}
 	
 }

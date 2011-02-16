@@ -5,9 +5,15 @@
 package org.lukep.javavis.program.generic.helpers;
 
 import org.lukep.javavis.program.generic.models.ClassModel;
+import org.lukep.javavis.program.generic.models.ProgramModelStore;
 
 public class CodeUnitInfoFactoryState {
 
-	public ClassModel lastClass = null;
+	protected ProgramModelStore programStore;
+	protected ClassModel lastClass = null;
+	
+	public CodeUnitInfoFactoryState(ProgramModelStore programStore) {
+		this.programStore = programStore;
+	}
 	
 }

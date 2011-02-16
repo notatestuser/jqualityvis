@@ -6,6 +6,7 @@ package org.lukep.javavis.program.generic.models;
 
 import java.util.Vector;
 
+import org.lukep.javavis.metrics.IMeasurable;
 import org.lukep.javavis.metrics.IMeasurableVisitor;
 import org.lukep.javavis.metrics.MetricAttribute;
 import org.lukep.javavis.metrics.MetricMeasurement;
@@ -17,8 +18,8 @@ public class ClassModel extends AbstractModel {
 	protected String simpleName;
 	protected String qualifiedName;
 	protected MethodModel constructorMethod;
-	protected Vector<MethodModel> methods = new Vector<MethodModel>();
-	protected Vector<VariableModel> variables = new Vector<VariableModel>();
+	protected int methodCount = 0;
+	protected int variableCount = 0;
 
 	public ClassModel(AbstractModelSourceLang lang, String simpleName, String qualifiedName) {
 		super(lang, JavaVisConstants.METRIC_APPLIES_TO_CLASS);
@@ -39,7 +40,7 @@ public class ClassModel extends AbstractModel {
 		int totalStatements = 0;
 		MetricMeasurement result;
 		
-		for (MethodModel method : methods) {
+		for (MethodModel method : getMethods()) {
 			result = method.getMetricMeasurement(
 						MetricRegistry.getInstance().getMetricAttribute(
 							JavaVisConstants.METRIC_NUM_OF_STATEMENTS));
@@ -54,7 +55,7 @@ public class ClassModel extends AbstractModel {
 		float avgComplexity = 0;
 		MetricMeasurement result;
 		
-		for (MethodModel method : methods) {
+		for (MethodModel method : getMethods()) {
 				result = method.getMetricMeasurement(
 							MetricRegistry.getInstance().getMetricAttribute(
 								JavaVisConstants.METRIC_CYCLO_COMPLEX));
@@ -71,7 +72,7 @@ public class ClassModel extends AbstractModel {
 		float maxComplexity = 0;
 		MetricMeasurement result;
 		
-		for (MethodModel method : methods) {
+		for (MethodModel method : getMethods()) {
 				result = method.getMetricMeasurement(
 							MetricRegistry.getInstance().getMetricAttribute(
 								JavaVisConstants.METRIC_CYCLO_COMPLEX));
@@ -117,27 +118,43 @@ public class ClassModel extends AbstractModel {
 	}
 	
 	public void addMethod(MethodModel method) {
-		methods.add(method);
+		addChild(method);
+		methodCount++;
 	}
 	
 	public Vector<MethodModel> getMethods() {
-		return methods;
+		if (children != null) {
+			Vector<MethodModel> methods = new Vector<MethodModel>(children.size());
+			for (IMeasurable m : children)
+				if (m instanceof MethodModel)
+					methods.add((MethodModel) m);
+			return methods;
+		}
+		return null;
 	}
 	
 	public int getMethodCount() {
-		return methods.size();
+		return methodCount;
 	}
 	
 	public void addVariable(VariableModel variable) {
-		variables.add(variable);
+		addChild(variable);
+		variableCount++;
 	}
 	
 	public Vector<VariableModel> getVariables() {
-		return variables;
+		if (children != null) {
+			Vector<VariableModel> variables = new Vector<VariableModel>(children.size());
+			for (IMeasurable m : children)
+				if (m instanceof VariableModel)
+					variables.add((VariableModel) m);
+			return variables;
+		}
+		return null;
 	}
 	
 	public int getVariableCount() {
-		return variables.size();
+		return variableCount;
 	}
 
 	@Override

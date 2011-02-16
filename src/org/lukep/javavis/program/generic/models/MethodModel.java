@@ -18,7 +18,6 @@ public class MethodModel extends AbstractModel {
 	}
 	
 	protected String name;
-	protected ClassModel parentClass;
 	protected SourceLangDependentAttributes extraAttributes;
 
 	public MethodModel(AbstractModelSourceLang lang, String name) {
@@ -45,11 +44,11 @@ public class MethodModel extends AbstractModel {
 	}
 
 	public ClassModel getParentClass() {
-		return parentClass;
+		return (ClassModel) parent;
 	}
 
 	public void setParentClass(ClassModel parentClass) {
-		this.parentClass = parentClass;
+		parent = parentClass;
 	}
 	
 	public Object getRootStatementBlock() {
@@ -62,7 +61,7 @@ public class MethodModel extends AbstractModel {
 
 	@Override
 	public String toString() {
-		return "MethodInfo [name=" + name + ", parentClass=" + parentClass + "]";
+		return "MethodInfo [name=" + name + ", parent=" + parent + "]";
 	}
 	
 }

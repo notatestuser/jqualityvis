@@ -5,7 +5,7 @@
 package org.lukep.javavis.program.generic.models;
 
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Vector;
@@ -13,20 +13,26 @@ import java.util.logging.Logger;
 
 import org.lukep.javavis.ui.IProgramSourceObserver;
 
-public class ClassModelStore extends Observable implements IProgramSourceObserver {
+public class ProgramModelStore extends Observable implements IProgramSourceObserver {
 	
 	protected final static Logger log = 
-		Logger.getLogger(ClassModelStore.class.getSimpleName());
+		Logger.getLogger(ProgramModelStore.class.getSimpleName());
 	
 	// keeps track of all instances of the ClassModelStore (for global class lookups)
-	protected final static Vector<ClassModelStore> instances = new Vector<ClassModelStore>();
+	protected final static Vector<ProgramModelStore> instances = new Vector<ProgramModelStore>();
 	
     protected Map<String, ClassModel> classMap;
+    protected Map<String, PackageModel> packageMap;
+    
+    ///////////////////////////////////////////////////////
 
-    public ClassModelStore() {
-    	classMap = Collections.synchronizedMap(new HashMap<String, ClassModel>());
+    public ProgramModelStore() {
+    	classMap = Collections.synchronizedMap(new LinkedHashMap<String, ClassModel>());
+    	packageMap = Collections.synchronizedMap(new LinkedHashMap<String, PackageModel>());
     	instances.add(this);
     }
+    
+    ///////////////////////////////////////////////////////
 
     public Map<String, ClassModel> getClassMap() {
         return classMap;
@@ -51,7 +57,7 @@ public class ClassModelStore extends Observable implements IProgramSourceObserve
     	// check all instances of ClassModelStore that we know about
     	if (instances.size() > 0) {
     		ClassModel clazz = null;
-    		for (ClassModelStore cms : instances) {
+    		for (ProgramModelStore cms : instances) {
     			clazz = cms.lookupClass(qualifiedName);
     			if (clazz != null)
     				return clazz;
@@ -59,6 +65,18 @@ public class ClassModelStore extends Observable implements IProgramSourceObserve
     	}
     	return null;
     }
+    
+    ///////////////////////////////////////////////////////
+    
+    public Map<String, PackageModel> getPackageMap() {
+    	return packageMap;
+    }
+    
+    public void addPackage(String packageName, PackageModel pkg) {
+    	packageMap.put(packageName, pkg);
+    }
+    
+    ///////////////////////////////////////////////////////
 
 	@Override
 	public void notifyFindClass(ClassModel clazz) {

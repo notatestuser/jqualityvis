@@ -64,9 +64,7 @@ public class MetricAttribute {
 
 	@Override
 	public String toString() {
-		return "MetricAttribute [name=" + name + ", nameInternal="
-				+ nameInternal + ", type=" + type + ", appliesTo=" + appliesTo
-				+ ", visitor=" + visitor + ", cold=" + cold + ", hot=" + hot + "]";
+		return name + " " + appliesTo;
 	}
 	
 }

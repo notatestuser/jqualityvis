@@ -19,6 +19,7 @@ import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
 import org.lukep.javavis.program.ISourceLoaderThread;
+import org.lukep.javavis.program.generic.models.ProgramModelStore;
 import org.lukep.javavis.ui.IProgramSourceObserver;
 import org.lukep.javavis.util.io.FileSystemUtils;
 import org.lukep.javavis.util.io.IFileSystemScanObserver;
@@ -29,12 +30,16 @@ public class JavaSourceLoaderThread implements ISourceLoaderThread {
 	
 	protected StandardJavaFileManager fileManager;
 	protected DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
+	
+	protected ProgramModelStore programStore;
 	protected Vector<IProgramSourceObserver> observers = new Vector<IProgramSourceObserver>();
+	
 	protected File selectedDirectory;
 	protected int directoryCount;
 	
-	public JavaSourceLoaderThread(File selectedDirectory) {
+	public JavaSourceLoaderThread(File selectedDirectory, ProgramModelStore programStore) {
 		this.selectedDirectory = selectedDirectory;
+		this.programStore = programStore;
 	}
 
 	@Override
@@ -67,7 +72,7 @@ public class JavaSourceLoaderThread implements ISourceLoaderThread {
 		CompilationTask compilationTask = compiler.getTask(null, fileManager, diagnostics, 
 															null, null, compilationUnits);
 		LinkedList<AbstractProcessor> processors = new LinkedList<AbstractProcessor>();
-		processors.add( new JavaCodeProcessor(observers) );
+		processors.add( new JavaCodeProcessor(observers, programStore) );
 		compilationTask.setProcessors(processors);
 		notifyStatusChange(compilationTask.call() 
 						? "Compiled " + inputFiles.size() + " source files in " + directoryCount + " directories successfully." 

@@ -10,6 +10,7 @@ import org.lukep.javavis.program.generic.helpers.CodeUnitInfoFactory;
 import org.lukep.javavis.program.generic.helpers.CodeUnitInfoFactoryState;
 import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.MethodModel;
+import org.lukep.javavis.program.generic.models.ProgramModelStore;
 import org.lukep.javavis.program.generic.models.VariableModel;
 import org.lukep.javavis.ui.IProgramSourceObserver;
 
@@ -23,12 +24,14 @@ import com.sun.source.util.Trees;
 public class JavaCodeTreeVisitor extends TreePathScanner<Object, Trees> {
 
 	protected Vector<IProgramSourceObserver> observers;
-	protected CodeUnitInfoFactoryState codeUnitState = new CodeUnitInfoFactoryState();
+	protected CodeUnitInfoFactoryState codeUnitState;
 	
-	public JavaCodeTreeVisitor(Vector<IProgramSourceObserver> observers) {
+	public JavaCodeTreeVisitor(Vector<IProgramSourceObserver> observers,
+			ProgramModelStore programStore) {
 		super();
 
 		this.observers = observers;
+		this.codeUnitState = new CodeUnitInfoFactoryState(programStore);
 	}
 
 	@Override

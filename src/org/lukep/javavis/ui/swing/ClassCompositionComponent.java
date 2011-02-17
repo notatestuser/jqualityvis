@@ -6,35 +6,49 @@ package org.lukep.javavis.ui.swing;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.JComponent;
 
 import org.lukep.javavis.metrics.MetricRegistry;
 import org.lukep.javavis.program.generic.models.ClassModel;
+import org.lukep.javavis.program.generic.models.IGenericModelNode;
 import org.lukep.javavis.program.generic.models.MethodModel;
+import org.lukep.javavis.ui.swing.WorkspaceContext.ChangeEvent;
 import org.lukep.javavis.util.JavaVisConstants;
 
-public class ClassCompositionComponent extends JComponent {
+public class ClassCompositionComponent extends JComponent implements Observer {
 
 	private static final Color BACK_COLOR	= Color.gray;
 	private static final Color BORDER_COLOR = Color.black;
 	private static final Color LABEL_COLOR	= Color.white;
 	
-	protected ClassModel currentClass;
+	protected WorkspaceContext wspContext;
+	protected IGenericModelNode currentModel;
 
-	public ClassCompositionComponent(ClassModel currentClass) {
+	public ClassCompositionComponent(WorkspaceContext wspContext) {
 		super();
-		this.currentClass = currentClass;
+		this.wspContext = wspContext;
+		wspContext.addObserver(this);
 	}
 	
-	public void setCurrentClass(ClassModel clazz) {
-		currentClass = clazz;
+	public ClassCompositionComponent(IGenericModelNode modelTarget) {
+		super();
+		this.currentModel = modelTarget;
+	}
+	
+	public void setCurrentModel(IGenericModelNode model) {
+		currentModel = model;
 		repaint();
 	}
 
 	@Override
 	public void paint(Graphics g) {
-		if (currentClass != null) {
+		if (currentModel != null
+				&& currentModel instanceof ClassModel) {
+			ClassModel currentClass = (ClassModel) currentModel;
+			
 			// start out with a blank canvas
 			g.setColor(BACK_COLOR);
 			g.fillRect(0, 0, getWidth() - 1, getHeight() - 1);
@@ -47,8 +61,8 @@ public class ClassCompositionComponent extends JComponent {
 					(int) Math.ceil(getHeight() / (double)pixelsPerStatement) : getHeight();
 			
 			int rectY, rectHeight, lastY = 0;
-			MethodModel method;
 			float complexity;
+			MethodModel method;
 			for (int i = 0; i < currentClass.getMethodCount(); i++) {
 				method = (MethodModel) currentClass.getMethods().get(i);
 				rectHeight = (int)(pixelsPerStatement * 
@@ -75,6 +89,13 @@ public class ClassCompositionComponent extends JComponent {
 			g.drawString(currentClass.getSimpleName(), 5, 10);
 		}
 		super.paint(g);
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		if (ChangeEvent.SELECTED_CHANGE == (ChangeEvent) arg
+				&& wspContext.getSelectedItem() != currentModel)
+			setCurrentModel(wspContext.getSelectedItem());
 	}
 	
 }

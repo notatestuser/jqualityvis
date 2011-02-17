@@ -11,14 +11,12 @@ import org.lukep.javavis.program.generic.models.Relationship.RelationshipType;
 import org.lukep.javavis.util.JavaVisConstants;
 
 public class PackageModel extends AbstractModel {
-
-	protected String qualifiedName;
 	
 	public PackageModel(AbstractModelSourceLang sourceLang, String qualifiedName) {
 		super(sourceLang, JavaVisConstants.METRIC_APPLIES_TO_PKG);
 		this.qualifiedName = qualifiedName;
 	}
-
+	
 	///////////////////////////////////////////////////////
 	
 	@Override
@@ -32,10 +30,6 @@ public class PackageModel extends AbstractModel {
 	
 	public void addClass(ClassModel clazz) {
 		addChild(clazz, RelationshipType.ENCLOSED_IN);
-	}
-
-	public String getQualifiedName() {
-		return qualifiedName;
 	}
 
 	@Override

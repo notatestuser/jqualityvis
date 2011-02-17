@@ -8,8 +8,12 @@ import java.util.HashMap;
 
 import org.lukep.javavis.metrics.IMeasurable;
 import org.lukep.javavis.program.generic.models.ClassModel;
+import org.lukep.javavis.program.generic.models.IGenericModelNode;
 import org.lukep.javavis.program.generic.models.PackageModel;
 import org.lukep.javavis.program.generic.models.ProgramModelStore;
+import org.lukep.javavis.ui.mxgraph.CustomMxGraphComponent;
+import org.lukep.javavis.ui.mxgraph.ICustomMxBehaviorProxy;
+import org.lukep.javavis.ui.mxgraph.MxSwingCanvas;
 import org.lukep.javavis.ui.swing.WorkspaceContext;
 import org.lukep.javavis.ui.swing.mxGraphWorkspacePane;
 
@@ -19,6 +23,7 @@ import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxIGraphModel;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.swing.util.mxMorphing;
+import com.mxgraph.swing.view.mxInteractiveCanvas;
 import com.mxgraph.util.mxConstants;
 import com.mxgraph.util.mxEvent;
 import com.mxgraph.util.mxEventObject;
@@ -29,8 +34,8 @@ public class ClassHierarchyView extends AbstractVisualisationView {
 
 	@Override
 	public void visit(mxGraphWorkspacePane workspace,
-			mxGraphComponent graphComponent) {
-
+			final mxGraphComponent graphComponent) {
+		
 		// obtain the workspace's context object (which gives us access to model store, vis, metric, relations)
 		final WorkspaceContext wspContext = workspace.getContext();
 		
@@ -46,15 +51,16 @@ public class ClassHierarchyView extends AbstractVisualisationView {
 		
 		// create package vertices
 		ProgramModelStore modelStore = wspContext.getModelStore();
-		HashMap<IMeasurable, mxCell> parentCellMap = new HashMap<IMeasurable, mxCell>();
+		HashMap<IMeasurable, mxCell> parentCellMap = new HashMap<IMeasurable, mxCell>(
+				modelStore.getPackageMap().size() + 10);
 		mxCell curCell;
 		
 		for (PackageModel pkg : modelStore.getPackageMap().values()) {
 			
 			curCell = (mxCell) graph.insertVertex(graph.getDefaultParent(), 
-					pkg.getQualifiedName(), pkg, 250, 100, 150, 80);
+					pkg.getQualifiedName(), pkg, 250, 100, 150, 30);
 			
-			IMeasurable parentPackage = pkg.getParent();
+			IGenericModelNode parentPackage = pkg.getParent();
 			if (parentPackage != null
 					&& parentPackage instanceof PackageModel
 					&& parentCellMap.containsKey(parentPackage)) {
@@ -73,13 +79,15 @@ public class ClassHierarchyView extends AbstractVisualisationView {
 			
 			curCell = (mxCell) graph.insertVertex(graph.getDefaultParent(), null, clazz, 20, 20, 150, 50);
 			
-			if (clazz.getParent() instanceof PackageModel
-					&& parentCellMap.containsKey(clazz.getParent())) {
+			if (parentCellMap.containsKey(clazz.getParent())) {
 				
 				// link to the parent package
 				graph.insertEdge(graph.getDefaultParent(), null, null, 
 						parentCellMap.get(clazz.getParent()), curCell);
 			}
+			
+			if (clazz.getChildCount() > 0)
+				parentCellMap.put(clazz, curCell);
 		}
 		
 		// execute the layout and animation
@@ -97,6 +105,7 @@ public class ClassHierarchyView extends AbstractVisualisationView {
 				public void invoke(Object sender, mxEventObject evt) {
 					graphModel.endUpdate();
 				}
+				
 			});
 			
 			morph.startAnimation();

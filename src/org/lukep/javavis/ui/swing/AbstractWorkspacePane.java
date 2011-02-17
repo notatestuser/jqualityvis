@@ -98,7 +98,7 @@ abstract class AbstractWorkspacePane extends JDesktopPane implements
 		toolbar.add(visComboBox);
 		
 		// create the properties panel to show the attributes of the currently selected class
-		propertiesPane = new ClassPropertiesPanel();
+		propertiesPane = new ClassPropertiesPanel(wspContext);
 		propertiesPane.setVisible(true);
 		
 		// create the right split pane that contains the graph component on the top and the class
@@ -144,7 +144,7 @@ abstract class AbstractWorkspacePane extends JDesktopPane implements
 				
 				MetricAttribute metric = (MetricAttribute) metricComboBox.getSelectedItem();
 				
-				wspContext.metric = metric;
+				wspContext.setMetric(metric);
 				
 				List<Visualisation> visualisations = 
 					VisualisationRegistry.getInstance().getVisualisationsByType(metric.getType());
@@ -152,8 +152,8 @@ abstract class AbstractWorkspacePane extends JDesktopPane implements
 				visComboBox.setEnabled(true);
 				
 			} else {
-				wspContext.metric = null;
-				wspContext.visualisation = null;
+				wspContext.setMetric(null);
+				wspContext.setVisualisation(null);
 				visComboBox.setEnabled(false);
 			}
 		} else if (visComboBox == e.getSource()
@@ -161,7 +161,7 @@ abstract class AbstractWorkspacePane extends JDesktopPane implements
 			
 			if (visComboBox.getSelectedItem() instanceof Visualisation) {
 				Visualisation vis = (Visualisation) visComboBox.getSelectedItem();
-				wspContext.visualisation = vis;
+				wspContext.setVisualisation(vis);
 				
 				try {
 					setProgramStatus("Applying Visualisation \"" + vis.getName() + "\"...");
@@ -176,7 +176,7 @@ abstract class AbstractWorkspacePane extends JDesktopPane implements
 					setProgramStatus("Applied Visualisation \"" + vis.getName() + "\".");
 				}
 			} else {
-				wspContext.visualisation = null;
+				wspContext.setVisualisation(null);
 			}
 		}
 	}
@@ -207,7 +207,7 @@ abstract class AbstractWorkspacePane extends JDesktopPane implements
 	@Override
 	public void notifyFindClass(ClassModel clazz) {
 		DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode) programTree.getModel().getRoot();
-		String packageName = clazz.getPackageName();
+		String packageName = clazz.getContainerName();
 		if (packageName.length() > 0) { // class is member of a named package (non-default)
 			DefaultMutableTreeNode newPackageNode = new DefaultMutableTreeNode( packageName );
 			Enumeration rootNodeChildren = rootNode.children();

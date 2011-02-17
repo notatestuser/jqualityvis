@@ -13,9 +13,9 @@ import java.util.HashMap;
 import javax.swing.tree.DefaultTreeModel;
 
 import org.lukep.javavis.program.generic.models.ClassModel;
+import org.lukep.javavis.program.generic.models.IGenericModelNode;
 import org.lukep.javavis.program.java.JavaSourceLoaderThread;
 import org.lukep.javavis.ui.IProgramStatusReporter;
-import org.lukep.javavis.ui.mxgraph.ICustomMxBehaviorProxy;
 import org.lukep.javavis.ui.mxgraph.MxSwingCanvas;
 import org.lukep.javavis.visualisation.IVisualisationVisitor;
 
@@ -54,14 +54,15 @@ public class mxGraphWorkspacePane extends AbstractWorkspacePane {
 						&& ((mxImageCanvas) canvas).getGraphicsCanvas() instanceof MxSwingCanvas
 						&& cell.getValue() instanceof ClassModel)
 				{
-					((MxSwingCanvas) ((mxImageCanvas) canvas).getGraphicsCanvas())
-							.drawVertex(state, new ClassCompositionComponent( (ClassModel) cell.getValue() ));
+					((MxSwingCanvas) ((mxImageCanvas) canvas).getGraphicsCanvas()).drawVertex(state, 
+									new ClassCompositionComponent( (ClassModel) cell.getValue() ));
 				}
 				// Redirection of drawing vertices in SwingCanvas
 				else if (getModel().isVertex(cell)
 						&& canvas instanceof MxSwingCanvas
 						&& cell.getValue() instanceof ClassModel) {
-					((MxSwingCanvas) canvas).drawVertex(state, new ClassCompositionComponent( (ClassModel) cell.getValue() ));
+					((MxSwingCanvas) canvas).drawVertex(state, 
+							new ClassCompositionComponent( (ClassModel) cell.getValue() ));
 				} else {
 					super.drawState(canvas, state, label);
 				}
@@ -72,19 +73,10 @@ public class mxGraphWorkspacePane extends AbstractWorkspacePane {
 		graphComponent = new mxGraphComponent(graph)
 		{
 			private static final long serialVersionUID = 4683716829748931448L;
-			
-			private ICustomMxBehaviorProxy behaviorProxy;
 
 			public mxInteractiveCanvas createCanvas()
 			{
-				if (behaviorProxy != null)
-					return behaviorProxy.createCanvas();
-				else
-					return super.createCanvas();
-			}
-
-			public void setCustomBehaviorProxy(ICustomMxBehaviorProxy behaviorProxy) {
-				this.behaviorProxy = behaviorProxy;
+				return new MxSwingCanvas(graphComponent);
 			}
 		};
 		graphComponent.getViewport().setOpaque(false);
@@ -104,10 +96,9 @@ public class mxGraphWorkspacePane extends AbstractWorkspacePane {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				mxCell currentSelectionCell = (mxCell)graphComponent.getCellAt(e.getX(), e.getY());
-				if (currentSelectionCell != null && graph.getModel().isVertex(currentSelectionCell)
-						&& currentSelectionCell.getValue() instanceof ClassModel) {
-					ClassModel mclass = (ClassModel) currentSelectionCell.getValue();
-					propertiesPane.setCurrentClass(mclass);
+				if (currentSelectionCell != null //&& graph.getModel().isVertex(currentSelectionCell)
+						&& currentSelectionCell.getValue() instanceof IGenericModelNode) {
+					wspContext.setSelectedItem((IGenericModelNode) currentSelectionCell.getValue());
 				}
 				super.mouseClicked(e);
 			}
@@ -116,7 +107,8 @@ public class mxGraphWorkspacePane extends AbstractWorkspacePane {
 	}
 
 	public void loadCodeBase(File selectedDirectory) {
-		JavaSourceLoaderThread jslt = new JavaSourceLoaderThread(selectedDirectory, wspContext.modelStore) {
+		JavaSourceLoaderThread jslt = new JavaSourceLoaderThread(selectedDirectory, 
+				wspContext.modelStore) {
 			
 			@Override
 			public void notifyStatusChange(String message) {

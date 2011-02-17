@@ -11,16 +11,13 @@ import org.lukep.javavis.util.JavaVisConstants;
 
 public class VariableModel extends AbstractModel {
 
-	protected String name;
-	protected String typeName;
 	protected ClassModel typeInternalClass;
-	protected ClassModel parentClass;
 	protected boolean isClassAttribute;
 	
 	public VariableModel(AbstractModelSourceLang lang, String name, String typeName) {
 		super(lang, JavaVisConstants.METRIC_APPLIES_TO_VAR);
-		this.name = name;
-		this.typeName = typeName;
+		setSimpleName(name);
+		setQualifiedName(typeName);
 	}
 	
 	///////////////////////////////////////////////////////
@@ -33,19 +30,19 @@ public class VariableModel extends AbstractModel {
 	///////////////////////////////////////////////////////
 
 	public String getName() {
-		return name;
+		return getSimpleName();
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		setSimpleName(name);
 	}
 
 	public String getTypeName() {
-		return typeName;
+		return getQualifiedName();
 	}
 
 	public void setTypeName(String typeName) {
-		this.typeName = typeName;
+		setQualifiedName(typeName);
 	}
 
 	public ClassModel getTypeInternalClass() {
@@ -57,11 +54,13 @@ public class VariableModel extends AbstractModel {
 	}
 
 	public ClassModel getParentClass() {
-		return parentClass;
+		if (getParent() instanceof ClassModel)
+			return (ClassModel) getParent();
+		return null;
 	}
 
 	public void setParentClass(ClassModel parentClass) {
-		this.parentClass = parentClass;
+		setParent(parentClass);
 	}
 
 	public boolean isClassAttribute() {
@@ -74,9 +73,9 @@ public class VariableModel extends AbstractModel {
 
 	@Override
 	public String toString() {
-		return "VariableInfo [name=" + name + ", typeName=" + typeName
-				+ ", typeInternalClass=" + typeInternalClass + ", parentClass="
-				+ parentClass + ", isClassAttribute=" + isClassAttribute + "]";
+		return "VariableModel [typeInternalClass=" + typeInternalClass
+				+ ", isClassAttribute=" + isClassAttribute + ", simpleName="
+				+ simpleName + ", qualifiedName=" + qualifiedName + ", parent=" + parent + "]";
 	}
 	
 }

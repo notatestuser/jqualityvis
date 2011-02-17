@@ -9,9 +9,9 @@ import java.util.logging.Logger;
 
 import javax.lang.model.element.TypeElement;
 
-import org.lukep.javavis.metrics.IMeasurable;
 import org.lukep.javavis.program.generic.models.AbstractModelSourceLang;
 import org.lukep.javavis.program.generic.models.ClassModel;
+import org.lukep.javavis.program.generic.models.IGenericModelNode;
 import org.lukep.javavis.program.generic.models.MethodModel;
 import org.lukep.javavis.program.generic.models.PackageModel;
 import org.lukep.javavis.program.generic.models.ProgramModelStore;
@@ -48,7 +48,7 @@ public class CodeUnitInfoFactory {
 		s.lastClass = newClassModel;
 		
 		// set the class's parent element
-		IMeasurable parent = null;
+		IGenericModelNode parent = null;
 		Symbol enclosingElement = (Symbol) e.getEnclosingElement();
 		
 		switch (enclosingElement.getKind()) {
@@ -157,8 +157,10 @@ public class CodeUnitInfoFactory {
 		
 		// create the current package cell and link it up to the parent
 		PackageModel curPackage = new PackageModel(AbstractModelSourceLang.JAVA, packageName);
-		if (parentPackage != null)
+		if (parentPackage != null) {
 			curPackage.setParent(parentPackage);
+			curPackage.setSimpleName(packageName.substring(lastDotIndex + 1));
+		}
 		
 		pkgMap.put(usingDefaultPkgName ? "" : packageName, curPackage);
 		

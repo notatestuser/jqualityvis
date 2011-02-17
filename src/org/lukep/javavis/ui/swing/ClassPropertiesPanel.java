@@ -7,6 +7,8 @@ package org.lukep.javavis.ui.swing;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -15,22 +17,28 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 
+import org.lukep.javavis.metrics.IMeasurable;
 import org.lukep.javavis.metrics.MetricAttribute;
 import org.lukep.javavis.metrics.MetricMeasurement;
 import org.lukep.javavis.metrics.MetricRegistry;
 import org.lukep.javavis.program.generic.models.ClassModel;
+import org.lukep.javavis.program.generic.models.IGenericModelNode;
+import org.lukep.javavis.ui.swing.WorkspaceContext.ChangeEvent;
 
-public class ClassPropertiesPanel extends JPanel {
+public class ClassPropertiesPanel extends JPanel implements Observer {
 	
 	protected JLabel contentLabel;
 	protected JTable methodTable;
 	
 	ClassCompositionComponent classCompositionComponent;
 	
-	protected ClassModel currentClass;
+	protected WorkspaceContext wspContext;
+	protected IGenericModelNode currentModel;
 
-	public ClassPropertiesPanel() {
+	public ClassPropertiesPanel(WorkspaceContext wspContext) {
 		setLayout( new GridLayout(1, 0, 3, 0) );
+		this.wspContext = wspContext;
+		wspContext.addObserver(this);
 		
 		// create content label
 		contentLabel = new JLabel();
@@ -42,7 +50,7 @@ public class ClassPropertiesPanel extends JPanel {
 		add(contentLabelPane);
 		
 		// add class composition component
-		classCompositionComponent = new ClassCompositionComponent(null);
+		classCompositionComponent = new ClassCompositionComponent(wspContext);
 		classCompositionComponent.setPreferredSize( new Dimension(100, 100) );
 		contentPanel.add(classCompositionComponent, BorderLayout.WEST);
 		
@@ -52,29 +60,25 @@ public class ClassPropertiesPanel extends JPanel {
 		add(methodTableScrollPane);
 	}
 	
-	public void setCurrentClass(ClassModel clazz) {
-		currentClass = clazz;
+	public void setCurrentModel(IGenericModelNode model) {
+		currentModel = model;
 		
 		// build up the html content string
 		StringBuilder sb = new StringBuilder("<html>");
-		// ... include package name
-		sb.append(clazz.getPackageName() + "<br />");
-		// ... include class's simple name
-		sb.append("<h2>" + clazz.getSimpleName() + "</h2>");
-		// ... include methods
-		/*if (clazz.getMethodCount() > 0) {
-			sb.append("<h3>Methods</h3>");
-			for (MethodInfo method : clazz.getMethods())
-				sb.append(method.getName() + "<br />");
-		}*/
+		// ... include container name
+		sb.append(model.getContainerName() + "<br />");
+		// ... include model's simple name
+		sb.append("<h2>" + model.getSimpleName() + "</h2>");
 		// ... include metrics
-		//sb.append("<h3>Metrics</h3>");
-		float result;
-		for (MetricAttribute attribute : MetricRegistry.getInstance().getMetricAttributes()) {
-			result = clazz.getMetricMeasurementVal(attribute);
-			if (result != MetricMeasurement.DEFAULT_RESULT)
-				sb.append("<strong>" + attribute.getName() + "</strong>" 
-						+ " = " + result + "<br />");
+		if (model instanceof IMeasurable) {
+			IMeasurable measurableModel = (IMeasurable) model;
+			float result;
+			for (MetricAttribute attribute : MetricRegistry.getInstance().getMetricAttributes()) {
+				result = measurableModel.getMetricMeasurementVal(attribute);
+				if (result != MetricMeasurement.DEFAULT_RESULT)
+					sb.append("<strong>" + attribute.getName() + "</strong>" 
+							+ " = " + result + "<br />");
+			}
 		}
 		// ... end
 		sb.append("</html>");
@@ -83,10 +87,22 @@ public class ClassPropertiesPanel extends JPanel {
 		contentLabel.setText( sb.toString() );
 		
 		// update method listing table
-		((ClassPropertiesTableModel)(methodTable.getModel())).setSubject(clazz);
+		ClassPropertiesTableModel methodTableModel = 
+			(ClassPropertiesTableModel) methodTable.getModel();
+		if (model instanceof ClassModel)
+			methodTableModel.setSubject(((ClassModel)(model)));
+		else
+			methodTableModel.setSubject(null);
 		
 		// update class composition component
-		classCompositionComponent.setCurrentClass(clazz);
+		classCompositionComponent.setCurrentModel(model);
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		if (ChangeEvent.SELECTED_CHANGE == (ChangeEvent) arg
+				&& wspContext.getSelectedItem() != currentModel)
+			setCurrentModel(wspContext.getSelectedItem());
 	}
 	
 }

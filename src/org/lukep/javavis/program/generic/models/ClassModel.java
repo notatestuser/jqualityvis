@@ -15,8 +15,6 @@ import org.lukep.javavis.util.JavaVisConstants;
 
 public class ClassModel extends AbstractModel {
 
-	protected String simpleName;
-	protected String qualifiedName;
 	protected MethodModel constructorMethod;
 	protected int methodCount = 0;
 	protected int variableCount = 0;
@@ -94,29 +92,16 @@ public class ClassModel extends AbstractModel {
 	
 	///////////////////////////////////////////////////////
 
-	public String getSimpleName() {
-		return simpleName;
-	}
-
-	public void setSimpleName(String simpleName) {
-		this.simpleName = simpleName;
-	}
-
-	public String getQualifiedName() {
-		return qualifiedName;
-	}
-
-	public void setQualifiedName(String qualifiedName) {
-		this.qualifiedName = qualifiedName;
-	}
-	
-	public String getPackageName() {
+	@Override
+	public String getContainerName() {
 		int lastDotIndex = qualifiedName.lastIndexOf('.');
 		if (qualifiedName.length() > 0 && lastDotIndex != -1) // class is member of a named package (non-default)
 			return qualifiedName.substring(0, lastDotIndex);
 		else
 			return JavaVisConstants.DEFAULT_PACKAGE_NAME;
 	}
+	
+	///////////////////////////////////////////////////////
 
 	public MethodModel getConstructorMethod() {
 		return constructorMethod;

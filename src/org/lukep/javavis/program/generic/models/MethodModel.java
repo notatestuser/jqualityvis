@@ -17,13 +17,12 @@ public class MethodModel extends AbstractModel {
 		public Object rootStatementBlock;
 	}
 	
-	protected String name;
 	protected SourceLangDependentAttributes extraAttributes;
 
 	public MethodModel(AbstractModelSourceLang lang, String name) {
 		super(lang, JavaVisConstants.METRIC_APPLIES_TO_METHOD);
-		this.name = name;
 		extraAttributes = new SourceLangDependentAttributes();
+		setName(name);
 	}
 
 	///////////////////////////////////////////////////////
@@ -36,11 +35,12 @@ public class MethodModel extends AbstractModel {
 	///////////////////////////////////////////////////////
 	
 	public String getName() {
-		return name;
+		return getSimpleName();
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		setSimpleName(name);
+		setQualifiedName(name);
 	}
 
 	public ClassModel getParentClass() {
@@ -61,7 +61,7 @@ public class MethodModel extends AbstractModel {
 
 	@Override
 	public String toString() {
-		return "MethodInfo [name=" + name + ", parent=" + parent + "]";
+		return "MethodInfo [name=" + simpleName + ", parent=" + parent + "]";
 	}
 	
 }

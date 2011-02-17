@@ -10,13 +10,13 @@ import java.util.Vector;
 import org.lukep.javavis.metrics.IMeasurable;
 import org.lukep.javavis.metrics.MetricAttribute;
 import org.lukep.javavis.program.generic.models.ProgramModelStore;
+import org.lukep.javavis.program.generic.models.Relationship;
 import org.lukep.javavis.visualisation.Visualisation;
-import org.lukep.javavis.visualisation.VisualisationRelationship;
 
 public class WorkspaceContext {
 
 	protected ProgramModelStore modelStore;
-	protected HashMap<IMeasurable, Vector<VisualisationRelationship>> relations; // one-to-many
+	protected HashMap<IMeasurable, Vector<Relationship>> relations; // one-to-many
 	protected IMeasurable subject;
 	
 	protected MetricAttribute metric;
@@ -28,11 +28,11 @@ public class WorkspaceContext {
 	public void setModelStore(ProgramModelStore modelStore) {
 		this.modelStore = modelStore;
 	}
-	public HashMap<IMeasurable, Vector<VisualisationRelationship>> getRelations() {
+	public HashMap<IMeasurable, Vector<Relationship>> getRelations() {
 		return relations;
 	}
 	public void setRelations(
-			HashMap<IMeasurable, Vector<VisualisationRelationship>> relations) {
+			HashMap<IMeasurable, Vector<Relationship>> relations) {
 		this.relations = relations;
 	}
 	public IMeasurable getSubject() {

@@ -7,7 +7,6 @@ package org.lukep.javavis.program.generic.helpers;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 
 import org.lukep.javavis.metrics.IMeasurable;
@@ -16,6 +15,7 @@ import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.MethodModel;
 import org.lukep.javavis.program.generic.models.PackageModel;
 import org.lukep.javavis.program.generic.models.ProgramModelStore;
+import org.lukep.javavis.program.generic.models.Relationship.RelationshipType;
 import org.lukep.javavis.program.generic.models.VariableModel;
 import org.lukep.javavis.util.JavaVisConstants;
 
@@ -24,6 +24,7 @@ import com.sun.source.tree.MethodTree;
 import com.sun.source.tree.VariableTree;
 import com.sun.source.util.TreePath;
 import com.sun.source.util.Trees;
+import com.sun.tools.javac.code.Symbol;
 import com.sun.tools.javac.code.Symbol.VarSymbol;
 
 public class CodeUnitInfoFactory {
@@ -48,20 +49,22 @@ public class CodeUnitInfoFactory {
 		
 		// set the class's parent element
 		IMeasurable parent = null;
-		Element enclosingElement = e.getEnclosingElement();
+		Symbol enclosingElement = (Symbol) e.getEnclosingElement();
 		
 		switch (enclosingElement.getKind()) {
 		
 		case PACKAGE:
-			parent = getOrCreatePackage(e.getQualifiedName().toString(), s);
+			parent = getOrCreatePackage(
+					enclosingElement.getQualifiedName().toString(), s);
 			break;
 			
 		case CLASS:
-			parent = s.programStore.getClassInfo(e.getQualifiedName().toString());
+			parent = s.programStore.getClassInfo(
+					enclosingElement.getQualifiedName().toString());
 			break;
 		}
 		if (parent != null) {
-			parent.addChild(newClassModel);
+			parent.addChild(newClassModel, RelationshipType.ENCLOSED_IN);
 			newClassModel.setParent(parent);
 		}
 		
@@ -129,7 +132,6 @@ public class CodeUnitInfoFactory {
 		return newVariableInfo;
 	}
 	
-	
 	private static PackageModel getOrCreatePackage(String packageName, Map<String, PackageModel> pkgMap) {
 		
 		// return the package if we already have it
@@ -137,14 +139,20 @@ public class CodeUnitInfoFactory {
 			return pkgMap.get(packageName);
 		
 		// parent package exists?
+		boolean usingDefaultPkgName = false;
 		int lastDotIndex = packageName.lastIndexOf('.');
 		String parentPackageName;
 		PackageModel parentPackage = null;
-		if (packageName.length() > 0 && lastDotIndex != -1) { // class is member of a named package (non-default)
-			parentPackageName = packageName.substring(0, lastDotIndex);
-			parentPackage = getOrCreatePackage(parentPackageName, pkgMap);
+		
+		if (packageName.length() > 0) {
+			if (lastDotIndex != -1) { // class is member of a named package (non-default)
+				parentPackageName = packageName.substring(0, lastDotIndex);
+				parentPackage = getOrCreatePackage(parentPackageName, pkgMap);
+			}
 		} else {
 			// we're at the root
+			packageName = JavaVisConstants.DEFAULT_PACKAGE_NAME;
+			usingDefaultPkgName = true;
 		}
 		
 		// create the current package cell and link it up to the parent
@@ -152,9 +160,9 @@ public class CodeUnitInfoFactory {
 		if (parentPackage != null)
 			curPackage.setParent(parentPackage);
 		
-		pkgMap.put(packageName, curPackage);
+		pkgMap.put(usingDefaultPkgName ? "" : packageName, curPackage);
 		
-		log.info("New " + curPackage.toString());
+		log.info("New package: " + curPackage.toString());
 		
 		return curPackage;
 	}

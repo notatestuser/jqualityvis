@@ -6,11 +6,11 @@ package org.lukep.javavis.program.generic.models;
 
 import java.util.Vector;
 
-import org.lukep.javavis.metrics.IMeasurable;
 import org.lukep.javavis.metrics.IMeasurableVisitor;
 import org.lukep.javavis.metrics.MetricAttribute;
 import org.lukep.javavis.metrics.MetricMeasurement;
 import org.lukep.javavis.metrics.MetricRegistry;
+import org.lukep.javavis.program.generic.models.Relationship.RelationshipType;
 import org.lukep.javavis.util.JavaVisConstants;
 
 public class ClassModel extends AbstractModel {
@@ -40,11 +40,14 @@ public class ClassModel extends AbstractModel {
 		int totalStatements = 0;
 		MetricMeasurement result;
 		
-		for (MethodModel method : getMethods()) {
-			result = method.getMetricMeasurement(
-						MetricRegistry.getInstance().getMetricAttribute(
-							JavaVisConstants.METRIC_NUM_OF_STATEMENTS));
-			totalStatements += result.getResult();
+		Vector<MethodModel> methods = getMethods();
+		if (methods != null) {
+			for (MethodModel method : methods) {
+				result = method.getMetricMeasurement(
+							MetricRegistry.getInstance().getMetricAttribute(
+								JavaVisConstants.METRIC_NUM_OF_STATEMENTS));
+				totalStatements += result.getResult();
+			}
 		}
 		
 		return totalStatements;
@@ -55,15 +58,18 @@ public class ClassModel extends AbstractModel {
 		float avgComplexity = 0;
 		MetricMeasurement result;
 		
-		for (MethodModel method : getMethods()) {
-				result = method.getMetricMeasurement(
-							MetricRegistry.getInstance().getMetricAttribute(
-								JavaVisConstants.METRIC_CYCLO_COMPLEX));
-				avgComplexity += result.getResult();
-				count++;
+		Vector<MethodModel> methods = getMethods();
+		if (methods != null) {
+			for (MethodModel method : methods) {
+					result = method.getMetricMeasurement(
+								MetricRegistry.getInstance().getMetricAttribute(
+									JavaVisConstants.METRIC_CYCLO_COMPLEX));
+					avgComplexity += result.getResult();
+					count++;
+			}
+			if (count > 0)
+				avgComplexity /= count;
 		}
-		if (count > 0)
-			avgComplexity /= count;
 		
 		return avgComplexity;
 	}
@@ -72,12 +78,15 @@ public class ClassModel extends AbstractModel {
 		float maxComplexity = 0;
 		MetricMeasurement result;
 		
-		for (MethodModel method : getMethods()) {
-				result = method.getMetricMeasurement(
-							MetricRegistry.getInstance().getMetricAttribute(
-								JavaVisConstants.METRIC_CYCLO_COMPLEX));
-				if (result.getResult() > maxComplexity)
-					maxComplexity = result.getResult();
+		Vector<MethodModel> methods = getMethods();
+		if (methods != null) {
+			for (MethodModel method : methods) {
+					result = method.getMetricMeasurement(
+								MetricRegistry.getInstance().getMetricAttribute(
+									JavaVisConstants.METRIC_CYCLO_COMPLEX));
+					if (result.getResult() > maxComplexity)
+						maxComplexity = result.getResult();
+			}
 		}
 		
 		return maxComplexity;
@@ -118,16 +127,16 @@ public class ClassModel extends AbstractModel {
 	}
 	
 	public void addMethod(MethodModel method) {
-		addChild(method);
+		addChild(method, RelationshipType.ENCLOSED_IN);
 		methodCount++;
 	}
 	
 	public Vector<MethodModel> getMethods() {
 		if (children != null) {
 			Vector<MethodModel> methods = new Vector<MethodModel>(children.size());
-			for (IMeasurable m : children)
-				if (m instanceof MethodModel)
-					methods.add((MethodModel) m);
+			for (Relationship m : children)
+				if (m.target instanceof MethodModel)
+					methods.add((MethodModel) m.target);
 			return methods;
 		}
 		return null;
@@ -138,16 +147,16 @@ public class ClassModel extends AbstractModel {
 	}
 	
 	public void addVariable(VariableModel variable) {
-		addChild(variable);
+		addChild(variable, RelationshipType.MEMBER_OF);
 		variableCount++;
 	}
 	
 	public Vector<VariableModel> getVariables() {
 		if (children != null) {
 			Vector<VariableModel> variables = new Vector<VariableModel>(children.size());
-			for (IMeasurable m : children)
-				if (m instanceof VariableModel)
-					variables.add((VariableModel) m);
+			for (Relationship m : children)
+				if (m.target instanceof VariableModel)
+					variables.add((VariableModel) m.target);
 			return variables;
 		}
 		return null;

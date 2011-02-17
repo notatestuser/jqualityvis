@@ -7,6 +7,7 @@ package org.lukep.javavis.program.generic.models;
 import org.lukep.javavis.metrics.IMeasurableVisitor;
 import org.lukep.javavis.metrics.MetricAttribute;
 import org.lukep.javavis.metrics.MetricMeasurement;
+import org.lukep.javavis.program.generic.models.Relationship.RelationshipType;
 import org.lukep.javavis.util.JavaVisConstants;
 
 public class PackageModel extends AbstractModel {
@@ -30,7 +31,7 @@ public class PackageModel extends AbstractModel {
 	///////////////////////////////////////////////////////
 	
 	public void addClass(ClassModel clazz) {
-		addChild(clazz);
+		addChild(clazz, RelationshipType.ENCLOSED_IN);
 	}
 
 	public String getQualifiedName() {

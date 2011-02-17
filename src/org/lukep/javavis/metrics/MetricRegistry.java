@@ -7,6 +7,7 @@ package org.lukep.javavis.metrics;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
@@ -34,11 +35,11 @@ public class MetricRegistry { // singleton
 		typeMap = Collections.synchronizedMap(
 					new HashMap<String, MetricType>());
 		metricMap = Collections.synchronizedMap(
-					new HashMap<String, MetricAttribute>());
+					new LinkedHashMap<String, MetricAttribute>());
 		metricSupportMap = Collections.synchronizedMap(
 					new HashMap<String, Vector<MetricAttribute>>());
 		measurementMap = Collections.synchronizedMap(
-					new HashMap<IMeasurable, Map<MetricAttribute,MetricMeasurement>>());
+					new HashMap<IMeasurable, Map<MetricAttribute, MetricMeasurement>>());
 		
 		// load the MetricAttributes from configuration data source
 		Metrics metrics = ConfigurationManager.getInstance().getMetrics();

@@ -11,6 +11,7 @@ import org.lukep.javavis.metrics.IMeasurable;
 import org.lukep.javavis.metrics.MetricAttribute;
 import org.lukep.javavis.metrics.MetricMeasurement;
 import org.lukep.javavis.metrics.MetricRegistry;
+import org.lukep.javavis.program.generic.models.Relationship.RelationshipType;
 
 abstract class AbstractModel implements Serializable, IMeasurable {
 
@@ -18,7 +19,7 @@ abstract class AbstractModel implements Serializable, IMeasurable {
 	
 	protected AbstractModelSourceLang sourceLang;
 	protected IMeasurable parent;
-	protected Vector<IMeasurable> children;
+	protected Vector<Relationship> children;
 
 	public AbstractModel(AbstractModelSourceLang sourceLang, String appliesToString) {
 		super();
@@ -61,15 +62,15 @@ abstract class AbstractModel implements Serializable, IMeasurable {
 	///////////////////////////////////////////////////////
 
 	@Override
-	public void addChild(IMeasurable child) {
+	public void addChild(IMeasurable child, RelationshipType type) {
 		// lazy instantiated list of child models
 		if (children == null)
-			children = new Vector<IMeasurable>();
-		children.add(child);
+			children = new Vector<Relationship>();
+		children.add( new Relationship(this, child, type) );
 	}
 	
 	@Override
-	public Vector<IMeasurable> getChildren() {
+	public Vector<Relationship> getChildren() {
 		return children;
 	}
 	

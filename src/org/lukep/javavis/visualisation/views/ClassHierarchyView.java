@@ -11,9 +11,6 @@ import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.IGenericModelNode;
 import org.lukep.javavis.program.generic.models.PackageModel;
 import org.lukep.javavis.program.generic.models.ProgramModelStore;
-import org.lukep.javavis.ui.mxgraph.CustomMxGraphComponent;
-import org.lukep.javavis.ui.mxgraph.ICustomMxBehaviorProxy;
-import org.lukep.javavis.ui.mxgraph.MxSwingCanvas;
 import org.lukep.javavis.ui.swing.WorkspaceContext;
 import org.lukep.javavis.ui.swing.mxGraphWorkspacePane;
 
@@ -23,7 +20,6 @@ import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxIGraphModel;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.swing.util.mxMorphing;
-import com.mxgraph.swing.view.mxInteractiveCanvas;
 import com.mxgraph.util.mxConstants;
 import com.mxgraph.util.mxEvent;
 import com.mxgraph.util.mxEventObject;

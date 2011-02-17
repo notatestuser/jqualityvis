@@ -12,6 +12,8 @@ public class JavaVisConstants {
 	public static final String METRICS_FILE_NAME 		= "metrics.xml";
 	public static final String VISUALISATIONS_FILE_NAME = "visualisations.xml";
 	
+	public static final String ICON_PROJECT_EXPLORER	= "assets/icons/folder.png";
+	
 	public static final String METRIC_NUM_OF_METHODS    = "NUM_OF_METHODS";
 	public static final String METRIC_NUM_OF_STATEMENTS	= "NUM_OF_STMTS";
 	public static final String METRIC_CYCLO_COMPLEX 	= "CC";

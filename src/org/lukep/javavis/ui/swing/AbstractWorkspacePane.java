@@ -12,13 +12,13 @@ import java.awt.event.ActionListener;
 import java.util.Enumeration;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JDesktopPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
-import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
 import javax.swing.ScrollPaneLayout;
@@ -31,6 +31,7 @@ import org.lukep.javavis.program.generic.models.MethodModel;
 import org.lukep.javavis.program.generic.models.ProgramModelStore;
 import org.lukep.javavis.ui.IProgramSourceObserver;
 import org.lukep.javavis.ui.IProgramStatusReporter;
+import org.lukep.javavis.util.JavaVisConstants;
 import org.lukep.javavis.visualisation.IVisualiser;
 import org.lukep.javavis.visualisation.Visualisation;
 import org.lukep.javavis.visualisation.VisualisationRegistry;
@@ -49,8 +50,7 @@ abstract class AbstractWorkspacePane extends JDesktopPane implements
 	protected JComboBox visComboBox;
 	
 	protected JTree programTree;
-	protected JScrollPane codeOverviewPanel;
-	protected JTabbedPane tabbedPane;
+	protected JScrollPane projectExplorerPanel;
 	protected ClassPropertiesPanel propertiesPane;
 	
 	protected WorkspaceContext wspContext = new WorkspaceContext();
@@ -104,34 +104,32 @@ abstract class AbstractWorkspacePane extends JDesktopPane implements
 		// create the right split pane that contains the graph component on the top and the class
 		// properties pane on the bottom
 		rightSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, mainPane, propertiesPane);
-		rightSplitPane.setOneTouchExpandable(true);
+		rightSplitPane.setOneTouchExpandable(false);
 		rightSplitPane.setDividerLocation(500);
 		rightSplitPane.setResizeWeight(1);
-		rightSplitPane.setDividerSize(6);
+		rightSplitPane.setDividerSize(2);
 		rightSplitPane.setBorder(null);
 		
 		// create the outer split pane that contains the left (inner) split pane and the graph
 		// component on the right side of the window
 		outerSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPane, rightSplitPane);
-		outerSplitPane.setOneTouchExpandable(true);
+		outerSplitPane.setOneTouchExpandable(false);
 		outerSplitPane.setDividerLocation(250);
-		outerSplitPane.setDividerSize(6);
+		outerSplitPane.setDividerSize(2);
 		outerSplitPane.setBorder(null);
 		this.add(outerSplitPane, BorderLayout.CENTER);
 		
-		// create the tabbed pane on the left split
-		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		leftPane.add(tabbedPane, BorderLayout.CENTER);
-		
-		// create the "Code Overview" tab
-		codeOverviewPanel = new JScrollPane();
-		tabbedPane.addTab("Project Explorer", null, codeOverviewPanel, null);
-		codeOverviewPanel.setLayout(new ScrollPaneLayout());
+		// create the "Project Explorer" panel
+		projectExplorerPanel = new JScrollPane();
+		projectExplorerPanel.setLayout(new ScrollPaneLayout());
+		leftPane.add(projectExplorerPanel, BorderLayout.CENTER);
+		leftPane.add(new HeaderLabel("Project Overview", 
+						new ImageIcon(JavaVisConstants.ICON_PROJECT_EXPLORER)), BorderLayout.NORTH);
 		
 		// create the program tree
 		programTree = new JTree();
 		programTree.setModel( new DefaultTreeModel( new DefaultMutableTreeNode("Program") ) );
-		codeOverviewPanel.setViewportView(programTree);
+		projectExplorerPanel.setViewportView(programTree);
 
 	}
 	

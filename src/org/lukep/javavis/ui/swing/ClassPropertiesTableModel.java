@@ -8,47 +8,63 @@ import java.util.Vector;
 
 import javax.swing.table.AbstractTableModel;
 
+import org.lukep.javavis.metrics.IMeasurable;
 import org.lukep.javavis.metrics.MetricAttribute;
 import org.lukep.javavis.metrics.MetricRegistry;
 import org.lukep.javavis.program.generic.models.ClassModel;
-import org.lukep.javavis.program.generic.models.MethodModel;
+import org.lukep.javavis.program.generic.models.IGenericModelNode;
+import org.lukep.javavis.program.generic.models.PackageModel;
 import org.lukep.javavis.util.JavaVisConstants;
 
 public class ClassPropertiesTableModel extends AbstractTableModel {
 
-	protected ClassModel subject;
+	protected IGenericModelNode subject;
 
-	public ClassPropertiesTableModel(ClassModel subject) {
+	public ClassPropertiesTableModel(IGenericModelNode subject) {
 		super();
 		this.subject = subject;
 	}
 
-	public void setSubject(ClassModel subject) {
+	public void setSubject(IGenericModelNode subject) {
 		this.subject = subject;
+		fireTableStructureChanged();
 		fireTableDataChanged();
 	}
 
 	@Override
 	public int getRowCount() {
-		if (subject == null)
-			return 0;
-		return subject.getMethodCount();
+		if (subject instanceof ClassModel)
+			return ((ClassModel)(subject)).getMethodCount();
+		else if (subject instanceof PackageModel)
+			return ((PackageModel)(subject)).getChildCount();
+		return 0;
 	}
 
 	@Override
 	public int getColumnCount() {
-		return MetricRegistry.getInstance().getSupportedMetricCount(
-				JavaVisConstants.METRIC_APPLIES_TO_METHOD) + 1;
+		if (subject instanceof ClassModel)
+			return MetricRegistry.getInstance().getSupportedMetricCount(
+						JavaVisConstants.METRIC_APPLIES_TO_METHOD) + 1;
+		else if (subject instanceof PackageModel)
+			return MetricRegistry.getInstance().getSupportedMetricCount(
+						JavaVisConstants.METRIC_APPLIES_TO_CLASS) + 1;
+		return 0;
 	}
 	
 	@Override
 	public String getColumnName(int column) {
 		if (column == 0) {
-			return "Method Name";
+			return "Member Name";
 		} else {
-			Vector<MetricAttribute> supportMap = 
-				MetricRegistry.getInstance().getSupportedMetrics(
-						JavaVisConstants.METRIC_APPLIES_TO_METHOD);
+			Vector<MetricAttribute> supportMap = null;
+			if (subject instanceof ClassModel)
+				supportMap = MetricRegistry.getInstance().getSupportedMetrics(
+							JavaVisConstants.METRIC_APPLIES_TO_METHOD);
+			else if (subject instanceof PackageModel)
+				supportMap = MetricRegistry.getInstance().getSupportedMetrics(
+							JavaVisConstants.METRIC_APPLIES_TO_CLASS);
+			else
+				return "( Unknown )";
 			return supportMap.get(column - 1).getName();
 		}
 	}
@@ -58,14 +74,33 @@ public class ClassPropertiesTableModel extends AbstractTableModel {
 		if (subject == null)
 			return null;
 		
-		MethodModel method = subject.getMethods().get(rowIndex);
+		IMeasurable measurable = null;
+		
+		if (subject instanceof ClassModel)
+			measurable = ((ClassModel)(subject)).getMethods().get(rowIndex);
+		else if (subject instanceof PackageModel)
+			measurable = subject.getChildren().get(rowIndex).getTarget();
+		else
+			return null;
+		
 		if (columnIndex == 0) {
-			return method.getName();
+			if (measurable instanceof IGenericModelNode)
+				return ((IGenericModelNode)(measurable)).getSimpleName();
+			else
+				return "( Member )";
 		} else {
-			Vector<MetricAttribute> supportMap = 
-					MetricRegistry.getInstance().getSupportedMetrics(
+			Vector<MetricAttribute> supportMap;
+			
+			if (subject instanceof ClassModel)
+				supportMap = MetricRegistry.getInstance().getSupportedMetrics(
 							JavaVisConstants.METRIC_APPLIES_TO_METHOD);
-			return  method.getMetricMeasurement(
+			else if (subject instanceof PackageModel)
+				supportMap = MetricRegistry.getInstance().getSupportedMetrics(
+							JavaVisConstants.METRIC_APPLIES_TO_CLASS);
+			else
+				return "( Unknown )";
+			
+			return measurable.getMetricMeasurement(
 						supportMap.get(columnIndex - 1)).getResult();
 		}
 	}

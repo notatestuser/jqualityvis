@@ -21,7 +21,6 @@ import org.lukep.javavis.metrics.IMeasurable;
 import org.lukep.javavis.metrics.MetricAttribute;
 import org.lukep.javavis.metrics.MetricMeasurement;
 import org.lukep.javavis.metrics.MetricRegistry;
-import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.IGenericModelNode;
 import org.lukep.javavis.ui.swing.WorkspaceContext.ChangeEvent;
 
@@ -89,10 +88,7 @@ public class ClassPropertiesPanel extends JPanel implements Observer {
 		// update method listing table
 		ClassPropertiesTableModel methodTableModel = 
 			(ClassPropertiesTableModel) methodTable.getModel();
-		if (model instanceof ClassModel)
-			methodTableModel.setSubject(((ClassModel)(model)));
-		else
-			methodTableModel.setSubject(null);
+		methodTableModel.setSubject(model);
 		
 		// update class composition component
 		classCompositionComponent.setCurrentModel(model);

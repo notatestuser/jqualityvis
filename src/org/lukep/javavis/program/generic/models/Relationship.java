@@ -25,5 +25,17 @@ public class Relationship implements Serializable {
 		this.target = target;
 		this.relationshipType = relationshipType;
 	}
+
+	public IMeasurable getSource() {
+		return source;
+	}
+
+	public IMeasurable getTarget() {
+		return target;
+	}
+
+	public RelationshipType getRelationshipType() {
+		return relationshipType;
+	}
 	
 }

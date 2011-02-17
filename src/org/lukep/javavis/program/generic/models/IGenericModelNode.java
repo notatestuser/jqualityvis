@@ -19,10 +19,14 @@ public interface IGenericModelNode extends Serializable {
 	public Vector<Relationship> getChildren();
 	public int getChildCount();
 	
+	public String getModelTypeName();
+	
+	public String getContainerName();
+	
 	public String getSimpleName();
 	public void setSimpleName(String simpleName);
+	
 	public String getQualifiedName();
 	public void setQualifiedName(String qualifiedName);
-	public String getContainerName();
 	
 }

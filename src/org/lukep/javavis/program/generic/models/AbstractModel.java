@@ -66,6 +66,18 @@ abstract class AbstractModel implements IGenericModelNode, IMeasurable {
 	}
 	
 	@Override
+	public String getModelTypeName() {
+		return APPLIES_TO_STR;
+	}
+	
+	@Override
+	public String getContainerName() {
+		if (parent != null)
+			return parent.getQualifiedName();
+		return "";
+	}
+
+	@Override
 	public String getSimpleName() {
 		return this.simpleName;
 	}
@@ -73,7 +85,6 @@ abstract class AbstractModel implements IGenericModelNode, IMeasurable {
 	@Override
 	public void setSimpleName(String simpleName) {
 		this.simpleName = simpleName;
-		
 	}
 	
 	@Override
@@ -84,13 +95,6 @@ abstract class AbstractModel implements IGenericModelNode, IMeasurable {
 	@Override
 	public void setQualifiedName(String qualifiedName) {
 		this.qualifiedName = qualifiedName;
-	}
-	
-	@Override
-	public String getContainerName() {
-		if (parent != null)
-			return parent.getQualifiedName();
-		return "";
 	}
 	
 	///////////////////////////////////////////////////////

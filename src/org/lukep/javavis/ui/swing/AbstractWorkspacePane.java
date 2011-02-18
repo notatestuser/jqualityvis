@@ -39,10 +39,15 @@ import org.lukep.javavis.visualisation.VisualisationRegistry;
 abstract class AbstractWorkspacePane extends JDesktopPane implements 
 		ActionListener, IProgramSourceObserver, IVisualiser {
 	
-	protected JPanel leftPane;
 	protected JPanel mainPane;
+	protected JPanel leftPaneTop;
+	protected JPanel leftPaneBottom;
+	
+	protected JScrollPane projectExplorerPanel;
+	protected JScrollPane metricAnalysisPanel;
 	
 	protected JSplitPane rightSplitPane;
+	protected JSplitPane leftSplitPane;
 	protected JSplitPane outerSplitPane;
 	
 	protected JToolBar toolbar;
@@ -50,7 +55,7 @@ abstract class AbstractWorkspacePane extends JDesktopPane implements
 	protected JComboBox visComboBox;
 	
 	protected JTree programTree;
-	protected JScrollPane projectExplorerPanel;
+	
 	protected ClassPropertiesPanel propertiesPane;
 	
 	protected WorkspaceContext wspContext = new WorkspaceContext();
@@ -70,9 +75,13 @@ abstract class AbstractWorkspacePane extends JDesktopPane implements
 		/*
 		 * UI Initialisation
 		 */
-		// create a panel to contain the left side of the JSplitPane's components
-		leftPane = new JPanel( new BorderLayout() );
-		leftPane.setVisible(true);
+		// create a panel to contain the left TOP side of the JSplitPane's components
+		leftPaneTop = new JPanel( new BorderLayout() );
+		leftPaneTop.setVisible(true);
+		
+		// create a panel to contain the left BOTTOM side of the JSplitPane's components
+		leftPaneBottom = new JPanel( new BorderLayout() );
+		leftPaneBottom.setVisible(true);
 		
 		// create a panel to contain the graph component and toolbar
 		mainPane = new JPanel( new BorderLayout() );
@@ -110,9 +119,18 @@ abstract class AbstractWorkspacePane extends JDesktopPane implements
 		rightSplitPane.setDividerSize(2);
 		rightSplitPane.setBorder(null);
 		
+		// create the left split pane that contains the "Project Explorer" and the "Quality Analysis"
+		// panels on the left side of the window
+		leftSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, leftPaneTop, leftPaneBottom);
+		leftSplitPane.setOneTouchExpandable(false);
+		leftSplitPane.setDividerLocation(400);
+		leftSplitPane.setResizeWeight(1);
+		leftSplitPane.setDividerSize(2);
+		leftSplitPane.setBorder(null);
+		
 		// create the outer split pane that contains the left (inner) split pane and the graph
 		// component on the right side of the window
-		outerSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPane, rightSplitPane);
+		outerSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftSplitPane, rightSplitPane);
 		outerSplitPane.setOneTouchExpandable(false);
 		outerSplitPane.setDividerLocation(250);
 		outerSplitPane.setDividerSize(2);
@@ -122,9 +140,16 @@ abstract class AbstractWorkspacePane extends JDesktopPane implements
 		// create the "Project Explorer" panel
 		projectExplorerPanel = new JScrollPane();
 		projectExplorerPanel.setLayout(new ScrollPaneLayout());
-		leftPane.add(projectExplorerPanel, BorderLayout.CENTER);
-		leftPane.add(new HeaderLabel("Project Overview", 
+		leftPaneTop.add(projectExplorerPanel, BorderLayout.CENTER);
+		leftPaneTop.add(new HeaderLabel(JavaVisConstants.HEADING_PROJECT_EXPLORER, 
 						new ImageIcon(JavaVisConstants.ICON_PROJECT_EXPLORER)), BorderLayout.NORTH);
+		
+		// create the "Quality Analysis" panel
+		metricAnalysisPanel = new JScrollPane();
+		metricAnalysisPanel.setLayout(new ScrollPaneLayout());
+		leftPaneBottom.add(metricAnalysisPanel, BorderLayout.CENTER);
+		leftPaneBottom.add(new HeaderLabel(JavaVisConstants.HEADING_QUALITY_ANALYSIS, 
+						new ImageIcon(JavaVisConstants.ICON_QUALITY_ANALYSIS)), BorderLayout.NORTH);
 		
 		// create the program tree
 		programTree = new JTree();

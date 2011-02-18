@@ -16,6 +16,7 @@ import org.lukep.javavis.program.generic.models.IGenericModelNode;
 import org.lukep.javavis.program.generic.models.PackageModel;
 import org.lukep.javavis.util.JavaVisConstants;
 
+// TODO clean this up
 public class ClassPropertiesTableModel extends AbstractTableModel {
 
 	protected IGenericModelNode subject;
@@ -79,7 +80,7 @@ public class ClassPropertiesTableModel extends AbstractTableModel {
 		if (subject instanceof ClassModel)
 			measurable = ((ClassModel)(subject)).getMethods().get(rowIndex);
 		else if (subject instanceof PackageModel)
-			measurable = subject.getChildren().get(rowIndex).getTarget();
+			measurable = (IMeasurable) subject.getChildren().get(rowIndex).getTarget();
 		else
 			return null;
 		

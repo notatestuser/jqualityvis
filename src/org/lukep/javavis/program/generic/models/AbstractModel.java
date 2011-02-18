@@ -46,7 +46,7 @@ abstract class AbstractModel implements IGenericModelNode, IMeasurable {
 	}
 	
 	@Override
-	public void addChild(IMeasurable child, RelationshipType type) {
+	public void addChild(IGenericModelNode child, RelationshipType type) {
 		// lazy instantiated list of child models
 		if (children == null)
 			children = new Vector<Relationship>();

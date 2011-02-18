@@ -102,7 +102,7 @@ public class mxGraphWorkspacePane extends AbstractWorkspacePane {
 	
 	@Override
 	public void acceptVisualisation(IVisualisationVisitor visitor) {
-		visitor.visit(this, graphComponent);
+		visitor.visit(this, wspContext, graphComponent);
 	}
 
 }

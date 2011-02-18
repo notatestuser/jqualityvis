@@ -6,19 +6,17 @@ package org.lukep.javavis.program.generic.models;
 
 import java.io.Serializable;
 
-import org.lukep.javavis.metrics.IMeasurable;
-
 public class Relationship implements Serializable {
 	
 	public static enum RelationshipType {
 		ENCLOSED_IN, MEMBER_OF, FAN_IN, FAN_OUT
 	}
 	
-	protected IMeasurable source;
-	protected IMeasurable target;
+	protected IGenericModelNode source;
+	protected IGenericModelNode target;
 	protected RelationshipType relationshipType;
 	
-	public Relationship(IMeasurable source, IMeasurable target,
+	public Relationship(IGenericModelNode source, IGenericModelNode target,
 			RelationshipType relationshipType) {
 		super();
 		this.source = source;
@@ -26,11 +24,11 @@ public class Relationship implements Serializable {
 		this.relationshipType = relationshipType;
 	}
 
-	public IMeasurable getSource() {
+	public IGenericModelNode getSource() {
 		return source;
 	}
 
-	public IMeasurable getTarget() {
+	public IGenericModelNode getTarget() {
 		return target;
 	}
 

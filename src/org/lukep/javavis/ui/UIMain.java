@@ -26,7 +26,9 @@ import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.lukep.javavis.ui.swing.PrefuseWorkspacePane;
 import org.lukep.javavis.ui.swing.mxGraphWorkspacePane;
+import org.lukep.javavis.visualisation.IVisualiser;
 
 public class UIMain implements IProgramStatusReporter, ChangeListener {
 
@@ -130,7 +132,7 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 				int returnVal = fc.showOpenDialog(null); // TODO: modify parent
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					Component selectedWorkspace = mainTabbedPane.getSelectedComponent();
-					mxGraphWorkspacePane selectedVdp = (mxGraphWorkspacePane)selectedWorkspace;
+					IVisualiser selectedVdp = (IVisualiser)selectedWorkspace;
 					selectedVdp.loadCodeBase(fc.getSelectedFile());
 				}
 			}
@@ -154,14 +156,14 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 	
 	private void addChildFrame()
 	{
-		mxGraphWorkspacePane visDesktop = null;
+		IVisualiser visDesktop = null;
 		try {
-			visDesktop = new mxGraphWorkspacePane(this);
+			visDesktop = new PrefuseWorkspacePane(this);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		mainTabbedPane.addTab( "Workspace " + (++workspaces), visDesktop );
+		mainTabbedPane.addTab( "Workspace " + (++workspaces), (Component) visDesktop );
 		mainTabbedPane.setSelectedIndex(mainTabbedPane.getTabCount()-1);
 	}
 

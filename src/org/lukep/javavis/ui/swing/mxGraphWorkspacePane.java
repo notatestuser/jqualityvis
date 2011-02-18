@@ -8,7 +8,6 @@ import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.util.HashMap;
 
 import javax.swing.tree.DefaultTreeModel;
 
@@ -32,13 +31,8 @@ public class mxGraphWorkspacePane extends AbstractWorkspacePane {
 	private mxGraph graph;
 	private mxGraphComponent graphComponent;
 	
-	private HashMap<String, mxCell> packageMap = new HashMap<String, mxCell>();
-	private HashMap<ClassModel, mxCell> classVertexMap;
-	
 	public mxGraphWorkspacePane(IProgramStatusReporter statusTarget) throws Exception {
 		super(statusTarget);
-		
-		classVertexMap = new HashMap<ClassModel, mxCell>();
 		
 		// initialise the mxGraph, its container component and the circle layout
 		graph = new mxGraph()
@@ -128,13 +122,13 @@ public class mxGraphWorkspacePane extends AbstractWorkspacePane {
 		new Thread(jslt).start();
 	}
 
+	public void setGraphScale(double scale) {
+		graphComponent.zoomTo(scale, true);
+	}
+	
 	@Override
 	public void acceptVisualisation(IVisualisationVisitor visitor) {
 		visitor.visit(this, graphComponent);
-	}
-	
-	public void setGraphScale(double scale) {
-		graphComponent.zoomTo(scale, true);
 	}
 
 }

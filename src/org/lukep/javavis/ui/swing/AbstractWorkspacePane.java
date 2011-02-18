@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -29,6 +30,7 @@ import org.lukep.javavis.metrics.MetricAttribute;
 import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.MethodModel;
 import org.lukep.javavis.program.generic.models.ProgramModelStore;
+import org.lukep.javavis.program.java.JavaSourceLoaderThread;
 import org.lukep.javavis.ui.IProgramSourceObserver;
 import org.lukep.javavis.ui.IProgramStatusReporter;
 import org.lukep.javavis.util.JavaVisConstants;
@@ -188,15 +190,11 @@ abstract class AbstractWorkspacePane extends JDesktopPane implements
 				
 				try {
 					setProgramStatus("Applying Visualisation \"" + vis.getName() + "\"...");
-					acceptVisualisation(vis.getVisitorClass().newInstance());
-				} catch (InstantiationException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (IllegalAccessException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} finally {
+					acceptVisualisation( vis.getVisitorClass().newInstance() );
 					setProgramStatus("Applied Visualisation \"" + vis.getName() + "\".");
+					
+				} catch (Exception e1) {
+					setProgramStatus("Error: " + e1.getLocalizedMessage());
 				}
 			} else {
 				wspContext.setVisualisation(null);
@@ -213,18 +211,31 @@ abstract class AbstractWorkspacePane extends JDesktopPane implements
 		
 		return (IProgramStatusReporter) c;
 	}
-	
-	public WorkspaceContext getContext() {
-		return wspContext;
-	}
 
 	protected void setGraphComponent(Component graph) {
-		//rightSplitPane.setLeftComponent(graph);
 		mainPane.add(graph, BorderLayout.CENTER);
 	}
 	
-	public void setProgramStatus(String status) {
-		statusTarget.setProgramStatus(status);
+	@Override
+	public void loadCodeBase(File selectedDirectory) {
+		JavaSourceLoaderThread jslt = new JavaSourceLoaderThread(selectedDirectory, 
+				wspContext.modelStore) {
+			
+			@Override
+			public void notifyStatusChange(String message) {
+				setProgramStatus(message);
+			}
+
+			@Override
+			public void statusFinished() {
+				((DefaultTreeModel)programTree.getModel()).reload();
+				metricComboBox.setEnabled(true);
+			}
+			
+		};
+		jslt.addObserver(this);
+		jslt.addObserver(wspContext.modelStore);
+		new Thread(jslt).start();
 	}
 	
 	@Override
@@ -250,6 +261,16 @@ abstract class AbstractWorkspacePane extends JDesktopPane implements
 			}
 		}
 		// TODO add classes in the default package to the tree?
+	}
+	
+	@Override
+	public WorkspaceContext getContext() {
+		return wspContext;
+	}
+	
+	@Override
+	public void setProgramStatus(String status) {
+		statusTarget.setProgramStatus(status);
 	}
 	
 	@Override

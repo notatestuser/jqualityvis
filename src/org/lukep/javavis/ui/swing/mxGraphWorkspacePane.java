@@ -7,13 +7,9 @@ package org.lukep.javavis.ui.swing;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
-
-import javax.swing.tree.DefaultTreeModel;
 
 import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.IGenericModelNode;
-import org.lukep.javavis.program.java.JavaSourceLoaderThread;
 import org.lukep.javavis.ui.IProgramStatusReporter;
 import org.lukep.javavis.ui.mxgraph.MxSwingCanvas;
 import org.lukep.javavis.visualisation.IVisualisationVisitor;
@@ -77,14 +73,14 @@ public class mxGraphWorkspacePane extends AbstractWorkspacePane {
 		graphComponent.setBackground( new Color(0xF9FFFB) );
 		
 		// bind mxGraph events
-		bindGraphEvents();
+		bindMxGraphEvents();
 		
 		// set the graph component in the AbstractWorkspacePane
 		super.setGraphComponent(graphComponent);
 		
 	}
 	
-	private void bindGraphEvents() {
+	private void bindMxGraphEvents() {
 		graphComponent.getGraphControl().addMouseListener(new MouseAdapter() {
 
 			@Override
@@ -98,28 +94,6 @@ public class mxGraphWorkspacePane extends AbstractWorkspacePane {
 			}
 			
 		});
-	}
-
-	public void loadCodeBase(File selectedDirectory) {
-		JavaSourceLoaderThread jslt = new JavaSourceLoaderThread(selectedDirectory, 
-				wspContext.modelStore) {
-			
-			@Override
-			public void notifyStatusChange(String message) {
-				setProgramStatus(message);
-			}
-
-			@Override
-			public void statusFinished() {
-				((DefaultTreeModel)programTree.getModel()).reload();
-				metricComboBox.setEnabled(true);
-			}
-			
-		};
-		jslt.addObserver(this);
-		jslt.addObserver(wspContext.modelStore);
-		//graph.getModel().beginUpdate();
-		new Thread(jslt).start();
 	}
 
 	public void setGraphScale(double scale) {

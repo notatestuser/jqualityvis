@@ -27,6 +27,7 @@ import com.sun.source.tree.ThrowTree;
 import com.sun.source.tree.TryTree;
 import com.sun.source.tree.VariableTree;
 import com.sun.source.tree.WhileLoopTree;
+import com.sun.tools.javac.tree.JCTree.LetExpr;
 
 public class StatementCountVisitor extends AbstractMeasurableVisitor {
 	
@@ -104,7 +105,10 @@ public class StatementCountVisitor extends AbstractMeasurableVisitor {
 	public Object visitExpressionStatement(ExpressionStatementTree arg0,
 			Object arg1) {
 		incrementStatementCount();
-		return super.visitExpressionStatement(arg0, arg1);
+		// TODO get rid of this disgusting thing
+		if (! (arg0.getExpression() instanceof LetExpr) )
+			return super.visitExpressionStatement(arg0, arg1);
+		return null;
 	}
 
 	@Override

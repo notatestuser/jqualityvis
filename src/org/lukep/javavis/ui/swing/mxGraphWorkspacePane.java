@@ -96,6 +96,7 @@ public class mxGraphWorkspacePane extends AbstractWorkspacePane {
 		});
 	}
 
+	@Override
 	public void setGraphScale(double scale) {
 		graphComponent.zoomTo(scale, true);
 	}

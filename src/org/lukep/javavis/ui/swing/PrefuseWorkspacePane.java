@@ -62,6 +62,11 @@ public class PrefuseWorkspacePane extends AbstractWorkspacePane {
 	}
 
 	@Override
+	public void setGraphScale(double scale) {
+		display.zoom(display.getLocation(), scale);
+	}
+
+	@Override
 	public void acceptVisualisation(IVisualisationVisitor visitor) {
 		visitor.visit(this, wspContext, display);
 	}

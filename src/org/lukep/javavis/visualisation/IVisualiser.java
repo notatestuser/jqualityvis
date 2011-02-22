@@ -15,5 +15,6 @@ public interface IVisualiser {
 	public WorkspaceContext getContext();
 	public void setProgramStatus(String status);
 	public void loadCodeBase(File selectedDirectory);
+	public void setGraphScale(double scale);
 	
 }

@@ -27,7 +27,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.lukep.javavis.ui.swing.PrefuseWorkspacePane;
-import org.lukep.javavis.ui.swing.mxGraphWorkspacePane;
 import org.lukep.javavis.visualisation.IVisualiser;
 
 public class UIMain implements IProgramStatusReporter, ChangeListener {
@@ -176,8 +175,8 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 	@Override
 	public void stateChanged(ChangeEvent e) {
 		if (zoomSlider == e.getSource()) {
-			mxGraphWorkspacePane selectedVdp = 
-				(mxGraphWorkspacePane) mainTabbedPane.getSelectedComponent();
+			IVisualiser selectedVdp = 
+				(IVisualiser) mainTabbedPane.getSelectedComponent();
 			selectedVdp.setGraphScale((double)zoomSlider.getValue() / 1000);
 		}
 	}

@@ -23,6 +23,9 @@ import javax.swing.JSplitPane;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
 import javax.swing.ScrollPaneLayout;
+import javax.swing.border.Border;
+import javax.swing.plaf.basic.BasicSplitPaneDivider;
+import javax.swing.plaf.basic.BasicSplitPaneUI;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
@@ -41,6 +44,16 @@ import org.lukep.javavis.visualisation.VisualisationRegistry;
 abstract class AbstractWorkspacePane extends JDesktopPane implements 
 		ActionListener, IProgramSourceObserver, IVisualiser {
 	
+	class WorkspaceSplitPaneUI extends BasicSplitPaneUI {
+		@Override
+		public BasicSplitPaneDivider createDefaultDivider() {
+			return new BasicSplitPaneDivider(this) {
+				@Override
+				public void setBorder(Border border) { }
+			};
+		}
+	}
+	
 	protected JPanel mainPane;
 	protected JPanel leftPaneTop;
 	protected JPanel leftPaneBottom;
@@ -58,11 +71,11 @@ abstract class AbstractWorkspacePane extends JDesktopPane implements
 	
 	protected JTree programTree;
 	
-	protected ClassPropertiesPanel propertiesPane;
-	
 	protected WorkspaceContext wspContext = new WorkspaceContext();
 	
 	protected IProgramStatusReporter statusTarget;
+	
+	protected ClassPropertiesPanel propertiesPane;
 	
 	public AbstractWorkspacePane(IProgramStatusReporter statusTarget) throws Exception {
 		super();
@@ -115,10 +128,11 @@ abstract class AbstractWorkspacePane extends JDesktopPane implements
 		// create the right split pane that contains the graph component on the top and the class
 		// properties pane on the bottom
 		rightSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, mainPane, propertiesPane);
-		rightSplitPane.setOneTouchExpandable(false);
+		rightSplitPane.setOneTouchExpandable(true);
 		rightSplitPane.setDividerLocation(500);
 		rightSplitPane.setResizeWeight(1);
 		rightSplitPane.setDividerSize(2);
+		rightSplitPane.setUI(new WorkspaceSplitPaneUI());
 		rightSplitPane.setBorder(null);
 		
 		// create the left split pane that contains the "Project Explorer" and the "Quality Analysis"
@@ -128,15 +142,17 @@ abstract class AbstractWorkspacePane extends JDesktopPane implements
 		leftSplitPane.setDividerLocation(400);
 		leftSplitPane.setResizeWeight(1);
 		leftSplitPane.setDividerSize(2);
+		leftSplitPane.setUI(new WorkspaceSplitPaneUI());
 		leftSplitPane.setBorder(null);
 		
 		// create the outer split pane that contains the left (inner) split pane and the graph
 		// component on the right side of the window
 		outerSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftSplitPane, rightSplitPane);
-		outerSplitPane.setOneTouchExpandable(false);
+		outerSplitPane.setOneTouchExpandable(true);
 		outerSplitPane.setDividerLocation(250);
 		outerSplitPane.setDividerSize(2);
 		outerSplitPane.setBorder(null);
+		outerSplitPane.setUI(new WorkspaceSplitPaneUI());
 		this.add(outerSplitPane, BorderLayout.CENTER);
 		
 		// create the "Project Explorer" panel
@@ -157,7 +173,24 @@ abstract class AbstractWorkspacePane extends JDesktopPane implements
 		programTree = new JTree();
 		programTree.setModel( new DefaultTreeModel( new DefaultMutableTreeNode("Program") ) );
 		projectExplorerPanel.setViewportView(programTree);
+		
+		JTree metricTree = new JTree( new DefaultMutableTreeNode() );
+		metricAnalysisPanel.setViewportView(metricTree);
 
+	}
+	
+	private IProgramStatusReporter getNearestStatusReporter() throws NullPointerException {
+		Component c = getParent();
+		
+		while ( !(c instanceof IProgramStatusReporter) ) {
+			c = c.getParent();
+		}
+		
+		return (IProgramStatusReporter) c;
+	}
+
+	protected void setGraphComponent(Component graph) {
+		mainPane.add(graph, BorderLayout.CENTER);
 	}
 	
 	@Override
@@ -195,25 +228,12 @@ abstract class AbstractWorkspacePane extends JDesktopPane implements
 					
 				} catch (Exception e1) {
 					setProgramStatus("Error: " + e1.getLocalizedMessage());
+					e1.printStackTrace();
 				}
 			} else {
 				wspContext.setVisualisation(null);
 			}
 		}
-	}
-	
-	private IProgramStatusReporter getNearestStatusReporter() throws NullPointerException {
-		Component c = getParent();
-		
-		while ( !(c instanceof IProgramStatusReporter) ) {
-			c = c.getParent();
-		}
-		
-		return (IProgramStatusReporter) c;
-	}
-
-	protected void setGraphComponent(Component graph) {
-		mainPane.add(graph, BorderLayout.CENTER);
 	}
 	
 	@Override

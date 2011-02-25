@@ -6,15 +6,16 @@ package org.lukep.javavis.util.io;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.PriorityQueue;
+import java.util.Queue;
 
 public final class FileSystemUtils {
 
 	public static ArrayList<File> ListFilesRecursive(File rootDirectory, final String[] extensions, IFileSystemScanObserver observer) {
 		File currentDirectory;
 		ArrayList<File> results = new ArrayList<File>();
-		PriorityQueue<File> directoriesToScan = new PriorityQueue<File>();
+		Queue<File> directoriesToScan = new ArrayDeque<File>();
 		directoriesToScan.add(rootDirectory);
 		FileFilter filter = new FileFilter() {
 			

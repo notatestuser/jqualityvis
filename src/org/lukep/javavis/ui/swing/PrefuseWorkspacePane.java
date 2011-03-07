@@ -29,8 +29,9 @@ import prefuse.visual.VisualItem;
 
 public class PrefuseWorkspacePane extends AbstractWorkspacePane {
 
-	private static final int HIGHLIGHT_COLOR_RGB = 0xFFBB87FF;
-	private static final int SELECTION_COLOR_RGB = 0xFF5EC3C7;
+	private static final int BACKGROUND_COLOR_RGB = 0xF9FFFB;
+	private static final int HIGHLIGHT_COLOR_RGB  = 0xFFBB87FF;
+	private static final int SELECTION_COLOR_RGB  = 0xFF5EC3C7;
 	
 	private Display display;
 	private Visualization visualisation;

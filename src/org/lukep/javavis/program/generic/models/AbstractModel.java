@@ -21,6 +21,14 @@ abstract class AbstractModel implements IGenericModelNode, IMeasurable {
 	protected AbstractModelSourceLang sourceLang;
 	protected IGenericModelNode parent;
 	protected Vector<Relationship> children;
+	
+	private boolean publicFlag = false;
+	private boolean protectedFlag = false;
+	private boolean finalFlag = false;
+	private boolean nativeFlag = false;
+	private boolean staticFlag = false;
+	private boolean privateFlag = false;
+	private boolean abstractFlag = false;
 
 	public AbstractModel(AbstractModelSourceLang sourceLang, String appliesToString) {
 		super();
@@ -31,70 +39,6 @@ abstract class AbstractModel implements IGenericModelNode, IMeasurable {
 	public AbstractModel(AbstractModelSourceLang sourceLang, String appliesToString, IGenericModelNode parent) {
 		this(sourceLang, appliesToString);
 		this.parent = parent;
-	}
-	
-	///////////////////////////////////////////////////////
-
-	@Override
-	public IGenericModelNode getParent() {
-		return parent;
-	}
-
-	@Override
-	public void setParent(IGenericModelNode parent) {
-		this.parent = parent;
-	}
-	
-	@Override
-	public void addChild(IGenericModelNode child, RelationshipType type) {
-		// lazy instantiated list of child models
-		if (children == null)
-			children = new Vector<Relationship>();
-		children.add( new Relationship(this, child, type) );
-	}
-	
-	@Override
-	public Vector<Relationship> getChildren() {
-		return children;
-	}
-	
-	@Override
-	public int getChildCount() {
-		if (children == null)
-			return 0;
-		return children.size();
-	}
-	
-	@Override
-	public String getModelTypeName() {
-		return APPLIES_TO_STR;
-	}
-	
-	@Override
-	public String getContainerName() {
-		if (parent != null)
-			return parent.getQualifiedName();
-		return "";
-	}
-
-	@Override
-	public String getSimpleName() {
-		return this.simpleName;
-	}
-
-	@Override
-	public void setSimpleName(String simpleName) {
-		this.simpleName = simpleName;
-	}
-	
-	@Override
-	public String getQualifiedName() {
-		return this.qualifiedName;
-	}
-
-	@Override
-	public void setQualifiedName(String qualifiedName) {
-		this.qualifiedName = qualifiedName;
 	}
 	
 	///////////////////////////////////////////////////////
@@ -122,6 +66,139 @@ abstract class AbstractModel implements IGenericModelNode, IMeasurable {
 		if (attribute != null)
 			return MetricRegistry.getInstance().getCachedMeasurement(this, attribute);
 		return null;
+	}
+	
+	///////////////////////////////////////////////////////
+
+	public void setParent(IGenericModelNode parent) {
+		this.parent = parent;
+	}
+	
+	public void setSimpleName(String simpleName) {
+		this.simpleName = simpleName;
+	}
+	
+	public void setQualifiedName(String qualifiedName) {
+		this.qualifiedName = qualifiedName;
+	}
+	
+	///////////////////////////////////////////////////////
+	
+	@Override
+	public void addChild(IGenericModelNode child, RelationshipType type) {
+		// lazy instantiated list of child models
+		if (children == null)
+			children = new Vector<Relationship>();
+		children.add( new Relationship(this, child, type) );
+	}
+	
+	@Override
+	public IGenericModelNode getParent() {
+		return parent;
+	}
+	
+	@Override
+	public Vector<Relationship> getChildren() {
+		return children;
+	}
+	
+	@Override
+	public int getChildCount() {
+		if (children == null)
+			return 0;
+		return children.size();
+	}
+	
+	@Override
+	public String getModelTypeName() {
+		return APPLIES_TO_STR;
+	}
+	
+	@Override
+	public String getContainerName() {
+		if (parent != null)
+			return parent.getQualifiedName();
+		return "";
+	}
+	
+	@Override
+	public String getSimpleName() {
+		return this.simpleName;
+	}
+	
+	@Override
+	public String getQualifiedName() {
+		return this.qualifiedName;
+	}
+	
+	@Override
+	public boolean isPublic() {
+		return publicFlag;
+	}
+
+	@Override
+	public boolean isProtected() {
+		return protectedFlag;
+	}
+
+	@Override
+	public boolean isFinal() {
+		return finalFlag;
+	}
+
+	@Override
+	public boolean isNative() {
+		return nativeFlag;
+	}
+
+	@Override
+	public boolean isStatic() {
+		return staticFlag;
+	}
+
+	@Override
+	public boolean isPrivate() {
+		return privateFlag;
+	}
+
+	@Override
+	public boolean isAbstract() {
+		return abstractFlag;
+	}
+
+	@Override
+	public void setPublic(boolean publicFlag) {
+		this.publicFlag = publicFlag;
+	}
+
+	@Override
+	public void setProtected(boolean protectedFlag) {
+		this.protectedFlag = protectedFlag;
+	}
+
+	@Override
+	public void setFinal(boolean finalFlag) {
+		this.finalFlag = finalFlag;
+	}
+
+	@Override
+	public void setNative(boolean nativeFlag) {
+		this.nativeFlag = nativeFlag;
+	}
+
+	@Override
+	public void setStatic(boolean staticFlag) {
+		this.staticFlag = staticFlag;
+	}
+
+	@Override
+	public void setPrivate(boolean privateFlag) {
+		this.privateFlag = privateFlag;
+	}
+
+	@Override
+	public void setAbstract(boolean abstractFlag) {
+		this.abstractFlag = abstractFlag;
 	}
 	
 	///////////////////////////////////////////////////////

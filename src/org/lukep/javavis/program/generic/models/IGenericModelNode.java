@@ -12,7 +12,6 @@ import org.lukep.javavis.program.generic.models.Relationship.RelationshipType;
 public interface IGenericModelNode extends Serializable {
 
 	public IGenericModelNode getParent();
-	public void setParent(IGenericModelNode parent);
 	
 	public void addChild(IGenericModelNode child, RelationshipType type);
 	public Vector<Relationship> getChildren();
@@ -23,9 +22,23 @@ public interface IGenericModelNode extends Serializable {
 	public String getContainerName();
 	
 	public String getSimpleName();
-	public void setSimpleName(String simpleName);
 	
 	public String getQualifiedName();
-	public void setQualifiedName(String qualifiedName);
+	
+    boolean isPublic();
+    boolean isProtected();
+    boolean isFinal();
+    boolean isNative();
+    boolean isStatic();
+    boolean isPrivate();
+    boolean isAbstract();
+    
+    void setPublic(boolean publicFlag);
+    void setProtected(boolean protectedFlag);
+    void setFinal(boolean finalFlag);
+    void setNative(boolean nativeFlag);
+    void setStatic(boolean staticFlag);
+    void setPrivate(boolean privateFlag);
+    void setAbstract(boolean abstractFlag);
 	
 }

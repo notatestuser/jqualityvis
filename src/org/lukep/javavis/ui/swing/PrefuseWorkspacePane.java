@@ -62,8 +62,13 @@ public class PrefuseWorkspacePane extends AbstractWorkspacePane {
 		
 		// handle roll-overs
         display.addControlListener(new ControlAdapter() {
-            
+        	
         	@Override
+			public void mouseClicked(MouseEvent e) {
+				wspContext.setSelectedItem(wspContext.getModelStore());
+			}
+
+			@Override
         	public void itemEntered(VisualItem item, MouseEvent e) {
                 // only un-highlight this node if it's not selected
         		if (item != currentSelectedNode) {

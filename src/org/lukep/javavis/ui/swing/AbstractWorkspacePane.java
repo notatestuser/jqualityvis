@@ -248,6 +248,7 @@ abstract class AbstractWorkspacePane extends JDesktopPane implements
 
 			@Override
 			public void statusFinished() {
+				wspContext.setSelectedItem(wspContext.getModelStore());
 				((DefaultTreeModel)programTree.getModel()).reload();
 				metricComboBox.setEnabled(true);
 			}

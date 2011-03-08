@@ -11,7 +11,7 @@ import java.util.Vector;
 import org.lukep.javavis.metrics.IMeasurable;
 import org.lukep.javavis.metrics.MetricAttribute;
 import org.lukep.javavis.program.generic.models.IGenericModelNode;
-import org.lukep.javavis.program.generic.models.ProgramModelStore;
+import org.lukep.javavis.program.generic.models.ProjectModel;
 import org.lukep.javavis.program.generic.models.Relationship;
 import org.lukep.javavis.visualisation.Visualisation;
 
@@ -24,7 +24,7 @@ public class WorkspaceContext extends Observable {
 	
 	///////////////////////////////////////////////////////
 	
-	protected ProgramModelStore modelStore;
+	protected ProjectModel modelStore;
 	protected HashMap<IMeasurable, Vector<Relationship>> relations; // one-to-many
 	protected IMeasurable subject;
 	
@@ -35,11 +35,11 @@ public class WorkspaceContext extends Observable {
 	
 	///////////////////////////////////////////////////////
 	
-	public ProgramModelStore getModelStore() {
+	public ProjectModel getModelStore() {
 		return modelStore;
 	}
 	
-	public void setModelStore(ProgramModelStore modelStore) {
+	public void setModelStore(ProjectModel modelStore) {
 		this.modelStore = modelStore;
 		fireEvent(ChangeEvent.MODELSTORE_CHANGE);
 	}

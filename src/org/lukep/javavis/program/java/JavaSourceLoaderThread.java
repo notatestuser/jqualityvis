@@ -19,7 +19,7 @@ import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
 import org.lukep.javavis.program.ISourceLoaderThread;
-import org.lukep.javavis.program.generic.models.ProgramModelStore;
+import org.lukep.javavis.program.generic.models.ProjectModel;
 import org.lukep.javavis.ui.IProgramSourceObserver;
 import org.lukep.javavis.util.io.FileSystemUtils;
 import org.lukep.javavis.util.io.IFileSystemScanObserver;
@@ -31,13 +31,13 @@ public class JavaSourceLoaderThread implements ISourceLoaderThread {
 	protected StandardJavaFileManager fileManager;
 	protected DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
 	
-	protected ProgramModelStore programStore;
+	protected ProjectModel programStore;
 	protected Vector<IProgramSourceObserver> observers = new Vector<IProgramSourceObserver>();
 	
 	protected File selectedDirectory;
 	protected int directoryCount;
 	
-	public JavaSourceLoaderThread(File selectedDirectory, ProgramModelStore programStore) {
+	public JavaSourceLoaderThread(File selectedDirectory, ProjectModel programStore) {
 		this.selectedDirectory = selectedDirectory;
 		this.programStore = programStore;
 	}

@@ -12,7 +12,7 @@ import java.util.Queue;
 import org.lukep.javavis.metrics.IMeasurable;
 import org.lukep.javavis.program.generic.models.IGenericModelNode;
 import org.lukep.javavis.program.generic.models.PackageModel;
-import org.lukep.javavis.program.generic.models.ProgramModelStore;
+import org.lukep.javavis.program.generic.models.ProjectModel;
 import org.lukep.javavis.program.generic.models.Relationship;
 import org.lukep.javavis.program.generic.models.Relationship.RelationshipType;
 import org.lukep.javavis.ui.swing.PrefuseWorkspacePane;
@@ -40,6 +40,8 @@ public class ClassHierarchyTree extends AbstractVisualisationView {
 	public void visit(PrefuseWorkspacePane workspace,
 			WorkspaceContext wspContext, Display display) {
 
+		display.reset();
+		
 		// -- 1. load the data ------------------------------------------------
 
 		Graph graph = new Graph();
@@ -49,7 +51,7 @@ public class ClassHierarchyTree extends AbstractVisualisationView {
 		graph.addColumn("metricMeasurement", float.class);
 		
 		// create package vertices
-		ProgramModelStore modelStore = wspContext.getModelStore();
+		ProjectModel modelStore = wspContext.getModelStore();
 		HashMap<IGenericModelNode, Node> parentNodeMap = 
 			new HashMap<IGenericModelNode, Node>(
 				modelStore.getPackageMap().size() + 10);

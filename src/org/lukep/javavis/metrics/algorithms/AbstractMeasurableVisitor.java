@@ -9,7 +9,7 @@ import org.lukep.javavis.metrics.MetricAttribute;
 import org.lukep.javavis.metrics.MetricMeasurement;
 import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.MethodModel;
-import org.lukep.javavis.program.generic.models.ProgramModelStore;
+import org.lukep.javavis.program.generic.models.ProjectModel;
 import org.lukep.javavis.program.generic.models.VariableModel;
 
 import com.sun.source.util.TreeScanner;
@@ -18,7 +18,7 @@ public abstract class AbstractMeasurableVisitor extends TreeScanner<Object, Obje
 		implements IMeasurableVisitor {
 
 	@Override
-	public MetricMeasurement visit(MetricAttribute metric, ProgramModelStore project) {
+	public MetricMeasurement visit(MetricAttribute metric, ProjectModel project) {
 		// implemented in child visitor class
 		return null;
 	}

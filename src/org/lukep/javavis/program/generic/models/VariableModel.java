@@ -51,8 +51,8 @@ public class VariableModel extends AbstractModel {
 		
 		// scan the project for this class
 		IGenericModelNode root = getRootNode();
-		if (root instanceof ProgramModelStore)
-			return ((ProgramModelStore)(root)).lookupClass(getTypeName());
+		if (root instanceof ProjectModel)
+			return ((ProjectModel)(root)).lookupClass(getTypeName());
 		
 		// nope - it's not here!
 		return null;

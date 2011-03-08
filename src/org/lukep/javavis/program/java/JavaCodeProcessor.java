@@ -16,7 +16,7 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 
-import org.lukep.javavis.program.generic.models.ProgramModelStore;
+import org.lukep.javavis.program.generic.models.ProjectModel;
 import org.lukep.javavis.ui.IProgramSourceObserver;
 
 import com.sun.source.util.TreePath;
@@ -28,11 +28,11 @@ public class JavaCodeProcessor extends AbstractProcessor {
 	
 	protected Trees trees;
 	
-	protected ProgramModelStore programStore;
+	protected ProjectModel programStore;
 	protected Vector<IProgramSourceObserver> observers;
 	
 	public JavaCodeProcessor(Vector<IProgramSourceObserver> observers, 
-			ProgramModelStore programStore) {
+			ProjectModel programStore) {
 		super();
 
 		this.observers = observers;

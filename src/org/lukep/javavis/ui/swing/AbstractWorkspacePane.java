@@ -32,7 +32,7 @@ import javax.swing.tree.DefaultTreeModel;
 import org.lukep.javavis.metrics.MetricAttribute;
 import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.MethodModel;
-import org.lukep.javavis.program.generic.models.ProgramModelStore;
+import org.lukep.javavis.program.generic.models.ProjectModel;
 import org.lukep.javavis.program.java.JavaSourceLoaderThread;
 import org.lukep.javavis.ui.IProgramSourceObserver;
 import org.lukep.javavis.ui.IProgramStatusReporter;
@@ -85,7 +85,7 @@ abstract class AbstractWorkspacePane extends JDesktopPane implements
 		setLayout( new BorderLayout() );
 		
 		// create a new ProgramModelStore in our WorkspaceContext
-		wspContext.modelStore = new ProgramModelStore("Project");
+		wspContext.modelStore = new ProjectModel("Project");
 		
 		/*
 		 * UI Initialisation

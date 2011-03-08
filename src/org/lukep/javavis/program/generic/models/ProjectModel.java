@@ -16,20 +16,20 @@ import org.lukep.javavis.metrics.MetricMeasurement;
 import org.lukep.javavis.ui.IProgramSourceObserver;
 import org.lukep.javavis.util.JavaVisConstants;
 
-public class ProgramModelStore extends AbstractModel implements IProgramSourceObserver {
+public class ProjectModel extends AbstractModel implements IProgramSourceObserver {
 	
 	protected final static Logger log = 
-		Logger.getLogger(ProgramModelStore.class.getSimpleName());
+		Logger.getLogger(ProjectModel.class.getSimpleName());
 	
 	// keeps track of all instances of the ClassModelStore (for global class lookups)
-	protected final static Vector<ProgramModelStore> instances = new Vector<ProgramModelStore>();
+	protected final static Vector<ProjectModel> instances = new Vector<ProjectModel>();
 	
     protected Map<String, ClassModel> classMap;
     protected Map<String, PackageModel> packageMap;
     
     ///////////////////////////////////////////////////////
 
-    public ProgramModelStore(String name) {
+    public ProjectModel(String name) {
     	super(AbstractModelSourceLang.UNKNOWN, 
     			JavaVisConstants.METRIC_APPLIES_TO_PROJCT);
     	
@@ -75,7 +75,7 @@ public class ProgramModelStore extends AbstractModel implements IProgramSourceOb
     	// check all instances of ClassModelStore that we know about
     	if (instances.size() > 0) {
     		ClassModel clazz = null;
-    		for (ProgramModelStore cms : instances) {
+    		for (ProjectModel cms : instances) {
     			clazz = cms.lookupClass(qualifiedName);
     			if (clazz != null)
     				return clazz;

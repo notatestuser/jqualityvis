@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 import org.lukep.javavis.metrics.IMeasurable;
 import org.lukep.javavis.program.generic.models.IGenericModelNode;
-import org.lukep.javavis.program.generic.models.ProgramModelStore;
+import org.lukep.javavis.program.generic.models.ProjectModel;
 import org.lukep.javavis.ui.swing.PrefuseWorkspacePane;
 import org.lukep.javavis.ui.swing.WorkspaceContext;
 
@@ -35,6 +35,8 @@ public class CircleView extends AbstractVisualisationView {
 	public void visit(PrefuseWorkspacePane workspace, WorkspaceContext wspContext,
 			Display display) {
 		
+		display.reset();
+		
 		// -- 1. load the data ------------------------------------------------
 
 		Graph graph = new Graph();
@@ -44,7 +46,7 @@ public class CircleView extends AbstractVisualisationView {
 		graph.addColumn("metricMeasurement", float.class);
 		
 		// create package vertices
-		ProgramModelStore modelStore = wspContext.getModelStore();
+		ProjectModel modelStore = wspContext.getModelStore();
 		HashMap<IGenericModelNode, Node> parentNodeMap = 
 			new HashMap<IGenericModelNode, Node>(
 				modelStore.getPackageMap().size() + 10);
@@ -91,7 +93,7 @@ public class CircleView extends AbstractVisualisationView {
         // pink for classes, baby blue for packages
         int[] palette = ColorLib.getCoolPalette();
         // create a metric palette
-        int[] mPalette = ColorLib.getInterpolatedPalette(0xFF00AA6D, 0xFFFFAA6D);
+        int[] mPalette = ColorLib.getInterpolatedPalette(0xFF91FF80, 0xFFFF8080);
         
         // TODO replace
         int[] mPalette2 = new int[mPalette.length + 1];

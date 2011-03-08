@@ -15,7 +15,7 @@ import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.IGenericModelNode;
 import org.lukep.javavis.program.generic.models.MethodModel;
 import org.lukep.javavis.program.generic.models.PackageModel;
-import org.lukep.javavis.program.generic.models.ProgramModelStore;
+import org.lukep.javavis.program.generic.models.ProjectModel;
 import org.lukep.javavis.program.generic.models.Relationship.RelationshipType;
 import org.lukep.javavis.program.generic.models.VariableModel;
 import org.lukep.javavis.util.JavaVisConstants;
@@ -147,7 +147,7 @@ public class CodeUnitInfoFactory {
 				newVariableModel.setClassAttribute(true);
 			
 			// set the variable's internal type target if we've got a generic of that type stored
-			ClassModel typeInternal = ProgramModelStore.lookupClassGlobal(qualifiedTypeName);
+			ClassModel typeInternal = ProjectModel.lookupClassGlobal(qualifiedTypeName);
 			if (typeInternal != null)
 				newVariableModel.setTypeInternalClass(typeInternal);
 			

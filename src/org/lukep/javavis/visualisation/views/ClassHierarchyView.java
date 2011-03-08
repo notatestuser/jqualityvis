@@ -13,7 +13,7 @@ import org.lukep.javavis.metrics.IMeasurable;
 import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.IGenericModelNode;
 import org.lukep.javavis.program.generic.models.PackageModel;
-import org.lukep.javavis.program.generic.models.ProgramModelStore;
+import org.lukep.javavis.program.generic.models.ProjectModel;
 import org.lukep.javavis.program.generic.models.Relationship;
 import org.lukep.javavis.program.generic.models.Relationship.RelationshipType;
 import org.lukep.javavis.ui.swing.PrefuseWorkspacePane;
@@ -65,7 +65,7 @@ public class ClassHierarchyView extends AbstractVisualisationView {
 		mxGraphLayout graphLayout = new mxCompactTreeLayout(graph);
 		
 		// create package vertices
-		ProgramModelStore modelStore = wspContext.getModelStore();
+		ProjectModel modelStore = wspContext.getModelStore();
 		HashMap<IGenericModelNode, mxCell> parentCellMap = 
 			new HashMap<IGenericModelNode, mxCell>(
 				modelStore.getPackageMap().size() + 10);
@@ -132,6 +132,8 @@ public class ClassHierarchyView extends AbstractVisualisationView {
 	public void visit(PrefuseWorkspacePane workspace, WorkspaceContext wspContext,
 			Display display) {
 		
+		display.reset();
+		
 		// -- 1. load the data ------------------------------------------------
 
 		Graph graph = new Graph();
@@ -141,7 +143,7 @@ public class ClassHierarchyView extends AbstractVisualisationView {
 		graph.addColumn("metricMeasurement", float.class);
 		
 		// create package vertices
-		ProgramModelStore modelStore = wspContext.getModelStore();
+		ProjectModel modelStore = wspContext.getModelStore();
 		HashMap<IGenericModelNode, Node> parentNodeMap = 
 			new HashMap<IGenericModelNode, Node>(
 				modelStore.getPackageMap().size() + 10);

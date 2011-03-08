@@ -15,14 +15,14 @@ import java.util.logging.Logger;
 
 import org.lukep.javavis.generated.jaxb.Metrics;
 import org.lukep.javavis.generated.jaxb.Metrics.Metric;
-import org.lukep.javavis.program.generic.models.ProgramModelStore;
+import org.lukep.javavis.program.generic.models.ProjectModel;
 import org.lukep.javavis.util.JavaVisConstants;
 import org.lukep.javavis.util.config.ConfigurationManager;
 
 public class MetricRegistry { // singleton
 
 	protected final static Logger log = 
-		Logger.getLogger(ProgramModelStore.class.getSimpleName());
+		Logger.getLogger(ProjectModel.class.getSimpleName());
 	
 	private static MetricRegistry instance = null;
 	
@@ -124,6 +124,10 @@ public class MetricRegistry { // singleton
 	}
 	
 	// Supported Metrics
+	
+	public Set<String> getSupportedMetricTargets() {
+		return metricSupportMap.keySet();
+	}
 	
 	public Vector<MetricAttribute> getSupportedMetrics(String measurableName) {
 		Vector<MetricAttribute> supportMap;

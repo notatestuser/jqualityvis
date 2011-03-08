@@ -32,6 +32,8 @@ public class ProjectModel extends AbstractModel implements IProgramSourceObserve
     public ProjectModel(String name) {
     	super(AbstractModelSourceLang.UNKNOWN, 
     			JavaVisConstants.METRIC_APPLIES_TO_PROJCT);
+    	setSimpleName(name);
+    	setQualifiedName(name);
     	
     	classMap = Collections.synchronizedMap(new LinkedHashMap<String, ClassModel>());
     	packageMap = Collections.synchronizedMap(new LinkedHashMap<String, PackageModel>());

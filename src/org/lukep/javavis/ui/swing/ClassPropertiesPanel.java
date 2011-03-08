@@ -66,8 +66,8 @@ public class ClassPropertiesPanel extends JPanel implements Observer {
 		StringBuilder sb = new StringBuilder("<html>");
 		// ... include container name
 		sb.append(model.getContainerName() + "<br />");
-		// ... include model's simple name
-		sb.append("<h2>" + model.getSimpleName() + "</h2>");
+		// ... include model's modifiers and simple name
+		sb.append("<h2>" + model.getModifierNames(" ") + " " + model.getSimpleName() + "</h2>");
 		// ... include metrics
 		if (model instanceof IMeasurable) {
 			IMeasurable measurableModel = (IMeasurable) model;

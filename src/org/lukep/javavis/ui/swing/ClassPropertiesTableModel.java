@@ -86,7 +86,8 @@ public class ClassPropertiesTableModel extends AbstractTableModel {
 		
 		if (columnIndex == 0) {
 			if (measurable instanceof IGenericModelNode)
-				return ((IGenericModelNode)(measurable)).getSimpleName();
+				return ((IGenericModelNode)(measurable)).getModifierNames(" ") + " "
+					 + ((IGenericModelNode)(measurable)).getSimpleName();
 			else
 				return "( Member )";
 		} else {

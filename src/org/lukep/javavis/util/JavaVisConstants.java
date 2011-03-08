@@ -28,5 +28,13 @@ public class JavaVisConstants {
 	public static final String METRIC_APPLIES_TO_CLASS  = "class";
 	public static final String METRIC_APPLIES_TO_METHOD = "method";
 	public static final String METRIC_APPLIES_TO_VAR    = "variable";
+	
+	public static final String MODEL_MODIFIER_PUBLIC	= "public";
+	public static final String MODEL_MODIFIER_PROTECTED	= "protected";
+	public static final String MODEL_MODIFIER_PRIVATE	= "private";
+	public static final String MODEL_MODIFIER_FINAL		= "final";
+	public static final String MODEL_MODIFIER_ABSTRACT	= "abstract";
+	public static final String MODEL_MODIFIER_NATIVE	= "native";
+	public static final String MODEL_MODIFIER_STATIC	= "static";
 
 }

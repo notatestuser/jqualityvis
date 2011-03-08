@@ -11,6 +11,7 @@ import org.lukep.javavis.metrics.MetricAttribute;
 import org.lukep.javavis.metrics.MetricMeasurement;
 import org.lukep.javavis.metrics.MetricRegistry;
 import org.lukep.javavis.program.generic.models.Relationship.RelationshipType;
+import org.lukep.javavis.util.JavaVisConstants;
 
 abstract class AbstractModel implements IGenericModelNode, IMeasurable {
 
@@ -129,6 +130,46 @@ abstract class AbstractModel implements IGenericModelNode, IMeasurable {
 	@Override
 	public String getQualifiedName() {
 		return this.qualifiedName;
+	}
+	
+	@Override
+	public String getModifierNames(String delimiter) {
+		
+		StringBuilder sb = new StringBuilder();
+		boolean first = true;
+		
+		if (isPublic() || isProtected() || isPrivate()) {
+			if (isPublic())
+				sb.append(JavaVisConstants.MODEL_MODIFIER_PUBLIC);
+			else if (isProtected())
+				sb.append(JavaVisConstants.MODEL_MODIFIER_PROTECTED);
+			else if (isPrivate())
+				sb.append(JavaVisConstants.MODEL_MODIFIER_PRIVATE);
+			first = false;
+		}
+		
+		if (isAbstract()) {
+			sb.append((!first ? delimiter : "")
+				+ JavaVisConstants.MODEL_MODIFIER_ABSTRACT);
+			first = false;
+		}
+		if (isFinal()) {
+			sb.append((!first ? delimiter : "")
+				+ JavaVisConstants.MODEL_MODIFIER_FINAL);
+			first = false;
+		}
+		if (isNative()) {
+			sb.append((!first ? delimiter : "")
+				+ JavaVisConstants.MODEL_MODIFIER_NATIVE);
+			first = false;
+		}
+		if (isStatic()) {
+			sb.append((!first ? delimiter : "")
+				+ JavaVisConstants.MODEL_MODIFIER_STATIC);
+			first = false;
+		}
+		
+		return sb.toString();
 	}
 	
 	@Override

@@ -18,27 +18,25 @@ public interface IGenericModelNode extends Serializable {
 	public int getChildCount();
 	
 	public String getModelTypeName();
-	
 	public String getContainerName();
-	
 	public String getSimpleName();
-	
 	public String getQualifiedName();
+	public String getModifierNames(String delimiter);
 	
     boolean isPublic();
     boolean isProtected();
+    boolean isPrivate();
     boolean isFinal();
+    boolean isAbstract();
     boolean isNative();
     boolean isStatic();
-    boolean isPrivate();
-    boolean isAbstract();
     
     void setPublic(boolean publicFlag);
     void setProtected(boolean protectedFlag);
+    void setPrivate(boolean privateFlag);
     void setFinal(boolean finalFlag);
+    void setAbstract(boolean abstractFlag);
     void setNative(boolean nativeFlag);
     void setStatic(boolean staticFlag);
-    void setPrivate(boolean privateFlag);
-    void setAbstract(boolean abstractFlag);
 	
 }

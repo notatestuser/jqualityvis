@@ -10,48 +10,44 @@
 		   name          : Friendly name to display in the user interface.
 		   internal_name : This is bound to the internals of the program. You can add new ones.
 		   type          : This groups metrics to visualisations. They can be made up.
-		   applies_to    : A list of measurable objects applicable to this metric. 'class' or 'method'
-		   visitor       : The internal visitor class implementing IMeasurableVisitor that is used to 
-		                   execute this metric.
+		   applies_to    : A list of measurable objects applicable to this metric.
+		                   Values: project, package, class, method, variable
+		   visitor       : The internal visitor class implementing IMeasurableVisitor that is used  
+		                   to execute this metric.
+		   argument		 : An argument string that is passed to the visitor class. Implementation 
+		   				   dictates how this is handled.
 		   cold          : Minimum metric value to be concerned with.
 		   hot           : Maximum metric value to be concerned with. This isn't a hard limit.
-	-->
-	<metric name="CK - Weighted Methods per Class (WMC)" internal_name="NUM_OF_METHODS">
-		<type>WEIGHTED_CLASS</type>
-		<applies_to>
-			<measurable>class</measurable>
-		</applies_to>
-		<visitor>org.lukep.javavis.metrics.algorithms.MethodCountVisitor</visitor>
-		<cold>0.0</cold>
-		<hot>100.0</hot>
-	</metric>
-	
-	<metric name="McCabe - Cyclomatic Complexity" internal_name="CC">
+	-->	
+	<metric name="McCabe Cyclomatic Complexity" internal_name="CC">
 		<type>WEIGHTED_METHOD</type>
 		<applies_to>
 			<measurable>method</measurable>
 		</applies_to>
 		<visitor>org.lukep.javavis.metrics.algorithms.CyclomaticComplexityVisitor</visitor>
+		<argument></argument>
 		<cold>0.0</cold>
 		<hot>30.0</hot>
 	</metric>
 	
-	<metric name="McCabe - Cyclomatic Complexity Avg" internal_name="CC_AVG">
+	<metric name="McCabe Cyclomatic Complexity Avg" internal_name="CC_AVG">
 		<type>WEIGHTED_CLASS</type>
 		<applies_to>
 			<measurable>class</measurable>
 		</applies_to>
 		<visitor>org.lukep.javavis.metrics.algorithms.CyclomaticComplexityVisitor</visitor>
+		<argument></argument>
 		<cold>0.0</cold>
 		<hot>30.0</hot>
 	</metric>
 	
-	<metric name="McCabe - Cyclomatic Complexity Max" internal_name="CC_MAX">
+	<metric name="McCabe Cyclomatic Complexity Max" internal_name="CC_MAX">
 		<type>WEIGHTED_CLASS</type>
 		<applies_to>
 			<measurable>class</measurable>
 		</applies_to>
 		<visitor>org.lukep.javavis.metrics.algorithms.CyclomaticComplexityVisitor</visitor>
+		<argument></argument>
 		<cold>0.0</cold>
 		<hot>30.0</hot>
 	</metric>
@@ -63,6 +59,74 @@
 			<measurable>method</measurable>
 		</applies_to>
 		<visitor>org.lukep.javavis.metrics.algorithms.StatementCountVisitor</visitor>
+		<argument></argument>
+		<cold>0.0</cold>
+		<hot>100.0</hot>
+	</metric>
+	
+	<!-- QMOOD Metrics by Bansiya and Davis -->
+	
+	<metric name="QMOOD Design Size in Classes" internal_name="DSC">
+		<type>PROJECT</type>
+		<applies_to>
+			<measurable>project</measurable>
+		</applies_to>
+		<visitor>org.lukep.javavis.metrics.algorithms.qmood.DesignSizeVisitor</visitor>
+		<argument></argument>
+		<cold>0.0</cold>
+		<hot>0.0</hot>
+	</metric>
+	
+	<metric name="QMOOD Data Access Metric" internal_name="DAM">
+		<type>WEIGHTED_CLASS</type>
+		<applies_to>
+			<measurable>class</measurable>
+		</applies_to>
+		<visitor>org.lukep.javavis.metrics.algorithms.qmood.DataAccessMetricVisitor</visitor>
+		<argument></argument>
+		<cold>1.0</cold>
+		<hot>0.0</hot>
+	</metric>
+	
+	<metric name="QMOOD Measure of Aggregation" internal_name="MOA">
+		<type>WEIGHTED_CLASS</type>
+		<applies_to>
+			<measurable>class</measurable>
+		</applies_to>
+		<visitor>org.lukep.javavis.metrics.algorithms.qmood.AggregationMeasureVisitor</visitor>
+		<argument></argument>
+		<cold>0.0</cold>
+		<hot>50.0</hot>
+	</metric>
+	
+	<metric name="QMOOD Number of Polymorphic Methods" internal_name="NOP">
+		<type>WEIGHTED_CLASS</type>
+		<applies_to>
+			<measurable>class</measurable>
+		</applies_to>
+		<visitor>org.lukep.javavis.metrics.algorithms.MethodCountVisitor</visitor>
+		<argument>polymorphic</argument>
+		<cold>0.0</cold>
+		<hot>0.0</hot>
+	</metric>
+	
+	<metric name="QMOOD Class Interface Size" internal_name="CIS">
+		<type>WEIGHTED_CLASS</type>
+		<applies_to>
+			<measurable>class</measurable>
+		</applies_to>
+		<visitor>org.lukep.javavis.metrics.algorithms.MethodCountVisitor</visitor>
+		<argument>public</argument>
+		<cold>0.0</cold>
+		<hot>0.0</hot>
+	</metric>
+	
+	<metric name="QMOOD Number of Methods" internal_name="NUM_OF_METHODS">
+		<type>WEIGHTED_CLASS</type>
+		<applies_to>
+			<measurable>class</measurable>
+		</applies_to>
+		<visitor>org.lukep.javavis.metrics.algorithms.MethodCountVisitor</visitor>
 		<cold>0.0</cold>
 		<hot>100.0</hot>
 	</metric>

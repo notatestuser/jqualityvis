@@ -20,6 +20,7 @@
                 </xsd:complexType>
               </xsd:element>
               <xsd:element name="visitor" type="xsd:string" />
+              <xsd:element name="argument" type="xsd:string" />
               <xsd:element name="cold" type="xsd:float" />
               <xsd:element name="hot" type="xsd:float" />
             </xsd:sequence>

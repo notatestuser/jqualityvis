@@ -15,6 +15,7 @@ public class MetricAttribute {
 	protected MetricType type;
 	protected List<String> appliesTo;
 	protected Class<IMeasurableVisitor> visitor;
+	protected String argument;
 	protected float cold;
 	protected float hot;
 	
@@ -26,6 +27,7 @@ public class MetricAttribute {
 		type = registry.getOrSetMetricType(sourceMetric.getType());
 		appliesTo = sourceMetric.getAppliesTo().getMeasurable();
 		visitor = (Class<IMeasurableVisitor>) Class.forName(sourceMetric.getVisitor());
+		argument = sourceMetric.getArgument();
 		cold = sourceMetric.getCold();
 		hot = sourceMetric.getHot();
 	}
@@ -52,6 +54,10 @@ public class MetricAttribute {
 
 	public Class<IMeasurableVisitor> getVisitorClass() {
 		return visitor;
+	}
+
+	public String getArgument() {
+		return argument;
 	}
 
 	public float getCold() {

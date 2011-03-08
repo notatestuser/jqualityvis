@@ -71,11 +71,11 @@ abstract class AbstractWorkspacePane extends JDesktopPane implements
 	
 	protected JTree programTree;
 	
-	protected WorkspaceContext wspContext = new WorkspaceContext();
+	protected ClassPropertiesPanel propertiesPane;
 	
 	protected IProgramStatusReporter statusTarget;
 	
-	protected ClassPropertiesPanel propertiesPane;
+	protected WorkspaceContext wspContext = new WorkspaceContext();
 	
 	public AbstractWorkspacePane(IProgramStatusReporter statusTarget) throws Exception {
 		super();
@@ -85,7 +85,7 @@ abstract class AbstractWorkspacePane extends JDesktopPane implements
 		setLayout( new BorderLayout() );
 		
 		// create a new ProgramModelStore in our WorkspaceContext
-		wspContext.modelStore = new ProgramModelStore();
+		wspContext.modelStore = new ProgramModelStore("Project");
 		
 		/*
 		 * UI Initialisation

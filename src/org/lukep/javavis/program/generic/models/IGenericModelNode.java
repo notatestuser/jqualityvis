@@ -12,6 +12,8 @@ import org.lukep.javavis.program.generic.models.Relationship.RelationshipType;
 public interface IGenericModelNode extends Serializable {
 
 	public IGenericModelNode getParent();
+	public IGenericModelNode getRootNode();
+	public boolean isRootNode();
 	
 	public void addChild(IGenericModelNode child, RelationshipType type);
 	public Vector<Relationship> getChildren();

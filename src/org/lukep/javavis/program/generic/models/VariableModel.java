@@ -46,7 +46,16 @@ public class VariableModel extends AbstractModel {
 	}
 
 	public ClassModel getTypeInternalClass() {
-		return typeInternalClass;
+		if (typeInternalClass != null)
+			return typeInternalClass;
+		
+		// scan the project for this class
+		IGenericModelNode root = getRootNode();
+		if (root instanceof ProgramModelStore)
+			return ((ProgramModelStore)(root)).lookupClass(getTypeName());
+		
+		// nope - it's not here!
+		return null;
 	}
 
 	public void setTypeInternalClass(ClassModel typeInternalClass) {

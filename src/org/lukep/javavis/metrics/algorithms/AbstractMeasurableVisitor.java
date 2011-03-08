@@ -9,12 +9,19 @@ import org.lukep.javavis.metrics.MetricAttribute;
 import org.lukep.javavis.metrics.MetricMeasurement;
 import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.MethodModel;
+import org.lukep.javavis.program.generic.models.ProgramModelStore;
 import org.lukep.javavis.program.generic.models.VariableModel;
 
 import com.sun.source.util.TreeScanner;
 
-abstract class AbstractMeasurableVisitor extends TreeScanner<Object, Object>
+public abstract class AbstractMeasurableVisitor extends TreeScanner<Object, Object>
 		implements IMeasurableVisitor {
+
+	@Override
+	public MetricMeasurement visit(MetricAttribute metric, ProgramModelStore project) {
+		// implemented in child visitor class
+		return null;
+	}
 
 	@Override
 	public MetricMeasurement visit(MetricAttribute metric, ClassModel clazz) {

@@ -99,6 +99,21 @@ abstract class AbstractModel implements IGenericModelNode, IMeasurable {
 	}
 	
 	@Override
+	public IGenericModelNode getRootNode() {
+		IGenericModelNode parent = this;
+		do {
+			parent = parent.getParent();
+			assert(parent != null);
+		} while (!parent.isRootNode());
+		return parent;
+	}
+
+	@Override
+	public boolean isRootNode() {
+		return false;
+	}
+
+	@Override
 	public Vector<Relationship> getChildren() {
 		return children;
 	}

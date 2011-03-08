@@ -7,13 +7,16 @@ package org.lukep.javavis.program.generic.models;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Observable;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.lukep.javavis.metrics.IMeasurableVisitor;
+import org.lukep.javavis.metrics.MetricAttribute;
+import org.lukep.javavis.metrics.MetricMeasurement;
 import org.lukep.javavis.ui.IProgramSourceObserver;
+import org.lukep.javavis.util.JavaVisConstants;
 
-public class ProgramModelStore extends Observable implements IProgramSourceObserver {
+public class ProgramModelStore extends AbstractModel implements IProgramSourceObserver {
 	
 	protected final static Logger log = 
 		Logger.getLogger(ProgramModelStore.class.getSimpleName());
@@ -26,11 +29,26 @@ public class ProgramModelStore extends Observable implements IProgramSourceObser
     
     ///////////////////////////////////////////////////////
 
-    public ProgramModelStore() {
+    public ProgramModelStore(String name) {
+    	super(AbstractModelSourceLang.UNKNOWN, 
+    			JavaVisConstants.METRIC_APPLIES_TO_PROJCT);
+    	
     	classMap = Collections.synchronizedMap(new LinkedHashMap<String, ClassModel>());
     	packageMap = Collections.synchronizedMap(new LinkedHashMap<String, PackageModel>());
     	instances.add(this);
     }
+    
+	@Override
+	public boolean isRootNode() {
+		return true;
+	}
+    
+	///////////////////////////////////////////////////////
+
+	@Override
+	public MetricMeasurement accept(MetricAttribute metric, IMeasurableVisitor visitor) {
+		return visitor.visit(metric, this);
+	}
     
     ///////////////////////////////////////////////////////
 

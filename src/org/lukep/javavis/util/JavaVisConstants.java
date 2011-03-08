@@ -24,6 +24,7 @@ public class JavaVisConstants {
 	public static final String METRIC_CYCLO_COMPLEX_AVG = "CC_AVG";
 	public static final String METRIC_CYCLO_COMPLEX_MAX	= "CC_MAX";
 	
+	public static final String METRIC_APPLIES_TO_PROJCT	= "project";
 	public static final String METRIC_APPLIES_TO_PKG	= "package";
 	public static final String METRIC_APPLIES_TO_CLASS  = "class";
 	public static final String METRIC_APPLIES_TO_METHOD = "method";

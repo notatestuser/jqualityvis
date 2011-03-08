@@ -6,6 +6,7 @@ package org.lukep.javavis.program.generic.models;
 
 public enum AbstractModelSourceLang {
 
+	UNKNOWN,
 	JAVA
 	
 }

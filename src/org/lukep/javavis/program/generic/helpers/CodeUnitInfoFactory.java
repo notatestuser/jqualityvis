@@ -70,8 +70,12 @@ public class CodeUnitInfoFactory {
 			break;
 		}
 		if (parent != null) {
+			// parent is a package or another class
 			parent.addChild(newClassModel, RelationshipType.ENCLOSED_IN);
 			newClassModel.setParent(parent);
+		} else {
+			// parent is the project
+			newClassModel.setParent(s.programStore);
 		}
 		
 		return newClassModel;
@@ -153,7 +157,8 @@ public class CodeUnitInfoFactory {
 		return newVariableModel;
 	}
 	
-	private static PackageModel getOrCreatePackage(String packageName, Map<String, PackageModel> pkgMap) {
+	private static PackageModel getOrCreatePackage(String packageName, 
+			Map<String, PackageModel> pkgMap, CodeUnitInfoFactoryState s) {
 		
 		// return the package if we already have it
 		if (pkgMap.containsKey(packageName))
@@ -168,7 +173,7 @@ public class CodeUnitInfoFactory {
 		if (packageName.length() > 0) {
 			if (lastDotIndex != -1) { // class is member of a named package (non-default)
 				parentPackageName = packageName.substring(0, lastDotIndex);
-				parentPackage = getOrCreatePackage(parentPackageName, pkgMap);
+				parentPackage = getOrCreatePackage(parentPackageName, pkgMap, s);
 			}
 		} else {
 			// we're at the root
@@ -181,6 +186,9 @@ public class CodeUnitInfoFactory {
 		if (parentPackage != null) {
 			curPackage.setParent(parentPackage);
 			curPackage.setSimpleName(packageName.substring(lastDotIndex + 1));
+		} else {
+			// no parent package - our root is the project
+			curPackage.setParent(s.programStore);
 		}
 		
 		pkgMap.put(usingDefaultPkgName ? "" : packageName, curPackage);
@@ -191,7 +199,7 @@ public class CodeUnitInfoFactory {
 	}
 	
 	private static PackageModel getOrCreatePackage(String packageName, CodeUnitInfoFactoryState s) {
-		return getOrCreatePackage(packageName, s.programStore.getPackageMap());
+		return getOrCreatePackage(packageName, s.programStore.getPackageMap(), s);
 	}
 	
 	private static void setJavaModifiers(String modifiers, IGenericModelNode model) {

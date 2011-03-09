@@ -99,6 +99,17 @@
 		<hot>0.0</hot>
 	</metric>
 	
+	<metric name="QMOOD Direct Class Coupling" internal_name="DCC">
+		<type>WEIGHTED_CLASS</type>
+		<applies_to>
+			<measurable>class</measurable>
+		</applies_to>
+		<visitor>org.lukep.javavis.metrics.algorithms.qmood.DirectCouplingVisitor</visitor>
+		<argument></argument>
+		<cold>0.0</cold>
+		<hot>30.0</hot>
+	</metric>
+	
 	<metric name="QMOOD Measure of Aggregation" internal_name="MOA">
 		<type>WEIGHTED_CLASS</type>
 		<applies_to>

@@ -7,8 +7,11 @@ package org.lukep.javavis.program.generic.helpers;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.VariableElement;
+import javax.lang.model.util.SimpleElementVisitor6;
 
 import org.lukep.javavis.program.generic.models.AbstractModelSourceLang;
 import org.lukep.javavis.program.generic.models.ClassModel;
@@ -94,7 +97,7 @@ public class CodeUnitInfoFactory {
 			return null;
 		
 		// create the new generic method object
-		MethodModel newMethodModel = new MethodModel(AbstractModelSourceLang.JAVA,
+		final MethodModel newMethodModel = new MethodModel(AbstractModelSourceLang.JAVA,
 											methodTree.getName().toString());
 		
 		// set the method's BlockTree entry point
@@ -103,6 +106,20 @@ public class CodeUnitInfoFactory {
 		// set modifiers
 		for (Modifier modifier : e.getModifiers())
 			setJavaModifiers(modifier.toString(), newMethodModel);
+		
+		// add parameters
+		e.accept(new SimpleElementVisitor6<Object, MethodModel>() {
+
+			@Override
+			public Object visitExecutable(ExecutableElement e, MethodModel p) {
+				for (VariableElement var : e.getParameters()) {
+					newMethodModel.addParameter(var.getSimpleName().toString(), 
+							var.asType().toString());
+				}
+				newMethodModel.setReturnType(e.getReturnType().toString());
+				return super.visitExecutable(e, p);
+			}
+		}, null);
 		
 		// set constructor method or just add to the parent class's list of methods
 		if (newMethodModel.getName().equals(JavaVisConstants.DEFAULT_CONSTRUCTOR_NAME)) {

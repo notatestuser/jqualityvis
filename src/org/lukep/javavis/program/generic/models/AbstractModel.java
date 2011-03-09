@@ -4,7 +4,8 @@
  */
 package org.lukep.javavis.program.generic.models;
 
-import java.util.Vector;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.lukep.javavis.metrics.IMeasurable;
 import org.lukep.javavis.metrics.MetricAttribute;
@@ -21,7 +22,7 @@ abstract class AbstractModel implements IGenericModelNode, IMeasurable {
 	protected String qualifiedName;
 	protected AbstractModelSourceLang sourceLang;
 	protected IGenericModelNode parent;
-	protected Vector<Relationship> children;
+	protected HashSet<Relationship> children;
 	
 	private boolean publicFlag = false;
 	private boolean protectedFlag = false;
@@ -89,7 +90,7 @@ abstract class AbstractModel implements IGenericModelNode, IMeasurable {
 	public void addChild(IGenericModelNode child, RelationshipType type) {
 		// lazy instantiated list of child models
 		if (children == null)
-			children = new Vector<Relationship>();
+			children = new HashSet<Relationship>();
 		children.add( new Relationship(this, child, type) );
 	}
 	
@@ -114,7 +115,7 @@ abstract class AbstractModel implements IGenericModelNode, IMeasurable {
 	}
 
 	@Override
-	public Vector<Relationship> getChildren() {
+	public Set<Relationship> getChildren() {
 		return children;
 	}
 	

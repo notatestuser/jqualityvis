@@ -14,6 +14,7 @@ import org.lukep.javavis.metrics.MetricRegistry;
 import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.IGenericModelNode;
 import org.lukep.javavis.program.generic.models.PackageModel;
+import org.lukep.javavis.program.generic.models.Relationship;
 import org.lukep.javavis.util.JavaVisConstants;
 
 // TODO clean this up
@@ -80,7 +81,8 @@ public class ClassPropertiesTableModel extends AbstractTableModel {
 		if (subject instanceof ClassModel)
 			measurable = ((ClassModel)(subject)).getMethods().get(rowIndex);
 		else if (subject instanceof PackageModel)
-			measurable = (IMeasurable) subject.getChildren().get(rowIndex).getTarget();
+			measurable = (IMeasurable) ((Relationship)(
+					subject.getChildren().toArray()[rowIndex])).getTarget();
 		else
 			return null;
 		

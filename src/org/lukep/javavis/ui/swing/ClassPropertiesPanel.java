@@ -75,7 +75,8 @@ public class ClassPropertiesPanel extends JPanel implements Observer {
 			for (MetricAttribute attribute : MetricRegistry.getInstance().getMetricAttributes()) {
 				result = measurableModel.getMetricMeasurementVal(attribute);
 				if (result != MetricMeasurement.DEFAULT_RESULT)
-					sb.append("<strong>" + attribute.getName() + "</strong>" 
+					sb.append("<strong>" + attribute.getName() 
+							+ " (" + attribute.getInternalName() + ")" + "</strong>" 
 							+ " = " + result + "<br />");
 			}
 		}

@@ -17,6 +17,9 @@ public class ClassModel extends AbstractModel {
 
 	protected String superClassName;
 	protected MethodModel constructorMethod;
+	protected int ancestorClassCount = 0;
+	protected int inheritedFieldCount = 0;
+	protected int inheritedMethodCount = 0;
 	protected int methodCount = 0;
 	protected int variableCount = 0;
 
@@ -120,6 +123,30 @@ public class ClassModel extends AbstractModel {
 		this.constructorMethod = constructorMethod;
 	}
 	
+	public int getAncestorClassCount() {
+		return ancestorClassCount;
+	}
+
+	public void setAncestorClassCount(int ancestorClassCount) {
+		this.ancestorClassCount = ancestorClassCount;
+	}
+
+	public int getInheritedFieldCount() {
+		return inheritedFieldCount;
+	}
+
+	public void setInheritedFieldCount(int inheritedFieldCount) {
+		this.inheritedFieldCount = inheritedFieldCount;
+	}
+
+	public int getInheritedMethodCount() {
+		return inheritedMethodCount;
+	}
+
+	public void setInheritedMethodCount(int inheritedMethodCount) {
+		this.inheritedMethodCount = inheritedMethodCount;
+	}
+
 	public void addMethod(MethodModel method) {
 		addChild(method, RelationshipType.ENCLOSED_IN);
 		methodCount++;

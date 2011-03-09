@@ -49,8 +49,6 @@ public class JavaSourceLoaderThread implements ISourceLoaderThread {
 		fileManager = compiler.getStandardFileManager(diagnostics, null, null); // TODO: add diagnostic listener
 		
 		// recursively scan through input directory to locate java files
-		//Collection<File> inputFiles = 
-		//	FileUtils.listFiles(selectedDirectory, new String[] { "java" }, true);
 		directoryCount = 0;
 		ArrayList<File> inputFiles = 
 			FileSystemUtils.ListFilesRecursive(selectedDirectory, JAVA_SOURCE_EXTENSIONS, new IFileSystemScanObserver() {
@@ -79,7 +77,8 @@ public class JavaSourceLoaderThread implements ISourceLoaderThread {
 						: "Compilation failed (" + diagnostics.getDiagnostics().get(0).getMessage(Locale.ENGLISH) + ").");
 		// TODO: fix crash when 0 source files discovered
 		
-		
+		// perform post-processing to link models together and build up inheritance tree info, etc
+		new JavaCodePostProcessor(programStore).process();
 		
 		statusFinished();
 	}

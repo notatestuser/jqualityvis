@@ -58,7 +58,7 @@ public class CodeUnitInfoFactory {
 		
 		// set the class's superclass (parent in the inheritance hierarchy)
 		if (classTree.getExtendsClause() != null)
-			newClassModel.setSuperClassName(classTree.getExtendsClause().toString());
+			newClassModel.setSuperClassName(e.getSuperclass().toString());
 		
 		// set the class's parent element
 		IGenericModelNode parent = null;

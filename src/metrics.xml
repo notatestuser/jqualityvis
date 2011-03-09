@@ -77,6 +77,17 @@
 		<hot>0.0</hot>
 	</metric>
 	
+	<metric name="QMOOD Number of Hierarchies" internal_name="NOH">
+		<type>PROJECT</type>
+		<applies_to>
+			<measurable>project</measurable>
+		</applies_to>
+		<visitor>org.lukep.javavis.metrics.algorithms.qmood.ClassHierarchyCountVisitor</visitor>
+		<argument></argument>
+		<cold>0.0</cold>
+		<hot>0.0</hot>
+	</metric>
+	
 	<metric name="QMOOD Data Access Metric" internal_name="DAM">
 		<type>WEIGHTED_CLASS</type>
 		<applies_to>

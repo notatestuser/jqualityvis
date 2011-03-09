@@ -15,6 +15,7 @@ import org.lukep.javavis.util.JavaVisConstants;
 
 public class ClassModel extends AbstractModel {
 
+	protected String superClassName;
 	protected MethodModel constructorMethod;
 	protected int methodCount = 0;
 	protected int variableCount = 0;
@@ -103,6 +104,14 @@ public class ClassModel extends AbstractModel {
 	
 	///////////////////////////////////////////////////////
 
+	public String getSuperClassName() {
+		return superClassName;
+	}
+
+	public void setSuperClassName(String parentName) {
+		this.superClassName = parentName;
+	}
+	
 	public MethodModel getConstructorMethod() {
 		return constructorMethod;
 	}

@@ -32,6 +32,19 @@ public class MetricAttribute {
 		hot = sourceMetric.getHot();
 	}
 	
+	public float measureTarget(IMeasurable target) {
+		try {
+		
+			// if this metric applies to the target's type - run it!
+			if (testAppliesTo(target.getModelTypeName()))
+				return target.accept( this, getVisitorClass().newInstance() ).getResult();
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	
 	public String getName() {
 		return name;
 	}

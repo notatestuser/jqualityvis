@@ -46,24 +46,6 @@ abstract class AbstractModel implements IGenericModelNode, IMeasurable {
 	///////////////////////////////////////////////////////
 	
 	@Override
-	public float getMetricMeasurementVal(MetricAttribute attribute) {
-		
-		if (attribute != null) {
-			try {
-			
-				// if the metric applies to a class - run it!
-				if (attribute.testAppliesTo(APPLIES_TO_STR))
-					return accept( attribute, 
-							attribute.getVisitorClass().newInstance() ).getResult();
-			
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		return -1;
-	}
-	
-	@Override
 	public MetricMeasurement getMetricMeasurement(MetricAttribute attribute) {
 		if (attribute != null)
 			return MetricRegistry.getInstance().getCachedMeasurement(this, attribute);

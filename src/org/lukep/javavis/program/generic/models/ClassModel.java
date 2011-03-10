@@ -4,6 +4,8 @@
  */
 package org.lukep.javavis.program.generic.models;
 
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Vector;
 
 import org.lukep.javavis.metrics.IMeasurableVisitor;
@@ -14,14 +16,12 @@ import org.lukep.javavis.program.generic.models.Relationship.RelationshipType;
 import org.lukep.javavis.util.JavaVisConstants;
 
 public class ClassModel extends AbstractModel {
-
+	
 	protected String superClassName;
-	protected MethodModel constructorMethod;
-	protected int ancestorClassCount = 0;
-	protected int inheritedFieldCount = 0;
-	protected int inheritedMethodCount = 0;
 	protected int methodCount = 0;
 	protected int variableCount = 0;
+	protected MethodModel constructorMethod;
+	protected LinkedList<ClassAncestor> ancestors = new LinkedList<ClassAncestor>();
 
 	public ClassModel(AbstractModelSourceLang lang, String simpleName, String qualifiedName) {
 		super(lang, JavaVisConstants.METRIC_APPLIES_TO_CLASS);
@@ -122,29 +122,31 @@ public class ClassModel extends AbstractModel {
 	public void setConstructorMethod(MethodModel constructorMethod) {
 		this.constructorMethod = constructorMethod;
 	}
+
+	public void addAncestor(ClassAncestor ancestor) {
+		this.ancestors.addFirst(ancestor);
+	}
 	
-	public int getAncestorClassCount() {
-		return ancestorClassCount;
+	public Queue<ClassAncestor> getAncestors() {
+		return ancestors;
 	}
-
-	public void setAncestorClassCount(int ancestorClassCount) {
-		this.ancestorClassCount = ancestorClassCount;
+	
+	public int getAncestorCount() {
+		return ancestors.size();
 	}
-
+	
 	public int getInheritedFieldCount() {
-		return inheritedFieldCount;
+		int inheritedFields = 0;
+		for (ClassAncestor ancestor : ancestors)
+			inheritedFields += ancestor.getDeclaredFields();
+		return inheritedFields;
 	}
-
-	public void setInheritedFieldCount(int inheritedFieldCount) {
-		this.inheritedFieldCount = inheritedFieldCount;
-	}
-
+	
 	public int getInheritedMethodCount() {
-		return inheritedMethodCount;
-	}
-
-	public void setInheritedMethodCount(int inheritedMethodCount) {
-		this.inheritedMethodCount = inheritedMethodCount;
+		int inheritedMethods = 0;
+		for (ClassAncestor ancestor : ancestors)
+			inheritedMethods += ancestor.getDeclaredMethods();
+		return inheritedMethods;
 	}
 
 	public void addMethod(MethodModel method) {

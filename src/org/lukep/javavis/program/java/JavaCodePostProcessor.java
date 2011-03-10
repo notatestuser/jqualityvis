@@ -4,13 +4,15 @@
  */
 package org.lukep.javavis.program.java;
 
+import org.lukep.javavis.program.generic.models.ClassAncestor;
 import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.ProjectModel;
 import org.lukep.javavis.program.generic.models.VariableModel;
 
 public class JavaCodePostProcessor {
 
-	private static final char GENERIC_BRACE_CHAR = '<';
+	private static final char     GENERIC_BRACE_CHAR           = '<';
+	private static final String   INHERITANCE_CLASS_DEFAULT    = "java.lang.Object";
 	private static final String[] INHERITANCE_CLASS_EXCLUSIONS = { /*"java.lang.Object"*/ };
 	
 	private ProjectModel projectModel;
@@ -29,32 +31,31 @@ public class JavaCodePostProcessor {
 		for (ClassModel clazz : projectModel.getClassMap().values()) {
 			
 			String superClassName = clazz.getSuperClassName();
-			if (superClassName == null)
-				continue;
 			
-			// find this class's inheritance stats
-			int[] parentFieldMethodCounts = { 0, 0, 0 };
-			findInheritanceCountsRecursive(superClassName, null, parentFieldMethodCounts);
-			clazz.setAncestorClassCount(parentFieldMethodCounts[0]);
-			clazz.setInheritedFieldCount(parentFieldMethodCounts[1]);
-			clazz.setInheritedMethodCount(parentFieldMethodCounts[2]);
+			// default to INHERITANCE_CLASS_DEFAULT name if we don't have a superclass specified
+			if (superClassName == null)
+				superClassName = INHERITANCE_CLASS_DEFAULT;
+			
+			// find this class's ancestor information and build it up in model meta-data
+			findAncestorsRecursive(superClassName, null, clazz);
 			System.out.println(
 					"Class " + clazz.getSimpleName() + " has " 
-					+ clazz.getAncestorClassCount() + " parents declaring " 
+					+ clazz.getAncestorCount() + " parents declaring " 
 					+ clazz.getInheritedFieldCount() + " fields and " 
 					+ clazz.getInheritedMethodCount() + " methods.");
 		}
 	}
 	
-	private void findInheritanceCountsRecursive(String superClassName, Class internalSuperClass, 
-			int[] parentFieldMethodCounts) {
+	private void findAncestorsRecursive(String superClassName, 
+			Class internalSuperClass, ClassModel clazz) {
 		
 		// check exclusion list
 		for (String exc : INHERITANCE_CLASS_EXCLUSIONS)
 			if (exc.equals(superClassName))
 				return;
 		
-		parentFieldMethodCounts[0] += 1;
+		// create a new ClassAncestor object
+		ClassAncestor newAncestor = new ClassAncestor(superClassName != null ? superClassName : "");
 		
 		// first we'll look for this class's parent in the project
 		ClassModel lookupClass = projectModel.lookupClass(superClassName);
@@ -65,12 +66,15 @@ public class JavaCodePostProcessor {
 			// accumulate our field and method counts
 			for (VariableModel var : lookupClass.getVariables())
 				if (var.isClassAttribute())
-					parentFieldMethodCounts[1]++;
-			parentFieldMethodCounts[2] += lookupClass.getMethodCount();
+					newAncestor.setDeclaredFields(newAncestor.getDeclaredFields() + 1);
+			newAncestor.setDeclaredMethods(
+					newAncestor.getDeclaredMethods() + lookupClass.getMethodCount());
 			
-			if (lookupClass.getSuperClassName() != null)
-				findInheritanceCountsRecursive(lookupClass.getSuperClassName(), null,
-						parentFieldMethodCounts);
+			String lookupSuperClassName = lookupClass.getSuperClassName();
+			if (!superClassName.equals(INHERITANCE_CLASS_DEFAULT))
+				findAncestorsRecursive(
+						lookupSuperClassName != null ? lookupSuperClassName : 
+							INHERITANCE_CLASS_DEFAULT, null, clazz);
 			
 		} else {
 			
@@ -92,20 +96,23 @@ public class JavaCodePostProcessor {
 				//		Class.forName(superClassName) : internalSuperClass;
 				
 				// accumulate our field and method counts
-				parentFieldMethodCounts[2] += javaClass.getDeclaredMethods().length;
-				parentFieldMethodCounts[1] += javaClass.getDeclaredFields().length;
+				newAncestor.setDeclaredMethods(
+						newAncestor.getDeclaredMethods() + javaClass.getDeclaredMethods().length);
+				newAncestor.setDeclaredFields(
+						newAncestor.getDeclaredFields() + javaClass.getDeclaredFields().length);
 				
 				// find the superclass and recursively visit it
 				Class javaSuperClass = javaClass.getSuperclass();
 				if (javaSuperClass != null)
-					findInheritanceCountsRecursive(javaSuperClass.getName(), 
-							javaSuperClass, parentFieldMethodCounts);
+					findAncestorsRecursive(javaSuperClass.getName(), javaSuperClass, clazz);
 				
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+		
+		clazz.addAncestor(newAncestor);
 	}
 	
 }

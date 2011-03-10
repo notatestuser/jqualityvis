@@ -82,7 +82,7 @@
 		<applies_to>
 			<measurable>project</measurable>
 		</applies_to>
-		<visitor>org.lukep.javavis.metrics.algorithms.qmood.DesignSizeVisitor</visitor>
+		<visitor>org.lukep.javavis.metrics.algorithms.qmood.DSCVisitor</visitor>
 		<argument></argument>
 		<cold>0.0</cold>
 		<hot>0.0</hot>
@@ -93,7 +93,7 @@
 		<applies_to>
 			<measurable>project</measurable>
 		</applies_to>
-		<visitor>org.lukep.javavis.metrics.algorithms.qmood.ClassHierarchyCountVisitor</visitor>
+		<visitor>org.lukep.javavis.metrics.algorithms.qmood.NOHVisitor</visitor>
 		<argument></argument>
 		<cold>0.0</cold>
 		<hot>0.0</hot>
@@ -115,7 +115,7 @@
 		<applies_to>
 			<measurable>class</measurable>
 		</applies_to>
-		<visitor>org.lukep.javavis.metrics.algorithms.qmood.DataAccessMetricVisitor</visitor>
+		<visitor>org.lukep.javavis.metrics.algorithms.qmood.DAMVisitor</visitor>
 		<argument></argument>
 		<cold>1.0</cold>
 		<hot>0.0</hot>
@@ -126,10 +126,21 @@
 		<applies_to>
 			<measurable>class</measurable>
 		</applies_to>
-		<visitor>org.lukep.javavis.metrics.algorithms.qmood.DirectCouplingVisitor</visitor>
+		<visitor>org.lukep.javavis.metrics.algorithms.qmood.DCCVisitor</visitor>
 		<argument></argument>
 		<cold>0.0</cold>
 		<hot>30.0</hot>
+	</metric>
+	
+	<metric name="QMOOD Cohesion Among Methods of Class" internal_name="CAM">
+		<type>WEIGHTED_CLASS</type>
+		<applies_to>
+			<measurable>class</measurable>
+		</applies_to>
+		<visitor>org.lukep.javavis.metrics.algorithms.qmood.CAMVisitor</visitor>
+		<argument></argument>
+		<cold>1.0</cold>
+		<hot>0.0</hot>
 	</metric>
 	
 	<metric name="QMOOD Measure of Aggregation" internal_name="MOA">
@@ -137,7 +148,7 @@
 		<applies_to>
 			<measurable>class</measurable>
 		</applies_to>
-		<visitor>org.lukep.javavis.metrics.algorithms.qmood.AggregationMeasureVisitor</visitor>
+		<visitor>org.lukep.javavis.metrics.algorithms.qmood.MOAVisitor</visitor>
 		<argument></argument>
 		<cold>0.0</cold>
 		<hot>50.0</hot>
@@ -148,7 +159,7 @@
 		<applies_to>
 			<measurable>class</measurable>
 		</applies_to>
-		<visitor>org.lukep.javavis.metrics.algorithms.qmood.FunctionalAbstractionMeasureVisitor</visitor>
+		<visitor>org.lukep.javavis.metrics.algorithms.qmood.MFAVisitor</visitor>
 		<argument></argument>
 		<cold>1.0</cold>
 		<hot>0.0</hot>

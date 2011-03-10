@@ -9,7 +9,7 @@ import org.lukep.javavis.metrics.MetricMeasurement;
 import org.lukep.javavis.metrics.algorithms.AbstractMeasurableVisitor;
 import org.lukep.javavis.program.generic.models.ClassModel;
 
-public class FunctionalAbstractionMeasureVisitor extends
+public class MFAVisitor extends
 		AbstractMeasurableVisitor {
 
 	@Override

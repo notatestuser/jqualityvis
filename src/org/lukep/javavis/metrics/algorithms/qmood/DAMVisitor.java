@@ -10,7 +10,7 @@ import org.lukep.javavis.metrics.algorithms.AbstractMeasurableVisitor;
 import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.VariableModel;
 
-public class DataAccessMetricVisitor extends AbstractMeasurableVisitor {
+public class DAMVisitor extends AbstractMeasurableVisitor {
 
 	@Override
 	public MetricMeasurement visit(MetricAttribute metric, ClassModel clazz) {

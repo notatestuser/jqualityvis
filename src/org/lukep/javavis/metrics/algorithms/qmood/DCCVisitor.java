@@ -13,7 +13,7 @@ import org.lukep.javavis.metrics.algorithms.AbstractMeasurableVisitor;
 import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.MethodModel;
 
-public class DirectCouplingVisitor extends AbstractMeasurableVisitor {
+public class DCCVisitor extends AbstractMeasurableVisitor {
 
 	private static final String[] PRIMITIVE_TYPE_EXCLUSIONS = 
 			{ "byte", "short", "int", "long", "float", "double", "char", "boolean" };

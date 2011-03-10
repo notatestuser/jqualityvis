@@ -13,7 +13,7 @@ import org.lukep.javavis.metrics.algorithms.AbstractMeasurableVisitor;
 import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.ProjectModel;
 
-public class ClassHierarchyCountVisitor extends AbstractMeasurableVisitor {
+public class NOHVisitor extends AbstractMeasurableVisitor {
 
 	@Override
 	public MetricMeasurement visit(MetricAttribute metric, ProjectModel project) {

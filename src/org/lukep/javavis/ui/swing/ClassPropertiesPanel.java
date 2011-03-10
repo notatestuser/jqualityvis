@@ -73,19 +73,23 @@ public class ClassPropertiesPanel extends JPanel implements Observer {
 		if (model instanceof ClassModel)
 			sb.append(((ClassModel)(model)).getInheritedFieldCount() + " fields and " 
 					+ ((ClassModel)(model)).getInheritedMethodCount() + " methods inherited from " 
-					+ ((ClassModel)(model)).getAncestorCount() + " ancestors<br /><br />");
+					+ ((ClassModel)(model)).getAncestorCount() + " ancestors<br />");
 		// ... include metrics
+		sb.append("<table border=\"0\" style=\"margin-top:5px\">");
 		if (model instanceof IMeasurable) {
 			IMeasurable measurableModel = (IMeasurable) model;
 			float result;
 			for (MetricAttribute attribute : MetricRegistry.getInstance().getMetricAttributes()) {
-				result = measurableModel.getMetricMeasurementVal(attribute);
+				result = attribute.measureTarget(measurableModel);
 				if (result != MetricMeasurement.DEFAULT_RESULT)
-					sb.append("<strong>" + attribute.getName() 
-							+ " (" + attribute.getInternalName() + ")" + "</strong>" 
-							+ " = " + result + "<br />");
+					sb.append("<tr><td><strong>" 
+							+ attribute.getName() 
+							+ " (" + attribute.getInternalName() + ")" 
+							+ "</strong></td>" 
+							+ "<td> " + result + "</td></tr>");
 			}
 		}
+		sb.append("</table>");
 		// ... end
 		sb.append("</html>");
 		

@@ -143,6 +143,17 @@
 		<hot>50.0</hot>
 	</metric>
 	
+	<metric name="QMOOD Measure of Functional Abstraction" internal_name="MFA">
+		<type>WEIGHTED_CLASS</type>
+		<applies_to>
+			<measurable>class</measurable>
+		</applies_to>
+		<visitor>org.lukep.javavis.metrics.algorithms.qmood.FunctionalAbstractionMeasureVisitor</visitor>
+		<argument></argument>
+		<cold>1.0</cold>
+		<hot>0.0</hot>
+	</metric>
+	
 	<metric name="QMOOD Number of Polymorphic Methods" internal_name="NOP">
 		<type>WEIGHTED_CLASS</type>
 		<applies_to>

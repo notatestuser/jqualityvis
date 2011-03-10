@@ -21,6 +21,7 @@ import org.lukep.javavis.metrics.IMeasurable;
 import org.lukep.javavis.metrics.MetricAttribute;
 import org.lukep.javavis.metrics.MetricMeasurement;
 import org.lukep.javavis.metrics.MetricRegistry;
+import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.IGenericModelNode;
 import org.lukep.javavis.ui.swing.WorkspaceContext.ChangeEvent;
 
@@ -68,6 +69,11 @@ public class ClassPropertiesPanel extends JPanel implements Observer {
 		sb.append(model.getContainerName() + "<br />");
 		// ... include model's modifiers and simple name
 		sb.append("<h2>" + model.getModifierNames(" ") + " " + model.getSimpleName() + "</h2>");
+		// ... classes: include bloodline statistics
+		if (model instanceof ClassModel)
+			sb.append(((ClassModel)(model)).getInheritedFieldCount() + " fields and " 
+					+ ((ClassModel)(model)).getInheritedMethodCount() + " methods inherited from " 
+					+ ((ClassModel)(model)).getAncestorCount() + " ancestors<br /><br />");
 		// ... include metrics
 		if (model instanceof IMeasurable) {
 			IMeasurable measurableModel = (IMeasurable) model;

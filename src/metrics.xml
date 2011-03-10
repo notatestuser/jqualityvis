@@ -2,7 +2,7 @@
 <!--
 	Document    : metrics.xml
 	Author      : Luke Plaster
-	Description : Defines the metrics utilized by the JMetricVis tool to evalute program code.
+	Description : Defines the static metrics utilized by the JMetricVis tool to evalute program code.
 -->
 <metrics>
 	<!--
@@ -52,6 +52,17 @@
 		<hot>30.0</hot>
 	</metric>
 	
+	<metric name="Number of Ancestor Classes" internal_name="NAC">
+		<type>WEIGHTED_CLASS</type>
+		<applies_to>
+			<measurable>class</measurable>
+		</applies_to>
+		<visitor>org.lukep.javavis.metrics.algorithms.AncestorCountVisitor</visitor>
+		<argument></argument>
+		<cold>0.0</cold>
+		<hot>20.0</hot>
+	</metric>
+	
 	<metric name="Number of Statements" internal_name="NUM_OF_STMTS">
 		<type>WEIGHTED_METHOD</type>
 		<applies_to>
@@ -86,6 +97,17 @@
 		<argument></argument>
 		<cold>0.0</cold>
 		<hot>0.0</hot>
+	</metric>
+	
+	<metric name="QMOOD Average Number of Ancestors" internal_name="ANA">
+		<type>PROJECT</type>
+		<applies_to>
+			<measurable>project</measurable>
+		</applies_to>
+		<visitor>org.lukep.javavis.metrics.algorithms.AncestorCountVisitor</visitor>
+		<argument>average</argument>
+		<cold>0.0</cold>
+		<hot>10.0</hot>
 	</metric>
 	
 	<metric name="QMOOD Data Access Metric" internal_name="DAM">

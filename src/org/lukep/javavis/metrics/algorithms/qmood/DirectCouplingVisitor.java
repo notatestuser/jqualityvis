@@ -31,10 +31,11 @@ public class DirectCouplingVisitor extends AbstractMeasurableVisitor {
 				coupledClasses.add(returnType);
 			
 			// add parameter types to set of coupled classes
-			for (String parameterType : method.getParameters().values()) {
-				if (isTypeNotPrimitive(parameterType))
-					coupledClasses.add(parameterType);
-			}
+			if (method.getParameters() != null)
+				for (String parameterType : method.getParameters().values()) {
+					if (isTypeNotPrimitive(parameterType))
+						coupledClasses.add(parameterType);
+				}
 		}
 		
 		return new MetricMeasurement(clazz, metric, coupledClasses.size());

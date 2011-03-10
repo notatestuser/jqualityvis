@@ -13,7 +13,7 @@ public class JavaCodePostProcessor {
 
 	private static final char     GENERIC_BRACE_CHAR           = '<';
 	private static final String   INHERITANCE_CLASS_DEFAULT    = "java.lang.Object";
-	private static final String[] INHERITANCE_CLASS_EXCLUSIONS = { /*"java.lang.Object"*/ };
+	private static final String[] INHERITANCE_CLASS_EXCLUSIONS = { "java.lang.Object" };
 	
 	private ProjectModel projectModel;
 

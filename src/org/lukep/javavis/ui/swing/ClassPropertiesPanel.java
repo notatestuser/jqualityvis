@@ -19,7 +19,6 @@ import javax.swing.SwingConstants;
 
 import org.lukep.javavis.metrics.IMeasurable;
 import org.lukep.javavis.metrics.MetricAttribute;
-import org.lukep.javavis.metrics.MetricMeasurement;
 import org.lukep.javavis.metrics.MetricRegistry;
 import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.IGenericModelNode;
@@ -80,13 +79,14 @@ public class ClassPropertiesPanel extends JPanel implements Observer {
 			IMeasurable measurableModel = (IMeasurable) model;
 			float result;
 			for (MetricAttribute attribute : MetricRegistry.getInstance().getMetricAttributes()) {
-				result = attribute.measureTarget(measurableModel);
-				if (result != MetricMeasurement.DEFAULT_RESULT)
+				try {
+					result = attribute.measureTarget(measurableModel).getResult();
 					sb.append("<tr><td><strong>" 
 							+ attribute.getName() 
 							+ " (" + attribute.getInternalName() + ")" 
 							+ "</strong></td>" 
 							+ "<td> " + result + "</td></tr>");
+				} catch (NullPointerException ex) {}
 			}
 		}
 		sb.append("</table>");

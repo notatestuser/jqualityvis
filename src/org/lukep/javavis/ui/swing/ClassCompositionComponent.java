@@ -11,6 +11,7 @@ import java.util.Observer;
 
 import javax.swing.JComponent;
 
+import org.lukep.javavis.metrics.MetricMeasurement;
 import org.lukep.javavis.metrics.MetricRegistry;
 import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.IGenericModelNode;
@@ -54,9 +55,12 @@ public class ClassCompositionComponent extends JComponent implements Observer {
 			g.fillRect(0, 0, getWidth() - 1, getHeight() - 1);
 			
 			// add the blocks representing methods
-			int pixelsPerStatement = (int) Math.ceil(currentClass.getMetricMeasurement(
+			MetricMeasurement currentClassNumStatements = 
+				currentClass.getMetricMeasurement(
 					MetricRegistry.getInstance().getMetricAttribute(
-						JavaVisConstants.METRIC_NUM_OF_STATEMENTS)).getResult());
+							JavaVisConstants.METRIC_NUM_OF_STATEMENTS));
+			assert(currentClassNumStatements != null);
+			int pixelsPerStatement = (int) Math.ceil(currentClassNumStatements.getResult());
 			pixelsPerStatement = pixelsPerStatement > 0 ? 
 					(int) Math.ceil(getHeight() / (double)pixelsPerStatement) : getHeight();
 			

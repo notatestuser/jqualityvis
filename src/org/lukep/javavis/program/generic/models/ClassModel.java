@@ -48,6 +48,7 @@ public class ClassModel extends AbstractModel {
 				result = method.getMetricMeasurement(
 							MetricRegistry.getInstance().getMetricAttribute(
 								JavaVisConstants.METRIC_NUM_OF_STATEMENTS));
+				assert(result != null);
 				totalStatements += result.getResult();
 			}
 		}
@@ -66,6 +67,7 @@ public class ClassModel extends AbstractModel {
 					result = method.getMetricMeasurement(
 								MetricRegistry.getInstance().getMetricAttribute(
 									JavaVisConstants.METRIC_CYCLO_COMPLEX));
+					assert(result != null);
 					avgComplexity += result.getResult();
 					count++;
 			}
@@ -86,6 +88,7 @@ public class ClassModel extends AbstractModel {
 					result = method.getMetricMeasurement(
 								MetricRegistry.getInstance().getMetricAttribute(
 									JavaVisConstants.METRIC_CYCLO_COMPLEX));
+					assert(result != null);
 					if (result.getResult() > maxComplexity)
 						maxComplexity = result.getResult();
 			}

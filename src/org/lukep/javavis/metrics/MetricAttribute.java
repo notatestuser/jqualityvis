@@ -32,17 +32,17 @@ public class MetricAttribute {
 		hot = sourceMetric.getHot();
 	}
 	
-	public float measureTarget(IMeasurable target) {
+	public MetricMeasurement measureTarget(IMeasurable target) {
 		try {
 		
 			// if this metric applies to the target's type - run it!
 			if (testAppliesTo(target.getModelTypeName()))
-				return target.accept( this, getVisitorClass().newInstance() ).getResult();
+				return target.accept( this, getVisitorClass().newInstance() );
 		
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return -1;
+		return null;
 	}
 	
 	public String getName() {

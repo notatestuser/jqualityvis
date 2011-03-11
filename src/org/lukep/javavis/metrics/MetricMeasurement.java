@@ -46,7 +46,7 @@ public class MetricMeasurement {
 	}
 	
 	public void refreshResult() {
-		setResult(metric.measureTarget(target));
+		setResult(metric.measureTarget(target).getResult());
 	}
 	
 }

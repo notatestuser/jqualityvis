@@ -186,13 +186,11 @@ public class MetricRegistry { // singleton
 			return measurement;
 		
 		// nope - create a new one and set the result
-		measurement = new MetricMeasurement(target, attribute);
-		float measurementVal = attribute.measureTarget(target);
-		if (measurementVal != -1)
-			measurement.setResult( measurementVal );
+		measurement = attribute.measureTarget(target);
 		
 		// add measurement to the MetricRegistry
-		getInstance().setMetricMeasurement(target, attribute, measurement);
+		if (measurement != null)
+			getInstance().setMetricMeasurement(target, attribute, measurement);
 		
 		return measurement;
 	}

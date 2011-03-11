@@ -10,6 +10,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
 import org.lukep.javavis.generated.jaxb.Metrics;
+import org.lukep.javavis.generated.jaxb.QualityModels;
 import org.lukep.javavis.generated.jaxb.Visualisations;
 import org.lukep.javavis.util.JavaVisConstants;
 
@@ -18,6 +19,7 @@ public class ConfigurationManager {
 	private static ConfigurationManager instance = null;
 	
 	private static Metrics metrics = null;
+	private static QualityModels qualityModels = null;
 	private static Visualisations visualisations = null;
 	
 	static {
@@ -35,6 +37,12 @@ public class ConfigurationManager {
 					JavaVisConstants.METRICS_FILE_NAME);
 			if (is != null)
 				metrics = (Metrics) unmarshaller.unmarshal(is);
+			
+			// load qualityModels xml
+			is = ConfigurationManager.class.getClassLoader().getResourceAsStream(
+					JavaVisConstants.QUALITYMODELS_FILE_NAME);
+			if (is != null)
+				qualityModels = (QualityModels) unmarshaller.unmarshal(is);
 			
 			// load visualisations xml
 			is = ConfigurationManager.class.getClassLoader().getResourceAsStream(
@@ -59,6 +67,10 @@ public class ConfigurationManager {
 	
 	public Metrics getMetrics() {
 		return metrics;
+	}
+	
+	public QualityModels getQualityModels() {
+		return qualityModels;
 	}
 	
 	public Visualisations getVisualisations() {

@@ -15,6 +15,9 @@ import java.util.logging.Logger;
 
 import org.lukep.javavis.generated.jaxb.Metrics;
 import org.lukep.javavis.generated.jaxb.Metrics.Metric;
+import org.lukep.javavis.generated.jaxb.QualityModels;
+import org.lukep.javavis.generated.jaxb.QualityModels.QualityModel;
+import org.lukep.javavis.generated.jaxb.QualityModels.QualityModel.DesignQualityAttributes.DesignQualityAttribute;
 import org.lukep.javavis.program.generic.models.ProjectModel;
 import org.lukep.javavis.util.JavaVisConstants;
 import org.lukep.javavis.util.config.ConfigurationManager;
@@ -29,7 +32,7 @@ public class MetricRegistry { // singleton
 	private Map<String, MetricType> typeMap;
 	private Map<String, MetricAttribute> metricMap;
 	private Map<String, Vector<MetricAttribute>> metricSupportMap;
-	private Map<IMeasurable, Map<MetricAttribute, MetricMeasurement>> measurementMap;
+	private Map<IMeasurableNode, Map<MetricAttribute, MetricMeasurement>> measurementMap;
 	
 	private MetricRegistry() {
 		typeMap = Collections.synchronizedMap(
@@ -39,34 +42,16 @@ public class MetricRegistry { // singleton
 		metricSupportMap = Collections.synchronizedMap(
 					new HashMap<String, Vector<MetricAttribute>>());
 		measurementMap = Collections.synchronizedMap(
-					new HashMap<IMeasurable, Map<MetricAttribute, MetricMeasurement>>());
+					new HashMap<IMeasurableNode, Map<MetricAttribute, MetricMeasurement>>());
 		
 		// load the MetricAttributes from configuration data source
+		MetricAttribute newMetric;
 		Metrics metrics = ConfigurationManager.getInstance().getMetrics();
 		if (metrics != null) {
-			MetricAttribute newMetric;
 			try {
 				for (Metric metric : metrics.getMetric()) {
 					newMetric = new MetricAttribute(metric, this);
-					metricMap.put(newMetric.getInternalName(), newMetric);
-					
-					// add the support info
-					Vector<MetricAttribute> curSupportMap;
-					for (String applicableMeasurable : newMetric.getAppliesTo()) {
-						
-						// get or create the list of supported metric attributes
-						if (metricSupportMap.containsKey(applicableMeasurable)) {
-							curSupportMap = metricSupportMap.get(applicableMeasurable);
-						} else {
-							curSupportMap = new Vector<MetricAttribute>();
-							metricSupportMap.put(applicableMeasurable, curSupportMap);
-						}
-						
-						// add our entry to the list!
-						curSupportMap.add(newMetric);
-					}
-					
-					log.info("New metric: " + newMetric.toString());
+					registerMetric(newMetric);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -74,12 +59,47 @@ public class MetricRegistry { // singleton
 		}
 		else
 			log.warning("No metrics loaded. Check " + JavaVisConstants.METRICS_FILE_NAME);
+		
+		// TODO load a generic quality model object instead
+		// load the QualityAttributes from configuration data source
+		QualityModels qualityModels = ConfigurationManager.getInstance().getQualityModels();
+		if (qualityModels != null) {
+			for (QualityModel qualityModel : qualityModels.getQualityModel()) {
+				for (DesignQualityAttribute qualityAttribute : 
+					qualityModel.getDesignQualityAttributes().getDesignQualityAttribute()) {
+					newMetric = new org.lukep.javavis.metrics.qualityModels.DesignQualityAttribute(qualityModel, qualityAttribute, this);
+					registerMetric(newMetric);
+				}
+			}
+		}
 	}
 	
 	public static MetricRegistry getInstance() {
 		if (instance == null)
 			instance = new MetricRegistry();
 		return instance;
+	}
+	
+	private void registerMetric(MetricAttribute newMetric) {
+		metricMap.put(newMetric.getInternalName(), newMetric);
+		
+		// add the support info
+		Vector<MetricAttribute> curSupportMap;
+		for (String applicableMeasurable : newMetric.getAppliesTo()) {
+			
+			// get or create the list of supported metric attributes
+			if (metricSupportMap.containsKey(applicableMeasurable)) {
+				curSupportMap = metricSupportMap.get(applicableMeasurable);
+			} else {
+				curSupportMap = new Vector<MetricAttribute>();
+				metricSupportMap.put(applicableMeasurable, curSupportMap);
+			}
+			
+			// add our entry to the list!
+			curSupportMap.add(newMetric);
+		}
+		
+		log.info("New metric: " + newMetric.toString());
 	}
 	
 	// Metric Types
@@ -146,7 +166,7 @@ public class MetricRegistry { // singleton
 	
 	// Metric Measurements
 	
-	public MetricMeasurement getMetricMeasurement(IMeasurable target, MetricAttribute attribute) {
+	public MetricMeasurement getMetricMeasurement(IMeasurableNode target, MetricAttribute attribute) {
 		
 		// check for if the target IMeasurable exists in our measurement map
 		if (measurementMap.containsKey(target)) {
@@ -161,7 +181,7 @@ public class MetricRegistry { // singleton
 		return null;
 	}
 	
-	public void setMetricMeasurement(IMeasurable target, MetricAttribute attribute, 
+	public void setMetricMeasurement(IMeasurableNode target, MetricAttribute attribute, 
 			MetricMeasurement measurement) {
 		
 		// check for if the target IMeasurable exists in our measurement map
@@ -178,7 +198,7 @@ public class MetricRegistry { // singleton
 		foundMeasurementMap.put(attribute, measurement);
 	}
 	
-	public MetricMeasurement getCachedMeasurement(IMeasurable target, MetricAttribute attribute) {
+	public MetricMeasurement getCachedMeasurement(IMeasurableNode target, MetricAttribute attribute) {
 
 		// search for an existing measurement in the MetricRegistry
 		MetricMeasurement measurement = getInstance().getMetricMeasurement(target, attribute);

@@ -17,7 +17,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 
-import org.lukep.javavis.metrics.IMeasurable;
+import org.lukep.javavis.metrics.IMeasurableNode;
 import org.lukep.javavis.metrics.MetricAttribute;
 import org.lukep.javavis.metrics.MetricRegistry;
 import org.lukep.javavis.program.generic.models.ClassModel;
@@ -75,8 +75,8 @@ public class ClassPropertiesPanel extends JPanel implements Observer {
 					+ ((ClassModel)(model)).getAncestorCount() + " ancestors<br />");
 		// ... include metrics
 		sb.append("<table border=\"0\" style=\"margin-top:5px\">");
-		if (model instanceof IMeasurable) {
-			IMeasurable measurableModel = (IMeasurable) model;
+		if (model instanceof IMeasurableNode) {
+			IMeasurableNode measurableModel = (IMeasurableNode) model;
 			float result;
 			for (MetricAttribute attribute : MetricRegistry.getInstance().getMetricAttributes()) {
 				try {

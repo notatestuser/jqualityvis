@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import org.lukep.javavis.metrics.IMeasurable;
+import org.lukep.javavis.metrics.IMeasurableNode;
 import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.IGenericModelNode;
 import org.lukep.javavis.program.generic.models.PackageModel;
@@ -197,10 +197,10 @@ public class ClassHierarchyView extends AbstractVisualisationView {
 			}
 			
 			// grab metric measurement if applicable
-			if (model instanceof IMeasurable
+			if (model instanceof IMeasurableNode
 					&& wspContext.getMetric().testAppliesTo(model.getModelTypeName())) {
 				curNode.setFloat("metricMeasurement", 
-						((IMeasurable)(model)).getMetricMeasurement(
+						((IMeasurableNode)(model)).getMetricMeasurement(
 								wspContext.getMetric()).getResult());
 			}
 		}

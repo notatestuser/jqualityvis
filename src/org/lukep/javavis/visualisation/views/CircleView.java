@@ -7,7 +7,7 @@ package org.lukep.javavis.visualisation.views;
 import java.awt.Color;
 import java.util.HashMap;
 
-import org.lukep.javavis.metrics.IMeasurable;
+import org.lukep.javavis.metrics.IMeasurableNode;
 import org.lukep.javavis.program.generic.models.IGenericModelNode;
 import org.lukep.javavis.program.generic.models.ProjectModel;
 import org.lukep.javavis.ui.swing.PrefuseWorkspacePane;
@@ -65,10 +65,10 @@ public class CircleView extends AbstractVisualisationView {
 			}
 			
 			// grab metric measurement if applicable
-			if (model instanceof IMeasurable
+			if (model instanceof IMeasurableNode
 					&& wspContext.getMetric().testAppliesTo(model.getModelTypeName())) {
 				curNode.setFloat("metricMeasurement", 
-						((IMeasurable)(model)).getMetricMeasurement(
+						((IMeasurableNode)(model)).getMetricMeasurement(
 								wspContext.getMetric()).getResult());
 			}
 		}

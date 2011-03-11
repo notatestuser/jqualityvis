@@ -19,25 +19,34 @@ public class MetricAttribute {
 	protected float cold;
 	protected float hot;
 	
+	public MetricAttribute(String name, String nameInternal, MetricType type, List<String> appliesTo) {
+		this.name = name;
+		this.nameInternal = nameInternal;
+		this.type = type;
+		this.appliesTo = appliesTo;
+	}
+	
 	public MetricAttribute(Metric sourceMetric, MetricRegistry registry) throws ClassNotFoundException {
 		
 		// set the fields in our new MetricAttribute object from the data source object
-		name = sourceMetric.getName();
-		nameInternal = sourceMetric.getInternalName();
-		type = registry.getOrSetMetricType(sourceMetric.getType());
-		appliesTo = sourceMetric.getAppliesTo().getMeasurable();
+		this(sourceMetric.getName(), 
+				sourceMetric.getInternalName(), 
+				registry.getOrSetMetricType(sourceMetric.getType()), 
+				sourceMetric.getAppliesTo().getMeasurable());
+		
+		// set static metric specific fields
 		visitor = (Class<IMeasurableVisitor>) Class.forName(sourceMetric.getVisitor());
 		argument = sourceMetric.getArgument();
 		cold = sourceMetric.getCold();
 		hot = sourceMetric.getHot();
 	}
 	
-	public MetricMeasurement measureTarget(IMeasurable target) {
+	public MetricMeasurement measureTarget(IMeasurableNode target) {
 		try {
 		
 			// if this metric applies to the target's type - run it!
 			if (testAppliesTo(target.getModelTypeName()))
-				return target.accept( this, getVisitorClass().newInstance() );
+				return target.accept( this, visitor.newInstance() );
 		
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -63,10 +72,6 @@ public class MetricAttribute {
 
 	public boolean testAppliesTo(String measurableName) {
 		return appliesTo.contains(measurableName);
-	}
-
-	public Class<IMeasurableVisitor> getVisitorClass() {
-		return visitor;
 	}
 
 	public String getArgument() {

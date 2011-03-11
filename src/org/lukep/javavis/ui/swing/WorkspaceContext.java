@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Observable;
 import java.util.Vector;
 
-import org.lukep.javavis.metrics.IMeasurable;
+import org.lukep.javavis.metrics.IMeasurableNode;
 import org.lukep.javavis.metrics.MetricAttribute;
 import org.lukep.javavis.program.generic.models.IGenericModelNode;
 import org.lukep.javavis.program.generic.models.ProjectModel;
@@ -25,8 +25,8 @@ public class WorkspaceContext extends Observable {
 	///////////////////////////////////////////////////////
 	
 	protected ProjectModel modelStore;
-	protected HashMap<IMeasurable, Vector<Relationship>> relations; // one-to-many
-	protected IMeasurable subject;
+	protected HashMap<IMeasurableNode, Vector<Relationship>> relations; // one-to-many
+	protected IMeasurableNode subject;
 	
 	protected MetricAttribute metric;
 	protected Visualisation visualisation;
@@ -44,21 +44,21 @@ public class WorkspaceContext extends Observable {
 		fireEvent(ChangeEvent.MODELSTORE_CHANGE);
 	}
 	
-	public HashMap<IMeasurable, Vector<Relationship>> getRelations() {
+	public HashMap<IMeasurableNode, Vector<Relationship>> getRelations() {
 		return relations;
 	}
 	
 	public void setRelations(
-			HashMap<IMeasurable, Vector<Relationship>> relations) {
+			HashMap<IMeasurableNode, Vector<Relationship>> relations) {
 		this.relations = relations;
 		fireEvent(ChangeEvent.RELATIONS_CHANGE);
 	}
 	
-	public IMeasurable getSubject() {
+	public IMeasurableNode getSubject() {
 		return subject;
 	}
 	
-	public void setSubject(IMeasurable subject) {
+	public void setSubject(IMeasurableNode subject) {
 		this.subject = subject;
 		fireEvent(ChangeEvent.SUBJECT_CHANGE);
 	}

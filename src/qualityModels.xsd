@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Document    : qualityModels.xsd
+	Author      : Luke Plaster
+	Description : XML Schema for qualityModels.xml.
+-->
+<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:element name="qualityModels">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element minOccurs="0" maxOccurs="unbounded" name="qualityModel">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="designQualityAttributes">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element minOccurs="0" maxOccurs="unbounded" name="designQualityAttribute">
+                      <xsd:complexType>
+                        <xsd:sequence>
+                          <xsd:element minOccurs="0" maxOccurs="unbounded" name="weightedMetric">
+                            <xsd:complexType>
+                              <xsd:attribute name="value" type="xsd:string" />
+                              <xsd:attribute name="weight" type="xsd:float" />
+                              <xsd:attribute name="internal_name" type="xsd:string" />
+                              <xsd:attribute name="target" type="xsd:string" />
+                            </xsd:complexType>
+                          </xsd:element>
+                        </xsd:sequence>
+                        <xsd:attribute name="name" type="xsd:string" />
+                      </xsd:complexType>
+                    </xsd:element>
+                  </xsd:sequence>
+                </xsd:complexType>
+              </xsd:element>
+            </xsd:sequence>
+            <xsd:attribute name="name" type="xsd:string" />
+            <xsd:attribute name="internal_name" type="xsd:string" />
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>

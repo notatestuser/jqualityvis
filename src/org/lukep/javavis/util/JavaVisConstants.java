@@ -10,6 +10,7 @@ public class JavaVisConstants {
 	public static final String DEFAULT_CONSTRUCTOR_NAME = "<init>";
 	
 	public static final String METRICS_FILE_NAME 		= "metrics.xml";
+	public static final String QUALITYMODELS_FILE_NAME  = "qualityModels.xml";
 	public static final String VISUALISATIONS_FILE_NAME = "visualisations.xml";
 	
 	public static final String ICON_PROJECT_EXPLORER	= "assets/icons/folder.png";

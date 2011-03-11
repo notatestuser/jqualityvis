@@ -7,14 +7,14 @@ package org.lukep.javavis.program.generic.models;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.lukep.javavis.metrics.IMeasurable;
+import org.lukep.javavis.metrics.IMeasurableNode;
 import org.lukep.javavis.metrics.MetricAttribute;
 import org.lukep.javavis.metrics.MetricMeasurement;
 import org.lukep.javavis.metrics.MetricRegistry;
 import org.lukep.javavis.program.generic.models.Relationship.RelationshipType;
 import org.lukep.javavis.util.JavaVisConstants;
 
-abstract class AbstractModel implements IGenericModelNode, IMeasurable {
+abstract class AbstractModel implements IMeasurableNode {
 
 	public String APPLIES_TO_STR = "generic";
 	

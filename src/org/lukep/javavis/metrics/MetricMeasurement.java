@@ -8,18 +8,18 @@ public class MetricMeasurement {
 
 	public static final float DEFAULT_RESULT = -1;
 	
-	protected IMeasurable target;
+	protected IMeasurableNode target;
 	protected MetricAttribute metric;
 	protected float result = -1;
 	protected boolean resultSet = false;
 	
-	public MetricMeasurement(IMeasurable target, MetricAttribute metric) {
+	public MetricMeasurement(IMeasurableNode target, MetricAttribute metric) {
 		super();
 		this.target = target;
 		this.metric = metric;
 	}
 	
-	public MetricMeasurement(IMeasurable target, MetricAttribute metric, float result) {
+	public MetricMeasurement(IMeasurableNode target, MetricAttribute metric, float result) {
 		this(target, metric);
 		setResult(result);
 	}

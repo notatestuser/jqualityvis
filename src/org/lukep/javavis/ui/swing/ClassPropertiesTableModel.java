@@ -8,7 +8,7 @@ import java.util.Vector;
 
 import javax.swing.table.AbstractTableModel;
 
-import org.lukep.javavis.metrics.IMeasurable;
+import org.lukep.javavis.metrics.IMeasurableNode;
 import org.lukep.javavis.metrics.MetricAttribute;
 import org.lukep.javavis.metrics.MetricRegistry;
 import org.lukep.javavis.program.generic.models.ClassModel;
@@ -76,20 +76,20 @@ public class ClassPropertiesTableModel extends AbstractTableModel {
 		if (subject == null)
 			return null;
 		
-		IMeasurable measurable = null;
+		IMeasurableNode measurable = null;
 		
 		if (subject instanceof ClassModel)
 			measurable = ((ClassModel)(subject)).getMethods().get(rowIndex);
 		else if (subject instanceof PackageModel)
-			measurable = (IMeasurable) ((Relationship)(
+			measurable = (IMeasurableNode) ((Relationship)(
 					subject.getChildren().toArray()[rowIndex])).getTarget();
 		else
 			return null;
 		
 		if (columnIndex == 0) {
 			if (measurable instanceof IGenericModelNode)
-				return ((IGenericModelNode)(measurable)).getModifierNames(" ") + " "
-					 + ((IGenericModelNode)(measurable)).getSimpleName();
+				return measurable.getModifierNames(" ") + " "
+					 + measurable.getSimpleName();
 			else
 				return "( Member )";
 		} else {

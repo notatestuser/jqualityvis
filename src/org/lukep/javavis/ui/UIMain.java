@@ -27,6 +27,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.lukep.javavis.ui.swing.PrefuseWorkspacePane;
+import org.lukep.javavis.util.JavaVisConstants;
 import org.lukep.javavis.visualisation.IVisualiser;
 
 public class UIMain implements IProgramStatusReporter, ChangeListener {
@@ -37,6 +38,56 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 	protected JLabel mainStatusBar;
 	protected JSlider zoomSlider;
 	protected int workspaces = 0;
+	
+	private ActionListener actionNewWorkspace = new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			addChildFrame();
+		}
+	};
+	
+	private ActionListener actionCloseWorkspace = new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			int response = JOptionPane.showConfirmDialog(null, "Are you sure you'd like to close this Workspace?");
+			if (response == JOptionPane.YES_OPTION)
+				mainTabbedPane.removeTabAt(mainTabbedPane.getSelectedIndex());
+		}
+	};
+	
+	private ActionListener actionImportProgram = new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			JFileChooser fc = new JFileChooser();
+			fc.setDialogTitle("Select a root directory containing source code");
+			fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+			fc.setMultiSelectionEnabled(false);
+			int returnVal = fc.showOpenDialog(null); // TODO: modify parent
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				Component selectedWorkspace = mainTabbedPane.getSelectedComponent();
+				IVisualiser selectedVdp = (IVisualiser)selectedWorkspace;
+				selectedVdp.loadCodeBase(fc.getSelectedFile());
+			}
+		}
+	};
+	
+	private ActionListener actionAbout = new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			JOptionPane.showMessageDialog(null, 
+					"<html><p>"+JavaVisConstants.APP_NAME+" " + 
+					JavaVisConstants.APP_VERSION + " by Luke T. Plaster</p>" +
+					"<p>" + JavaVisConstants.APP_WEBPAGE + "</p></html>",
+					"About " + JavaVisConstants.APP_NAME, JOptionPane.INFORMATION_MESSAGE);
+		}
+	};
+	
+	private ActionListener actionExit = new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			System.exit(0);
+		}
+	};
 
 	/**
 	 * Launch the application.
@@ -71,7 +122,7 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 	 */
 	private void initialize() throws Exception {
 		frmJavavis = new JFrame();
-		frmJavavis.setTitle("JMetricVis Software Quality Visualiser");
+		frmJavavis.setTitle(JavaVisConstants.APP_NAME + " Software Quality Visualiser");
 		frmJavavis.setBounds(100, 100, 1280, 768);
 		frmJavavis.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -96,60 +147,38 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 		// initialize menu bar and actions
 		JMenuBar menuBar = new JMenuBar();
 		frmJavavis.setJMenuBar(menuBar);
+		
 		// ... File menu
 		JMenu mnFile = new JMenu("File");
 		menuBar.add(mnFile);
+		
 		// ... File > New Workspace
 		JMenuItem mntmNewCanvas = new JMenuItem("New Workspace");
-		mntmNewCanvas.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				addChildFrame();
-			}
-		});
+		mntmNewCanvas.addActionListener(actionNewWorkspace);
 		mnFile.add(mntmNewCanvas);
+		
 		// ... File > Close Workspace
 		JMenuItem mntmCloseWorkspace = new JMenuItem("Close Workspace");
-		mntmCloseWorkspace.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				int response = JOptionPane.showConfirmDialog(null, "Are you sure you'd like to close this Workspace?");
-				if (response == JOptionPane.YES_OPTION)
-					mainTabbedPane.removeTabAt(mainTabbedPane.getSelectedIndex());
-			}
-		});
+		mntmCloseWorkspace.addActionListener(actionCloseWorkspace);
 		mnFile.add(mntmCloseWorkspace);
+		
 		// ... File > Import Program Sources...
 		JMenuItem mntmOpenCodeDirectory = new JMenuItem("Import Program Sources...");
-		mntmOpenCodeDirectory.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				JFileChooser fc = new JFileChooser();
-				fc.setDialogTitle("Select a root directory containing source code");
-				fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-				fc.setMultiSelectionEnabled(false);
-				int returnVal = fc.showOpenDialog(null); // TODO: modify parent
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					Component selectedWorkspace = mainTabbedPane.getSelectedComponent();
-					IVisualiser selectedVdp = (IVisualiser)selectedWorkspace;
-					selectedVdp.loadCodeBase(fc.getSelectedFile());
-				}
-			}
-		});
+		mntmOpenCodeDirectory.addActionListener(actionImportProgram);
 		mnFile.add(mntmOpenCodeDirectory);
+		
 		// ... File > Exit
 		JMenuItem mntmExit = new JMenuItem("Exit");
-		mntmExit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				System.exit(0);
-			}
-		});
+		mntmExit.addActionListener(actionExit);
 		mnFile.add(mntmExit);
+		
 		// ... Help menu
 		JMenu mnHelp = new JMenu("Help");
 		menuBar.add(mnHelp);
+		
 		// ... Help > About
 		JMenuItem mntmAbout = new JMenuItem("About");
+		mntmAbout.addActionListener(actionAbout);
 		mnHelp.add(mntmAbout);
 	}
 	

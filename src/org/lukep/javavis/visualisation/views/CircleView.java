@@ -93,7 +93,7 @@ public class CircleView extends AbstractVisualisationView {
         // pink for classes, baby blue for packages
         int[] palette = ColorLib.getCoolPalette();
         // create a metric palette
-        int[] mPalette = ColorLib.getInterpolatedPalette(0xFF91FF80, 0xFFFF8080);
+        int[] mPalette = ColorLib.getInterpolatedPalette(0xFFDBFFCC, 0xFF473D42);
         
         // TODO replace
         int[] mPalette2 = new int[mPalette.length + 1];
@@ -105,7 +105,7 @@ public class CircleView extends AbstractVisualisationView {
         DataColorAction fill = new DataColorAction("graph.nodes", "type",
                 Constants.NOMINAL, VisualItem.FILLCOLOR, palette);
         DataColorAction fillMetrics = new DataColorAction("graph.nodes", 
-        		"metricMeasurement", Constants.NUMERICAL, VisualItem.FILLCOLOR, mPalette2);
+        		"metricMeasurement", Constants.NUMERICAL, VisualItem.FILLCOLOR, mPalette);
         // use black for node text
         ColorAction text = new ColorAction("graph.nodes",
                 VisualItem.TEXTCOLOR, ColorLib.gray(0));

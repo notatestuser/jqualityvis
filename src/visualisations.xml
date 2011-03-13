@@ -14,22 +14,36 @@
 		   arguments:	 : The arguments to pass to the view.
 	-->
 	<visualisation name="Class Hierarchy w/Methods">
-		<type>WEIGHTED_METHOD</type>
+		<type>WeightedMethod</type>
 		<visitor>org.lukep.javavis.visualisation.views.ClassHierarchyView</visitor>
 		<arguments>
 		</arguments>
 	</visualisation>
 	
 	<visualisation name="Class Tree w/Methods">
-		<type>WEIGHTED_METHOD</type>
+		<type>WeightedMethod</type>
 		<visitor>org.lukep.javavis.visualisation.views.ClassHierarchyTree</visitor>
 		<arguments>
 		</arguments>
 	</visualisation>
 	
 	<visualisation name="Class Circle">
-		<type>WEIGHTED_CLASS</type>
+		<type>WeightedClass</type>
 		<visitor>org.lukep.javavis.visualisation.views.CircleView</visitor>
+		<arguments>
+		</arguments>
+	</visualisation>
+	
+	<visualisation name="Class TreeMap">
+		<type>WeightedClass</type>
+		<visitor>org.lukep.javavis.visualisation.views.TreeMapView</visitor>
+		<arguments>
+		</arguments>
+	</visualisation>
+	
+	<visualisation name="Scatter Graph">
+		<type>WeightedClass</type>
+		<visitor>org.lukep.javavis.visualisation.views.ScatterGraphView</visitor>
 		<arguments>
 		</arguments>
 	</visualisation>

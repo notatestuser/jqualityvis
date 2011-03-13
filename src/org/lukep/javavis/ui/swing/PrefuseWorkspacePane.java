@@ -20,6 +20,7 @@ import prefuse.Visualization;
 import prefuse.controls.ControlAdapter;
 import prefuse.controls.FocusControl;
 import prefuse.controls.PanControl;
+import prefuse.controls.ToolTipControl;
 import prefuse.controls.WheelZoomControl;
 import prefuse.controls.ZoomControl;
 import prefuse.controls.ZoomToFitControl;
@@ -29,7 +30,7 @@ import prefuse.visual.VisualItem;
 
 public class PrefuseWorkspacePane extends AbstractWorkspacePane {
 
-	private static final int BACKGROUND_COLOR_RGB = 0xF9FFFB;
+	private static final int BACKGROUND_COLOR_RGB = 0xFFF9FFFB;
 	private static final int HIGHLIGHT_COLOR_RGB  = 0xFFBB87FF;
 	private static final int SELECTION_COLOR_RGB  = 0xFF5EC3C7;
 	
@@ -46,7 +47,7 @@ public class PrefuseWorkspacePane extends AbstractWorkspacePane {
 		
 		display = new Display(visualisation);
 		display.setOpaque(true);
-		display.setBackground( new Color(0xF9FFFB) );
+		display.setBackground( new Color(BACKGROUND_COLOR_RGB) );
 		display.setBorder( BorderFactory.createEtchedBorder() );
 		
 		bindPerfuseEvents();
@@ -59,6 +60,7 @@ public class PrefuseWorkspacePane extends AbstractWorkspacePane {
 		display.addControlListener(new ZoomControl());
 		display.addControlListener(new PanControl(true));
 		display.addControlListener(new WheelZoomControl());
+		display.addControlListener(new ToolTipControl("name"));
 		
 		// handle roll-overs
         display.addControlListener(new ControlAdapter() {

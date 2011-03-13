@@ -19,7 +19,7 @@ import org.lukep.javavis.util.JavaVisConstants;
 
 public class DesignQualityAttribute extends MetricAttribute {
 	
-	private static final String ATTRIBUTE_METRIC_TYPE = "WEIGHTED_CLASS";
+	private static final String ATTRIBUTE_METRIC_TYPE = "WeightedClass";
 	private static final String[] ATTRIBUTE_METRIC_APPLIES_TO = { 
 		//JavaVisConstants.METRIC_APPLIES_TO_PROJCT, 
 		JavaVisConstants.METRIC_APPLIES_TO_CLASS };

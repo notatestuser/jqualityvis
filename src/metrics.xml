@@ -20,7 +20,7 @@
 		   hot           : Maximum metric value to be concerned with. This isn't a hard limit.
 	-->	
 	<metric name="McCabe Cyclomatic Complexity" internal_name="CC">
-		<type>WEIGHTED_METHOD</type>
+		<type>WeightedMethod</type>
 		<applies_to>
 			<measurable>method</measurable>
 		</applies_to>
@@ -31,7 +31,7 @@
 	</metric>
 	
 	<metric name="McCabe Cyclomatic Complexity Avg" internal_name="CC_AVG">
-		<type>WEIGHTED_CLASS</type>
+		<type>WeightedMethod</type>
 		<applies_to>
 			<measurable>class</measurable>
 		</applies_to>
@@ -42,7 +42,7 @@
 	</metric>
 	
 	<metric name="McCabe Cyclomatic Complexity Max" internal_name="CC_MAX">
-		<type>WEIGHTED_CLASS</type>
+		<type>WeightedClass</type>
 		<applies_to>
 			<measurable>class</measurable>
 		</applies_to>
@@ -53,7 +53,7 @@
 	</metric>
 	
 	<metric name="Number of Ancestor Classes" internal_name="NAC">
-		<type>WEIGHTED_CLASS</type>
+		<type>WeightedClass</type>
 		<applies_to>
 			<measurable>class</measurable>
 		</applies_to>
@@ -64,7 +64,7 @@
 	</metric>
 	
 	<metric name="Number of Statements" internal_name="NUM_OF_STMTS">
-		<type>WEIGHTED_METHOD</type>
+		<type>WeightedMethod</type>
 		<applies_to>
 			<measurable>class</measurable>
 			<measurable>method</measurable>
@@ -78,7 +78,7 @@
 	<!-- QMOOD Metrics by Bansiya and Davis -->
 	
 	<metric name="QMOOD Design Size in Classes" internal_name="DSC">
-		<type>PROJECT</type>
+		<type>Project</type>
 		<applies_to>
 			<measurable>project</measurable>
 		</applies_to>
@@ -89,7 +89,7 @@
 	</metric>
 	
 	<metric name="QMOOD Number of Hierarchies" internal_name="NOH">
-		<type>PROJECT</type>
+		<type>Project</type>
 		<applies_to>
 			<measurable>project</measurable>
 		</applies_to>
@@ -100,7 +100,7 @@
 	</metric>
 	
 	<metric name="QMOOD Average Number of Ancestors" internal_name="ANA">
-		<type>PROJECT</type>
+		<type>Project</type>
 		<applies_to>
 			<measurable>project</measurable>
 		</applies_to>
@@ -111,7 +111,7 @@
 	</metric>
 	
 	<metric name="QMOOD Data Access Metric" internal_name="DAM">
-		<type>WEIGHTED_CLASS</type>
+		<type>WeightedClass</type>
 		<applies_to>
 			<measurable>class</measurable>
 		</applies_to>
@@ -122,7 +122,7 @@
 	</metric>
 	
 	<metric name="QMOOD Direct Class Coupling" internal_name="DCC">
-		<type>WEIGHTED_CLASS</type>
+		<type>WeightedClass</type>
 		<applies_to>
 			<measurable>class</measurable>
 		</applies_to>
@@ -133,7 +133,7 @@
 	</metric>
 	
 	<metric name="QMOOD Cohesion Among Methods of Class" internal_name="CAM">
-		<type>WEIGHTED_CLASS</type>
+		<type>WeightedClass</type>
 		<applies_to>
 			<measurable>class</measurable>
 		</applies_to>
@@ -144,7 +144,7 @@
 	</metric>
 	
 	<metric name="QMOOD Measure of Aggregation" internal_name="MOA">
-		<type>WEIGHTED_CLASS</type>
+		<type>WeightedClass</type>
 		<applies_to>
 			<measurable>class</measurable>
 		</applies_to>
@@ -155,7 +155,7 @@
 	</metric>
 	
 	<metric name="QMOOD Measure of Functional Abstraction" internal_name="MFA">
-		<type>WEIGHTED_CLASS</type>
+		<type>WeightedClass</type>
 		<applies_to>
 			<measurable>class</measurable>
 		</applies_to>
@@ -166,7 +166,7 @@
 	</metric>
 	
 	<metric name="QMOOD Number of Polymorphic Methods" internal_name="NOP">
-		<type>WEIGHTED_CLASS</type>
+		<type>WeightedClass</type>
 		<applies_to>
 			<measurable>class</measurable>
 		</applies_to>
@@ -177,7 +177,7 @@
 	</metric>
 	
 	<metric name="QMOOD Class Interface Size" internal_name="CIS">
-		<type>WEIGHTED_CLASS</type>
+		<type>WeightedClass</type>
 		<applies_to>
 			<measurable>class</measurable>
 		</applies_to>
@@ -188,7 +188,7 @@
 	</metric>
 	
 	<metric name="QMOOD Number of Methods" internal_name="NUM_OF_METHODS">
-		<type>WEIGHTED_CLASS</type>
+		<type>WeightedClass</type>
 		<applies_to>
 			<measurable>class</measurable>
 		</applies_to>

@@ -15,9 +15,13 @@ public class JavaVisConstants {
 	
 	public static final String ICON_PROJECT_EXPLORER	= "assets/icons/folder.png";
 	public static final String ICON_QUALITY_ANALYSIS	= "assets/icons/chart_curve.png";
+	public static final String ICON_METRICS				= "assets/icons/chart_bar.png";
+	public static final String ICON_WARNINGS			= "assets/icons/exclamation.png";
 	
 	public static final String HEADING_PROJECT_EXPLORER	= "Project Explorer";
 	public static final String HEADING_QUALITY_ANALYSIS	= "Quality Analysis";
+	public static final String HEADING_METRICS			= "Metrics";
+	public static final String HEADING_WARNINGS			= "Warnings";
 	
 	public static final String METRIC_NUM_OF_METHODS    = "NUM_OF_METHODS";
 	public static final String METRIC_NUM_OF_STATEMENTS	= "NUM_OF_STMTS";

@@ -10,8 +10,12 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.Collection;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
@@ -20,16 +24,22 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
 import javax.swing.ScrollPaneLayout;
 import javax.swing.border.Border;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.plaf.basic.BasicSplitPaneDivider;
 import javax.swing.plaf.basic.BasicSplitPaneUI;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.MutableTreeNode;
 
 import org.lukep.javavis.metrics.MetricAttribute;
+import org.lukep.javavis.metrics.MetricRegistry;
+import org.lukep.javavis.metrics.qualityModels.QualityModel;
 import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.MethodModel;
 import org.lukep.javavis.program.generic.models.ProjectModel;
@@ -42,7 +52,7 @@ import org.lukep.javavis.visualisation.Visualisation;
 import org.lukep.javavis.visualisation.VisualisationRegistry;
 
 abstract class AbstractWorkspacePane extends JDesktopPane implements 
-		ActionListener, IProgramSourceObserver, IVisualiser {
+		ActionListener, TreeSelectionListener, IProgramSourceObserver, IVisualiser {
 	
 	class WorkspaceSplitPaneUI extends BasicSplitPaneUI {
 		@Override
@@ -59,7 +69,7 @@ abstract class AbstractWorkspacePane extends JDesktopPane implements
 	protected JPanel leftPaneBottom;
 	
 	protected JScrollPane projectExplorerPanel;
-	protected JScrollPane metricAnalysisPanel;
+	protected JScrollPane metricSelectionPanel;
 	
 	protected JSplitPane rightSplitPane;
 	protected JSplitPane leftSplitPane;
@@ -70,6 +80,7 @@ abstract class AbstractWorkspacePane extends JDesktopPane implements
 	protected JComboBox visComboBox;
 	
 	protected JTree programTree;
+	protected JTree metricTree;
 	
 	protected ClassPropertiesPanel propertiesPane;
 	
@@ -85,7 +96,7 @@ abstract class AbstractWorkspacePane extends JDesktopPane implements
 		setLayout( new BorderLayout() );
 		
 		// create a new ProgramModelStore in our WorkspaceContext
-		wspContext.modelStore = new ProjectModel("Project");
+		wspContext.modelStore = new ProjectModel("Untitled Project");
 		
 		/*
 		 * UI Initialisation
@@ -163,20 +174,84 @@ abstract class AbstractWorkspacePane extends JDesktopPane implements
 						new ImageIcon(JavaVisConstants.ICON_PROJECT_EXPLORER)), BorderLayout.NORTH);
 		
 		// create the "Quality Analysis" panel
-		metricAnalysisPanel = new JScrollPane();
-		metricAnalysisPanel.setLayout(new ScrollPaneLayout());
-		leftPaneBottom.add(metricAnalysisPanel, BorderLayout.CENTER);
+		JTabbedPane qualityAnalysisPane = new JTabbedPane(JTabbedPane.BOTTOM);
+		leftPaneBottom.add(qualityAnalysisPane, BorderLayout.CENTER);
 		leftPaneBottom.add(new HeaderLabel(JavaVisConstants.HEADING_QUALITY_ANALYSIS, 
 						new ImageIcon(JavaVisConstants.ICON_QUALITY_ANALYSIS)), BorderLayout.NORTH);
+		
+		// ... create the "Metrics" tab + tree
+		metricSelectionPanel = new JScrollPane();
+		metricSelectionPanel.setLayout(new ScrollPaneLayout());
+		qualityAnalysisPane.add("Metrics", metricSelectionPanel);
+		qualityAnalysisPane.addTab(JavaVisConstants.HEADING_METRICS, 
+				new ImageIcon(JavaVisConstants.ICON_METRICS), metricSelectionPanel);
+		
+		// ... create the "Warnings" tab
+		qualityAnalysisPane.addTab(JavaVisConstants.HEADING_WARNINGS, 
+				new ImageIcon(JavaVisConstants.ICON_WARNINGS), new JPanel());
 		
 		// create the program tree
 		programTree = new JTree();
 		programTree.setModel( new DefaultTreeModel( new DefaultMutableTreeNode("Program") ) );
 		projectExplorerPanel.setViewportView(programTree);
 		
-		JTree metricTree = new JTree( new DefaultMutableTreeNode() );
-		metricAnalysisPanel.setViewportView(metricTree);
+		// create the "Metrics" tree
+		metricTree = new JTree();
+		DefaultTreeModel treeModel = new DefaultTreeModel( new DefaultMutableTreeNode("root") );
+		metricTree.setModel( treeModel );
+		metricTree.setRootVisible(false);
+		metricTree.addTreeSelectionListener(this);
+		MutableTreeNode staticMetricsNode = new DefaultMutableTreeNode("Static Metrics");
+		MutableTreeNode qualityModelsNode = new DefaultMutableTreeNode("Quality Models");
+		treeModel.insertNodeInto(staticMetricsNode, (MutableTreeNode) treeModel.getRoot(), 0);
+		treeModel.insertNodeInto(qualityModelsNode, (MutableTreeNode) treeModel.getRoot(), 1);
+		
+		// ... add metric types
+		Map<String, MutableTreeNode> typeNodes = new HashMap<String, MutableTreeNode>();
+		for (String metricType : MetricRegistry.getInstance().getSupportedMetricTargets()) {
+			MutableTreeNode node = new DefaultMutableTreeNode(metricType + " Metrics");
+			staticMetricsNode.insert(node, 0);
+			typeNodes.put(metricType, node);
+		}
+		
+		// ... add metrics to type nodes
+		for (Entry<String, MutableTreeNode> entries : typeNodes.entrySet()) {
+			Collection<MetricAttribute> metrics = 
+				MetricRegistry.getInstance().getSupportedMetrics(entries.getKey());
+			
+			addMetricsToTreeNode(metrics, treeModel, entries.getValue());
+		}
+		
+		// ... add the quality models
+		for (QualityModel qm : MetricRegistry.getInstance().getQualityModelMap().values()) {
+			MutableTreeNode qualityModelNode = new DefaultMutableTreeNode(qm);
+			treeModel.insertNodeInto(qualityModelNode, qualityModelsNode, 0);
+			
+			addMetricsToTreeNode(qm, treeModel, qualityModelNode);
+		}
+		
+		treeModel.reload();
+		
+		metricTree.expandRow(1);
+		metricTree.expandRow(0);
+		
+		metricSelectionPanel.setViewportView(metricTree);
 
+	}
+	
+	private void addMetricsToTreeNode(Collection<MetricAttribute> metrics, DefaultTreeModel treeModel, 
+			MutableTreeNode parentNode) {
+		
+		for (MetricAttribute metric : metrics) {
+			MutableTreeNode metricTreeNode = new DefaultMutableTreeNode(metric);
+			treeModel.insertNodeInto(metricTreeNode, parentNode, 0);
+			
+			// ... add applicable visualisations
+			List<Visualisation> visualisations = 
+				VisualisationRegistry.getInstance().getVisualisationsByType(metric.getType());
+			for (Visualisation vis : visualisations)
+				treeModel.insertNodeInto(new DefaultMutableTreeNode(vis), metricTreeNode, 0);
+		}
 	}
 	
 	private IProgramStatusReporter getNearestStatusReporter() throws NullPointerException {
@@ -236,6 +311,36 @@ abstract class AbstractWorkspacePane extends JDesktopPane implements
 		}
 	}
 	
+	@Override
+	public void valueChanged(TreeSelectionEvent e) {
+
+		DefaultMutableTreeNode node;
+		if (metricTree == e.getSource()) {
+			node = (DefaultMutableTreeNode) metricTree.getLastSelectedPathComponent();
+			
+			if (node.getUserObject() instanceof Visualisation) {
+				DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) node.getParent();
+				MetricAttribute metric = (MetricAttribute) parentNode.getUserObject();
+				
+				Visualisation vis = (Visualisation) node.getUserObject();
+				
+				wspContext.setMetric(metric);
+				wspContext.setVisualisation(vis);
+				
+				try {
+					setProgramStatus("Applying Visualisation \"" + vis.getName() + "\"...");
+					acceptVisualisation( vis.getVisitorClass().newInstance() );
+					setProgramStatus("Applied Visualisation \"" + vis.getName() + "\".");
+					
+				} catch (Exception e1) {
+					setProgramStatus("Error: " + e1.getLocalizedMessage());
+					e1.printStackTrace();
+				}
+			}
+		}
+		
+	}
+
 	@Override
 	public void loadCodeBase(File selectedDirectory) {
 		JavaSourceLoaderThread jslt = new JavaSourceLoaderThread(selectedDirectory, 

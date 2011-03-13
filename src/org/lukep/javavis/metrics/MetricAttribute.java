@@ -88,7 +88,7 @@ public class MetricAttribute {
 
 	@Override
 	public String toString() {
-		return name + " " + appliesTo;
+		return name;// + " " + appliesTo;
 	}
 	
 }

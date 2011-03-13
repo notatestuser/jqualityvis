@@ -16,8 +16,7 @@ import java.util.logging.Logger;
 import org.lukep.javavis.generated.jaxb.Metrics;
 import org.lukep.javavis.generated.jaxb.Metrics.Metric;
 import org.lukep.javavis.generated.jaxb.QualityModels;
-import org.lukep.javavis.generated.jaxb.QualityModels.QualityModel;
-import org.lukep.javavis.generated.jaxb.QualityModels.QualityModel.DesignQualityAttributes.DesignQualityAttribute;
+import org.lukep.javavis.metrics.qualityModels.QualityModel;
 import org.lukep.javavis.program.generic.models.ProjectModel;
 import org.lukep.javavis.util.JavaVisConstants;
 import org.lukep.javavis.util.config.ConfigurationManager;
@@ -32,6 +31,7 @@ public class MetricRegistry { // singleton
 	private Map<String, MetricType> typeMap;
 	private Map<String, MetricAttribute> metricMap;
 	private Map<String, Vector<MetricAttribute>> metricSupportMap;
+	private Map<String, QualityModel> qualityModelMap;
 	private Map<IMeasurableNode, Map<MetricAttribute, MetricMeasurement>> measurementMap;
 	
 	private MetricRegistry() {
@@ -41,6 +41,8 @@ public class MetricRegistry { // singleton
 					new LinkedHashMap<String, MetricAttribute>());
 		metricSupportMap = Collections.synchronizedMap(
 					new HashMap<String, Vector<MetricAttribute>>());
+		qualityModelMap = Collections.synchronizedMap(
+					new HashMap<String, QualityModel>());
 		measurementMap = Collections.synchronizedMap(
 					new HashMap<IMeasurableNode, Map<MetricAttribute, MetricMeasurement>>());
 		
@@ -60,17 +62,11 @@ public class MetricRegistry { // singleton
 		else
 			log.warning("No metrics loaded. Check " + JavaVisConstants.METRICS_FILE_NAME);
 		
-		// TODO load a generic quality model object instead
-		// load the QualityAttributes from configuration data source
+		// load the QualityModels from configuration data source
 		QualityModels qualityModels = ConfigurationManager.getInstance().getQualityModels();
-		if (qualityModels != null) {
-			for (QualityModel qualityModel : qualityModels.getQualityModel()) {
-				for (DesignQualityAttribute qualityAttribute : 
-					qualityModel.getDesignQualityAttributes().getDesignQualityAttribute()) {
-					newMetric = new org.lukep.javavis.metrics.qualityModels.DesignQualityAttribute(qualityModel, qualityAttribute, this);
-					registerMetric(newMetric);
-				}
-			}
+		for (org.lukep.javavis.generated.jaxb.QualityModels.QualityModel qm 
+				: qualityModels.getQualityModel()) {
+			qualityModelMap.put(qm.getInternalName(), new QualityModel(qm, this));
 		}
 	}
 	
@@ -164,6 +160,12 @@ public class MetricRegistry { // singleton
 		return 0;
 	}
 	
+	// Quality Models
+	
+	public Map<String, QualityModel> getQualityModelMap() {
+		return qualityModelMap;
+	}
+	
 	// Metric Measurements
 	
 	public MetricMeasurement getMetricMeasurement(IMeasurableNode target, MetricAttribute attribute) {
@@ -180,7 +182,7 @@ public class MetricRegistry { // singleton
 		}
 		return null;
 	}
-	
+
 	public void setMetricMeasurement(IMeasurableNode target, MetricAttribute attribute, 
 			MetricMeasurement measurement) {
 		

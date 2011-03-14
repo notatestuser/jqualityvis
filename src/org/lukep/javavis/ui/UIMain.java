@@ -83,7 +83,8 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 		public void actionPerformed(ActionEvent e) {
 			JOptionPane.showMessageDialog(null, 
 					"<html><p>"+JavaVisConstants.APP_NAME+" " + 
-					JavaVisConstants.APP_VERSION + " by Luke T. Plaster</p>" +
+					JavaVisConstants.APP_VERSION + "</p>" +
+					"<p>Copyright © 2011 Luke T. Plaster</p><br />" +
 					"<p>" + JavaVisConstants.APP_WEBPAGE + "</p></html>",
 					"About " + JavaVisConstants.APP_NAME, JOptionPane.INFORMATION_MESSAGE);
 		}

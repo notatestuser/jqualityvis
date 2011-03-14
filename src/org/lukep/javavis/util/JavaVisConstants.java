@@ -7,7 +7,7 @@ package org.lukep.javavis.util;
 public class JavaVisConstants {
 	
 	public static final String APP_NAME					= "JMetricVis";
-	public static final String APP_VERSION				= "1.0";
+	public static final String APP_VERSION				= "pre-delivery alpha";
 	public static final String APP_WEBPAGE				= "http://www.lancs.ac.uk/ug/plaster";
 	
 	public static final String SUPPORTED_LANG_JAVA_6	= "Java 6";

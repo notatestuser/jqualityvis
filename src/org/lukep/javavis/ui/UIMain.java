@@ -10,9 +10,12 @@ import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.swing.BorderFactory;
-import javax.swing.JFileChooser;
+import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -26,7 +29,7 @@ import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.lukep.javavis.ui.swing.PrefuseWorkspacePane;
+import org.lukep.javavis.ui.swing.ProjectWizardWindow;
 import org.lukep.javavis.util.JavaVisConstants;
 import org.lukep.javavis.visualisation.IVisualiser;
 
@@ -39,34 +42,38 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 	protected JSlider zoomSlider;
 	protected int workspaces = 0;
 	
-	private ActionListener actionNewWorkspace = new ActionListener() {
+	protected UIMain thisInstance;
+	
+	private ActionListener actionCreateProject = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			addChildFrame();
+			ProjectWizardWindow pww = new ProjectWizardWindow(frmJavavis, thisInstance);
+			pww.setVisible(true);
 		}
 	};
 	
 	private ActionListener actionCloseWorkspace = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			int response = JOptionPane.showConfirmDialog(null, "Are you sure you'd like to close this Workspace?");
-			if (response == JOptionPane.YES_OPTION)
-				mainTabbedPane.removeTabAt(mainTabbedPane.getSelectedIndex());
+			int response = -1;
+			if (mainTabbedPane.getSelectedComponent() instanceof IVisualiser) {
+				response = JOptionPane.showConfirmDialog(null, "Are you sure you'd like to close this Workspace?");
+				if (response != JOptionPane.YES_OPTION)
+					return;
+			}
+			mainTabbedPane.removeTabAt(mainTabbedPane.getSelectedIndex());
 		}
 	};
 	
-	private ActionListener actionImportProgram = new ActionListener() {
+	private ActionListener actionHelp = new ActionListener() {
 		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			JFileChooser fc = new JFileChooser();
-			fc.setDialogTitle("Select a root directory containing source code");
-			fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-			fc.setMultiSelectionEnabled(false);
-			int returnVal = fc.showOpenDialog(null); // TODO: modify parent
-			if (returnVal == JFileChooser.APPROVE_OPTION) {
-				Component selectedWorkspace = mainTabbedPane.getSelectedComponent();
-				IVisualiser selectedVdp = (IVisualiser)selectedWorkspace;
-				selectedVdp.loadCodeBase(fc.getSelectedFile());
+		public void actionPerformed(ActionEvent e) {
+			try {
+				addChildHTMLFrame("Help", 
+						(new java.io.File(JavaVisConstants.HELP_HTML_URL)).toURI().toURL());
+			} catch (MalformedURLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
 		}
 	};
@@ -113,11 +120,15 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 	 */
 	public UIMain() throws Exception {
 		initialize();
-		addChildFrame();
+		//addChildWorkspaceFrame();
+		addChildHTMLFrame("Welcome", 
+				(new java.io.File(JavaVisConstants.WELCOME_HTML_URL)).toURI().toURL());
+		
+		thisInstance = this;
 	}
 
 	/**
-	 * Initialize the contents of the frame.
+	 * Initialise the contents of the frame.
 	 * @throws Exception 
 	 */
 	private void initialize() throws Exception {
@@ -152,20 +163,15 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 		JMenu mnFile = new JMenu("File");
 		menuBar.add(mnFile);
 		
-		// ... File > New Workspace
-		JMenuItem mntmNewCanvas = new JMenuItem("New Workspace");
-		mntmNewCanvas.addActionListener(actionNewWorkspace);
-		mnFile.add(mntmNewCanvas);
+		// ... File > Create a New Project...
+		JMenuItem mntmCreateProject = new JMenuItem("Create a New Project...");
+		mntmCreateProject.addActionListener(actionCreateProject);
+		mnFile.add(mntmCreateProject);
 		
 		// ... File > Close Workspace
 		JMenuItem mntmCloseWorkspace = new JMenuItem("Close Workspace");
 		mntmCloseWorkspace.addActionListener(actionCloseWorkspace);
 		mnFile.add(mntmCloseWorkspace);
-		
-		// ... File > Import Program Sources...
-		JMenuItem mntmOpenCodeDirectory = new JMenuItem("Import Program Sources...");
-		mntmOpenCodeDirectory.addActionListener(actionImportProgram);
-		mnFile.add(mntmOpenCodeDirectory);
 		
 		// ... File > Exit
 		JMenuItem mntmExit = new JMenuItem("Exit");
@@ -176,21 +182,33 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 		JMenu mnHelp = new JMenu("Help");
 		menuBar.add(mnHelp);
 		
+		// ... Help > Help
+		JMenuItem mntmHelp = new JMenuItem("Help...");
+		mntmHelp.addActionListener(actionHelp);
+		mnHelp.add(mntmHelp);
+		
 		// ... Help > About
-		JMenuItem mntmAbout = new JMenuItem("About");
+		JMenuItem mntmAbout = new JMenuItem("About " + JavaVisConstants.APP_NAME + "...");
 		mntmAbout.addActionListener(actionAbout);
 		mnHelp.add(mntmAbout);
 	}
 	
-	private void addChildFrame()
-	{
-		IVisualiser visDesktop = null;
+	private void addChildHTMLFrame(String title, URL url) {
+		JEditorPane newPane = null;
 		try {
-			visDesktop = new PrefuseWorkspacePane(this);
-		} catch (Exception e) {
+			newPane = new JEditorPane(url);
+			newPane.setEditable(false);
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		if (newPane != null) {
+			mainTabbedPane.addTab(title, newPane);
+			mainTabbedPane.setSelectedComponent(newPane);
+		}
+	}
+	
+	public void addChildWorkspaceFrame(IVisualiser visDesktop) {
 		mainTabbedPane.addTab( "Workspace " + (++workspaces), (Component) visDesktop );
 		mainTabbedPane.setSelectedIndex(mainTabbedPane.getTabCount()-1);
 	}

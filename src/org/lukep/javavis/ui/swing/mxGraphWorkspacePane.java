@@ -10,6 +10,7 @@ import java.awt.event.MouseEvent;
 
 import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.IGenericModelNode;
+import org.lukep.javavis.program.generic.models.ProjectModel;
 import org.lukep.javavis.ui.IProgramStatusReporter;
 import org.lukep.javavis.ui.mxgraph.MxSwingCanvas;
 import org.lukep.javavis.visualisation.IVisualisationVisitor;
@@ -27,8 +28,8 @@ public class mxGraphWorkspacePane extends AbstractWorkspacePane {
 	private mxGraph graph;
 	private mxGraphComponent graphComponent;
 	
-	public mxGraphWorkspacePane(IProgramStatusReporter statusTarget) throws Exception {
-		super(statusTarget);
+	public mxGraphWorkspacePane(ProjectModel project, IProgramStatusReporter statusTarget) throws Exception {
+		super(project, statusTarget);
 		
 		// initialise the mxGraph, its container component and the circle layout
 		graph = new mxGraph()

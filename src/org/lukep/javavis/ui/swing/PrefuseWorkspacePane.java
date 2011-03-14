@@ -12,6 +12,7 @@ import java.util.Iterator;
 import javax.swing.BorderFactory;
 
 import org.lukep.javavis.program.generic.models.IGenericModelNode;
+import org.lukep.javavis.program.generic.models.ProjectModel;
 import org.lukep.javavis.ui.IProgramStatusReporter;
 import org.lukep.javavis.visualisation.IVisualisationVisitor;
 
@@ -39,9 +40,9 @@ public class PrefuseWorkspacePane extends AbstractWorkspacePane {
 	
 	private NodeItem currentSelectedNode;
 	
-	public PrefuseWorkspacePane(IProgramStatusReporter statusTarget)
+	public PrefuseWorkspacePane(ProjectModel project, IProgramStatusReporter statusTarget)
 			throws Exception {
-		super(statusTarget);
+		super(project, statusTarget);
 
 		visualisation = new Visualization();
 		

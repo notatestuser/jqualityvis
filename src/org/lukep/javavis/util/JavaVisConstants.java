@@ -10,6 +10,8 @@ public class JavaVisConstants {
 	public static final String APP_VERSION				= "1.0";
 	public static final String APP_WEBPAGE				= "http://www.lancs.ac.uk/ug/plaster";
 	
+	public static final String SUPPORTED_LANG_JAVA_6	= "Java 6";
+	
 	public static final String DEFAULT_PACKAGE_NAME 	= "(default package)";
 	public static final String DEFAULT_CONSTRUCTOR_NAME = "<init>";
 	
@@ -17,10 +19,14 @@ public class JavaVisConstants {
 	public static final String QUALITYMODELS_FILE_NAME  = "qualityModels.xml";
 	public static final String VISUALISATIONS_FILE_NAME = "visualisations.xml";
 	
+	public static final String WELCOME_HTML_URL			= "assets/html/welcome.html";
+	public static final String HELP_HTML_URL			= "assets/html/help.html";
+	
 	public static final String ICON_PROJECT_EXPLORER	= "assets/icons/folder.png";
 	public static final String ICON_QUALITY_ANALYSIS	= "assets/icons/chart_curve.png";
 	public static final String ICON_METRICS				= "assets/icons/chart_bar.png";
 	public static final String ICON_WARNINGS			= "assets/icons/exclamation.png";
+	public static final String ICON_PROJECT_WIZARD		= "assets/icons/application-blue.png";
 	
 	public static final String HEADING_PROJECT_EXPLORER	= "Project Explorer";
 	public static final String HEADING_QUALITY_ANALYSIS	= "Quality Analysis";

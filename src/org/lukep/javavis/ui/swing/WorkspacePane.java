@@ -7,16 +7,19 @@ package org.lukep.javavis.ui.swing;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Observable;
+import java.util.Observer;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JDesktopPane;
@@ -43,16 +46,19 @@ import org.lukep.javavis.metrics.qualityModels.QualityModel;
 import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.MethodModel;
 import org.lukep.javavis.program.generic.models.ProjectModel;
-import org.lukep.javavis.program.java.JavaSourceLoaderThread;
 import org.lukep.javavis.ui.IProgramSourceObserver;
 import org.lukep.javavis.ui.IProgramStatusReporter;
+import org.lukep.javavis.ui.swing.WorkspaceContext.ChangeEvent;
 import org.lukep.javavis.util.JavaVisConstants;
-import org.lukep.javavis.visualisation.IVisualiser;
 import org.lukep.javavis.visualisation.Visualisation;
 import org.lukep.javavis.visualisation.VisualisationRegistry;
+import org.lukep.javavis.visualisation.views.IVisualiserVisitor;
+import org.lukep.javavis.visualisation.visualisers.IVisualiser;
 
-abstract class AbstractWorkspacePane extends JDesktopPane implements 
-		ActionListener, TreeSelectionListener, IProgramSourceObserver, IVisualiser {
+public class WorkspacePane extends JDesktopPane implements 
+		Observer, ActionListener, TreeSelectionListener, IProgramSourceObserver {
+	
+	private static final int DECOY_BACKGROUND_COLOR_RGB = 0xFFF9FFFB;
 	
 	class WorkspaceSplitPaneUI extends BasicSplitPaneUI {
 		@Override
@@ -82,26 +88,33 @@ abstract class AbstractWorkspacePane extends JDesktopPane implements
 	protected JTree programTree;
 	protected JTree metricTree;
 	
+	protected IVisualiser curVisualiser;
+	protected Component curVisualiserComponent;
+	
 	protected ClassPropertiesPanel propertiesPane;
 	
 	protected IProgramStatusReporter statusTarget;
 	
-	protected WorkspaceContext wspContext = new WorkspaceContext();
+	protected WorkspaceContext wspContext;
 	
-	public AbstractWorkspacePane(ProjectModel project, IProgramStatusReporter statusTarget) throws Exception {
+	public WorkspacePane(ProjectModel project, IProgramStatusReporter statusTarget) throws Exception {
 		super();
 		this.statusTarget = statusTarget;
 		
 		setBackground( Color.WHITE );
 		setLayout( new BorderLayout() );
 		
+		// initialise the WorkspaceContext
+		wspContext = new WorkspaceContext();
+		wspContext.addObserver(this);
+		
 		// create a new ProgramModelStore in our WorkspaceContext
 		wspContext.modelStore = project;
-		wspContext.setSelectedItem(wspContext.getModelStore());
 		
-		/*
-		 * UI Initialisation
-		 */
+		initialize();
+	}
+	
+	private void initialize() {
 		// create a panel to contain the left TOP side of the JSplitPane's components
 		leftPaneTop = new JPanel( new BorderLayout() );
 		leftPaneTop.setVisible(true);
@@ -231,13 +244,26 @@ abstract class AbstractWorkspacePane extends JDesktopPane implements
 			addMetricsToTreeNode(qm, treeModel, qualityModelNode);
 		}
 		
+		// refresh and reload the JTrees we have here
 		treeModel.reload();
 		
 		metricTree.expandRow(1);
 		metricTree.expandRow(0);
-		
 		metricSelectionPanel.setViewportView(metricTree);
-
+		
+		// put a decoy visualisation component in place so we're not staring at a drab grey canvas
+		JPanel decoy = new JPanel() {
+			@Override
+			protected void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				g.drawImage(new ImageIcon(JavaVisConstants.IMG_DECOY_PANEL_BG).getImage(), 
+						0, 0, getBackground(), null);
+			}
+		};
+		decoy.setOpaque(true);
+		decoy.setBackground( new Color(DECOY_BACKGROUND_COLOR_RGB) );
+		decoy.setBorder( BorderFactory.createEtchedBorder() );
+		setVisualisationComponent(decoy);
 	}
 	
 	private void addMetricsToTreeNode(Collection<MetricAttribute> metrics, DefaultTreeModel treeModel, 
@@ -264,11 +290,64 @@ abstract class AbstractWorkspacePane extends JDesktopPane implements
 		
 		return (IProgramStatusReporter) c;
 	}
-
-	protected void setGraphComponent(Component graph) {
-		mainPane.add(graph, BorderLayout.CENTER);
+	
+	private void setVisualisationComponent(Component c) {
+		if (curVisualiserComponent != null)
+			mainPane.remove(curVisualiserComponent);
+		mainPane.add(c, BorderLayout.CENTER);
+		curVisualiserComponent = c;
 	}
 	
+	private void setVisualisation(Visualisation vis) {
+		
+		Class<IVisualiser> visualiser = vis.getVisualiserClass();
+		Class<IVisualiserVisitor> visitor = vis.getVisitorClass();
+		
+		if (visualiser != null
+				&& visitor != null) {
+			
+			try {
+				setProgramStatus("Applying Visualisation \"" + vis.getName() + "\"...");
+				
+				IVisualiser visualiserInstance = 
+					visualiser.getDeclaredConstructor(WorkspaceContext.class).newInstance(wspContext);
+				curVisualiser = visualiserInstance;
+				
+				setVisualisationComponent( visualiserInstance.acceptVisualisation( visitor.newInstance() ) );
+				
+				setProgramStatus("Applied Visualisation \"" + vis.getName() + "\".");
+				
+			} catch (Exception e1) {
+				setProgramStatus("Error: " + e1.getLocalizedMessage());
+				e1.printStackTrace();
+			}
+		}
+	}
+	
+	@Override
+	public void update(Observable o, Object arg) {
+
+		if (wspContext == o) {
+			ChangeEvent ce = (ChangeEvent) arg;
+			switch (ce) {
+			case VISUALISATION_CHANGE:
+				Visualisation vis = wspContext.getVisualisation();
+				if (vis != null)
+					setVisualisation(vis);
+				break;
+			}
+		}
+	}
+	
+	@Override
+	public void setVisible(boolean aFlag) {
+		super.setVisible(aFlag);
+		
+		programTree.expandRow(0);
+		
+		wspContext.setSelectedItem(wspContext.getModelStore());
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (metricComboBox == e.getSource()
@@ -296,16 +375,6 @@ abstract class AbstractWorkspacePane extends JDesktopPane implements
 			if (visComboBox.getSelectedItem() instanceof Visualisation) {
 				Visualisation vis = (Visualisation) visComboBox.getSelectedItem();
 				wspContext.setVisualisation(vis);
-				
-				try {
-					setProgramStatus("Applying Visualisation \"" + vis.getName() + "\"...");
-					acceptVisualisation( vis.getVisitorClass().newInstance() );
-					setProgramStatus("Applied Visualisation \"" + vis.getName() + "\".");
-					
-				} catch (Exception e1) {
-					setProgramStatus("Error: " + e1.getLocalizedMessage());
-					e1.printStackTrace();
-				}
 			} else {
 				wspContext.setVisualisation(null);
 			}
@@ -327,42 +396,9 @@ abstract class AbstractWorkspacePane extends JDesktopPane implements
 				
 				wspContext.setMetric(metric);
 				wspContext.setVisualisation(vis);
-				
-				try {
-					setProgramStatus("Applying Visualisation \"" + vis.getName() + "\"...");
-					acceptVisualisation( vis.getVisitorClass().newInstance() );
-					setProgramStatus("Applied Visualisation \"" + vis.getName() + "\".");
-					
-				} catch (Exception e1) {
-					setProgramStatus("Error: " + e1.getLocalizedMessage());
-					e1.printStackTrace();
-				}
 			}
 		}
 		
-	}
-
-	@Override
-	public void loadCodeBase(File selectedDirectory) {
-		JavaSourceLoaderThread jslt = new JavaSourceLoaderThread(selectedDirectory, 
-				wspContext.modelStore) {
-			
-			@Override
-			public void notifyStatusChange(String message) {
-				setProgramStatus(message);
-			}
-
-			@Override
-			public void statusFinished() {
-				wspContext.setSelectedItem(wspContext.getModelStore());
-				((DefaultTreeModel)programTree.getModel()).reload();
-				metricComboBox.setEnabled(true);
-			}
-			
-		};
-		jslt.addObserver(this);
-		jslt.addObserver(wspContext.modelStore);
-		new Thread(jslt).start();
 	}
 	
 	@Override
@@ -391,19 +427,18 @@ abstract class AbstractWorkspacePane extends JDesktopPane implements
 	}
 	
 	@Override
-	public WorkspaceContext getContext() {
-		return wspContext;
+	public void notifyFindMethod(MethodModel method) {
+		// TODO Auto-generated method stub
+		
 	}
 	
-	@Override
 	public void setProgramStatus(String status) {
 		statusTarget.setProgramStatus(status);
 	}
 	
-	@Override
-	public void notifyFindMethod(MethodModel method) {
-		// TODO Auto-generated method stub
-		
+	public void setVisualisationScale(double scale) {
+		if (curVisualiser != null)
+			curVisualiser.setScale(scale);
 	}
 	
 }

@@ -7,8 +7,8 @@ package org.lukep.javavis.visualisation.views;
 import org.lukep.javavis.metrics.IMeasurableNode;
 import org.lukep.javavis.program.generic.models.IGenericModelNode;
 import org.lukep.javavis.program.generic.models.ProjectModel;
-import org.lukep.javavis.ui.swing.PrefuseWorkspacePane;
 import org.lukep.javavis.ui.swing.WorkspaceContext;
+import org.lukep.javavis.visualisation.visualisers.PrefuseVisualiser;
 
 import prefuse.Constants;
 import prefuse.Display;
@@ -27,7 +27,7 @@ import prefuse.visual.expression.VisiblePredicate;
 public class ScatterGraphView extends AbstractVisualisationView {
 
 	@Override
-	public void visit(PrefuseWorkspacePane workspace,
+	public void visit(PrefuseVisualiser visualiser,
 			WorkspaceContext wspContext, Display display) {
 
 		display.reset();

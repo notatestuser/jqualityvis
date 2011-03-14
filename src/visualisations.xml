@@ -7,43 +7,58 @@
 <visualisations>
 	<!--
 		Visualisations
-		   name          : Friendly name to display in the user interface.
-		   type          : This groups metrics to visualisations. They can be made up.
-		   visitor       : The internal visitor class implementing IVisualisationVisitor that is used to 
-		                   display this visualisation.
-		   arguments:	 : The arguments to pass to the view.
+		   name          	  : Friendly name to display in the user interface.
+		   type               : This groups metrics to visualisations. They can be made up.
+		   IVisualiser        : The internal visualiser class implementing IVisualiser that is subject
+		                        to a visitation from the specified IVisualiserVisitor.
+		   IVisualiserVisitor : The internal visitor class implementing IVisualiserVisitor that is used to 
+		                        prepare and display this visualisation in the specified IVisualiser.
+		   arguments:	      : The arguments to pass to the IVisualiserVisitor.
 	-->
 	<visualisation name="Class Hierarchy w/Methods">
 		<type>WeightedMethod</type>
-		<visitor>org.lukep.javavis.visualisation.views.ClassHierarchyView</visitor>
+		<IVisualiser>org.lukep.javavis.visualisation.visualisers.PrefuseVisualiser</IVisualiser>
+		<IVisualiserVisitor>org.lukep.javavis.visualisation.views.ClassHierarchyView</IVisualiserVisitor>
+		<arguments>
+		</arguments>
+	</visualisation>
+	
+	<visualisation name="Class Hierarchy w/Methods (mxGraph)">
+		<type>WeightedMethod</type>
+		<IVisualiser>org.lukep.javavis.visualisation.visualisers.mxGraphVisualiser</IVisualiser>
+		<IVisualiserVisitor>org.lukep.javavis.visualisation.views.ClassHierarchyView</IVisualiserVisitor>
 		<arguments>
 		</arguments>
 	</visualisation>
 	
 	<visualisation name="Class Tree w/Methods">
 		<type>WeightedMethod</type>
-		<visitor>org.lukep.javavis.visualisation.views.ClassHierarchyTree</visitor>
+		<IVisualiser>org.lukep.javavis.visualisation.visualisers.PrefuseVisualiser</IVisualiser>
+		<IVisualiserVisitor>org.lukep.javavis.visualisation.views.ClassHierarchyTree</IVisualiserVisitor>
 		<arguments>
 		</arguments>
 	</visualisation>
 	
 	<visualisation name="Class Circle">
 		<type>WeightedClass</type>
-		<visitor>org.lukep.javavis.visualisation.views.CircleView</visitor>
+		<IVisualiser>org.lukep.javavis.visualisation.visualisers.PrefuseVisualiser</IVisualiser>
+		<IVisualiserVisitor>org.lukep.javavis.visualisation.views.CircleView</IVisualiserVisitor>
 		<arguments>
 		</arguments>
 	</visualisation>
 	
 	<visualisation name="Class TreeMap">
 		<type>WeightedClass</type>
-		<visitor>org.lukep.javavis.visualisation.views.TreeMapView</visitor>
+		<IVisualiser>org.lukep.javavis.visualisation.visualisers.PrefuseVisualiser</IVisualiser>
+		<IVisualiserVisitor>org.lukep.javavis.visualisation.views.TreeMapView</IVisualiserVisitor>
 		<arguments>
 		</arguments>
 	</visualisation>
 	
 	<visualisation name="Scatter Graph">
 		<type>WeightedClass</type>
-		<visitor>org.lukep.javavis.visualisation.views.ScatterGraphView</visitor>
+		<IVisualiser>org.lukep.javavis.visualisation.visualisers.PrefuseVisualiser</IVisualiser>
+		<IVisualiserVisitor>org.lukep.javavis.visualisation.views.ScatterGraphView</IVisualiserVisitor>
 		<arguments>
 		</arguments>
 	</visualisation>

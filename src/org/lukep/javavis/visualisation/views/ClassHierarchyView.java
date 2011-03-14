@@ -16,9 +16,9 @@ import org.lukep.javavis.program.generic.models.PackageModel;
 import org.lukep.javavis.program.generic.models.ProjectModel;
 import org.lukep.javavis.program.generic.models.Relationship;
 import org.lukep.javavis.program.generic.models.Relationship.RelationshipType;
-import org.lukep.javavis.ui.swing.PrefuseWorkspacePane;
 import org.lukep.javavis.ui.swing.WorkspaceContext;
-import org.lukep.javavis.ui.swing.mxGraphWorkspacePane;
+import org.lukep.javavis.visualisation.visualisers.PrefuseVisualiser;
+import org.lukep.javavis.visualisation.visualisers.mxGraphVisualiser;
 
 import prefuse.Constants;
 import prefuse.Display;
@@ -51,7 +51,7 @@ import com.mxgraph.view.mxGraph;
 public class ClassHierarchyView extends AbstractVisualisationView {
 
 	@Override
-	public void visit(mxGraphWorkspacePane workspace, final WorkspaceContext wspContext,
+	public void visit(mxGraphVisualiser visualiser, final WorkspaceContext wspContext,
 			final mxGraphComponent graphComponent) {
 		
 		// start the mxGraph transaction and clear model
@@ -129,7 +129,7 @@ public class ClassHierarchyView extends AbstractVisualisationView {
 	}
 
 	@Override
-	public void visit(PrefuseWorkspacePane workspace, WorkspaceContext wspContext,
+	public void visit(PrefuseVisualiser visualiser, WorkspaceContext wspContext,
 			Display display) {
 		
 		display.reset();

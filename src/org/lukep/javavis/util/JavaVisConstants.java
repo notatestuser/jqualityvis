@@ -22,6 +22,8 @@ public class JavaVisConstants {
 	public static final String WELCOME_HTML_URL			= "assets/html/welcome.html";
 	public static final String HELP_HTML_URL			= "assets/html/help.html";
 	
+	public static final String IMG_DECOY_PANEL_BG		= "assets/img/decoyPanelBackground.png";
+	
 	public static final String ICON_PROJECT_EXPLORER	= "assets/icons/folder.png";
 	public static final String ICON_QUALITY_ANALYSIS	= "assets/icons/chart_curve.png";
 	public static final String ICON_METRICS				= "assets/icons/chart_bar.png";

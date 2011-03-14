@@ -1,23 +1,22 @@
 /*
- * PrefuseWorkspacePane.java (JMetricVis)
+ * PrefuseVisualiser.java (JMetricVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
-package org.lukep.javavis.ui.swing;
+package org.lukep.javavis.visualisation.visualisers;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.MouseEvent;
 import java.util.Iterator;
 
 import javax.swing.BorderFactory;
 
 import org.lukep.javavis.program.generic.models.IGenericModelNode;
-import org.lukep.javavis.program.generic.models.ProjectModel;
-import org.lukep.javavis.ui.IProgramStatusReporter;
-import org.lukep.javavis.visualisation.IVisualisationVisitor;
+import org.lukep.javavis.ui.swing.WorkspaceContext;
+import org.lukep.javavis.visualisation.views.IVisualiserVisitor;
 
 import prefuse.Display;
-import prefuse.Visualization;
 import prefuse.controls.ControlAdapter;
 import prefuse.controls.FocusControl;
 import prefuse.controls.PanControl;
@@ -29,34 +28,23 @@ import prefuse.visual.EdgeItem;
 import prefuse.visual.NodeItem;
 import prefuse.visual.VisualItem;
 
-public class PrefuseWorkspacePane extends AbstractWorkspacePane {
+public class PrefuseVisualiser extends AbstractVisualiser {
 
 	private static final int BACKGROUND_COLOR_RGB = 0xFFF9FFFB;
 	private static final int HIGHLIGHT_COLOR_RGB  = 0xFFBB87FF;
 	private static final int SELECTION_COLOR_RGB  = 0xFF5EC3C7;
 	
 	private Display display;
-	private Visualization visualisation;
 	
 	private NodeItem currentSelectedNode;
 	
-	public PrefuseWorkspacePane(ProjectModel project, IProgramStatusReporter statusTarget)
+	public PrefuseVisualiser(WorkspaceContext wspContext)
 			throws Exception {
-		super(project, statusTarget);
 
-		visualisation = new Visualization();
-		
-		display = new Display(visualisation);
-		display.setOpaque(true);
-		display.setBackground( new Color(BACKGROUND_COLOR_RGB) );
-		display.setBorder( BorderFactory.createEtchedBorder() );
-		
-		bindPerfuseEvents();
-		
-		super.setGraphComponent(display);
+		super(wspContext);
 	}
 	
-	private void bindPerfuseEvents() {
+	private void bindPrefuseEvents() {
 		display.addControlListener(new ZoomToFitControl());
 		display.addControlListener(new ZoomControl());
 		display.addControlListener(new PanControl(true));
@@ -68,7 +56,7 @@ public class PrefuseWorkspacePane extends AbstractWorkspacePane {
         	
         	@Override
 			public void mouseClicked(MouseEvent e) {
-				wspContext.setSelectedItem(wspContext.getModelStore());
+				getWorkspaceContext().setSelectedItem(getWorkspaceContext().getModelStore());
 			}
 
 			@Override
@@ -141,7 +129,7 @@ public class PrefuseWorkspacePane extends AbstractWorkspacePane {
     				item.setStroke(new BasicStroke(3));
 					
 					// set the WorkspaceContext's currently selected item
-					wspContext.setSelectedItem(
+					getWorkspaceContext().setSelectedItem(
 							(IGenericModelNode) item.get("model"));
 				}
 				
@@ -153,13 +141,22 @@ public class PrefuseWorkspacePane extends AbstractWorkspacePane {
 	}
 
 	@Override
-	public void setGraphScale(double scale) {
-		display.zoom(display.getLocation(), scale);
+	public Component acceptVisualisation(IVisualiserVisitor visitor) {
+		display = new Display();
+		display.setOpaque(true);
+		display.setBackground( new Color(BACKGROUND_COLOR_RGB) );
+		display.setBorder( BorderFactory.createEtchedBorder() );
+		
+		bindPrefuseEvents();
+		
+		visitor.visit(this, getWorkspaceContext(), display);
+		
+		return display;
 	}
-
+	
 	@Override
-	public void acceptVisualisation(IVisualisationVisitor visitor) {
-		visitor.visit(this, wspContext, display);
+	public void setScale(double scale) {
+		display.zoom(display.getLocation(), scale);
 	}
 
 }

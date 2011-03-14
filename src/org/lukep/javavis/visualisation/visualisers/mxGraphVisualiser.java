@@ -1,19 +1,20 @@
 /*
- * mxGraphWorkspacePane.java (JMetricVis)
+ * mxGraphVisualiser.java (JMetricVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
-package org.lukep.javavis.ui.swing;
+package org.lukep.javavis.visualisation.visualisers;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.IGenericModelNode;
-import org.lukep.javavis.program.generic.models.ProjectModel;
-import org.lukep.javavis.ui.IProgramStatusReporter;
 import org.lukep.javavis.ui.mxgraph.MxSwingCanvas;
-import org.lukep.javavis.visualisation.IVisualisationVisitor;
+import org.lukep.javavis.ui.swing.ClassCompositionComponent;
+import org.lukep.javavis.ui.swing.WorkspaceContext;
+import org.lukep.javavis.visualisation.views.IVisualiserVisitor;
 
 import com.mxgraph.canvas.mxICanvas;
 import com.mxgraph.canvas.mxImageCanvas;
@@ -23,13 +24,14 @@ import com.mxgraph.swing.view.mxInteractiveCanvas;
 import com.mxgraph.view.mxCellState;
 import com.mxgraph.view.mxGraph;
 
-public class mxGraphWorkspacePane extends AbstractWorkspacePane {
+public class mxGraphVisualiser extends AbstractVisualiser {
 	
 	private mxGraph graph;
 	private mxGraphComponent graphComponent;
 	
-	public mxGraphWorkspacePane(ProjectModel project, IProgramStatusReporter statusTarget) throws Exception {
-		super(project, statusTarget);
+	public mxGraphVisualiser(WorkspaceContext wspContext) throws Exception {
+
+		super(wspContext);
 		
 		// initialise the mxGraph, its container component and the circle layout
 		graph = new mxGraph()
@@ -76,9 +78,6 @@ public class mxGraphWorkspacePane extends AbstractWorkspacePane {
 		// bind mxGraph events
 		bindMxGraphEvents();
 		
-		// set the graph component in the AbstractWorkspacePane
-		super.setGraphComponent(graphComponent);
-		
 	}
 	
 	private void bindMxGraphEvents() {
@@ -89,22 +88,23 @@ public class mxGraphWorkspacePane extends AbstractWorkspacePane {
 				mxCell currentSelectionCell = (mxCell)graphComponent.getCellAt(e.getX(), e.getY());
 				if (currentSelectionCell != null //&& graph.getModel().isVertex(currentSelectionCell)
 						&& currentSelectionCell.getValue() instanceof IGenericModelNode) {
-					wspContext.setSelectedItem((IGenericModelNode) currentSelectionCell.getValue());
+					getWorkspaceContext().setSelectedItem((IGenericModelNode) currentSelectionCell.getValue());
 				}
 				super.mouseClicked(e);
 			}
 			
 		});
 	}
-
-	@Override
-	public void setGraphScale(double scale) {
-		graphComponent.zoomTo(scale, true);
-	}
 	
 	@Override
-	public void acceptVisualisation(IVisualisationVisitor visitor) {
-		visitor.visit(this, wspContext, graphComponent);
+	public Component acceptVisualisation(IVisualiserVisitor visitor) {
+		visitor.visit(this, getWorkspaceContext(), graphComponent);
+		return graphComponent;
+	}
+
+	@Override
+	public void setScale(double scale) {
+		graphComponent.zoomTo(scale, true);
 	}
 
 }

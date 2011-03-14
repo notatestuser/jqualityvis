@@ -279,7 +279,7 @@ public class ProjectWizardWindow extends JDialog implements ActionListener {
 	public void loadJavaCodeBase(File selectedDirectory) throws Exception {
 		
 		ProjectModel project = new ProjectModel(txtProjectName.getText());
-		final PrefuseWorkspacePane workspace = new PrefuseWorkspacePane(project, uiInstance);
+		final WorkspacePane workspace = new WorkspacePane(project, uiInstance);
 		
 		JavaSourceLoaderThread jslt = new JavaSourceLoaderThread(selectedDirectory, project) {
 			
@@ -291,6 +291,7 @@ public class ProjectWizardWindow extends JDialog implements ActionListener {
 			@Override
 			public void statusFinished() {
 				uiInstance.addChildWorkspaceFrame(workspace);
+				workspace.setVisible(true);
 				thisInstance.setVisible(false);
 				thisInstance.dispose();
 			}

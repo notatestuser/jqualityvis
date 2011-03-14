@@ -4,19 +4,18 @@
  */
 package org.lukep.javavis.visualisation.views;
 
-import org.lukep.javavis.ui.swing.PrefuseWorkspacePane;
 import org.lukep.javavis.ui.swing.WorkspaceContext;
-import org.lukep.javavis.ui.swing.mxGraphWorkspacePane;
-import org.lukep.javavis.visualisation.IVisualisationVisitor;
+import org.lukep.javavis.visualisation.visualisers.PrefuseVisualiser;
+import org.lukep.javavis.visualisation.visualisers.mxGraphVisualiser;
 
 import prefuse.Display;
 
 import com.mxgraph.swing.mxGraphComponent;
 
-public class AbstractVisualisationView implements IVisualisationVisitor {
+public class AbstractVisualisationView implements IVisualiserVisitor {
 
 	@Override
-	public void visit(mxGraphWorkspacePane workspace, WorkspaceContext wspContext, 
+	public void visit(mxGraphVisualiser visualiser, WorkspaceContext wspContext, 
 			mxGraphComponent graphComponent) {
 		
 		// overridden in sub-class
@@ -24,7 +23,7 @@ public class AbstractVisualisationView implements IVisualisationVisitor {
 	}
 
 	@Override
-	public void visit(PrefuseWorkspacePane workspace, WorkspaceContext wspContext, 
+	public void visit(PrefuseVisualiser visualiser, WorkspaceContext wspContext, 
 			Display display) {
 		
 		// overridden in sub-class

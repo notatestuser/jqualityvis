@@ -8,12 +8,15 @@ import java.util.List;
 
 import org.lukep.javavis.metrics.MetricRegistry;
 import org.lukep.javavis.metrics.MetricType;
+import org.lukep.javavis.visualisation.views.IVisualiserVisitor;
+import org.lukep.javavis.visualisation.visualisers.IVisualiser;
 
 public class Visualisation {
 	
 	protected String name;
 	protected MetricType type;
-	protected Class<IVisualisationVisitor> visitor;
+	protected Class<IVisualiser> visualiser;
+	protected Class<IVisualiserVisitor> visualiserVisitor;
 	protected List<String> arguments;
 	
 	public Visualisation(org.lukep.javavis.generated.jaxb.Visualisations.Visualisation sourceVis) throws 
@@ -22,7 +25,8 @@ public class Visualisation {
 		// set the fields in our new VisualisationView object from the data source object
 		name = sourceVis.getName();
 		type = MetricRegistry.getInstance().getOrSetMetricType(sourceVis.getType());
-		visitor = (Class<IVisualisationVisitor>) Class.forName(sourceVis.getVisitor());
+		visualiser = (Class<IVisualiser>) Class.forName(sourceVis.getIVisualiser());
+		visualiserVisitor = (Class<IVisualiserVisitor>) Class.forName(sourceVis.getIVisualiserVisitor());
 		arguments = sourceVis.getArguments().getArgument();
 	}
 
@@ -34,8 +38,12 @@ public class Visualisation {
 		return type;
 	}
 
-	public Class<IVisualisationVisitor> getVisitorClass() {
-		return visitor;
+	public Class<IVisualiser> getVisualiserClass() {
+		return visualiser;
+	}
+	
+	public Class<IVisualiserVisitor> getVisitorClass() {
+		return visualiserVisitor;
 	}
 
 	public List<String> getArguments() {

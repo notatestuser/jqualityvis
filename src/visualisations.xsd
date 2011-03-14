@@ -12,7 +12,8 @@
           <xsd:complexType>
             <xsd:sequence>
               <xsd:element name="type" type="xsd:string" />
-              <xsd:element name="visitor" type="xsd:string" />
+              <xsd:element name="IVisualiser" type="xsd:string" />
+              <xsd:element name="IVisualiserVisitor" type="xsd:string" />
               <xsd:element name="arguments">
                 <xsd:complexType>
                   <xsd:sequence>

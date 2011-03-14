@@ -10,8 +10,8 @@ import java.util.HashMap;
 import org.lukep.javavis.metrics.IMeasurableNode;
 import org.lukep.javavis.program.generic.models.IGenericModelNode;
 import org.lukep.javavis.program.generic.models.ProjectModel;
-import org.lukep.javavis.ui.swing.PrefuseWorkspacePane;
 import org.lukep.javavis.ui.swing.WorkspaceContext;
+import org.lukep.javavis.visualisation.visualisers.PrefuseVisualiser;
 
 import prefuse.Constants;
 import prefuse.Display;
@@ -32,7 +32,7 @@ import prefuse.visual.VisualItem;
 public class CircleView extends AbstractVisualisationView {
 
 	@Override
-	public void visit(PrefuseWorkspacePane workspace, WorkspaceContext wspContext,
+	public void visit(PrefuseVisualiser visualiser, WorkspaceContext wspContext,
 			Display display) {
 		
 		display.reset();

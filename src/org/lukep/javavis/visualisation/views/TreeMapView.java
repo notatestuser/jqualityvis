@@ -4,30 +4,18 @@
  */
 package org.lukep.javavis.visualisation.views;
 
-import infovis.Tree;
-import infovis.Visualization;
-import infovis.column.FloatColumn;
-import infovis.column.IntColumn;
-import infovis.column.ObjectColumn;
-import infovis.column.StringColumn;
-import infovis.tree.DefaultTree;
-import infovis.tree.visualization.TreemapVisualization;
-
 import java.awt.Font;
 import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
-import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Iterator;
 
 import org.lukep.javavis.metrics.IMeasurableNode;
-import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.IGenericModelNode;
 import org.lukep.javavis.program.generic.models.PackageModel;
 import org.lukep.javavis.program.generic.models.ProjectModel;
-import org.lukep.javavis.ui.swing.InfoVisWorkspacePane;
-import org.lukep.javavis.ui.swing.PrefuseWorkspacePane;
 import org.lukep.javavis.ui.swing.WorkspaceContext;
+import org.lukep.javavis.visualisation.visualisers.PrefuseVisualiser;
 
 import prefuse.Constants;
 import prefuse.Display;
@@ -57,7 +45,7 @@ import prefuse.visual.expression.InGroupPredicate;
 public class TreeMapView extends AbstractVisualisationView {
 
 	@Override
-	public void visit(PrefuseWorkspacePane workspace,
+	public void visit(PrefuseVisualiser visualiser,
 			WorkspaceContext wspContext, Display display) {
 
 		display.reset();
@@ -367,7 +355,7 @@ public class TreeMapView extends AbstractVisualisationView {
     
     // ------------------------------------------------------------------------
 
-	@Override
+	/*@Override
 	public void visit(InfoVisWorkspacePane workspace,
 			WorkspaceContext wspContext) {
 
@@ -452,6 +440,6 @@ public class TreeMapView extends AbstractVisualisationView {
 		treemap.setVisualColumn(Visualization.VISUAL_COLOR, metric);
 		workspace.setVis(treemap);
 		
-	}
+	}*/
 
 }

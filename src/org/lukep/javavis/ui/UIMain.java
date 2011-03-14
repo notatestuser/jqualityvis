@@ -31,8 +31,9 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.lukep.javavis.ui.swing.ProjectWizardWindow;
+import org.lukep.javavis.ui.swing.WorkspacePane;
 import org.lukep.javavis.util.JavaVisConstants;
-import org.lukep.javavis.visualisation.IVisualiser;
+import org.lukep.javavis.visualisation.visualisers.IVisualiser;
 
 public class UIMain implements IProgramStatusReporter, ChangeListener {
 
@@ -62,7 +63,8 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 				if (response != JOptionPane.YES_OPTION)
 					return;
 			}
-			mainTabbedPane.removeTabAt(mainTabbedPane.getSelectedIndex());
+			if (mainTabbedPane.getTabCount() > 0)
+				mainTabbedPane.removeTabAt(mainTabbedPane.getSelectedIndex());
 		}
 	};
 	
@@ -213,8 +215,8 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 		}
 	}
 	
-	public void addChildWorkspaceFrame(IVisualiser visDesktop) {
-		mainTabbedPane.addTab( "Workspace " + (++workspaces), (Component) visDesktop );
+	public void addChildWorkspaceFrame(WorkspacePane workspace) {
+		mainTabbedPane.addTab( "Workspace " + (++workspaces), (Component) workspace );
 		mainTabbedPane.setSelectedIndex(mainTabbedPane.getTabCount()-1);
 	}
 
@@ -226,10 +228,11 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 
 	@Override
 	public void stateChanged(ChangeEvent e) {
-		if (zoomSlider == e.getSource()) {
-			IVisualiser selectedVdp = 
-				(IVisualiser) mainTabbedPane.getSelectedComponent();
-			selectedVdp.setGraphScale((double)zoomSlider.getValue() / 1000);
+		if (zoomSlider == e.getSource()
+				&& mainTabbedPane.getSelectedComponent() instanceof WorkspacePane) {
+			WorkspacePane selectedWorkspace = 
+				(WorkspacePane) mainTabbedPane.getSelectedComponent();
+			selectedWorkspace.setVisualisationScale((double)zoomSlider.getValue() / 1000);
 		}
 	}
 }

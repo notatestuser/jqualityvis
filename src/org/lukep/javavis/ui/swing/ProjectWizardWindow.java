@@ -234,6 +234,12 @@ public class ProjectWizardWindow extends JDialog implements ActionListener {
 			btnPerformActionEnabled = false;
 		}
 	}
+	
+	private void lockControls() {
+		txtProjectName.setEnabled(false);
+		btnBrowse.setEnabled(false);
+		btnPerformAction.setEnabled(false);
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -249,8 +255,10 @@ public class ProjectWizardWindow extends JDialog implements ActionListener {
 					validateForm();
 				}
 			} else if (btnPerformAction == e.getSource()) {
-				if (selectedFile != null)
+				if (selectedFile != null) {
+					lockControls();
 					loadJavaCodeBase(selectedFile);
+				}
 			}
 		} catch (Exception ex) {
 			JOptionPane.showMessageDialog(this, "Exception: " + ex.getLocalizedMessage(), 

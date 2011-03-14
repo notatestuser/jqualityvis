@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Vector;
 
-import org.lukep.javavis.generated.jaxb.QualityModels.QualityModel;
 import org.lukep.javavis.generated.jaxb.QualityModels.QualityModel.DesignQualityAttributes;
 import org.lukep.javavis.generated.jaxb.QualityModels.QualityModel.DesignQualityAttributes.DesignQualityAttribute.WeightedMetric;
 import org.lukep.javavis.metrics.IMeasurableNode;

@@ -39,8 +39,7 @@ public class JavaVisConstants {
 	public static final String HEADING_METRICS			= "Metrics";
 	public static final String HEADING_WARNINGS			= "Warnings";
 	
-	public static final String METRIC_NUM_OF_METHODS    = "NUM_OF_METHODS";
-	public static final String METRIC_NUM_OF_STATEMENTS	= "NUM_OF_STMTS";
+	public static final String METRIC_NUM_OF_STATEMENTS	= "NOS";
 	public static final String METRIC_CYCLO_COMPLEX 	= "CC";
 	public static final String METRIC_CYCLO_COMPLEX_AVG = "CC_AVG";
 	public static final String METRIC_CYCLO_COMPLEX_MAX	= "CC_MAX";

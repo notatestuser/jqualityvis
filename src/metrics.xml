@@ -63,7 +63,7 @@
 		<hot>20.0</hot>
 	</metric>
 	
-	<metric name="Number of Statements" internal_name="NUM_OF_STMTS">
+	<metric name="Number of Statements" internal_name="NOS">
 		<type>WeightedMethod</type>
 		<applies_to>
 			<measurable>class</measurable>
@@ -187,7 +187,7 @@
 		<hot>0.0</hot>
 	</metric>
 	
-	<metric name="QMOOD Number of Methods" internal_name="NUM_OF_METHODS">
+	<metric name="QMOOD Number of Methods" internal_name="NOM">
 		<type>WeightedClass</type>
 		<applies_to>
 			<measurable>class</measurable>

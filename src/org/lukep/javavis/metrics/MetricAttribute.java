@@ -16,8 +16,8 @@ public class MetricAttribute {
 	protected List<String> appliesTo;
 	protected Class<IMeasurableVisitor> visitor;
 	protected String argument;
-	protected float cold;
-	protected float hot;
+	protected double cold;
+	protected double hot;
 	
 	public MetricAttribute(String name, String nameInternal, MetricType type, List<String> appliesTo) {
 		this.name = name;
@@ -78,11 +78,11 @@ public class MetricAttribute {
 		return argument;
 	}
 
-	public float getCold() {
+	public double getCold() {
 		return cold;
 	}
 
-	public float getHot() {
+	public double getHot() {
 		return hot;
 	}
 

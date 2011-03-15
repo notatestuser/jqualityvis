@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import org.lukep.javavis.metrics.IMeasurableNode;
+import org.lukep.javavis.metrics.MetricMeasurement;
 import org.lukep.javavis.program.generic.models.IGenericModelNode;
 import org.lukep.javavis.program.generic.models.PackageModel;
 import org.lukep.javavis.program.generic.models.ProjectModel;
@@ -56,7 +57,7 @@ public class TreeMapView extends AbstractVisualisationView {
 		t.addColumn("type", String.class);
 		t.addColumn("name", String.class);
 		t.addColumn("model", IGenericModelNode.class);
-		t.addColumn("metricMeasurement", float.class);
+		t.addColumn("metricMeasurement", double.class);
 		
 		// create package vertices
 		ProjectModel modelStore = wspContext.getModelStore();
@@ -91,16 +92,16 @@ public class TreeMapView extends AbstractVisualisationView {
 			curNode = t.addNode();
 			
 			// grab metric measurement if applicable
+			MetricMeasurement measurement = null;
 			if (model instanceof IMeasurableNode
 					&& wspContext.getMetric().testAppliesTo(model.getModelTypeName())) {
-				curNode.setFloat("metricMeasurement", 
-						((IMeasurableNode)(model)).getMetricMeasurement(
-								wspContext.getMetric()).getResult());
+				measurement = ((IMeasurableNode)(model)).getMetricMeasurement(wspContext.getMetric());
+				curNode.setDouble("metricMeasurement", measurement.getResult());
 			}
 			
 			curNode.setString("type", model.getModelTypeName());
 			curNode.setString("name", model.getSimpleName()
-					+ "\r\n" + curNode.getFloat("metricMeasurement"));
+					+ "\r\n" + (measurement != null ? measurement.getRoundedResult(5) : "0.0"));
 			curNode.set("model", model);
 			
 			// add children to iterModels

@@ -21,8 +21,8 @@
               </xsd:element>
               <xsd:element name="visitor" type="xsd:string" />
               <xsd:element name="argument" type="xsd:string" />
-              <xsd:element name="cold" type="xsd:float" />
-              <xsd:element name="hot" type="xsd:float" />
+              <xsd:element name="cold" type="xsd:double" />
+              <xsd:element name="hot" type="xsd:double" />
             </xsd:sequence>
             <xsd:attribute name="name" type="xsd:string" />
             <xsd:attribute name="internal_name" type="xsd:string" />

@@ -65,7 +65,7 @@ public class ClassCompositionComponent extends JComponent implements Observer {
 					(int) Math.ceil(getHeight() / (double)pixelsPerStatement) : getHeight();
 			
 			int rectY, rectHeight, lastY = 0;
-			float complexity;
+			double complexity;
 			MethodModel method;
 			for (int i = 0; i < currentClass.getMethodCount(); i++) {
 				method = (MethodModel) currentClass.getMethods().get(i);

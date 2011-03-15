@@ -47,7 +47,7 @@ public class DesignQualityAttribute extends MetricAttribute {
 		String modelTypeName = target.getModelTypeName();
 		if (testAppliesTo(modelTypeName)) {
 			
-			float measurement = 0.0f, current = 0.0f;
+			double measurement = 0.0f, current = 0.0f;
 			MetricAttribute metric;
 			IMeasurableNode curTarget;
 			

@@ -78,8 +78,8 @@ public class ClassModel extends AbstractModel {
 		return avgComplexity;
 	}
 	
-	public float getMaxCyclomaticComplexity() {
-		float maxComplexity = 0;
+	public double getMaxCyclomaticComplexity() {
+		double maxComplexity = 0;
 		MetricMeasurement result;
 		
 		Vector<MethodModel> methods = getMethods();

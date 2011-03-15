@@ -27,7 +27,7 @@ import com.sun.source.tree.WhileLoopTree;
 
 public class CyclomaticComplexityVisitor extends AbstractMeasurableVisitor {
 	
-	protected float complexity = 1; // we always start out with 1 path through a method
+	protected double complexity = 1; // we always start out with 1 path through a method
 	
 	@Override
 	public MetricMeasurement visit(MetricAttribute metric, ClassModel clazz) {

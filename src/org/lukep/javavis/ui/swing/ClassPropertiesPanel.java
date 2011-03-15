@@ -77,10 +77,10 @@ public class ClassPropertiesPanel extends JPanel implements Observer {
 		sb.append("<table border=\"0\" style=\"margin-top:5px\">");
 		if (model instanceof IMeasurableNode) {
 			IMeasurableNode measurableModel = (IMeasurableNode) model;
-			float result;
+			double result;
 			for (MetricAttribute attribute : MetricRegistry.getInstance().getMetricAttributes()) {
 				try {
-					result = attribute.measureTarget(measurableModel).getResult();
+					result = attribute.measureTarget(measurableModel).getRoundedResult(5);
 					sb.append("<tr><td><strong>" 
 							+ attribute.getName() 
 							+ " (" + attribute.getInternalName() + ")" 

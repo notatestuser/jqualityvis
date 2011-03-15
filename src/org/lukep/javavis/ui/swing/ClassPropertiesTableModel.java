@@ -105,7 +105,7 @@ public class ClassPropertiesTableModel extends AbstractTableModel {
 				return "( Unknown )";
 			
 			return measurable.getMetricMeasurement(
-						supportMap.get(columnIndex - 1)).getResult();
+						supportMap.get(columnIndex - 1)).getRoundedResult(5);
 		}
 	}
 

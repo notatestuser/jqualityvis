@@ -48,7 +48,7 @@ public class ClassHierarchyTree extends AbstractVisualisationView {
 		graph.addColumn("type", String.class);
 		graph.addColumn("name", String.class);
 		graph.addColumn("model", IGenericModelNode.class);
-		graph.addColumn("metricMeasurement", float.class);
+		graph.addColumn("metricMeasurement", double.class);
 		
 		// create package vertices
 		ProjectModel modelStore = wspContext.getModelStore();
@@ -107,7 +107,7 @@ public class ClassHierarchyTree extends AbstractVisualisationView {
 			// grab metric measurement if applicable
 			if (model instanceof IMeasurableNode
 					&& wspContext.getMetric().testAppliesTo(model.getModelTypeName())) {
-				curNode.setFloat("metricMeasurement", 
+				curNode.setDouble("metricMeasurement", 
 						((IMeasurableNode)(model)).getMetricMeasurement(
 								wspContext.getMetric()).getResult());
 			}

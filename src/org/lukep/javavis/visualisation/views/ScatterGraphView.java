@@ -5,6 +5,7 @@
 package org.lukep.javavis.visualisation.views;
 
 import org.lukep.javavis.metrics.IMeasurableNode;
+import org.lukep.javavis.metrics.MetricMeasurement;
 import org.lukep.javavis.program.generic.models.IGenericModelNode;
 import org.lukep.javavis.program.generic.models.ProjectModel;
 import org.lukep.javavis.ui.swing.WorkspaceContext;
@@ -40,7 +41,7 @@ public class ScatterGraphView extends AbstractVisualisationView {
 		t.addColumn("type", String.class);
 		t.addColumn("name", String.class);
 		t.addColumn("model", IGenericModelNode.class);
-		t.addColumn("metricMeasurement", float.class);
+		t.addColumn("metricMeasurement", double.class);
 		
 		// create class nodes
 		int curNode;
@@ -48,17 +49,17 @@ public class ScatterGraphView extends AbstractVisualisationView {
 			curNode = t.addRow();
 			
 			// grab metric measurement if applicable
+			MetricMeasurement measurement = null;
 			if (model instanceof IMeasurableNode
 					&& wspContext.getMetric().testAppliesTo(model.getModelTypeName())) {
-				t.setFloat(curNode, "metricMeasurement", 
-						((IMeasurableNode)(model)).getMetricMeasurement(
-								wspContext.getMetric()).getResult());
+				measurement = ((IMeasurableNode)(model)).getMetricMeasurement(wspContext.getMetric());
+				t.setDouble(curNode, "metricMeasurement", measurement.getResult());
 			}
 			
 			// add other fields
 			t.setString(curNode, "type", model.getModelTypeName());
 			t.setString(curNode, "name", model.getSimpleName()
-					+ "\r\n" + t.getFloat(curNode, "metricMeasurement"));
+					+ "\r\n" + (measurement != null ? measurement.getRoundedResult(5) : "0.0"));
 			t.set(curNode, "model", model);			
 
 		}

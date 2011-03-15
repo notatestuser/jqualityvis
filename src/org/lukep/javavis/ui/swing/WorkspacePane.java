@@ -413,19 +413,27 @@ public class WorkspacePane extends JPanel implements
 			node = (DefaultMutableTreeNode) programTree.getLastSelectedPathComponent();
 			
 			if (node != null
-				&& node.getUserObject() instanceof IGenericModelNode) {
-					wspContext.setSelectedItem((IGenericModelNode) node.getUserObject());
+				&& node.getUserObject() instanceof IGenericModelNode
+				&& wspContext.getMetric() instanceof MetricAttribute
+				&& wspContext.getVisualisation() instanceof Visualisation) {
+					
+					IGenericModelNode model = (IGenericModelNode) node.getUserObject();
+					wspContext.setSubject(model);
+					wspContext.setSelectedItem(model);
+					setVisualisation(wspContext.getVisualisation());
 				}
 		} else if (metricTree == e.getSource()) {
 			node = (DefaultMutableTreeNode) metricTree.getLastSelectedPathComponent();
 			
 			if (node != null
 					&& node.getUserObject() instanceof Visualisation) {
+				
 				DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) node.getParent();
 				MetricAttribute metric = (MetricAttribute) parentNode.getUserObject();
 				
 				Visualisation vis = (Visualisation) node.getUserObject();
 				
+				wspContext.setSubject(wspContext.getModelStore());
 				wspContext.setMetric(metric);
 				wspContext.setVisualisation(vis);
 			}
@@ -440,6 +448,10 @@ public class WorkspacePane extends JPanel implements
 	public void setVisualisationScale(double scale) {
 		if (curVisualiser != null)
 			curVisualiser.setScale(scale);
+	}
+	
+	public WorkspaceContext getContext() {
+		return wspContext;
 	}
 	
 }

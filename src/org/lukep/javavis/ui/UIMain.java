@@ -54,6 +54,22 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 		}
 	};
 	
+	private ActionListener actionOpenProject = new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+	};
+	
+	private ActionListener actionSaveProject = new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+	};
+	
 	private ActionListener actionCloseWorkspace = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -72,7 +88,7 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			try {
-				addChildHTMLFrame("Help", 
+				addChildHTMLFrame("Help Page", 
 						(new java.io.File(JavaVisConstants.HELP_HTML_URL)).toURI().toURL());
 			} catch (MalformedURLException e1) {
 				// TODO Auto-generated catch block
@@ -124,8 +140,7 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 	 */
 	public UIMain() throws Exception {
 		initialize();
-		//addChildWorkspaceFrame();
-		addChildHTMLFrame("Welcome", 
+		addChildHTMLFrame("Welcome Page", 
 				(new java.io.File(JavaVisConstants.WELCOME_HTML_URL)).toURI().toURL());
 		
 		thisInstance = this;
@@ -173,8 +188,20 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 		mntmCreateProject.addActionListener(actionCreateProject);
 		mnFile.add(mntmCreateProject);
 		
+		// ... File > Open a Project...
+		JMenuItem mntmOpenProject = new JMenuItem("Open Project...", 
+				new ImageIcon(JavaVisConstants.ICON_MENU_PROJECT_OPEN));
+		mntmOpenProject.addActionListener(actionOpenProject);
+		mnFile.add(mntmOpenProject);
+		
+		// ... File > Save Project...
+		JMenuItem mntmSaveProject = new JMenuItem("Save Project...", 
+				new ImageIcon(JavaVisConstants.ICON_MENU_PROJECT_SAVE));
+		mntmOpenProject.addActionListener(actionSaveProject);
+		mnFile.add(mntmSaveProject);
+		
 		// ... File > Close Workspace
-		JMenuItem mntmCloseWorkspace = new JMenuItem("Close Workspace", 
+		JMenuItem mntmCloseWorkspace = new JMenuItem("Close Current Tab", 
 				new ImageIcon(JavaVisConstants.ICON_MENU_PROJECT_CLOSE));
 		mntmCloseWorkspace.addActionListener(actionCloseWorkspace);
 		mnFile.add(mntmCloseWorkspace);
@@ -216,7 +243,8 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 	}
 	
 	public void addChildWorkspaceFrame(WorkspacePane workspace) {
-		mainTabbedPane.addTab( "Workspace " + (++workspaces), (Component) workspace );
+		mainTabbedPane.addTab( "Workspace " + (++workspaces) 
+				+ " (" + workspace.getContext().getModelStore() + ")", (Component) workspace );
 		mainTabbedPane.setSelectedIndex(mainTabbedPane.getTabCount()-1);
 	}
 

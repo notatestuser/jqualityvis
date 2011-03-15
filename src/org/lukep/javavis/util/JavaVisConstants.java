@@ -30,7 +30,9 @@ public class JavaVisConstants {
 	public static final String ICON_WARNINGS			= "assets/icons/exclamation.png";
 	public static final String ICON_PROJECT_WIZARD		= "assets/icons/application-blue.png";
 	
-	public static final String ICON_MENU_PROJECT_CREATE	= "assets/icons/folder-blank.png";
+	public static final String ICON_MENU_PROJECT_CREATE	= "assets/icons/document.png";
+	public static final String ICON_MENU_PROJECT_OPEN	= "assets/icons/folder-import.png";
+	public static final String ICON_MENU_PROJECT_SAVE	= "assets/icons/disk-black.png";
 	public static final String ICON_MENU_PROJECT_CLOSE	= "assets/icons/cross-button.png";
 	public static final String ICON_MENU_HELP			= "assets/icons/question-frame.png";
 	

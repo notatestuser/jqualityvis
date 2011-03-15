@@ -22,7 +22,6 @@ import java.util.Observer;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
-import javax.swing.JDesktopPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -55,7 +54,7 @@ import org.lukep.javavis.visualisation.VisualisationRegistry;
 import org.lukep.javavis.visualisation.views.IVisualiserVisitor;
 import org.lukep.javavis.visualisation.visualisers.IVisualiser;
 
-public class WorkspacePane extends JDesktopPane implements 
+public class WorkspacePane extends JPanel implements 
 		Observer, ActionListener, TreeSelectionListener, IProgramSourceObserver {
 	
 	private static final int DECOY_BACKGROUND_COLOR_RGB = 0xFFF9FFFB;

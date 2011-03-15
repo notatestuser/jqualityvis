@@ -278,8 +278,7 @@ public class ProjectWizardWindow extends JDialog implements ActionListener {
 	
 	public void loadJavaCodeBase(File selectedDirectory) throws Exception {
 		
-		ProjectModel project = new ProjectModel(txtProjectName.getText());
-		final WorkspacePane workspace = new WorkspacePane(project, uiInstance);
+		final ProjectModel project = new ProjectModel(txtProjectName.getText());
 		
 		JavaSourceLoaderThread jslt = new JavaSourceLoaderThread(selectedDirectory, project) {
 			
@@ -290,14 +289,21 @@ public class ProjectWizardWindow extends JDialog implements ActionListener {
 
 			@Override
 			public void statusFinished() {
-				uiInstance.addChildWorkspaceFrame(workspace);
-				workspace.setVisible(true);
-				thisInstance.setVisible(false);
-				thisInstance.dispose();
+				WorkspacePane workspace = null;
+				try {
+					workspace = new WorkspacePane(project, uiInstance);
+					uiInstance.addChildWorkspaceFrame(workspace);
+					workspace.setVisible(true);
+					thisInstance.setVisible(false);
+					thisInstance.dispose();
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(null, "Error creating workspace: " + e.getLocalizedMessage(), 
+							"Error", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 			
 		};
-		jslt.addObserver(workspace);
+		//jslt.addObserver(workspace);
 		jslt.addObserver(project);
 		new Thread(jslt).start();
 	}

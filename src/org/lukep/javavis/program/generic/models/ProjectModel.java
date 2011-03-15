@@ -108,5 +108,10 @@ public class ProjectModel extends AbstractModel implements IProgramSourceObserve
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public String toString() {
+		return simpleName;
+	}
     
 }

@@ -11,7 +11,6 @@ import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,9 +42,9 @@ import org.lukep.javavis.metrics.MetricAttribute;
 import org.lukep.javavis.metrics.MetricRegistry;
 import org.lukep.javavis.metrics.qualityModels.QualityModel;
 import org.lukep.javavis.program.generic.models.ClassModel;
-import org.lukep.javavis.program.generic.models.MethodModel;
+import org.lukep.javavis.program.generic.models.IGenericModelNode;
+import org.lukep.javavis.program.generic.models.PackageModel;
 import org.lukep.javavis.program.generic.models.ProjectModel;
-import org.lukep.javavis.ui.IProgramSourceObserver;
 import org.lukep.javavis.ui.IProgramStatusReporter;
 import org.lukep.javavis.ui.swing.WorkspaceContext.ChangeEvent;
 import org.lukep.javavis.util.JavaVisConstants;
@@ -55,7 +54,7 @@ import org.lukep.javavis.visualisation.views.IVisualiserVisitor;
 import org.lukep.javavis.visualisation.visualisers.IVisualiser;
 
 public class WorkspacePane extends JPanel implements 
-		Observer, ActionListener, TreeSelectionListener, IProgramSourceObserver {
+		Observer, ActionListener, TreeSelectionListener {
 	
 	private static final int DECOY_BACKGROUND_COLOR_RGB = 0xFFF9FFFB;
 	
@@ -111,6 +110,8 @@ public class WorkspacePane extends JPanel implements
 		wspContext.modelStore = project;
 		
 		initialize();
+		
+		wspContext.setSelectedItem(wspContext.getModelStore());
 	}
 	
 	private void initialize() {
@@ -203,10 +204,13 @@ public class WorkspacePane extends JPanel implements
 		qualityAnalysisPane.addTab(JavaVisConstants.HEADING_WARNINGS, 
 				new ImageIcon(JavaVisConstants.ICON_WARNINGS), new JPanel());
 		
-		// create the program tree
+		// create the "Project" tree
 		programTree = new JTree();
-		programTree.setModel( new DefaultTreeModel( new DefaultMutableTreeNode("Program") ) );
+		DefaultTreeModel projectTreeModel = new DefaultTreeModel( new DefaultMutableTreeNode(wspContext.getModelStore()) );
+		programTree.setModel(projectTreeModel);
+		programTree.addTreeSelectionListener(this);
 		projectExplorerPanel.setViewportView(programTree);
+		fillProjectTree(projectTreeModel);
 		
 		// create the "Metrics" tree
 		metricTree = new JTree();
@@ -214,6 +218,52 @@ public class WorkspacePane extends JPanel implements
 		metricTree.setModel( treeModel );
 		metricTree.setRootVisible(false);
 		metricTree.addTreeSelectionListener(this);
+		metricSelectionPanel.setViewportView(metricTree);
+		fillMetricTree(treeModel);
+		
+		// put a decoy visualisation component in place so we're not staring at a drab grey canvas
+		JPanel decoy = new JPanel() {
+			@Override
+			protected void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				g.drawImage(new ImageIcon(JavaVisConstants.IMG_DECOY_PANEL_BG).getImage(), 
+						0, 0, getBackground(), null);
+			}
+		};
+		decoy.setOpaque(true);
+		decoy.setBackground( new Color(DECOY_BACKGROUND_COLOR_RGB) );
+		decoy.setBorder( BorderFactory.createEtchedBorder() );
+		setVisualisationComponent(decoy);
+	}
+	
+	private void fillProjectTree(DefaultTreeModel treeModel) {
+		ProjectModel project = wspContext.getModelStore();
+		Map<String, DefaultMutableTreeNode> parentNodeMap = new HashMap<String, DefaultMutableTreeNode>();
+		int i = 0;
+		
+		// add package nodes
+		DefaultMutableTreeNode node;
+		for (PackageModel pkg : project.getPackageMap().values()) {
+			node = new DefaultMutableTreeNode(pkg);
+			treeModel.insertNodeInto(node, (MutableTreeNode) treeModel.getRoot(), i++);
+			parentNodeMap.put(pkg.getQualifiedName(), node);
+		}
+		
+		// add classes to package nodes
+		for (ClassModel clazz : project.getClassMap().values()) {
+			node = new DefaultMutableTreeNode(clazz);
+			if (parentNodeMap.containsKey(clazz.getContainerName()))
+					treeModel.insertNodeInto(node, parentNodeMap.get(clazz.getContainerName()), 0);
+			if (clazz.getChildCount() > 0)
+				parentNodeMap.put(clazz.getQualifiedName(), node);
+		}
+		
+		// refresh and reload the TreeModel
+		treeModel.reload();
+		programTree.expandRow(0);
+	}
+	
+	private void fillMetricTree(DefaultTreeModel treeModel) {
 		MutableTreeNode staticMetricsNode = new DefaultMutableTreeNode("Static Metrics");
 		MutableTreeNode qualityModelsNode = new DefaultMutableTreeNode("Quality Models");
 		treeModel.insertNodeInto(staticMetricsNode, (MutableTreeNode) treeModel.getRoot(), 0);
@@ -243,26 +293,10 @@ public class WorkspacePane extends JPanel implements
 			addMetricsToTreeNode(qm, treeModel, qualityModelNode);
 		}
 		
-		// refresh and reload the JTrees we have here
+		// refresh and reload the TreeModel
 		treeModel.reload();
-		
 		metricTree.expandRow(1);
 		metricTree.expandRow(0);
-		metricSelectionPanel.setViewportView(metricTree);
-		
-		// put a decoy visualisation component in place so we're not staring at a drab grey canvas
-		JPanel decoy = new JPanel() {
-			@Override
-			protected void paintComponent(Graphics g) {
-				super.paintComponent(g);
-				g.drawImage(new ImageIcon(JavaVisConstants.IMG_DECOY_PANEL_BG).getImage(), 
-						0, 0, getBackground(), null);
-			}
-		};
-		decoy.setOpaque(true);
-		decoy.setBackground( new Color(DECOY_BACKGROUND_COLOR_RGB) );
-		decoy.setBorder( BorderFactory.createEtchedBorder() );
-		setVisualisationComponent(decoy);
 	}
 	
 	private void addMetricsToTreeNode(Collection<MetricAttribute> metrics, DefaultTreeModel treeModel, 
@@ -337,15 +371,6 @@ public class WorkspacePane extends JPanel implements
 			}
 		}
 	}
-	
-	@Override
-	public void setVisible(boolean aFlag) {
-		super.setVisible(aFlag);
-		
-		programTree.expandRow(0);
-		
-		wspContext.setSelectedItem(wspContext.getModelStore());
-	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -384,7 +409,14 @@ public class WorkspacePane extends JPanel implements
 	public void valueChanged(TreeSelectionEvent e) {
 
 		DefaultMutableTreeNode node;
-		if (metricTree == e.getSource()) {
+		if (programTree == e.getSource()) {
+			node = (DefaultMutableTreeNode) programTree.getLastSelectedPathComponent();
+			
+			if (node != null
+				&& node.getUserObject() instanceof IGenericModelNode) {
+					wspContext.setSelectedItem((IGenericModelNode) node.getUserObject());
+				}
+		} else if (metricTree == e.getSource()) {
 			node = (DefaultMutableTreeNode) metricTree.getLastSelectedPathComponent();
 			
 			if (node != null
@@ -398,37 +430,6 @@ public class WorkspacePane extends JPanel implements
 				wspContext.setVisualisation(vis);
 			}
 		}
-		
-	}
-	
-	@Override
-	public void notifyFindClass(ClassModel clazz) {
-		DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode) programTree.getModel().getRoot();
-		String packageName = clazz.getContainerName();
-		if (packageName.length() > 0) { // class is member of a named package (non-default)
-			DefaultMutableTreeNode newPackageNode = new DefaultMutableTreeNode( packageName );
-			Enumeration rootNodeChildren = rootNode.children();
-			boolean addedToExistingNode = false;
-			while (rootNodeChildren.hasMoreElements()) {
-				DefaultMutableTreeNode element = (DefaultMutableTreeNode) rootNodeChildren.nextElement();
-				if (element.toString().equals(packageName)) { // check if existing package node exists
-					element.add( new DefaultMutableTreeNode( clazz.getSimpleName() ) ); // yes, add it to that one
-					//addClass( clazz, packageName ); // create cell graph
-					addedToExistingNode = true;
-				}
-			}
-			if (!addedToExistingNode) {
-				rootNode.add( newPackageNode ); // add new package node
-				newPackageNode.add( new DefaultMutableTreeNode( clazz.getSimpleName() ) ); // add class sub-node
-				//addClass( clazz, packageName );
-			}
-		}
-		// TODO add classes in the default package to the tree?
-	}
-	
-	@Override
-	public void notifyFindMethod(MethodModel method) {
-		// TODO Auto-generated method stub
 		
 	}
 	

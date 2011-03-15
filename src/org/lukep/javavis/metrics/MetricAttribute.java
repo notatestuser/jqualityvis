@@ -54,6 +54,10 @@ public class MetricAttribute {
 		return null;
 	}
 	
+	public MetricMeasurement measureTargetCached(IMeasurableNode target) {
+		return MetricRegistry.getInstance().getCachedMeasurement(target, this);
+	}
+	
 	public String getName() {
 		return name;
 	}

@@ -32,12 +32,12 @@ import com.sun.tools.javac.code.Symbol;
 import com.sun.tools.javac.code.Symbol.MethodSymbol;
 import com.sun.tools.javac.code.Symbol.VarSymbol;
 
-public class CodeUnitInfoFactory {
+public class GenericModelFactory {
 
 	protected final static Logger log = 
-		Logger.getLogger(CodeUnitInfoFactory.class.getSimpleName());
+		Logger.getLogger(GenericModelFactory.class.getSimpleName());
 	
-	public static ClassModel createClassInfoFromJava(CodeUnitInfoFactoryState s, 
+	public static ClassModel createClassInfoFromJava(GenericModelFactoryState s, 
 			ClassTree classTree, TreePath path, Trees trees) {
 		
 		TypeElement e = (TypeElement) trees.getElement(path);
@@ -88,7 +88,7 @@ public class CodeUnitInfoFactory {
 		return newClassModel;
 	}
 	
-	public static MethodModel createMethodInfoFromJava(CodeUnitInfoFactoryState s, 
+	public static MethodModel createMethodInfoFromJava(GenericModelFactoryState s, 
 			MethodTree methodTree, TreePath path, Trees trees) {
 		
 		MethodSymbol e = (MethodSymbol) trees.getElement(path);
@@ -139,7 +139,7 @@ public class CodeUnitInfoFactory {
 		return newMethodModel;
 	}
 	
-	public static VariableModel createVariableInfoFromJava(CodeUnitInfoFactoryState s,
+	public static VariableModel createVariableInfoFromJava(GenericModelFactoryState s,
 			VariableTree variableTree, TreePath path, Trees trees) {
 		
 		VarSymbol e = (VarSymbol) trees.getElement(path);
@@ -179,7 +179,7 @@ public class CodeUnitInfoFactory {
 	}
 	
 	private static PackageModel getOrCreatePackage(String packageName, 
-			Map<String, PackageModel> pkgMap, CodeUnitInfoFactoryState s) {
+			Map<String, PackageModel> pkgMap, GenericModelFactoryState s) {
 		
 		// return the package if we already have it
 		if (pkgMap.containsKey(packageName))
@@ -219,7 +219,7 @@ public class CodeUnitInfoFactory {
 		return curPackage;
 	}
 	
-	private static PackageModel getOrCreatePackage(String packageName, CodeUnitInfoFactoryState s) {
+	private static PackageModel getOrCreatePackage(String packageName, GenericModelFactoryState s) {
 		return getOrCreatePackage(packageName, s.programStore.getPackageMap(), s);
 	}
 	

@@ -6,8 +6,8 @@ package org.lukep.javavis.program.java;
 
 import java.util.Vector;
 
-import org.lukep.javavis.program.generic.helpers.CodeUnitInfoFactory;
-import org.lukep.javavis.program.generic.helpers.CodeUnitInfoFactoryState;
+import org.lukep.javavis.program.generic.helpers.GenericModelFactory;
+import org.lukep.javavis.program.generic.helpers.GenericModelFactoryState;
 import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.MethodModel;
 import org.lukep.javavis.program.generic.models.ProjectModel;
@@ -24,21 +24,21 @@ import com.sun.source.util.Trees;
 public class JavaCodeTreeVisitor extends TreePathScanner<Object, Trees> {
 
 	protected Vector<IProgramSourceObserver> observers;
-	protected CodeUnitInfoFactoryState codeUnitState;
+	protected GenericModelFactoryState codeUnitState;
 	
 	public JavaCodeTreeVisitor(Vector<IProgramSourceObserver> observers,
 			ProjectModel programStore) {
 		super();
 
 		this.observers = observers;
-		this.codeUnitState = new CodeUnitInfoFactoryState(programStore);
+		this.codeUnitState = new GenericModelFactoryState(programStore);
 	}
 
 	@Override
 	public Object visitClass(ClassTree classTree, Trees trees) {
 		TreePath path = getCurrentPath();
 		ClassModel newClassModel = 
-			CodeUnitInfoFactory.createClassInfoFromJava(codeUnitState, classTree, path, trees);
+			GenericModelFactory.createClassInfoFromJava(codeUnitState, classTree, path, trees);
 		
 		// notify observers
 		if (newClassModel != null) {
@@ -53,7 +53,7 @@ public class JavaCodeTreeVisitor extends TreePathScanner<Object, Trees> {
 	public Object visitMethod(MethodTree methodTree, Trees trees) {
 		TreePath path = getCurrentPath();
 		MethodModel newMethodInfo = 
-			CodeUnitInfoFactory.createMethodInfoFromJava(codeUnitState, methodTree, path, trees);
+			GenericModelFactory.createMethodInfoFromJava(codeUnitState, methodTree, path, trees);
 		
 		// notify observers
 		for (IProgramSourceObserver observer : observers)
@@ -65,7 +65,7 @@ public class JavaCodeTreeVisitor extends TreePathScanner<Object, Trees> {
 	@Override
 	public Object visitVariable(VariableTree variableTree, Trees trees) {
 		TreePath path = getCurrentPath();
-		VariableModel newVariableInfo = CodeUnitInfoFactory.createVariableInfoFromJava(
+		VariableModel newVariableInfo = GenericModelFactory.createVariableInfoFromJava(
 				codeUnitState, variableTree, path, trees);
 		// TODO: do something here
 		return super.visitVariable(variableTree, trees);

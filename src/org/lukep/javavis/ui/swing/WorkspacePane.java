@@ -388,7 +388,8 @@ public class WorkspacePane extends JDesktopPane implements
 		if (metricTree == e.getSource()) {
 			node = (DefaultMutableTreeNode) metricTree.getLastSelectedPathComponent();
 			
-			if (node.getUserObject() instanceof Visualisation) {
+			if (node != null
+					&& node.getUserObject() instanceof Visualisation) {
 				DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) node.getParent();
 				MetricAttribute metric = (MetricAttribute) parentNode.getUserObject();
 				

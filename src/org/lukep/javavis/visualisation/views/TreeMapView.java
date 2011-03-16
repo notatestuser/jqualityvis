@@ -320,7 +320,8 @@ public class TreeMapView extends AbstractVisualisationView {
             super(group);
         }
         
-        @Override
+        @SuppressWarnings("rawtypes")
+		@Override
         public void run(double frac) {
             Iterator iter = m_vis.items(m_group);
             while (iter.hasNext()) {

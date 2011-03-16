@@ -17,8 +17,6 @@ public class NOHVisitor extends AbstractMeasurableVisitor {
 
 	@Override
 	public MetricMeasurement visit(MetricAttribute metric, ProjectModel project) {
-
-		int hierarchies = 0;
 		
 		// build up a set of all classes that don't inherit from another class (except Object)
 		Set<String> loneWolves = new HashSet<String>();

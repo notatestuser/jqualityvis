@@ -26,6 +26,7 @@ public class MetricAttribute {
 		this.appliesTo = appliesTo;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public MetricAttribute(Metric sourceMetric, MetricRegistry registry) throws ClassNotFoundException {
 		
 		// set the fields in our new MetricAttribute object from the data source object

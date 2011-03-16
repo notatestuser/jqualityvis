@@ -46,6 +46,7 @@ public class JavaCodePostProcessor {
 		}
 	}
 	
+	@SuppressWarnings("rawtypes")
 	private void findAncestorsRecursive(String superClassName, 
 			Class internalSuperClass, ClassModel clazz) {
 		

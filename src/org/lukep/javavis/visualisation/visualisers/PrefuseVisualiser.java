@@ -44,6 +44,7 @@ public class PrefuseVisualiser extends AbstractVisualiser {
 		super(wspContext);
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void bindPrefuseEvents() {
 		display.addControlListener(new ZoomToFitControl());
 		display.addControlListener(new ZoomControl());

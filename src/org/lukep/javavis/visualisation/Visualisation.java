@@ -19,6 +19,7 @@ public class Visualisation {
 	protected Class<IVisualiserVisitor> visualiserVisitor;
 	protected List<String> arguments;
 	
+	@SuppressWarnings("unchecked")
 	public Visualisation(org.lukep.javavis.generated.jaxb.Visualisations.Visualisation sourceVis) throws 
 			ClassNotFoundException {
 		

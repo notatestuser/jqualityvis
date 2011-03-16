@@ -7,6 +7,10 @@ package org.lukep.javavis.ui.swing;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
@@ -17,6 +21,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.filechooser.FileFilter;
 
 import org.lukep.javavis.program.generic.models.ProjectModel;
 import org.lukep.javavis.program.java.JavaSourceLoaderThread;
@@ -27,10 +32,12 @@ public class NewProjectWizardWindow extends AbstractWizardWindow {
 
 	private JTextField txtProjectName;
 	private JTextField txtSourceDirectory;
-	private JTextField txtAdditionalClasspaths;
+	private JTextField txtAdditionalClasspath;
 
-	private File selectedSourceRootDir;
 	private JButton btnBrowseSourceRootDir;
+	private JButton btnAddClasspath;
+	
+	private File selectedSourceRootDir;
 	
 	public NewProjectWizardWindow(Frame parent, UIMain uiInstance) {
 		super(parent, uiInstance, 
@@ -67,14 +74,15 @@ public class NewProjectWizardWindow extends AbstractWizardWindow {
 		cbxSelectedLanguage.setModel(new DefaultComboBoxModel(new String[] {JavaVisConstants.SUPPORTED_LANG_JAVA_6}));
 		addFormControl(cbxSelectedLanguage, "4, 6, fill, default");
 		
-		JLabel lblAdditionalClasspaths = new JLabel("Additional Classpaths:");
+		JLabel lblAdditionalClasspaths = new JLabel("Additional Classpath:");
 		addFormControl(lblAdditionalClasspaths, "2, 8, right, default");
 		
-		txtAdditionalClasspaths = new JTextField();
-		addFormControl(txtAdditionalClasspaths, "4, 8, fill, default");
-		txtAdditionalClasspaths.setColumns(10);
+		txtAdditionalClasspath = new JTextField();
+		addFormControl(txtAdditionalClasspath, "4, 8, fill, default");
+		txtAdditionalClasspath.setColumns(10);
 		
-		JButton btnAddClasspath = new JButton("Add...");
+		btnAddClasspath = new JButton("Add...");
+		btnAddClasspath.addActionListener(this);
 		addFormControl(btnAddClasspath, "6, 8");
 		
 		JLabel lblOptions = new JLabel("Options:");
@@ -92,6 +100,22 @@ public class NewProjectWizardWindow extends AbstractWizardWindow {
 			if (selectedSourceRootDir != null) {
 				txtSourceDirectory.setText(selectedSourceRootDir.getAbsolutePath());
 				refreshActionable();
+			}
+		} else if (btnAddClasspath == e.getSource()) {
+			File[] selectedFiles = browseClasspathSelect();
+			if (selectedFiles != null) {
+				String currentClasspaths = txtAdditionalClasspath.getText(), newClasspaths;
+				for (File f : selectedFiles) {
+					try {
+						newClasspaths = currentClasspaths 
+							+ (currentClasspaths.length() > 0 ? ";" : "") 
+							+ f.getCanonicalPath();
+						txtAdditionalClasspath.setText(newClasspaths);
+						currentClasspaths = newClasspaths;
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+				}
 			}
 		}
 		super.actionPerformed(e);
@@ -128,9 +152,34 @@ public class NewProjectWizardWindow extends AbstractWizardWindow {
 		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		fc.setMultiSelectionEnabled(false);
 		int returnVal = fc.showOpenDialog(null); // TODO: modify parent
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
+		if (returnVal == JFileChooser.APPROVE_OPTION)
 			return fc.getSelectedFile();
-		}
+		return null;
+	}
+	
+	private File[] browseClasspathSelect() {
+		JFileChooser fc = new JFileChooser();
+		fc.setDialogTitle("Add an additional classpath (directory or individual .jars)");
+		fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+		fc.setMultiSelectionEnabled(true);
+		fc.setFileFilter(new FileFilter() {
+			@Override
+			public String getDescription() {
+				return ".jar files and directories containing .class files";
+			}
+			
+			@Override
+			public boolean accept(File f) {
+				if (f.isDirectory() 
+						|| f.getName().endsWith(".jar")
+						|| f.getName().endsWith(".class"))
+					return true;
+				return false;
+			}
+		});
+		int returnVal = fc.showDialog(null, "Add Directory or JAR(s)");
+		if (returnVal == JFileChooser.APPROVE_OPTION)
+			return fc.getSelectedFiles();
 		return null;
 	}
 	
@@ -138,7 +187,17 @@ public class NewProjectWizardWindow extends AbstractWizardWindow {
 		
 		final ProjectModel project = new ProjectModel(txtProjectName.getText());
 		
-		JavaSourceLoaderThread jslt = new JavaSourceLoaderThread(selectedDirectory, project) {
+		// build the (custom) classpath to pass to the compiler
+		String customClasspath = txtAdditionalClasspath.getText();
+		String classpath = System.getProperty("java.class.path") 
+							+ (customClasspath.length() > 0 ? ";" + customClasspath : "");
+		
+		// create compiler options list
+		List<String> compilerOptions = new ArrayList<String>(2);
+		compilerOptions.addAll(Arrays.asList("-classpath", classpath));
+		
+		JavaSourceLoaderThread jslt = new JavaSourceLoaderThread(selectedDirectory, 
+				project, compilerOptions) {
 			
 			@Override
 			public void notifyStatusChange(String message) {
@@ -155,8 +214,8 @@ public class NewProjectWizardWindow extends AbstractWizardWindow {
 					thisInstance.setVisible(false);
 					thisInstance.dispose();
 				} catch (Exception e) {
-					JOptionPane.showMessageDialog(null, "Error creating workspace: " + e.getLocalizedMessage(), 
-							"Error", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Error creating workspace: " 
+							+ e.getLocalizedMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 			

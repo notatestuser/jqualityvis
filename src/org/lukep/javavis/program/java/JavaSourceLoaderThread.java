@@ -7,6 +7,7 @@ package org.lukep.javavis.program.java;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Vector;
 
@@ -28,18 +29,21 @@ public class JavaSourceLoaderThread implements ISourceLoaderThread {
 
 	static final String[] JAVA_SOURCE_EXTENSIONS = { "java" };
 	
-	protected StandardJavaFileManager fileManager;
-	protected DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
+	private StandardJavaFileManager fileManager;
+	private DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
 	
-	protected ProjectModel programStore;
-	protected Vector<IProgramSourceObserver> observers = new Vector<IProgramSourceObserver>();
+	private ProjectModel programStore;
+	private Vector<IProgramSourceObserver> observers = new Vector<IProgramSourceObserver>();
 	
-	protected File selectedDirectory;
-	protected int directoryCount;
+	private File selectedDirectory;
+	private int directoryCount;
 	
-	public JavaSourceLoaderThread(File selectedDirectory, ProjectModel programStore) {
+	private List<String> compilerOptions;
+	
+	public JavaSourceLoaderThread(File selectedDirectory, ProjectModel programStore, List<String> compilerOptions) {
 		this.selectedDirectory = selectedDirectory;
 		this.programStore = programStore;
+		this.compilerOptions = compilerOptions;
 	}
 
 	@Override
@@ -68,7 +72,7 @@ public class JavaSourceLoaderThread implements ISourceLoaderThread {
 		// perform compilation of source files
 		notifyStatusChange("Compiling " + inputFiles.size() + " source files in " + directoryCount + " directories...");
 		CompilationTask compilationTask = compiler.getTask(null, fileManager, diagnostics, 
-															null, null, compilationUnits);
+															compilerOptions, null, compilationUnits);
 		LinkedList<AbstractProcessor> processors = new LinkedList<AbstractProcessor>();
 		processors.add( new JavaCodeProcessor(observers, programStore) );
 		compilationTask.setProcessors(processors);
@@ -78,7 +82,9 @@ public class JavaSourceLoaderThread implements ISourceLoaderThread {
 		// TODO: fix crash when 0 source files discovered
 		
 		// perform post-processing to link models together and build up inheritance tree info, etc
+		notifyStatusChange("Running post-processor...");
 		new JavaCodePostProcessor(programStore).process();
+		notifyStatusChange("Source code processed successfully.");
 		
 		statusFinished();
 	}

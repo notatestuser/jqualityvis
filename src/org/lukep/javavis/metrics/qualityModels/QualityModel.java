@@ -11,6 +11,11 @@ import org.lukep.javavis.metrics.MetricRegistry;
 
 public class QualityModel extends Vector<MetricAttribute> {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4064602565979392577L;
+	
 	private String name;
 	private String internalName;
 	

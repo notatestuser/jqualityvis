@@ -8,6 +8,11 @@ import java.io.Serializable;
 
 public class ClassAncestor implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8368848167487954848L;
+	
 	private String name;
 	private int declaredFields = 0;
 	private int declaredMethods = 0;

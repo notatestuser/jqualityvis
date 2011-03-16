@@ -14,6 +14,11 @@ import org.lukep.javavis.util.JavaVisConstants;
 
 public class MethodModel extends AbstractModel {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1079184886702387866L;
+	
 	private String returnType;
 	private Map<String, String> parameters;
 	private int statementCount = 0;

@@ -16,6 +16,11 @@ import org.lukep.javavis.util.JavaVisConstants;
 
 abstract class AbstractModel implements IMeasurableNode {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3811512186983329425L;
+
 	public String APPLIES_TO_STR = "generic";
 	
 	protected String simpleName;

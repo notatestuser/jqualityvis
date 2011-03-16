@@ -17,6 +17,11 @@ import org.lukep.javavis.util.JavaVisConstants;
 
 public class ClassModel extends AbstractModel {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7311995018796844405L;
+	
 	protected String superClassName;
 	protected int methodCount = 0;
 	protected int variableCount = 0;
@@ -166,7 +171,6 @@ public class ClassModel extends AbstractModel {
 			return methods;
 		}
 		return new Vector<MethodModel>() {};
-	}
 	
 	public int getMethodCount() {
 		return methodCount;
@@ -186,7 +190,6 @@ public class ClassModel extends AbstractModel {
 			return variables;
 		}
 		return new Vector<VariableModel>() {};
-	}
 	
 	public int getVariableCount() {
 		return variableCount;

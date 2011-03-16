@@ -17,6 +17,11 @@ import org.lukep.javavis.util.JavaVisConstants;
 
 public class ProjectModel extends AbstractModel implements IProgramSourceObserver {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4060931547733163850L;
+	
 	protected final static Logger log = 
 		Logger.getLogger(ProjectModel.class.getSimpleName());
 	

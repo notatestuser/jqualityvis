@@ -12,6 +12,11 @@ import org.lukep.javavis.util.JavaVisConstants;
 
 public class PackageModel extends AbstractModel {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1910507117107683678L;
+	
 	public PackageModel(AbstractModelSourceLang sourceLang, String qualifiedName) {
 		super(sourceLang, JavaVisConstants.METRIC_APPLIES_TO_PKG);
 		this.qualifiedName = qualifiedName;

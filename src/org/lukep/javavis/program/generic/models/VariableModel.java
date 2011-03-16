@@ -11,6 +11,11 @@ import org.lukep.javavis.util.JavaVisConstants;
 
 public class VariableModel extends AbstractModel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5524831645892374369L;
+	
 	protected ClassModel typeInternalClass;
 	protected boolean isClassAttribute;
 	

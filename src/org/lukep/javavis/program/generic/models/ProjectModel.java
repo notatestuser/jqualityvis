@@ -7,7 +7,6 @@ package org.lukep.javavis.program.generic.models;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.lukep.javavis.metrics.IMeasurableVisitor;
@@ -20,9 +19,6 @@ public class ProjectModel extends AbstractModel implements IProgramSourceObserve
 	
 	protected final static Logger log = 
 		Logger.getLogger(ProjectModel.class.getSimpleName());
-	
-	// keeps track of all instances of the ClassModelStore (for global class lookups)
-	protected transient final static Vector<ProjectModel> instances = new Vector<ProjectModel>();
 	
     protected Map<String, ClassModel> classMap;
     protected Map<String, PackageModel> packageMap;
@@ -41,7 +37,6 @@ public class ProjectModel extends AbstractModel implements IProgramSourceObserve
     	
     	classMap = Collections.synchronizedMap(new LinkedHashMap<String, ClassModel>());
     	packageMap = Collections.synchronizedMap(new LinkedHashMap<String, PackageModel>());
-    	instances.add(this);
     }
     
 	@Override
@@ -74,19 +69,6 @@ public class ProjectModel extends AbstractModel implements IProgramSourceObserve
     public ClassModel lookupClass(String qualifiedName) {
     	if (classMap.size() > 0 && classMap.containsKey(qualifiedName))
     		return classMap.get(qualifiedName);
-    	return null;
-    }
-    
-    public static ClassModel lookupClassGlobal(String qualifiedName) {
-    	// check all instances of ClassModelStore that we know about
-    	if (instances.size() > 0) {
-    		ClassModel clazz = null;
-    		for (ProjectModel cms : instances) {
-    			clazz = cms.lookupClass(qualifiedName);
-    			if (clazz != null)
-    				return clazz;
-    		}
-    	}
     	return null;
     }
     

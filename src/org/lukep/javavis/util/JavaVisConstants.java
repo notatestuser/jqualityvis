@@ -28,7 +28,8 @@ public class JavaVisConstants {
 	public static final String ICON_QUALITY_ANALYSIS	= "assets/icons/chart_curve.png";
 	public static final String ICON_METRICS				= "assets/icons/chart_bar.png";
 	public static final String ICON_WARNINGS			= "assets/icons/exclamation.png";
-	public static final String ICON_PROJECT_WIZARD		= "assets/icons/application-blue.png";
+	public static final String ICON_PROJECT_WIZARD_NEW	= "assets/icons/application-blue.png";
+	public static final String ICON_PROJECT_WIZARD_SAVE = "assets/icons/document-text.png";
 	
 	public static final String ICON_MENU_PROJECT_CREATE	= "assets/icons/document.png";
 	public static final String ICON_MENU_PROJECT_OPEN	= "assets/icons/folder-import.png";

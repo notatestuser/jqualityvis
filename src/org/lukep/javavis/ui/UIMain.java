@@ -31,20 +31,24 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.lukep.javavis.ui.swing.NewProjectWizardWindow;
+import org.lukep.javavis.ui.swing.SaveProjectWizardWindow;
 import org.lukep.javavis.ui.swing.WorkspacePane;
 import org.lukep.javavis.util.JavaVisConstants;
 import org.lukep.javavis.visualisation.visualisers.IVisualiser;
 
 public class UIMain implements IProgramStatusReporter, ChangeListener {
 
-	protected JFrame frmJavavis;
-	protected JTabbedPane mainTabbedPane;
-	protected JPanel bottomPanel;
-	protected JLabel mainStatusBar;
-	protected JSlider zoomSlider;
-	protected int workspaces = 0;
+	private UIMain thisInstance;
 	
-	protected UIMain thisInstance;
+	private JFrame frmJavavis;
+	private JTabbedPane mainTabbedPane;
+	private JPanel bottomPanel;
+	private JLabel mainStatusBar;
+	private JSlider zoomSlider;
+	private int workspaces = 0;
+	
+	private JMenuItem mntmSaveProject;
+	private JMenuItem mntmCloseTab;
 	
 	private ActionListener actionCreateProject = new ActionListener() {
 		@Override
@@ -65,12 +69,14 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 	private ActionListener actionSaveProject = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			
+			WorkspacePane selectedWorkspace = (WorkspacePane) mainTabbedPane.getSelectedComponent();
+			SaveProjectWizardWindow spw = new SaveProjectWizardWindow(frmJavavis, thisInstance, 
+					selectedWorkspace.getContext().getModelStore());
+			spw.setVisible(true);
 		}
 	};
 	
-	private ActionListener actionCloseWorkspace = new ActionListener() {
+	private ActionListener actionCloseTab = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			int response = -1;
@@ -161,6 +167,7 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 		
 		// initialize main tabbed pane
 		mainTabbedPane = new JTabbedPane();
+		mainTabbedPane.addChangeListener(this);
 		frmJavavis.getContentPane().add(mainTabbedPane);
 		mainTabbedPane.setBackground(Color.LIGHT_GRAY);
 		
@@ -188,6 +195,8 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 		mntmCreateProject.addActionListener(actionCreateProject);
 		mnFile.add(mntmCreateProject);
 		
+		mnFile.addSeparator();
+		
 		// ... File > Open a Project...
 		JMenuItem mntmOpenProject = new JMenuItem("Open Project...", 
 				new ImageIcon(JavaVisConstants.ICON_MENU_PROJECT_OPEN));
@@ -195,16 +204,19 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 		mnFile.add(mntmOpenProject);
 		
 		// ... File > Save Project...
-		JMenuItem mntmSaveProject = new JMenuItem("Save Project...", 
+		mntmSaveProject = new JMenuItem("Save Project...", 
 				new ImageIcon(JavaVisConstants.ICON_MENU_PROJECT_SAVE));
-		mntmOpenProject.addActionListener(actionSaveProject);
+		mntmSaveProject.addActionListener(actionSaveProject);
 		mnFile.add(mntmSaveProject);
+		mntmSaveProject.setEnabled(false);
 		
-		// ... File > Close Workspace
-		JMenuItem mntmCloseWorkspace = new JMenuItem("Close Current Tab", 
+		// ... File > Close Tab
+		mntmCloseTab = new JMenuItem("Close Tab", 
 				new ImageIcon(JavaVisConstants.ICON_MENU_PROJECT_CLOSE));
-		mntmCloseWorkspace.addActionListener(actionCloseWorkspace);
-		mnFile.add(mntmCloseWorkspace);
+		mntmCloseTab.addActionListener(actionCloseTab);
+		mnFile.add(mntmCloseTab);
+		
+		mnFile.addSeparator();
 		
 		// ... File > Exit
 		JMenuItem mntmExit = new JMenuItem("Exit");
@@ -256,10 +268,26 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 
 	@Override
 	public void stateChanged(ChangeEvent e) {
-		if (zoomSlider == e.getSource()
+		if (mainTabbedPane == e.getSource()) {
+			Component selectedTab = mainTabbedPane.getSelectedComponent();
+			
+			// "Close Current Tab" action availability handling
+			if (selectedTab == null)
+				mntmCloseTab.setEnabled(false);
+			else
+				mntmCloseTab.setEnabled(true);
+			
+			// "Save Project" action availability handling
+			if (selectedTab instanceof WorkspacePane)
+				mntmSaveProject.setEnabled(true);
+			else
+				mntmSaveProject.setEnabled(false);
+			
+		} else if (zoomSlider == e.getSource()
 				&& mainTabbedPane.getSelectedComponent() instanceof WorkspacePane) {
 			WorkspacePane selectedWorkspace = 
 				(WorkspacePane) mainTabbedPane.getSelectedComponent();
+			
 			selectedWorkspace.setVisualisationScale((double)zoomSlider.getValue() / 1000);
 		}
 	}

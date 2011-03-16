@@ -22,13 +22,17 @@ public class ProjectModel extends AbstractModel implements IProgramSourceObserve
 		Logger.getLogger(ProjectModel.class.getSimpleName());
 	
 	// keeps track of all instances of the ClassModelStore (for global class lookups)
-	protected final static Vector<ProjectModel> instances = new Vector<ProjectModel>();
+	protected transient final static Vector<ProjectModel> instances = new Vector<ProjectModel>();
 	
     protected Map<String, ClassModel> classMap;
     protected Map<String, PackageModel> packageMap;
     
     ///////////////////////////////////////////////////////
 
+    public ProjectModel() {
+    	this("Untitled Project");
+    }
+    
     public ProjectModel(String name) {
     	super(AbstractModelSourceLang.UNKNOWN, 
     			JavaVisConstants.METRIC_APPLIES_TO_PROJCT);

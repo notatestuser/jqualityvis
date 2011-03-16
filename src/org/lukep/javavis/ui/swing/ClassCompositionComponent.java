@@ -19,6 +19,7 @@ import org.lukep.javavis.program.generic.models.MethodModel;
 import org.lukep.javavis.ui.swing.WorkspaceContext.ChangeEvent;
 import org.lukep.javavis.util.JavaVisConstants;
 
+@SuppressWarnings("serial")
 public class ClassCompositionComponent extends JComponent implements Observer {
 
 	private static final Color BACK_COLOR	= Color.gray;

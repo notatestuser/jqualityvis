@@ -14,6 +14,7 @@ import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.border.EtchedBorder;
 
+@SuppressWarnings("serial")
 public class HeaderLabel extends JLabel {
 
 	public HeaderLabel(String text, Icon icon) {

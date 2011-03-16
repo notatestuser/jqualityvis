@@ -162,6 +162,7 @@ public class ClassModel extends AbstractModel {
 		methodCount++;
 	}
 	
+	@SuppressWarnings("serial")
 	public Vector<MethodModel> getMethods() {
 		if (children != null) {
 			Vector<MethodModel> methods = new Vector<MethodModel>(children.size());
@@ -170,7 +171,8 @@ public class ClassModel extends AbstractModel {
 					methods.add((MethodModel) m.target);
 			return methods;
 		}
-		return new Vector<MethodModel>() {};
+		return new Vector<MethodModel>() { };
+	}
 	
 	public int getMethodCount() {
 		return methodCount;
@@ -181,6 +183,7 @@ public class ClassModel extends AbstractModel {
 		variableCount++;
 	}
 	
+	@SuppressWarnings("serial")
 	public Vector<VariableModel> getVariables() {
 		if (children != null) {
 			Vector<VariableModel> variables = new Vector<VariableModel>(children.size());
@@ -190,6 +193,7 @@ public class ClassModel extends AbstractModel {
 			return variables;
 		}
 		return new Vector<VariableModel>() {};
+	}
 	
 	public int getVariableCount() {
 		return variableCount;

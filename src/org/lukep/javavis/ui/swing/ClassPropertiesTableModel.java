@@ -18,6 +18,7 @@ import org.lukep.javavis.program.generic.models.Relationship;
 import org.lukep.javavis.util.JavaVisConstants;
 
 // TODO clean this up
+@SuppressWarnings("serial")
 public class ClassPropertiesTableModel extends AbstractTableModel {
 
 	protected IGenericModelNode subject;

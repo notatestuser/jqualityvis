@@ -27,6 +27,7 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 
+@SuppressWarnings("serial")
 public class OpenProjectWizardWindow extends AbstractWizardWindow {
 
 	private JTextField txtOpenFilename;

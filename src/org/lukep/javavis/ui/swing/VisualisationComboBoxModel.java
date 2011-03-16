@@ -10,6 +10,7 @@ import javax.swing.DefaultComboBoxModel;
 
 import org.lukep.javavis.visualisation.Visualisation;
 
+@SuppressWarnings("serial")
 public class VisualisationComboBoxModel extends DefaultComboBoxModel {
 
 	protected List<Visualisation> visualisations;

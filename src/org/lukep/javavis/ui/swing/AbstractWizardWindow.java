@@ -32,6 +32,7 @@ import javax.swing.border.EmptyBorder;
 import org.lukep.javavis.program.generic.models.ProjectModel;
 import org.lukep.javavis.ui.UIMain;
 
+@SuppressWarnings("serial")
 abstract class AbstractWizardWindow extends JDialog implements ActionListener {
 
 	AbstractWizardWindow thisInstance;

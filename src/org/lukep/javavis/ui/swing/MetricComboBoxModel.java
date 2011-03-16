@@ -8,6 +8,7 @@ import javax.swing.DefaultComboBoxModel;
 
 import org.lukep.javavis.metrics.MetricRegistry;
 
+@SuppressWarnings("serial")
 public class MetricComboBoxModel extends DefaultComboBoxModel {
 
 	@Override

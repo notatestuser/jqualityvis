@@ -24,6 +24,7 @@ import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.IGenericModelNode;
 import org.lukep.javavis.ui.swing.WorkspaceContext.ChangeEvent;
 
+@SuppressWarnings("serial")
 public class ClassPropertiesPanel extends JPanel implements Observer {
 	
 	protected JLabel contentLabel;

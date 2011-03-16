@@ -1,5 +1,5 @@
 /*
- * SaveProjectWizardWindow.java (JMetricVis)
+ * OpenProjectWizardWindow.java (JMetricVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
 package org.lukep.javavis.ui.swing;
@@ -8,14 +8,12 @@ import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.io.File;
-import java.io.IOException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -29,28 +27,24 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 
-public class SaveProjectWizardWindow extends AbstractWizardWindow {
+public class OpenProjectWizardWindow extends AbstractWizardWindow {
+
+	private JTextField txtOpenFilename;
+	private JButton btnOpenBrowse;
+	private File selectedFile;
 	
-	private ProjectModel project;
-	
-	private JTextField txtSaveFilename;
-	private JButton btnSaveBrowse;
-	private File selectedSaveFile;
-	
-	private JCheckBox chckbxSerialiseXML;
-	private JCheckBox chckbxGZIPCompress;
+	private JCheckBox chckbxUnserialiseXML;
+	private JCheckBox chckbxGZIPDecompress;
 	
 	private Thread workerThread;
 	
-	public SaveProjectWizardWindow(Frame parent, UIMain uiInstance, ProjectModel project) {
+	public OpenProjectWizardWindow(Frame parent, UIMain uiInstance) {
 		super(parent, uiInstance, 
-				"Save Project '" + project.getSimpleName() + "'",
-				new ImageIcon(JavaVisConstants.ICON_PROJECT_WIZARD_SAVE));
-		setActionButtonText("Save Project File");
-		
-		this.project = project;
+				"Open an Existing Project",
+				new ImageIcon(JavaVisConstants.ICON_PROJECT_WIZARD_OPEN));
+		setActionButtonText("Load Project File");
 	}
-
+	
 	@Override
 	public void dispose() {
 		if (workerThread != null)
@@ -73,40 +67,41 @@ public class SaveProjectWizardWindow extends AbstractWizardWindow {
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,}));
 		
-		JLabel lblSaveFilename = new JLabel("File Path:");
-		addFormControl(lblSaveFilename, "2, 2, right, default");
+		JLabel lblOpenFilename = new JLabel("File Path:");
+		addFormControl(lblOpenFilename, "2, 2, right, default");
 		
-		txtSaveFilename = new JTextField();
-		addFormControl(txtSaveFilename, "4, 2, fill, default");
-		txtSaveFilename.setColumns(30);
-		txtSaveFilename.addKeyListener(validationListener);
+		txtOpenFilename = new JTextField();
+		addFormControl(txtOpenFilename, "4, 2, fill, default");
+		txtOpenFilename.setColumns(30);
+		txtOpenFilename.addKeyListener(validationListener);
 		
-		btnSaveBrowse = new JButton("Browse...");
-		btnSaveBrowse.addActionListener(this);
-		addFormControl(btnSaveBrowse, "6, 2");
+		btnOpenBrowse = new JButton("Browse...");
+		btnOpenBrowse.addActionListener(this);
+		addFormControl(btnOpenBrowse, "6, 2");
 		
 		JLabel lblOptions = new JLabel("Options:");
 		addFormControl(lblOptions, "2, 4, right, default");
 		
 		JPanel pnlOptions = new JPanel(new FlowLayout());
 		{
-			chckbxSerialiseXML = new JCheckBox("Export as XML");
-			chckbxSerialiseXML.setSelected(false);
-			pnlOptions.add(chckbxSerialiseXML);
+			chckbxUnserialiseXML = new JCheckBox("Import as XML");
+			chckbxUnserialiseXML.setSelected(false);
+			pnlOptions.add(chckbxUnserialiseXML);
 			
-			chckbxGZIPCompress = new JCheckBox("GZIP Compress Output");
-			chckbxGZIPCompress.setSelected(true);
-			pnlOptions.add(chckbxGZIPCompress);
+			chckbxGZIPDecompress = new JCheckBox("GZIP Decompress Source");
+			chckbxGZIPDecompress.setSelected(true);
+			pnlOptions.add(chckbxGZIPDecompress);
 		}
 		addFormControl(pnlOptions, "4, 4, fill, default");
+
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (btnSaveBrowse == e.getSource()) {
-			selectedSaveFile = browseFileSaveLocation();
-			if (selectedSaveFile != null) {
-				txtSaveFilename.setText(selectedSaveFile.getAbsolutePath());
+		if (btnOpenBrowse == e.getSource()) {
+			selectedFile = browseFileSaveLocation();
+			if (selectedFile != null) {
+				txtOpenFilename.setText(selectedFile.getAbsolutePath());
 				refreshActionable();
 			}
 		}
@@ -115,11 +110,11 @@ public class SaveProjectWizardWindow extends AbstractWizardWindow {
 
 	@Override
 	protected boolean validateFormControls() {
-		String saveFilename = txtSaveFilename.getText();
+		String saveFilename = txtOpenFilename.getText();
 		if (saveFilename.length() > 0) {
-			selectedSaveFile = new File(txtSaveFilename.getText());
-			if (selectedSaveFile.isAbsolute()
-					&& !selectedSaveFile.isDirectory())
+			selectedFile = new File(txtOpenFilename.getText());
+			if (selectedFile.isAbsolute()
+					&& !selectedFile.isDirectory())
 				return true;
 		}
 		return false;
@@ -127,33 +122,35 @@ public class SaveProjectWizardWindow extends AbstractWizardWindow {
 
 	@Override
 	protected void lockFormControls() {
-		txtSaveFilename.setEnabled(false);
-		btnSaveBrowse.setEnabled(false);
+		txtOpenFilename.setEnabled(false);
+		btnOpenBrowse.setEnabled(false);
 		btnPerformAction.setEnabled(false);
 	}
 
 	@Override
 	protected void unlockFormControls() {
-		txtSaveFilename.setEnabled(true);
-		btnSaveBrowse.setEnabled(true);
+		txtOpenFilename.setEnabled(true);
+		btnOpenBrowse.setEnabled(true);
 		refreshActionable();
 	}
 
 	@Override
 	protected boolean performAction() throws Exception {
 		progressBar.setMaximum(1);
-		setProgramStatus("Saving " + selectedSaveFile.getName() + "...", true, 0);
+		setProgramStatus("Opening " + selectedFile.getName() + "...", true, 0);
 		
 		// start the serialisation task in a new thread
-		final boolean fxml = chckbxSerialiseXML.isSelected();
-		final boolean fgzip = chckbxGZIPCompress.isSelected();
+		final boolean fxml = chckbxUnserialiseXML.isSelected();
+		final boolean fgzip = chckbxGZIPDecompress.isSelected();
 		workerThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
+				ProjectModel project = null;
 				try {
-					ModelSerializer.serializeProjectToFile(selectedSaveFile, project, fxml, fgzip);
-					notifySerializationComplete();
-				} catch (IOException e) {
+					project = ModelSerializer.loadProjectFromFile(selectedFile, fxml, fgzip, 
+							progressBar.getModel());
+					notifyLoadComplete(project);
+				} catch (Exception e) {
 					showError(e.getLocalizedMessage());
 				}
 			}
@@ -162,22 +159,25 @@ public class SaveProjectWizardWindow extends AbstractWizardWindow {
 		workerThread.start();
 		return true;
 	}
-
+	
 	private File browseFileSaveLocation() {
 		JFileChooser fc = new JFileChooser();
-		fc.setDialogTitle("Save Project");
+		fc.setDialogTitle("Open Project");
+		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		fc.setMultiSelectionEnabled(false);
 		int returnVal = fc.showSaveDialog(this);
 		if (returnVal == JFileChooser.APPROVE_OPTION)
 			return fc.getSelectedFile();
 		return null;
 	}
 	
-	public void notifySerializationComplete() {
-		setProgramStatus("Save successful.", false, progressBar.getMaximum());
-		JOptionPane.showMessageDialog(this, "Project saved to " + selectedSaveFile.getName() + ".", 
-				"Saved", JOptionPane.INFORMATION_MESSAGE);
-		setVisible(false);
-		dispose();
+	public void notifyLoadComplete(ProjectModel project) {
+		if (project != null) {
+			setProgramStatus("Load successful.", false, progressBar.getMaximum());
+			createWorkspaceAndClose(project);
+			return;
+		}
+		showError("Project load routine returned null - please check input file.");
 	}
 
 }

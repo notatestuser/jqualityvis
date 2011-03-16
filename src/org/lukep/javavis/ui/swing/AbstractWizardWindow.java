@@ -29,6 +29,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.border.EmptyBorder;
 
+import org.lukep.javavis.program.generic.models.ProjectModel;
 import org.lukep.javavis.ui.UIMain;
 
 abstract class AbstractWizardWindow extends JDialog implements ActionListener {
@@ -50,13 +51,21 @@ abstract class AbstractWizardWindow extends JDialog implements ActionListener {
 	protected KeyListener validationListener = new KeyListener() {
 		@Override
 		public void keyTyped(KeyEvent e) {
-			refreshActionable();
 		}
 		@Override
 		public void keyReleased(KeyEvent e) {
+			refreshActionable();
 		}
 		@Override
 		public void keyPressed(KeyEvent e) {
+		}
+	};
+	
+	protected final Thread.UncaughtExceptionHandler exHandler = 
+		new Thread.UncaughtExceptionHandler() {
+		@Override
+		public void uncaughtException(Thread t, Throwable e) {
+			showError(e.getLocalizedMessage());
 		}
 	};
 	
@@ -124,7 +133,13 @@ abstract class AbstractWizardWindow extends JDialog implements ActionListener {
 		btnCancel.addActionListener(this);
 		pnlButtons.add(btnCancel);
 		
-		btnPerformAction = new JButton("Confirm Action");
+		btnPerformAction = new JButton("Confirm Action") {
+			@Override
+			public void setEnabled(boolean arg0) {
+				super.setEnabled(arg0);
+				btnPerformActionEnabled = arg0;
+			}
+		};
 		btnPerformAction.addActionListener(this);
 		btnPerformAction.setEnabled(false);
 		pnlButtons.add(btnPerformAction);
@@ -183,18 +198,32 @@ abstract class AbstractWizardWindow extends JDialog implements ActionListener {
 		if (validateFormControls()) {
 			if (!btnPerformActionEnabled) {
 				btnPerformAction.setEnabled(true);
-				btnPerformActionEnabled = true;
 			}
 		} else if (btnPerformActionEnabled) {
 			btnPerformAction.setEnabled(false);
-			btnPerformActionEnabled = false;
 		}
 	}
 	
 	protected void showError(String message) {
 		JOptionPane.showMessageDialog(this, message, "Something went awry!", 
 				JOptionPane.ERROR_MESSAGE);
+		
+		// reset progress bar and unlock form controls
+		setProgramStatus("", false, 0);
 		unlockFormControls();
+	}
+	
+	protected void createWorkspaceAndClose(ProjectModel project) {
+		WorkspacePane workspace = null;
+		try {
+			workspace = new WorkspacePane(project, uiInstance);
+			uiInstance.addChildWorkspaceFrame(workspace);
+			workspace.setVisible(true);
+			setVisible(false);
+			dispose();
+		} catch (Exception e) {
+			showError("Error creating workspace: " + e.getLocalizedMessage());
+		}
 	}
 	
 	protected abstract void initialiseFormControls();

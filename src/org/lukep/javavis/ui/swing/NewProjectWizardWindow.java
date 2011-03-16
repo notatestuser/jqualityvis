@@ -46,12 +46,21 @@ public class NewProjectWizardWindow extends AbstractWizardWindow implements IPro
 	
 	private File selectedSourceRootDir;
 	
+	private Thread workerThread;
+	
 	public NewProjectWizardWindow(Frame parent, UIMain uiInstance) {
 		super(parent, uiInstance, 
 				"Create a New Project", 
 				new ImageIcon(JavaVisConstants.ICON_PROJECT_WIZARD_NEW));
 		
 		setActionButtonText("Create Project");
+	}
+	
+	@Override
+	public void dispose() {
+		if (workerThread != null)
+			workerThread.stop();
+		super.dispose();
 	}
 	
 	@Override
@@ -120,7 +129,7 @@ public class NewProjectWizardWindow extends AbstractWizardWindow implements IPro
 		chckbxPreloadMetricMeasurements.setSelected(true);
 		addFormControl(chckbxPreloadMetricMeasurements, "4, 10");
 	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (btnBrowseSourceRootDir == e.getSource()) {
@@ -243,22 +252,14 @@ public class NewProjectWizardWindow extends AbstractWizardWindow implements IPro
 
 			@Override
 			public void statusFinished() {
-				WorkspacePane workspace = null;
-				try {
-					workspace = new WorkspacePane(project, uiInstance);
-					uiInstance.addChildWorkspaceFrame(workspace);
-					workspace.setVisible(true);
-					thisInstance.setVisible(false);
-					thisInstance.dispose();
-				} catch (Exception e) {
-					showError("Error creating workspace: " + e.getLocalizedMessage());
-				}
+				createWorkspaceAndClose(project);
 			}
 			
 		};
 		jslt.addObserver(this);
 		jslt.addObserver(project);
-		new Thread(jslt).start();
+		workerThread = new Thread(jslt);
+		workerThread.start();
 	}
 
 	@Override

@@ -31,6 +31,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.lukep.javavis.ui.swing.NewProjectWizardWindow;
+import org.lukep.javavis.ui.swing.OpenProjectWizardWindow;
 import org.lukep.javavis.ui.swing.SaveProjectWizardWindow;
 import org.lukep.javavis.ui.swing.WorkspacePane;
 import org.lukep.javavis.util.JavaVisConstants;
@@ -61,8 +62,8 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 	private ActionListener actionOpenProject = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			
+			OpenProjectWizardWindow opw = new OpenProjectWizardWindow(frmJavavis, thisInstance);
+			opw.setVisible(true);
 		}
 	};
 	

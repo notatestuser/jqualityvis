@@ -23,12 +23,20 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
 
+import org.lukep.javavis.program.generic.models.ClassModel;
+import org.lukep.javavis.program.generic.models.MethodModel;
 import org.lukep.javavis.program.generic.models.ProjectModel;
 import org.lukep.javavis.program.java.JavaSourceLoaderThread;
+import org.lukep.javavis.ui.IProgramSourceObserver;
 import org.lukep.javavis.ui.UIMain;
 import org.lukep.javavis.util.JavaVisConstants;
 
-public class NewProjectWizardWindow extends AbstractWizardWindow {
+import com.jgoodies.forms.factories.FormFactory;
+import com.jgoodies.forms.layout.ColumnSpec;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.RowSpec;
+
+public class NewProjectWizardWindow extends AbstractWizardWindow implements IProgramSourceObserver {
 
 	private JTextField txtProjectName;
 	private JTextField txtSourceDirectory;
@@ -42,11 +50,32 @@ public class NewProjectWizardWindow extends AbstractWizardWindow {
 	public NewProjectWizardWindow(Frame parent, UIMain uiInstance) {
 		super(parent, uiInstance, 
 				"Create a New Project", 
-				new ImageIcon(JavaVisConstants.ICON_PROJECT_WIZARD));
+				new ImageIcon(JavaVisConstants.ICON_PROJECT_WIZARD_NEW));
+		
+		setActionButtonText("Create Project");
 	}
 	
 	@Override
 	protected void initialiseFormControls() {
+		setFormLayout(new FormLayout(new ColumnSpec[] {
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,
+				FormFactory.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("default:grow"),
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,},
+			new RowSpec[] {
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,}));
+		
 		JLabel lblProjectName = new JLabel("Project Name:");
 		addFormControl(lblProjectName, "2, 2, right, default");
 		
@@ -139,11 +168,20 @@ public class NewProjectWizardWindow extends AbstractWizardWindow {
 	protected void lockFormControls() {
 		txtProjectName.setEnabled(false);
 		btnBrowseSourceRootDir.setEnabled(false);
+		btnPerformAction.setEnabled(false);
 	}
 	
 	@Override
-	protected void performAction() throws Exception {
+	protected void unlockFormControls() {
+		txtProjectName.setEnabled(true);
+		btnBrowseSourceRootDir.setEnabled(true);
+		refreshActionable();
+	}
+
+	@Override
+	protected boolean performAction() throws Exception {
 		loadJavaCodeBase(selectedSourceRootDir);
+		return true;
 	}
 	
 	private File browseSourceRootDirectorySelect() {
@@ -151,7 +189,7 @@ public class NewProjectWizardWindow extends AbstractWizardWindow {
 		fc.setDialogTitle("Browse for a directory");
 		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		fc.setMultiSelectionEnabled(false);
-		int returnVal = fc.showOpenDialog(null); // TODO: modify parent
+		int returnVal = fc.showOpenDialog(this);
 		if (returnVal == JFileChooser.APPROVE_OPTION)
 			return fc.getSelectedFile();
 		return null;
@@ -177,7 +215,7 @@ public class NewProjectWizardWindow extends AbstractWizardWindow {
 				return false;
 			}
 		});
-		int returnVal = fc.showDialog(null, "Add Directory or JAR(s)");
+		int returnVal = fc.showDialog(this, "Add Directory or JAR(s)");
 		if (returnVal == JFileChooser.APPROVE_OPTION)
 			return fc.getSelectedFiles();
 		return null;
@@ -220,8 +258,32 @@ public class NewProjectWizardWindow extends AbstractWizardWindow {
 			}
 			
 		};
+		jslt.addObserver(this);
 		jslt.addObserver(project);
 		new Thread(jslt).start();
+	}
+
+	@Override
+	public void notifyRootNodeCount(int rootNodes) {
+		progressBar.setMaximum(rootNodes);
+	}
+
+	@Override
+	public void notifyRootNodeProcessing(int rootNode, String name) {
+		setProgramStatus("Processing " + name + "...", false, rootNode);
+	}
+
+	@Override
+	public void notifyRootNodesProcessed() {
+		setProgramStatus("Preparing to post-process elements...", true, 0);
+	}
+
+	@Override
+	public void notifyFindClass(ClassModel clazz) {
+	}
+
+	@Override
+	public void notifyFindMethod(MethodModel method) {
 	}
 
 }

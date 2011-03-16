@@ -48,21 +48,32 @@ public class JavaCodeProcessor extends AbstractProcessor {
 	@Override
 	public boolean process(Set<? extends TypeElement> annotations,
 			RoundEnvironment roundEnv) {
+		
 		Set<? extends Element> roots = roundEnv.getRootElements();
-		//System.out.println(roots.size() + " root elements in this RoundEnvironment");
+		
+		// notify observers of the root element count
+		for (IProgramSourceObserver observer : observers)
+			observer.notifyRootNodeCount(roots.size());
 		
 		// initialise tree scanner to traverse constituent elements
 		JavaCodeTreeVisitor treeVisitor = new JavaCodeTreeVisitor(observers, programStore);
 		
+		int i = 0;
 		for (Element root : roots) {
+			// notify observers of the root element's name
+			for (IProgramSourceObserver observer : observers)
+				observer.notifyRootNodeProcessing(i, root.getSimpleName().toString());
+			
+			// dispatch the JavaCodeTreeVisitor on the root element
 			TreePath tp = trees.getPath(root);
 			treeVisitor.scan(tp, trees);
 			
-			/*if (root instanceof ClassSymbol) {
-				ClassSymbol rootClass = (ClassSymbol) root;
-				System.out.println(rootClass.toString());
-			}*/
+			i++;
 		}
+		
+		// notify observers about root node visitation completion
+		for (IProgramSourceObserver observer : observers)
+			observer.notifyRootNodesProcessed();
 		
 		return false;
 	}

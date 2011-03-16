@@ -10,6 +10,7 @@ import java.awt.Component;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.GridLayout;
+import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -30,11 +31,6 @@ import javax.swing.border.EmptyBorder;
 
 import org.lukep.javavis.ui.UIMain;
 
-import com.jgoodies.forms.factories.FormFactory;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.RowSpec;
-
 abstract class AbstractWizardWindow extends JDialog implements ActionListener {
 
 	AbstractWizardWindow thisInstance;
@@ -42,14 +38,14 @@ abstract class AbstractWizardWindow extends JDialog implements ActionListener {
 	
 	private JPanel pnlForm;
 	
-	protected JButton btnPerformAction;
-	private JButton btnCancel;
+	protected JProgressBar progressBar;
 	
+	protected JButton btnPerformAction;
 	protected boolean btnPerformActionEnabled = false;
 	
-	private JLabel lblStatus;
+	private JButton btnCancel;
 	
-	private JProgressBar progressBar;
+	private JLabel lblStatus;
 	
 	protected KeyListener validationListener = new KeyListener() {
 		@Override
@@ -109,24 +105,6 @@ abstract class AbstractWizardWindow extends JDialog implements ActionListener {
 		JScrollPane spForm = new JScrollPane(pnlForm);
 		spForm.setBorder(BorderFactory.createEmptyBorder());
 		getContentPane().add(spForm, BorderLayout.CENTER);
-		pnlForm.setLayout(new FormLayout(new ColumnSpec[] {
-				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,
-				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("default:grow"),
-				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,},
-			new RowSpec[] {
-				FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,}));
 		
 		// --- end form, begin footer
 		
@@ -146,7 +124,7 @@ abstract class AbstractWizardWindow extends JDialog implements ActionListener {
 		btnCancel.addActionListener(this);
 		pnlButtons.add(btnCancel);
 		
-		btnPerformAction = new JButton("Create Project");
+		btnPerformAction = new JButton("Confirm Action");
 		btnPerformAction.addActionListener(this);
 		btnPerformAction.setEnabled(false);
 		pnlButtons.add(btnPerformAction);
@@ -169,7 +147,8 @@ abstract class AbstractWizardWindow extends JDialog implements ActionListener {
 			} else if (btnPerformAction == e.getSource()) {
 				if (validateFormControls()) {
 					lockFormControls();
-					performAction();
+					if (!performAction())
+						unlockFormControls();
 				}
 			}
 		} catch (Exception ex) {
@@ -178,8 +157,16 @@ abstract class AbstractWizardWindow extends JDialog implements ActionListener {
 		}
 	}
 	
+	protected void setFormLayout(LayoutManager layout) {
+		pnlForm.setLayout(layout);
+	}
+	
 	protected void addFormControl(Component comp, Object constraints) {
 		pnlForm.add(comp, constraints);
+	}
+	
+	protected void setActionButtonText(String text) {
+		btnPerformAction.setText(text);
 	}
 	
 	protected void setProgramStatus(String status, boolean indeterminate, int progress) {
@@ -207,6 +194,7 @@ abstract class AbstractWizardWindow extends JDialog implements ActionListener {
 	protected abstract void initialiseFormControls();
 	protected abstract boolean validateFormControls();
 	protected abstract void lockFormControls();
-	protected abstract void performAction() throws Exception;
+	protected abstract void unlockFormControls();
+	protected abstract boolean performAction() throws Exception;
 
 }

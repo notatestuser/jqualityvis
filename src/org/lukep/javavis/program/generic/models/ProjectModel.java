@@ -105,10 +105,22 @@ public class ProjectModel extends AbstractModel implements IProgramSourceObserve
 
 	@Override
 	public void notifyFindMethod(MethodModel method) {
-		// TODO Auto-generated method stub
-		
 	}
 
+	@Override
+	public void notifyRootNodeCount(int rootNodes) {
+	}
+
+	@Override
+	public void notifyRootNodeProcessing(int rootNode, String name) {
+	}
+	
+	@Override
+	public void notifyRootNodesProcessed() {
+	}
+	
+    ///////////////////////////////////////////////////////
+	
 	@Override
 	public String toString() {
 		return simpleName;

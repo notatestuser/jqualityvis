@@ -6,8 +6,8 @@ package org.lukep.javavis.program.java;
 
 import java.util.Vector;
 
-import org.lukep.javavis.program.generic.helpers.GenericModelFactory;
-import org.lukep.javavis.program.generic.helpers.GenericModelFactoryState;
+import org.lukep.javavis.program.generic.factories.GenericModelFactory;
+import org.lukep.javavis.program.generic.factories.GenericModelFactoryState;
 import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.MethodModel;
 import org.lukep.javavis.program.generic.models.ProjectModel;

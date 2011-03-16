@@ -4,7 +4,6 @@
  */
 package org.lukep.javavis.program.generic.models;
 
-import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -14,18 +13,14 @@ import org.lukep.javavis.metrics.MetricMeasurement;
 import org.lukep.javavis.util.JavaVisConstants;
 
 public class MethodModel extends AbstractModel {
-
-	class SourceLangDependentAttributes implements Serializable {
-		public Object rootStatementBlock;
-	}
 	
 	private String returnType;
 	private Map<String, String> parameters;
-	private SourceLangDependentAttributes extraAttributes;
+	private int statementCount = 0;
+	private int independentExecutionPaths = 1; // we always start out with 1 path through a method
 
 	public MethodModel(AbstractModelSourceLang lang, String name) {
 		super(lang, JavaVisConstants.METRIC_APPLIES_TO_METHOD);
-		extraAttributes = new SourceLangDependentAttributes();
 		setName(name);
 	}
 
@@ -73,12 +68,28 @@ public class MethodModel extends AbstractModel {
 		return parameters;
 	}
 
-	public Object getRootStatementBlock() {
-		return extraAttributes.rootStatementBlock;
+	public int getStatementCount() {
+		return statementCount;
+	}
+
+	public void setStatementCount(int statementCount) {
+		this.statementCount = statementCount;
 	}
 	
-	public void setRootStatementBlock(Object rootStatementBlock) {
-		extraAttributes.rootStatementBlock = rootStatementBlock;
+	public void incStatementCount(int n) {
+		this.statementCount += n;
+	}
+
+	public int getIndependentExecutionPaths() {
+		return independentExecutionPaths;
+	}
+
+	public void setIndependentExecutionPaths(int independentCodePaths) {
+		this.independentExecutionPaths = independentCodePaths;
+	}
+	
+	public void incIndependentExecutionPaths(int n) {
+		this.independentExecutionPaths += n;
 	}
 
 	@Override

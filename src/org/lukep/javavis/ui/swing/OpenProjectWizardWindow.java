@@ -47,8 +47,8 @@ public class OpenProjectWizardWindow extends AbstractWizardWindow {
 	
 	@Override
 	public void dispose() {
-		if (workerThread != null)
-			workerThread.stop();
+		//if (workerThread != null)
+		//	workerThread.stop();
 		super.dispose();
 	}
 

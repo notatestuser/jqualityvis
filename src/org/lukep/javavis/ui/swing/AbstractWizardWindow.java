@@ -191,6 +191,12 @@ abstract class AbstractWizardWindow extends JDialog implements ActionListener {
 		}
 	}
 	
+	protected void showError(String message) {
+		JOptionPane.showMessageDialog(this, message, "Something went awry!", 
+				JOptionPane.ERROR_MESSAGE);
+		unlockFormControls();
+	}
+	
 	protected abstract void initialiseFormControls();
 	protected abstract boolean validateFormControls();
 	protected abstract void lockFormControls();

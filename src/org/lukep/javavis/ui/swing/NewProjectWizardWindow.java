@@ -19,7 +19,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
 
@@ -252,8 +251,7 @@ public class NewProjectWizardWindow extends AbstractWizardWindow implements IPro
 					thisInstance.setVisible(false);
 					thisInstance.dispose();
 				} catch (Exception e) {
-					JOptionPane.showMessageDialog(null, "Error creating workspace: " 
-							+ e.getLocalizedMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+					showError("Error creating workspace: " + e.getLocalizedMessage());
 				}
 			}
 			

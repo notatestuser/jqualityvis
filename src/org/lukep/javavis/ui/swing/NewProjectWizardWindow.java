@@ -1,0 +1,168 @@
+/*
+ * NewProjectWizardWindow.java (JMetricVis)
+ * Copyright 2011 Luke Plaster. All rights reserved.
+ */
+package org.lukep.javavis.ui.swing;
+
+import java.awt.Frame;
+import java.awt.event.ActionEvent;
+import java.io.File;
+
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+
+import org.lukep.javavis.program.generic.models.ProjectModel;
+import org.lukep.javavis.program.java.JavaSourceLoaderThread;
+import org.lukep.javavis.ui.UIMain;
+import org.lukep.javavis.util.JavaVisConstants;
+
+public class NewProjectWizardWindow extends AbstractWizardWindow {
+
+	private JTextField txtProjectName;
+	private JTextField txtSourceDirectory;
+	private JTextField txtAdditionalClasspaths;
+
+	private File selectedSourceRootDir;
+	private JButton btnBrowseSourceRootDir;
+	
+	public NewProjectWizardWindow(Frame parent, UIMain uiInstance) {
+		super(parent, uiInstance, 
+				"Create a New Project", 
+				new ImageIcon(JavaVisConstants.ICON_PROJECT_WIZARD));
+	}
+	
+	@Override
+	protected void initialiseFormControls() {
+		JLabel lblProjectName = new JLabel("Project Name:");
+		addFormControl(lblProjectName, "2, 2, right, default");
+		
+		txtProjectName = new JTextField();
+		addFormControl(txtProjectName, "4, 2, fill, default");
+		txtProjectName.setColumns(30);
+		txtProjectName.addKeyListener(validationListener);
+		
+		JLabel lblSourceDirectory = new JLabel("Source Root Directory:");
+		addFormControl(lblSourceDirectory, "2, 4, right, default");
+		
+		txtSourceDirectory = new JTextField();
+		addFormControl(txtSourceDirectory, "4, 4, fill, default");
+		txtSourceDirectory.setColumns(10);
+		txtSourceDirectory.setEditable(false);
+		
+		btnBrowseSourceRootDir = new JButton("Browse...");
+		btnBrowseSourceRootDir.addActionListener(this);
+		addFormControl(btnBrowseSourceRootDir, "6, 4");
+		
+		JLabel lblSourceLanguage = new JLabel("Source Language:");
+		addFormControl(lblSourceLanguage, "2, 6, right, default");
+		
+		JComboBox cbxSelectedLanguage = new JComboBox();
+		cbxSelectedLanguage.setModel(new DefaultComboBoxModel(new String[] {JavaVisConstants.SUPPORTED_LANG_JAVA_6}));
+		addFormControl(cbxSelectedLanguage, "4, 6, fill, default");
+		
+		JLabel lblAdditionalClasspaths = new JLabel("Additional Classpaths:");
+		addFormControl(lblAdditionalClasspaths, "2, 8, right, default");
+		
+		txtAdditionalClasspaths = new JTextField();
+		addFormControl(txtAdditionalClasspaths, "4, 8, fill, default");
+		txtAdditionalClasspaths.setColumns(10);
+		
+		JButton btnAddClasspath = new JButton("Add...");
+		addFormControl(btnAddClasspath, "6, 8");
+		
+		JLabel lblOptions = new JLabel("Options:");
+		addFormControl(lblOptions, "2, 10, right, default");
+		
+		JCheckBox chckbxPreloadMetricMeasurements = new JCheckBox("Preload Metric Measurements");
+		chckbxPreloadMetricMeasurements.setSelected(true);
+		addFormControl(chckbxPreloadMetricMeasurements, "4, 10");
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (btnBrowseSourceRootDir == e.getSource()) {
+			selectedSourceRootDir = browseSourceRootDirectorySelect();
+			if (selectedSourceRootDir != null) {
+				txtSourceDirectory.setText(selectedSourceRootDir.getAbsolutePath());
+				refreshActionable();
+			}
+		}
+		super.actionPerformed(e);
+	}
+	
+	@Override
+	protected boolean validateFormControls() {
+		if (	// validate project name text length
+				txtProjectName.getText().length() > 0
+				// validate source directory length
+				&& txtSourceDirectory.getText().length() > 0
+				// ensure selected file exists
+				&& selectedSourceRootDir != null
+				&& selectedSourceRootDir.exists()) {
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
+	protected void lockFormControls() {
+		txtProjectName.setEnabled(false);
+		btnBrowseSourceRootDir.setEnabled(false);
+	}
+	
+	@Override
+	protected void performAction() throws Exception {
+		loadJavaCodeBase(selectedSourceRootDir);
+	}
+	
+	private File browseSourceRootDirectorySelect() {
+		JFileChooser fc = new JFileChooser();
+		fc.setDialogTitle("Browse for a directory");
+		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		fc.setMultiSelectionEnabled(false);
+		int returnVal = fc.showOpenDialog(null); // TODO: modify parent
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			return fc.getSelectedFile();
+		}
+		return null;
+	}
+	
+	private void loadJavaCodeBase(File selectedDirectory) throws Exception {
+		
+		final ProjectModel project = new ProjectModel(txtProjectName.getText());
+		
+		JavaSourceLoaderThread jslt = new JavaSourceLoaderThread(selectedDirectory, project) {
+			
+			@Override
+			public void notifyStatusChange(String message) {
+				setProgramStatus(message, true, 0);
+			}
+
+			@Override
+			public void statusFinished() {
+				WorkspacePane workspace = null;
+				try {
+					workspace = new WorkspacePane(project, uiInstance);
+					uiInstance.addChildWorkspaceFrame(workspace);
+					workspace.setVisible(true);
+					thisInstance.setVisible(false);
+					thisInstance.dispose();
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(null, "Error creating workspace: " + e.getLocalizedMessage(), 
+							"Error", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+			
+		};
+		jslt.addObserver(project);
+		new Thread(jslt).start();
+	}
+
+}

@@ -30,7 +30,7 @@ import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.lukep.javavis.ui.swing.ProjectWizardWindow;
+import org.lukep.javavis.ui.swing.NewProjectWizardWindow;
 import org.lukep.javavis.ui.swing.WorkspacePane;
 import org.lukep.javavis.util.JavaVisConstants;
 import org.lukep.javavis.visualisation.visualisers.IVisualiser;
@@ -49,7 +49,7 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 	private ActionListener actionCreateProject = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			ProjectWizardWindow pww = new ProjectWizardWindow(frmJavavis, thisInstance);
+			NewProjectWizardWindow pww = new NewProjectWizardWindow(frmJavavis, thisInstance);
 			pww.setVisible(true);
 		}
 	};

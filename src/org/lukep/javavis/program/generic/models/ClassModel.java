@@ -165,7 +165,7 @@ public class ClassModel extends AbstractModel {
 					methods.add((MethodModel) m.target);
 			return methods;
 		}
-		return null;
+		return new Vector<MethodModel>() {};
 	}
 	
 	public int getMethodCount() {
@@ -185,7 +185,7 @@ public class ClassModel extends AbstractModel {
 					variables.add((VariableModel) m.target);
 			return variables;
 		}
-		return null;
+		return new Vector<VariableModel>() {};
 	}
 	
 	public int getVariableCount() {

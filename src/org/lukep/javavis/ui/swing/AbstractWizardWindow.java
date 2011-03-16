@@ -15,6 +15,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -105,7 +106,9 @@ abstract class AbstractWizardWindow extends JDialog implements ActionListener {
 		
 		pnlForm = new JPanel();
 		pnlForm.setBorder(new EmptyBorder(15, 15, 15, 15));
-		getContentPane().add(new JScrollPane(pnlForm), BorderLayout.CENTER);
+		JScrollPane spForm = new JScrollPane(pnlForm);
+		spForm.setBorder(BorderFactory.createEmptyBorder());
+		getContentPane().add(spForm, BorderLayout.CENTER);
 		pnlForm.setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,

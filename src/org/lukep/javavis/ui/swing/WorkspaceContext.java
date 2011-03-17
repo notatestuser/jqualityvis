@@ -26,7 +26,8 @@ public class WorkspaceContext extends Observable {
 	
 	protected ProjectModel modelStore;
 	protected HashMap<IMeasurableNode, Vector<Relationship>> relations; // one-to-many
-	protected IMeasurableNode subject;
+	
+	protected IGenericModelNode subject;
 	
 	protected MetricAttribute metric;
 	protected Visualisation visualisation;
@@ -54,11 +55,11 @@ public class WorkspaceContext extends Observable {
 		fireEvent(ChangeEvent.RELATIONS_CHANGE);
 	}
 	
-	public IMeasurableNode getSubject() {
+	public IGenericModelNode getSubject() {
 		return subject;
 	}
 	
-	public void setSubject(IMeasurableNode subject) {
+	public void setSubject(IGenericModelNode subject) {
 		this.subject = subject;
 		fireEvent(ChangeEvent.SUBJECT_CHANGE);
 	}

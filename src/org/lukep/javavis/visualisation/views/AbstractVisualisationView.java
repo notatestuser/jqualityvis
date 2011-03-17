@@ -24,13 +24,15 @@ import com.mxgraph.swing.mxGraphComponent;
 
 public class AbstractVisualisationView implements IVisualiserVisitor {
 
+	private static final String UNSUPPORTED_VISUALISATION_EXCEPTION = 
+		"This Visualisation is unsupported by the current Workspace.";
+	
 	@Override
 	public void visit(mxGraphVisualiser visualiser, WorkspaceContext wspContext, 
 			mxGraphComponent graphComponent) {
 		
 		// overridden in sub-class
-		throw new UnsupportedOperationException(
-				"This Visualisation is unsupported by the current Workspace.");
+		throw new UnsupportedOperationException(UNSUPPORTED_VISUALISATION_EXCEPTION);
 	}
 
 	@Override
@@ -38,16 +40,14 @@ public class AbstractVisualisationView implements IVisualiserVisitor {
 			Display display) {
 		
 		// overridden in sub-class
-		throw new UnsupportedOperationException(
-				"This Visualisation is unsupported by the current Workspace.");
+		throw new UnsupportedOperationException(UNSUPPORTED_VISUALISATION_EXCEPTION);
 	}
 
 	@Override
 	public ExtendedChartPanel visit(Openchart2Visualiser visualiser, WorkspaceContext wspContext) {
 		
 		// overridden in sub-class
-		throw new UnsupportedOperationException(
-				"This Visualisation is unsupported by the current Workspace.");
+		throw new UnsupportedOperationException(UNSUPPORTED_VISUALISATION_EXCEPTION);
 	}
 	
 	protected static Collection<ClassModel> getFilteredClasses(ProjectModel project, 

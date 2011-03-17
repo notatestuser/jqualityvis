@@ -62,4 +62,28 @@
 		<arguments>
 		</arguments>
 	</visualisation>
+	
+	<visualisation name="Bar Chart">
+		<type>WeightedClass</type>
+		<IVisualiser>org.lukep.javavis.visualisation.visualisers.Openchart2Visualiser</IVisualiser>
+		<IVisualiserVisitor>org.lukep.javavis.visualisation.views.BarChartView</IVisualiserVisitor>
+		<arguments>
+		</arguments>
+	</visualisation>
+	
+	<visualisation name="Pie Chart">
+		<type>WeightedClass</type>
+		<IVisualiser>org.lukep.javavis.visualisation.visualisers.Openchart2Visualiser</IVisualiser>
+		<IVisualiserVisitor>org.lukep.javavis.visualisation.views.PieChartView</IVisualiserVisitor>
+		<arguments>
+		</arguments>
+	</visualisation>
+	
+	<visualisation name="Radar Chart">
+		<type>WeightedClass</type>
+		<IVisualiser>org.lukep.javavis.visualisation.visualisers.Openchart2Visualiser</IVisualiser>
+		<IVisualiserVisitor>org.lukep.javavis.visualisation.views.RadarChartView</IVisualiserVisitor>
+		<arguments>
+		</arguments>
+	</visualisation>
 </visualisations>

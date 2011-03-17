@@ -37,5 +37,7 @@ public abstract class AbstractMeasurableVisitor implements IMeasurableVisitor {
 		// implemented in child visitor class
 		return null;
 	}
+	
+	public abstract void resetInstanceAttributes();
 
 }

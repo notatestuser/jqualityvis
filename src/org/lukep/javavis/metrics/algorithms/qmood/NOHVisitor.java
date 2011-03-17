@@ -1,5 +1,5 @@
 /*
- * ClassHierarchyCountVisitor.java (JMetricVis)
+ * NOHVisitor.java (JMetricVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
 package org.lukep.javavis.metrics.algorithms.qmood;
@@ -15,13 +15,15 @@ import org.lukep.javavis.program.generic.models.ProjectModel;
 
 public class NOHVisitor extends AbstractMeasurableVisitor {
 
+	// build up a set of all classes that don't inherit from another class (except Object)
+	private Set<String> loneWolves = new HashSet<String>();
+	// ... and a set of all dependent classes
+	private Set<String> dependents = new HashSet<String>();
+	
 	@Override
 	public MetricMeasurement visit(MetricAttribute metric, ProjectModel project) {
 		
-		// build up a set of all classes that don't inherit from another class (except Object)
-		Set<String> loneWolves = new HashSet<String>();
-		// ... and a set of all dependent classes
-		Set<String> dependents = new HashSet<String>();
+		resetInstanceAttributes();
 		
 		for (ClassModel clazz : project.getClassMap().values()) {
 			if (clazz.getSuperClassName() == null) {
@@ -40,6 +42,14 @@ public class NOHVisitor extends AbstractMeasurableVisitor {
 		intersection.retainAll(dependents);
 		
 		return new MetricMeasurement(project, metric, intersection.size());
+	}
+
+	@Override
+	public void resetInstanceAttributes() {
+		if (loneWolves.size() > 0)
+			loneWolves.clear();
+		if (dependents.size() > 0)
+			dependents.clear();
 	}
 
 }

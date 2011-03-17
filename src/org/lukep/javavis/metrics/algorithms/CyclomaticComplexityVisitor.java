@@ -12,11 +12,14 @@ import org.lukep.javavis.util.JavaVisConstants;
 
 public class CyclomaticComplexityVisitor extends AbstractMeasurableVisitor {
 	
+	private double complexity;
+	
 	@Override
 	public MetricMeasurement visit(MetricAttribute metric, ClassModel clazz) {
 
+		resetInstanceAttributes();
+		
 		// if we're dealing with a class - we just return its total or avg complexity
-		double complexity;
 		if (metric.getInternalName().equals(JavaVisConstants.METRIC_CYCLO_COMPLEX_AVG))
 			complexity = clazz.getAvgCyclomaticComplexity();
 		else if (metric.getInternalName().equals(JavaVisConstants.METRIC_CYCLO_COMPLEX_MAX))
@@ -30,6 +33,11 @@ public class CyclomaticComplexityVisitor extends AbstractMeasurableVisitor {
 	@Override
 	public MetricMeasurement visit(MetricAttribute metric, MethodModel method) {
 		return new MetricMeasurement(method, metric, method.getIndependentExecutionPaths());
+	}
+
+	@Override
+	public void resetInstanceAttributes() {
+		complexity = 0.0;
 	}
 	
 }

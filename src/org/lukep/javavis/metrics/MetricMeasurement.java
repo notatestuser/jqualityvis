@@ -5,15 +5,18 @@
 package org.lukep.javavis.metrics;
 
 import java.text.DecimalFormat;
+import java.util.HashSet;
+import java.util.Set;
 
 public class MetricMeasurement {
 
 	public static final float DEFAULT_RESULT = -1;
 	
-	protected IMeasurableNode target;
-	protected MetricAttribute metric;
-	protected double result = -1;
-	protected boolean resultSet = false;
+	private IMeasurableNode target;
+	private MetricAttribute metric;
+	private double result = -1;
+	private boolean resultSet = false;
+	private Set<MetricMeasurementRelation> relations;
 	
 	public MetricMeasurement(IMeasurableNode target, MetricAttribute metric) {
 		super();
@@ -60,6 +63,18 @@ public class MetricMeasurement {
 	
 	public void refreshResult() {
 		setResult(metric.measureTarget(target).getResult());
+	}
+	
+	public void addRelation(MetricMeasurementRelation relation) {
+		if (relations == null)
+			relations = new HashSet<MetricMeasurementRelation>();
+		relations.add(relation);
+	}
+
+	public Set<MetricMeasurementRelation> getRelations() {
+		if (relations != null)
+			return relations;
+		return null;
 	}
 	
 }

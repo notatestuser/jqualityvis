@@ -1,5 +1,5 @@
 /*
- * AverageAncestorsCountVisitor.java (JMetricVis)
+ * AncestorCountVisitor.java (JMetricVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
 package org.lukep.javavis.metrics.algorithms;
@@ -25,7 +25,7 @@ public class AncestorCountVisitor extends AbstractMeasurableVisitor {
 		for (ClassModel clazz : classes)
 			ancestorCount += clazz.getAncestorCount();
 		
-		float mean = metric.getArgument() != null && metric.getArgument().equals(ARG_AVERAGE) ? 
+		float mean = metric.isArgumentSet(ARG_AVERAGE) ? 
 				ancestorCount / (float)(classes.size()) : ancestorCount;
 		return new MetricMeasurement(project, metric, mean);
 	}
@@ -33,6 +33,11 @@ public class AncestorCountVisitor extends AbstractMeasurableVisitor {
 	@Override
 	public MetricMeasurement visit(MetricAttribute metric, ClassModel clazz) {
 		return new MetricMeasurement(clazz, metric, clazz.getAncestorCount());
+	}
+
+	@Override
+	public void resetInstanceAttributes() {
+		
 	}
 
 }

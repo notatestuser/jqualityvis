@@ -43,15 +43,10 @@ public class MetricAttribute {
 	}
 	
 	public MetricMeasurement measureTarget(IMeasurableNode target) {
-		try {
-		
-			// if this metric applies to the target's type - run it!
-			if (testAppliesTo(target.getModelTypeName()))
-				return target.accept( this, visitor.newInstance() );
-		
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		// if this metric applies to the target's type - run it!
+		if (testAppliesTo(target.getModelTypeName()))
+			return target.accept( this, 
+					MeasurableVisitorPool.getInstance().getPooledVisitor(visitor) );
 		return null;
 	}
 	
@@ -81,6 +76,12 @@ public class MetricAttribute {
 
 	public String getArgument() {
 		return argument;
+	}
+	
+	public boolean isArgumentSet(String argument) {
+		if (argument != null)
+			return argument.contains(argument);
+		return false;
 	}
 
 	public double getCold() {

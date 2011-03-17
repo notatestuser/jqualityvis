@@ -11,8 +11,6 @@ import org.lukep.javavis.program.generic.models.MethodModel;
 
 public class StatementCountVisitor extends AbstractMeasurableVisitor {
 	
-	protected int statementCount = 0;
-	
 	@Override
 	public MetricMeasurement visit(MetricAttribute metric, ClassModel clazz) {
 		return new MetricMeasurement(clazz, metric, clazz.getTotalNumberOfStatements());
@@ -21,6 +19,11 @@ public class StatementCountVisitor extends AbstractMeasurableVisitor {
 	@Override
 	public MetricMeasurement visit(MetricAttribute metric, MethodModel method) {
 		return new MetricMeasurement(method, metric, method.getStatementCount());
+	}
+
+	@Override
+	public void resetInstanceAttributes() {
+		
 	}
 	
 }

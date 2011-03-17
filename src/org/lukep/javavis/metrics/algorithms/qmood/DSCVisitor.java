@@ -1,5 +1,5 @@
 /*
- * DesignSizeVisitor.java (JMetricVis)
+ * DSCVisitor.java (JMetricVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
 package org.lukep.javavis.metrics.algorithms.qmood;
@@ -16,6 +16,11 @@ public class DSCVisitor extends AbstractMeasurableVisitor {
 			ProjectModel project) {
 
 		return new MetricMeasurement(project, metric, project.getClassMap().size());
+	}
+
+	@Override
+	public void resetInstanceAttributes() {
+		
 	}
 
 }

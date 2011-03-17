@@ -1,5 +1,5 @@
 /*
- * AggregationMeasureVisitor.java (JMetricVis)
+ * MOAVisitor.java (JMetricVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
 package org.lukep.javavis.metrics.algorithms.qmood;
@@ -12,10 +12,13 @@ import org.lukep.javavis.program.generic.models.VariableModel;
 
 public class MOAVisitor extends AbstractMeasurableVisitor {
 
+	private int userClassAttributeCount;
+	
 	@Override
 	public MetricMeasurement visit(MetricAttribute metric, ClassModel clazz) {
-
-		int userClassAttributeCount = 0;
+		
+		resetInstanceAttributes();
+		
 		for (VariableModel var : clazz.getVariables()) {
 			if (var.isClassAttribute()) {
 				// is this class known by us?
@@ -24,6 +27,11 @@ public class MOAVisitor extends AbstractMeasurableVisitor {
 			}
 		}
 		return new MetricMeasurement(clazz, metric, userClassAttributeCount);
+	}
+
+	@Override
+	public void resetInstanceAttributes() {
+		userClassAttributeCount = 0;
 	}
 
 }

@@ -14,25 +14,31 @@ public class MethodCountVisitor extends AbstractMeasurableVisitor {
 	private static final String ARG_POLYMORPHIC	= "polymorphic";
 	private static final String ARG_PUBLIC		= "public"; 
 	
+	private int methodCount;
+	
 	@Override
 	public MetricMeasurement visit(MetricAttribute metric, ClassModel clazz) {
 		
-		int methodCount = 0;
+		resetInstanceAttributes();
 		
-		String metricArgument = metric.getArgument();
-		if (metricArgument == null || metricArgument.length() == 0) 
-			methodCount = clazz.getMethodCount();
-		else if (metric.getArgument().equals(ARG_POLYMORPHIC)) {
+		if (metric.isArgumentSet(ARG_POLYMORPHIC)) {
 			for (MethodModel method : clazz.getMethods())
 				if (method.isAbstract())
 					methodCount++;
-		} else if (metric.getArgument().equals(ARG_PUBLIC)) {
+		} else if (metric.isArgumentSet(ARG_PUBLIC)) {
 			for (MethodModel method : clazz.getMethods())
 				if (method.isPublic())
 					methodCount++;
+		} else {
+			methodCount = clazz.getMethodCount();
 		}
 		
 		return new MetricMeasurement(clazz, metric, methodCount);
+	}
+
+	@Override
+	public void resetInstanceAttributes() {
+		methodCount = 0;
 	}
 
 }

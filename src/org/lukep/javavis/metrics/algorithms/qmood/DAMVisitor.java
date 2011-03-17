@@ -1,5 +1,5 @@
 /*
- * DataAccessMetricVisitor.java (JMetricVis)
+ * DAMVisitor.java (JMetricVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
 package org.lukep.javavis.metrics.algorithms.qmood;
@@ -12,10 +12,14 @@ import org.lukep.javavis.program.generic.models.VariableModel;
 
 public class DAMVisitor extends AbstractMeasurableVisitor {
 
+	private int attributeCount;
+	private int hiddenAttributeCount;
+	
 	@Override
 	public MetricMeasurement visit(MetricAttribute metric, ClassModel clazz) {
 
-		int attributeCount = 0, hiddenAttributeCount = 0;
+		resetInstanceAttributes();
+		
 		for (VariableModel var : clazz.getVariables()) {
 			if (var.isClassAttribute()) {
 				attributeCount++;
@@ -27,6 +31,12 @@ public class DAMVisitor extends AbstractMeasurableVisitor {
 		
 		float dam = (float)(hiddenAttributeCount) / (float)(attributeCount);
 		return new MetricMeasurement(clazz, metric, Float.isNaN(dam) ? 1.0f : dam);
+	}
+
+	@Override
+	public void resetInstanceAttributes() {
+		attributeCount = 0;
+		hiddenAttributeCount = 0;
 	}
 
 }

@@ -15,13 +15,15 @@ import org.lukep.javavis.program.generic.models.MethodModel;
 
 public class CAMVisitor extends AbstractMeasurableVisitor {
 
+	private float numerator;
+	private float denominator;
+	
+	private Set<String> paramTypes = new HashSet<String>();
+	
 	@Override
 	public MetricMeasurement visit(MetricAttribute metric, ClassModel clazz) {
-
-		float numerator = 0;
-		float denominator = 0;
 		
-		Set<String> paramTypes = new HashSet<String>();
+		resetInstanceAttributes();
 		
 		// collect data about method arguments
 		for (MethodModel m : clazz.getMethods()) {
@@ -38,6 +40,14 @@ public class CAMVisitor extends AbstractMeasurableVisitor {
 		
 		return new MetricMeasurement(clazz, metric, 
 				numerator/(denominator == 0 ? 1 : denominator));
+	}
+
+	@Override
+	public void resetInstanceAttributes() {
+		numerator = 0;
+		denominator = 0;
+		if (paramTypes.size() > 0)
+			paramTypes.clear();
 	}
 
 }

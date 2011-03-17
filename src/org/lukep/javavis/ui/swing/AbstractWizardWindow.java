@@ -29,6 +29,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.border.EmptyBorder;
 
+import org.lukep.javavis.program.generic.helpers.MetricPreloader;
 import org.lukep.javavis.program.generic.models.ProjectModel;
 import org.lukep.javavis.ui.UIMain;
 
@@ -159,7 +160,6 @@ abstract class AbstractWizardWindow extends JDialog implements ActionListener {
 		try {
 			if (btnCancel == e.getSource()) {
 				setVisible(false);
-				dispose();
 			} else if (btnPerformAction == e.getSource()) {
 				if (validateFormControls()) {
 					lockFormControls();
@@ -225,6 +225,11 @@ abstract class AbstractWizardWindow extends JDialog implements ActionListener {
 		} catch (Exception e) {
 			showError("Error creating workspace: " + e.getLocalizedMessage());
 		}
+	}
+	
+	protected void preloadMetrics(ProjectModel project) {
+		setProgramStatus("Preloading metric measurements...", false, 0);
+		MetricPreloader.preloadMetricMeasurements(project, progressBar.getModel());
 	}
 	
 	protected abstract void initialiseFormControls();

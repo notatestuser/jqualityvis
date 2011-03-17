@@ -36,6 +36,8 @@ abstract class AbstractModel implements IMeasurableNode {
 	private boolean staticFlag = false;
 	private boolean privateFlag = false;
 	private boolean abstractFlag = false;
+	
+	private transient boolean metricsPreloaded = false;
 
 	public AbstractModel(AbstractModelSourceLang sourceLang, String appliesToString) {
 		super();
@@ -55,6 +57,16 @@ abstract class AbstractModel implements IMeasurableNode {
 		if (attribute != null)
 			return MetricRegistry.getInstance().getCachedMeasurement(this, attribute);
 		return null;
+	}
+	
+	@Override
+	public boolean isMetricsPreloaded() {
+		return metricsPreloaded;
+	}
+
+	@Override
+	public void setMetricsPreloaded(boolean metricsPreloaded) {
+		this.metricsPreloaded = metricsPreloaded;
 	}
 	
 	///////////////////////////////////////////////////////

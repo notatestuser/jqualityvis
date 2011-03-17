@@ -47,6 +47,8 @@ public class NewProjectWizardWindow extends AbstractWizardWindow implements IPro
 	
 	private File selectedSourceRootDir;
 	
+	private JCheckBox chckbxPreloadMetricMeasurements;
+	
 	private Thread workerThread;
 	
 	public NewProjectWizardWindow(Frame parent, UIMain uiInstance) {
@@ -126,7 +128,7 @@ public class NewProjectWizardWindow extends AbstractWizardWindow implements IPro
 		JLabel lblOptions = new JLabel("Options:");
 		addFormControl(lblOptions, "2, 10, right, default");
 		
-		JCheckBox chckbxPreloadMetricMeasurements = new JCheckBox("Preload Metric Measurements");
+		chckbxPreloadMetricMeasurements = new JCheckBox("Preload Metric Measurements");
 		chckbxPreloadMetricMeasurements.setSelected(true);
 		addFormControl(chckbxPreloadMetricMeasurements, "4, 10");
 	}
@@ -253,6 +255,10 @@ public class NewProjectWizardWindow extends AbstractWizardWindow implements IPro
 
 			@Override
 			public void statusFinished() {
+				if (chckbxPreloadMetricMeasurements.isSelected())
+					preloadMetrics(project);
+				setProgramStatus("Created project " + project.getSimpleName() + " successfully.", 
+						false, progressBar.getMaximum());
 				createWorkspaceAndClose(project);
 			}
 			

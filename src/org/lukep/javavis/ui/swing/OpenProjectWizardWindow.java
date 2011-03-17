@@ -4,8 +4,8 @@
  */
 package org.lukep.javavis.ui.swing;
 
-import java.awt.FlowLayout;
 import java.awt.Frame;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.io.File;
 
@@ -36,6 +36,7 @@ public class OpenProjectWizardWindow extends AbstractWizardWindow {
 	
 	private JCheckBox chckbxUnserialiseXML;
 	private JCheckBox chckbxGZIPDecompress;
+	private JCheckBox chckbxPreloadMetricMeasurements;
 	
 	private Thread workerThread;
 	
@@ -66,6 +67,8 @@ public class OpenProjectWizardWindow extends AbstractWizardWindow {
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,}));
 		
 		JLabel lblOpenFilename = new JLabel("File Path:");
@@ -83,7 +86,7 @@ public class OpenProjectWizardWindow extends AbstractWizardWindow {
 		JLabel lblOptions = new JLabel("Options:");
 		addFormControl(lblOptions, "2, 4, right, default");
 		
-		JPanel pnlOptions = new JPanel(new FlowLayout());
+		JPanel pnlOptions = new JPanel(new GridLayout(1, 2));
 		{
 			chckbxUnserialiseXML = new JCheckBox("Import as XML");
 			chckbxUnserialiseXML.setSelected(false);
@@ -94,7 +97,10 @@ public class OpenProjectWizardWindow extends AbstractWizardWindow {
 			pnlOptions.add(chckbxGZIPDecompress);
 		}
 		addFormControl(pnlOptions, "4, 4, fill, default");
-
+		
+		chckbxPreloadMetricMeasurements = new JCheckBox("Preload Metric Measurements");
+		chckbxPreloadMetricMeasurements.setSelected(true);
+		addFormControl(chckbxPreloadMetricMeasurements, "4, 6");
 	}
 
 	@Override
@@ -174,7 +180,10 @@ public class OpenProjectWizardWindow extends AbstractWizardWindow {
 	
 	public void notifyLoadComplete(ProjectModel project) {
 		if (project != null) {
-			setProgramStatus("Load successful.", false, progressBar.getMaximum());
+			if (chckbxPreloadMetricMeasurements.isSelected())
+				preloadMetrics(project);
+			setProgramStatus("Loaded project " + project.getSimpleName() + " successfully.", 
+					false, progressBar.getMaximum());
 			createWorkspaceAndClose(project);
 			return;
 		}

@@ -86,6 +86,8 @@ public class GenericModelFactory {
 			newClassModel.setParent(s.programStore);
 		}
 		
+		s.programStore.incModelCount(1);
+		
 		return newClassModel;
 	}
 	
@@ -137,6 +139,8 @@ public class GenericModelFactory {
 		// calculate the method's statement and complexity heuristics (no. of statements, independent exec. paths)
 		methodUtils.populateMethodStatementHeuristics(methodTree, newMethodModel);
 		
+		s.programStore.incModelCount(1);
+		
 		return newMethodModel;
 	}
 	
@@ -174,6 +178,8 @@ public class GenericModelFactory {
 				newVariableModel.setTypeInternalClass(typeInternal);
 			
 			log.info("New " + newVariableModel.toString());
+			
+			s.programStore.incModelCount(1);
 		}
 		
 		return newVariableModel;
@@ -213,9 +219,12 @@ public class GenericModelFactory {
 			curPackage.setParent(s.programStore);
 		}
 		
-		pkgMap.put(usingDefaultPkgName ? "" : packageName, curPackage);
+		//pkgMap.put(usingDefaultPkgName ? "" : packageName, curPackage);
+		s.programStore.addPackage((usingDefaultPkgName ? "" : packageName), curPackage);
 		
 		log.info("New package: " + curPackage.toString());
+		
+		s.programStore.incModelCount(1);
 		
 		return curPackage;
 	}

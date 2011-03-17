@@ -12,4 +12,7 @@ public interface IMeasurableNode extends IGenericModelNode {
 	
 	public MetricMeasurement getMetricMeasurement(MetricAttribute attribute);
 	
+	public boolean isMetricsPreloaded();
+	public void setMetricsPreloaded(boolean metricsPreloaded);
+	
 }

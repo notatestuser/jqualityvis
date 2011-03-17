@@ -68,11 +68,6 @@ public class WorkspacePane extends JPanel implements
 		@Override
 		public BasicSplitPaneDivider createDefaultDivider() {
 			return new BasicSplitPaneDivider(this) {
-				/**
-				 * 
-				 */
-				private static final long serialVersionUID = 6260645716034399522L;
-
 				@Override
 				public void setBorder(Border border) { }
 			};
@@ -301,9 +296,10 @@ public class WorkspacePane extends JPanel implements
 		}
 		
 		// ... add the quality models
+		int i = 0;
 		for (QualityModel qm : MetricRegistry.getInstance().getQualityModelMap().values()) {
 			MutableTreeNode qualityModelNode = new DefaultMutableTreeNode(qm);
-			treeModel.insertNodeInto(qualityModelNode, qualityModelsNode, 0);
+			treeModel.insertNodeInto(qualityModelNode, qualityModelsNode, i++);
 			
 			addMetricsToTreeNode(qm, treeModel, qualityModelNode, false);
 		}

@@ -1,5 +1,5 @@
 /*
- * AbstractWorkspacePane.java (JMetricVis)
+ * WorkspacePane.java (JMetricVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
 package org.lukep.javavis.ui.swing;
@@ -40,6 +40,7 @@ import javax.swing.tree.MutableTreeNode;
 
 import org.lukep.javavis.metrics.MetricAttribute;
 import org.lukep.javavis.metrics.MetricRegistry;
+import org.lukep.javavis.metrics.qualityModels.DesignQualityAttribute;
 import org.lukep.javavis.metrics.qualityModels.QualityModel;
 import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.IGenericModelNode;
@@ -56,12 +57,22 @@ import org.lukep.javavis.visualisation.visualisers.IVisualiser;
 public class WorkspacePane extends JPanel implements 
 		Observer, ActionListener, TreeSelectionListener {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1442832577578014026L;
+	
 	private static final int DECOY_BACKGROUND_COLOR_RGB = 0xFFF9FFFB;
 	
 	class WorkspaceSplitPaneUI extends BasicSplitPaneUI {
 		@Override
 		public BasicSplitPaneDivider createDefaultDivider() {
 			return new BasicSplitPaneDivider(this) {
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = 6260645716034399522L;
+
 				@Override
 				public void setBorder(Border border) { }
 			};
@@ -109,12 +120,14 @@ public class WorkspacePane extends JPanel implements
 		// create a new ProgramModelStore in our WorkspaceContext
 		wspContext.modelStore = project;
 		
-		initialize();
+		initialise();
 		
-		wspContext.setSelectedItem(wspContext.getModelStore());
+		// make the ProjectModel the subject of our attention
+		wspContext.setSelectedItem(project);
+		wspContext.setSubject(project);
 	}
 	
-	private void initialize() {
+	private void initialise() {
 		// create a panel to contain the left TOP side of the JSplitPane's components
 		leftPaneTop = new JPanel( new BorderLayout() );
 		leftPaneTop.setVisible(true);
@@ -196,6 +209,7 @@ public class WorkspacePane extends JPanel implements
 		// ... create the "Metrics" tab + tree
 		metricSelectionPanel = new JScrollPane();
 		metricSelectionPanel.setLayout(new ScrollPaneLayout());
+		metricSelectionPanel.setBorder(BorderFactory.createEmptyBorder());
 		qualityAnalysisPane.add("Metrics", metricSelectionPanel);
 		qualityAnalysisPane.addTab(JavaVisConstants.HEADING_METRICS, 
 				new ImageIcon(JavaVisConstants.ICON_METRICS), metricSelectionPanel);
@@ -222,6 +236,7 @@ public class WorkspacePane extends JPanel implements
 		fillMetricTree(treeModel);
 		
 		// put a decoy visualisation component in place so we're not staring at a drab grey canvas
+		@SuppressWarnings("serial")
 		JPanel decoy = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g) {
@@ -282,7 +297,7 @@ public class WorkspacePane extends JPanel implements
 			Collection<MetricAttribute> metrics = 
 				MetricRegistry.getInstance().getSupportedMetrics(entries.getKey());
 			
-			addMetricsToTreeNode(metrics, treeModel, entries.getValue());
+			addMetricsToTreeNode(metrics, treeModel, entries.getValue(), true);
 		}
 		
 		// ... add the quality models
@@ -290,7 +305,7 @@ public class WorkspacePane extends JPanel implements
 			MutableTreeNode qualityModelNode = new DefaultMutableTreeNode(qm);
 			treeModel.insertNodeInto(qualityModelNode, qualityModelsNode, 0);
 			
-			addMetricsToTreeNode(qm, treeModel, qualityModelNode);
+			addMetricsToTreeNode(qm, treeModel, qualityModelNode, false);
 		}
 		
 		// refresh and reload the TreeModel
@@ -300,9 +315,12 @@ public class WorkspacePane extends JPanel implements
 	}
 	
 	private void addMetricsToTreeNode(Collection<MetricAttribute> metrics, DefaultTreeModel treeModel, 
-			MutableTreeNode parentNode) {
+			MutableTreeNode parentNode, boolean skipQualityAttributes) {
 		
 		for (MetricAttribute metric : metrics) {
+			if (skipQualityAttributes && metric instanceof DesignQualityAttribute)
+				continue;
+			
 			MutableTreeNode metricTreeNode = new DefaultMutableTreeNode(metric);
 			treeModel.insertNodeInto(metricTreeNode, parentNode, 0);
 			
@@ -312,16 +330,6 @@ public class WorkspacePane extends JPanel implements
 			for (Visualisation vis : visualisations)
 				treeModel.insertNodeInto(new DefaultMutableTreeNode(vis), metricTreeNode, 0);
 		}
-	}
-	
-	private IProgramStatusReporter getNearestStatusReporter() throws NullPointerException {
-		Component c = getParent();
-		
-		while ( !(c instanceof IProgramStatusReporter) ) {
-			c = c.getParent();
-		}
-		
-		return (IProgramStatusReporter) c;
 	}
 	
 	private void setVisualisationComponent(Component c) {
@@ -340,12 +348,12 @@ public class WorkspacePane extends JPanel implements
 				&& visitor != null) {
 			
 			try {
-				setProgramStatus("Applying Visualisation \"" + vis.getName() + "\"...");
+				String progressText = "Applying Visualisation \"" + vis.getName() + "\"...";
+				setProgramStatus(progressText);
 				
 				IVisualiser visualiserInstance = 
 					visualiser.getDeclaredConstructor(WorkspaceContext.class).newInstance(wspContext);
 				curVisualiser = visualiserInstance;
-				
 				setVisualisationComponent( visualiserInstance.acceptVisualisation( visitor.newInstance() ) );
 				
 				setProgramStatus("Applied Visualisation \"" + vis.getName() + "\".");
@@ -413,14 +421,14 @@ public class WorkspacePane extends JPanel implements
 			node = (DefaultMutableTreeNode) programTree.getLastSelectedPathComponent();
 			
 			if (node != null
-				&& node.getUserObject() instanceof IGenericModelNode
-				&& wspContext.getMetric() instanceof MetricAttribute
-				&& wspContext.getVisualisation() instanceof Visualisation) {
-					
+				&& node.getUserObject() instanceof IGenericModelNode) {
 					IGenericModelNode model = (IGenericModelNode) node.getUserObject();
 					wspContext.setSubject(model);
 					wspContext.setSelectedItem(model);
-					setVisualisation(wspContext.getVisualisation());
+					
+					if (wspContext.getMetric() instanceof MetricAttribute
+							&& wspContext.getVisualisation() instanceof Visualisation)
+						setVisualisation(wspContext.getVisualisation());
 				}
 		} else if (metricTree == e.getSource()) {
 			node = (DefaultMutableTreeNode) metricTree.getLastSelectedPathComponent();
@@ -433,7 +441,6 @@ public class WorkspacePane extends JPanel implements
 				
 				Visualisation vis = (Visualisation) node.getUserObject();
 				
-				wspContext.setSubject(wspContext.getModelStore());
 				wspContext.setMetric(metric);
 				wspContext.setVisualisation(vis);
 			}

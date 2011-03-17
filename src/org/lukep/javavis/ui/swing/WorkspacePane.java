@@ -317,12 +317,13 @@ public class WorkspacePane extends JPanel implements
 	private void addMetricsToTreeNode(Collection<MetricAttribute> metrics, DefaultTreeModel treeModel, 
 			MutableTreeNode parentNode, boolean skipQualityAttributes) {
 		
+		int i = 0;
 		for (MetricAttribute metric : metrics) {
 			if (skipQualityAttributes && metric instanceof DesignQualityAttribute)
 				continue;
 			
 			MutableTreeNode metricTreeNode = new DefaultMutableTreeNode(metric);
-			treeModel.insertNodeInto(metricTreeNode, parentNode, 0);
+			treeModel.insertNodeInto(metricTreeNode, parentNode, i++);
 			
 			// ... add applicable visualisations
 			List<Visualisation> visualisations = 

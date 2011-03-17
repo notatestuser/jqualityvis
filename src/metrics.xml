@@ -127,7 +127,7 @@
 			<measurable>class</measurable>
 		</applies_to>
 		<visitor>org.lukep.javavis.metrics.algorithms.qmood.DCCVisitor</visitor>
-		<argument></argument>
+		<argument>includeClassRelations</argument>
 		<cold>0.0</cold>
 		<hot>30.0</hot>
 	</metric>

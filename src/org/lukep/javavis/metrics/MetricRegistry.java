@@ -66,7 +66,12 @@ public class MetricRegistry { // singleton
 		QualityModels qualityModels = ConfigurationManager.getInstance().getQualityModels();
 		for (org.lukep.javavis.generated.jaxb.QualityModels.QualityModel qm 
 				: qualityModels.getQualityModel()) {
-			qualityModelMap.put(qm.getInternalName(), new QualityModel(qm, this));
+			QualityModel newQualityModel = new QualityModel(qm, this);
+			qualityModelMap.put(qm.getInternalName(), newQualityModel);
+			
+			// register all of the design quality attributes of the quality model as standard metrics
+			for (MetricAttribute metric : newQualityModel)
+				registerMetric(metric);
 		}
 	}
 	

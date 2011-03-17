@@ -28,6 +28,11 @@ public class VariableModel extends AbstractModel {
 	///////////////////////////////////////////////////////
 	
 	@Override
+	public void accept(IGenericModelNodeVisitor visitor) {
+		visitor.visit(this);
+	}
+	
+	@Override
 	public MetricMeasurement accept(MetricAttribute metric, IMeasurableVisitor visitor) {
 		return visitor.visit(metric, this);
 	}

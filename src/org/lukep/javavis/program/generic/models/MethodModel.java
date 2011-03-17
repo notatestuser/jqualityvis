@@ -32,12 +32,17 @@ public class MethodModel extends AbstractModel {
 	///////////////////////////////////////////////////////
 	
 	@Override
+	public void accept(IGenericModelNodeVisitor visitor) {
+		visitor.visit(this);
+	}
+	
+	@Override
 	public MetricMeasurement accept(MetricAttribute metric, IMeasurableVisitor visitor) {
 		return visitor.visit(metric, this);
 	}
 	
 	///////////////////////////////////////////////////////
-	
+
 	public String getName() {
 		return getSimpleName();
 	}

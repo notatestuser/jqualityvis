@@ -25,6 +25,11 @@ public class PackageModel extends AbstractModel {
 	///////////////////////////////////////////////////////
 	
 	@Override
+	public void accept(IGenericModelNodeVisitor visitor) {
+		visitor.visit(this);
+	}
+	
+	@Override
 	public MetricMeasurement accept(MetricAttribute metric,
 			IMeasurableVisitor visitor) {
 		// TODO Auto-generated method stub

@@ -37,12 +37,17 @@ public class ClassModel extends AbstractModel {
 	///////////////////////////////////////////////////////
 	
 	@Override
+	public void accept(IGenericModelNodeVisitor visitor) {
+		visitor.visit(this);
+	}
+	
+	@Override
 	public MetricMeasurement accept(MetricAttribute metric, IMeasurableVisitor visitor) {
 		return visitor.visit(metric, this);
 	}
 	
 	///////////////////////////////////////////////////////
-	
+
 	public int getTotalNumberOfStatements() {
 		int totalStatements = 0;
 		MetricMeasurement result;

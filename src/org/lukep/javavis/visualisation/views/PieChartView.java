@@ -6,7 +6,7 @@ package org.lukep.javavis.visualisation.views;
 
 import java.awt.Font;
 import java.awt.Rectangle;
-import java.util.Collection;
+import java.util.Map;
 
 import org.lukep.javavis.metrics.MetricAttribute;
 import org.lukep.javavis.program.generic.models.ClassModel;
@@ -30,15 +30,15 @@ public class PieChartView extends AbstractVisualisationView {
 		MetricAttribute metric = wspContext.getMetric();
 		
 		// get filtered collection of classes
-		IGenericModelNode subject = wspContext.getSubject();
-		Collection<ClassModel> filteredClasses = getFilteredClasses(project, subject);
+		IGenericModelNode[] subjects = wspContext.getSubjects();
+		Map<IGenericModelNode, ClassModel[]> filteredClasses = getFilteredClasses(project, subjects);
 		
-		// create the chart's data model - multiple series (classes as series)
+		// create the chart's data model - single series
 		ObjectChartDataModel model = getClassSeriesObjectChartDataModel(filteredClasses, metric);
 		
 		// initialise the chart itself
 		ExtendedChartPanel chart = 
-			new ExtendedChartPanel(model, metric.getName() + " in " + subject.getQualifiedName());
+			new ExtendedChartPanel(model, metric.getName() + " in SUBJECTS HERE");
 		
 		// set up legend
 		chart.getLegend().setFont( new Font("Tahoma", Font.PLAIN, 9) );

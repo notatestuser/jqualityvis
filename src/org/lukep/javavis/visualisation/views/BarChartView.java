@@ -6,7 +6,7 @@ package org.lukep.javavis.visualisation.views;
 
 import java.awt.Font;
 import java.text.DecimalFormat;
-import java.util.Collection;
+import java.util.Map;
 
 import org.lukep.javavis.metrics.MetricAttribute;
 import org.lukep.javavis.program.generic.models.ClassModel;
@@ -30,15 +30,15 @@ public class BarChartView extends AbstractVisualisationView {
 		MetricAttribute metric = wspContext.getMetric();
 		
 		// get filtered collection of classes
-		IGenericModelNode subject = wspContext.getSubject();
-		Collection<ClassModel> filteredClasses = getFilteredClasses(project, subject);
+		IGenericModelNode[] subjects = wspContext.getSubjects();
+		Map<IGenericModelNode, ClassModel[]> filteredClasses = getFilteredClasses(project, subjects);
 		
 		// create the chart's data model - single series
-		ObjectChartDataModel model = getSingleSeriesObjectChartDataModel(filteredClasses, metric);
+		ObjectChartDataModel model = getContainerSeriesObjectChartDataModel(filteredClasses, metric);
 		
 		// initialise the chart itself
 		ExtendedChartPanel chart = 
-			new ExtendedChartPanel(model, metric.getName() + " in " + subject.getQualifiedName());
+			new ExtendedChartPanel(model, metric.getName() + " in  SUBJECTS HERE");
 		
 		// create a coordinate system object and renderer
 		ClassicCoordSystem coord = new ClassicCoordSystem(model);

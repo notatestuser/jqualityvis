@@ -12,11 +12,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -37,6 +39,7 @@ import javax.swing.plaf.basic.BasicSplitPaneUI;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.MutableTreeNode;
+import javax.swing.tree.TreePath;
 
 import org.lukep.javavis.metrics.MetricAttribute;
 import org.lukep.javavis.metrics.MetricRegistry;
@@ -329,39 +332,6 @@ public class WorkspacePane extends JPanel implements
 		}
 	}
 	
-	private void setVisualisationComponent(Component c) {
-		if (curVisualiserComponent != null)
-			mainPane.remove(curVisualiserComponent);
-		mainPane.add(c, BorderLayout.CENTER);
-		curVisualiserComponent = c;
-	}
-	
-	private void setVisualisation(Visualisation vis) {
-		
-		Class<IVisualiser> visualiser = vis.getVisualiserClass();
-		Class<IVisualiserVisitor> visitor = vis.getVisitorClass();
-		
-		if (visualiser != null
-				&& visitor != null) {
-			
-			try {
-				String progressText = "Applying Visualisation \"" + vis.getName() + "\"...";
-				setProgramStatus(progressText);
-				
-				IVisualiser visualiserInstance = 
-					visualiser.getDeclaredConstructor(WorkspaceContext.class).newInstance(wspContext);
-				curVisualiser = visualiserInstance;
-				setVisualisationComponent( visualiserInstance.acceptVisualisation( visitor.newInstance() ) );
-				
-				setProgramStatus("Applied Visualisation \"" + vis.getName() + "\".");
-				
-			} catch (Exception e1) {
-				setProgramStatus("Error: " + e1.getLocalizedMessage());
-				e1.printStackTrace();
-			}
-		}
-	}
-	
 	@Override
 	public void update(Observable o, Object arg) {
 
@@ -413,22 +383,32 @@ public class WorkspacePane extends JPanel implements
 	@Override
 	public void valueChanged(TreeSelectionEvent e) {
 
-		DefaultMutableTreeNode node;
-		if (programTree == e.getSource()) {
-			node = (DefaultMutableTreeNode) programTree.getLastSelectedPathComponent();
+		if (programTree == e.getSource()
+				&& programTree.getSelectionPaths() != null) {
+			Set<IGenericModelNode> selectedModels = new HashSet<IGenericModelNode>();
 			
-			if (node != null
-				&& node.getUserObject() instanceof IGenericModelNode) {
-					IGenericModelNode model = (IGenericModelNode) node.getUserObject();
-					wspContext.setSubject(model);
-					wspContext.setSelectedItem(model);
-					
-					if (wspContext.getMetric() instanceof MetricAttribute
-							&& wspContext.getVisualisation() instanceof Visualisation)
-						setVisualisation(wspContext.getVisualisation());
+			DefaultMutableTreeNode treeNode;
+			IGenericModelNode modelNode;
+			for (TreePath path : programTree.getSelectionPaths()) {
+				treeNode = (DefaultMutableTreeNode) path.getLastPathComponent();
+				if (treeNode != null
+						&& treeNode.getUserObject() instanceof IGenericModelNode) {
+					modelNode = (IGenericModelNode) treeNode.getUserObject();
+					selectedModels.add(modelNode);
+					wspContext.setSelectedItem(modelNode);
 				}
+			}
+			
+			if (selectedModels.size() > 0) {
+				IGenericModelNode[] selectedModelsArray = new IGenericModelNode[selectedModels.size()];
+				wspContext.setSubjects(selectedModels.toArray(selectedModelsArray));
+				
+				if (wspContext.getMetric() instanceof MetricAttribute
+						&& wspContext.getVisualisation() instanceof Visualisation)
+					setVisualisation(wspContext.getVisualisation());
+			}
 		} else if (metricTree == e.getSource()) {
-			node = (DefaultMutableTreeNode) metricTree.getLastSelectedPathComponent();
+			DefaultMutableTreeNode node = (DefaultMutableTreeNode) metricTree.getLastSelectedPathComponent();
 			
 			if (node != null
 					&& node.getUserObject() instanceof Visualisation) {
@@ -443,6 +423,39 @@ public class WorkspacePane extends JPanel implements
 			}
 		}
 		
+	}
+	
+	private void setVisualisationComponent(Component c) {
+		if (curVisualiserComponent != null)
+			mainPane.remove(curVisualiserComponent);
+		mainPane.add(c, BorderLayout.CENTER);
+		curVisualiserComponent = c;
+	}
+	
+	private void setVisualisation(Visualisation vis) {
+		
+		Class<IVisualiser> visualiser = vis.getVisualiserClass();
+		Class<IVisualiserVisitor> visitor = vis.getVisitorClass();
+		
+		if (visualiser != null
+				&& visitor != null) {
+			
+			try {
+				String progressText = "Applying Visualisation \"" + vis.getName() + "\"...";
+				setProgramStatus(progressText);
+				
+				IVisualiser visualiserInstance = 
+					visualiser.getDeclaredConstructor(WorkspaceContext.class).newInstance(wspContext);
+				curVisualiser = visualiserInstance;
+				setVisualisationComponent( visualiserInstance.acceptVisualisation( visitor.newInstance() ) );
+				
+				setProgramStatus("Applied Visualisation \"" + vis.getName() + "\".");
+				
+			} catch (Exception e1) {
+				setProgramStatus("Error: " + e1.getLocalizedMessage());
+				e1.printStackTrace();
+			}
+		}
 	}
 	
 	public void setProgramStatus(String status) {

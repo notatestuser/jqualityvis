@@ -4,15 +4,11 @@
  */
 package org.lukep.javavis.ui.swing;
 
-import java.util.HashMap;
 import java.util.Observable;
-import java.util.Vector;
 
-import org.lukep.javavis.metrics.IMeasurableNode;
 import org.lukep.javavis.metrics.MetricAttribute;
 import org.lukep.javavis.program.generic.models.IGenericModelNode;
 import org.lukep.javavis.program.generic.models.ProjectModel;
-import org.lukep.javavis.program.generic.models.Relationship;
 import org.lukep.javavis.visualisation.Visualisation;
 
 public class WorkspaceContext extends Observable {
@@ -25,12 +21,11 @@ public class WorkspaceContext extends Observable {
 	///////////////////////////////////////////////////////
 	
 	protected ProjectModel modelStore;
-	protected HashMap<IMeasurableNode, Vector<Relationship>> relations; // one-to-many
-	
-	protected IGenericModelNode subject;
 	
 	protected MetricAttribute metric;
 	protected Visualisation visualisation;
+	
+	protected IGenericModelNode[] subjects;
 	
 	protected IGenericModelNode selectedItem;
 	
@@ -43,25 +38,6 @@ public class WorkspaceContext extends Observable {
 	public void setModelStore(ProjectModel modelStore) {
 		this.modelStore = modelStore;
 		fireEvent(ChangeEvent.MODELSTORE_CHANGE);
-	}
-	
-	public HashMap<IMeasurableNode, Vector<Relationship>> getRelations() {
-		return relations;
-	}
-	
-	public void setRelations(
-			HashMap<IMeasurableNode, Vector<Relationship>> relations) {
-		this.relations = relations;
-		fireEvent(ChangeEvent.RELATIONS_CHANGE);
-	}
-	
-	public IGenericModelNode getSubject() {
-		return subject;
-	}
-	
-	public void setSubject(IGenericModelNode subject) {
-		this.subject = subject;
-		fireEvent(ChangeEvent.SUBJECT_CHANGE);
 	}
 	
 	public MetricAttribute getMetric() {
@@ -80,6 +56,19 @@ public class WorkspaceContext extends Observable {
 	public void setVisualisation(Visualisation visualisation) {
 		this.visualisation = visualisation;
 		fireEvent(ChangeEvent.VISUALISATION_CHANGE);
+	}
+	
+	public IGenericModelNode[] getSubjects() {
+		return subjects;
+	}
+	
+	public void setSubjects(IGenericModelNode[] subjects) {
+		this.subjects = subjects;
+		fireEvent(ChangeEvent.SUBJECT_CHANGE);
+	}
+	
+	public void setSubject(IGenericModelNode subject) {
+		setSubjects(new IGenericModelNode[] { subject });
 	}
 	
 	public IGenericModelNode getSelectedItem() {

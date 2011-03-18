@@ -4,7 +4,9 @@
  */
 package org.lukep.javavis.metrics.algorithms.qmood;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.lukep.javavis.metrics.MetricAttribute;
@@ -23,6 +25,7 @@ public class DCCVisitor extends AbstractMeasurableVisitor {
 			{ "byte", "short", "int", "long", "float", "double", "char", "boolean" };
 	
 	private Set<String> coupledClasses = new HashSet<String>();
+	private Map<String, Short> coupleOccurrences = new HashMap<String, Short>();
 	
 	@Override
 	public MetricMeasurement visit(MetricAttribute metric, ClassModel clazz) {
@@ -36,13 +39,13 @@ public class DCCVisitor extends AbstractMeasurableVisitor {
 			// add return type to set of coupled classes
 			returnType = method.getReturnType();
 			if (isTypeNotPrimitive(returnType))
-				coupledClasses.add(returnType);
+				addCoupledClass(returnType);
 			
 			// add parameter types to set of coupled classes
 			if (method.getParameters() != null)
 				for (String parameterType : method.getParameters().values()) {
 					if (isTypeNotPrimitive(parameterType))
-						coupledClasses.add(parameterType);
+						addCoupledClass(parameterType);
 				}
 		}
 		
@@ -56,7 +59,9 @@ public class DCCVisitor extends AbstractMeasurableVisitor {
 				for (String coupledClassName : coupledClasses) {
 					coupledClass = project.lookupClass(coupledClassName);
 					if (coupledClass != null)
-						measurement.addRelation( new MetricMeasurementRelation(clazz, coupledClass, 1) );
+						measurement.addRelation( 
+								new MetricMeasurementRelation(clazz, coupledClass, 
+										coupleOccurrences.get(coupledClassName)) );
 				}
 			}
 		}
@@ -65,17 +70,27 @@ public class DCCVisitor extends AbstractMeasurableVisitor {
 		return measurement;
 	}
 	
+	private void addCoupledClass(String className) {
+		coupledClasses.add(className);
+		short occurrences = 0;
+		if (coupleOccurrences.containsKey(className))
+			occurrences = coupleOccurrences.get(className);
+		coupleOccurrences.put(className, occurrences += 1);
+	}
+	
 	private static boolean isTypeNotPrimitive(String type) {
 		for (String prim : PRIMITIVE_TYPE_EXCLUSIONS)
 			if (prim.equals(type))
 				return false;
 		return true;
 	}
-
+	
 	@Override
 	public void resetInstanceAttributes() {
 		if (coupledClasses.size() > 0)
 			coupledClasses.clear();
+		if (coupleOccurrences.size() > 0)
+			coupleOccurrences.clear();
 	}
 
 }

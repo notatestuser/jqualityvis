@@ -47,6 +47,14 @@
 		</arguments>
 	</visualisation>
 	
+	<visualisation name="Relational Circle">
+		<type>RelationalClass</type>
+		<IVisualiser>org.lukep.javavis.visualisation.visualisers.mxGraphVisualiser</IVisualiser>
+		<IVisualiserVisitor>org.lukep.javavis.visualisation.views.CircleView</IVisualiserVisitor>
+		<arguments>
+		</arguments>
+	</visualisation>
+	
 	<visualisation name="Class TreeMap">
 		<type>WeightedClass</type>
 		<IVisualiser>org.lukep.javavis.visualisation.visualisers.PrefuseVisualiser</IVisualiser>

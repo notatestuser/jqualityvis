@@ -122,7 +122,7 @@
 	</metric>
 	
 	<metric name="QMOOD Direct Class Coupling" internal_name="DCC">
-		<type>WeightedClass</type>
+		<type>RelationalClass</type>
 		<applies_to>
 			<measurable>class</measurable>
 		</applies_to>

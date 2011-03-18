@@ -10,10 +10,10 @@ public class MetricMeasurementRelation {
 
 	protected IGenericModelNode source;
 	protected IGenericModelNode target;
-	protected int weight;
+	protected short weight;
 	
 	public MetricMeasurementRelation(IGenericModelNode source,
-			IGenericModelNode target, int weight) {
+			IGenericModelNode target, short weight) {
 		super();
 		this.source = source;
 		this.target = target;
@@ -27,7 +27,7 @@ public class MetricMeasurementRelation {
 	public IGenericModelNode getTarget() {
 		return target;
 	}
-	public int getWeight() {
+	public short getWeight() {
 		return weight;
 	}
 	

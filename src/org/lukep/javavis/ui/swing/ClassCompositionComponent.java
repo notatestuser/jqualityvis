@@ -5,6 +5,7 @@
 package org.lukep.javavis.ui.swing;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.util.Observable;
 import java.util.Observer;
@@ -89,9 +90,15 @@ public class ClassCompositionComponent extends JComponent implements Observer {
 			g.setColor(BORDER_COLOR);
 			g.drawRect(0, 0, getWidth() - 1, getHeight() - 1);
 			
-			// draw class name
+			// draw container's simple name
 			g.setColor(LABEL_COLOR);
-			g.drawString(currentClass.getSimpleName(), 5, 10);
+			g.setFont(new Font("Tahoma", Font.PLAIN, 9));
+			g.drawString(currentClass.getParent().getSimpleName(), 5, 10);
+			
+			// draw class name
+			int fontH = g.getFontMetrics().getHeight();
+			g.setFont(new Font("Tahoma", Font.BOLD, 10));
+			g.drawString(currentClass.getSimpleName(), 5, fontH + 10);
 		}
 		super.paint(g);
 	}

@@ -35,7 +35,7 @@ public class RadarChartView extends AbstractVisualisationView {
 		ObjectChartDataModel model = getContainerSeriesObjectChartDataModel(filteredClasses, metric);
 		
 		// initialise the chart itself
-		ExtendedChartPanel chart = new ExtendedChartPanel(model, metric.getName() + " in SUBJECTS HERE");
+		ExtendedChartPanel chart = new ExtendedChartPanel(model, metric.getName());
 		
 		// create a coordinate system object and renderer
 		ClassicCoordSystem coord = new ClassicCoordSystem(model);

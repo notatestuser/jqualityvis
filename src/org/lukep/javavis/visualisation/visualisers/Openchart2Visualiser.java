@@ -4,8 +4,9 @@
  */
 package org.lukep.javavis.visualisation.visualisers;
 
-import java.awt.Component;
 import java.awt.event.MouseEvent;
+
+import javax.swing.JComponent;
 
 import org.lukep.javavis.ui.swing.WorkspaceContext;
 import org.lukep.javavis.visualisation.views.IVisualiserVisitor;
@@ -23,7 +24,7 @@ public class Openchart2Visualiser extends AbstractVisualiser {
 	}
 
 	@Override
-	public Component acceptVisualisation(IVisualiserVisitor visitor) {
+	public JComponent acceptVisualisation(IVisualiserVisitor visitor) {
 		currentChartPanel = visitor.visit(this, getWorkspaceContext());
 		currentChartPanel.setZoomMouseButton(MOUSE_BUTTON_DYNAMIC_ZOOM);
 		return currentChartPanel;

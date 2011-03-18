@@ -4,7 +4,7 @@
  */
 package org.lukep.javavis.visualisation.visualisers;
 
-import java.awt.Component;
+import javax.swing.JComponent;
 
 import org.lukep.javavis.ui.swing.WorkspaceContext;
 import org.lukep.javavis.visualisation.views.IVisualiserVisitor;
@@ -22,7 +22,7 @@ public class AbstractVisualiser implements IVisualiser {
 	}
 
 	@Override
-	public Component acceptVisualisation(IVisualiserVisitor visitor) {
+	public JComponent acceptVisualisation(IVisualiserVisitor visitor) {
 		// Overridden in sub-class
 		return null;
 	}

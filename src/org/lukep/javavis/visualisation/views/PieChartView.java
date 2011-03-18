@@ -37,8 +37,7 @@ public class PieChartView extends AbstractVisualisationView {
 		ObjectChartDataModel model = getClassSeriesObjectChartDataModel(filteredClasses, metric);
 		
 		// initialise the chart itself
-		ExtendedChartPanel chart = 
-			new ExtendedChartPanel(model, metric.getName() + " in SUBJECTS HERE");
+		ExtendedChartPanel chart = new ExtendedChartPanel(model, metric.getName());
 		
 		// set up legend
 		chart.getLegend().setFont( new Font("Tahoma", Font.PLAIN, 9) );

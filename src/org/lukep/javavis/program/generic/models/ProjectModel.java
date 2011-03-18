@@ -5,6 +5,7 @@
 package org.lukep.javavis.program.generic.models;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -25,6 +26,8 @@ public class ProjectModel extends AbstractModel implements IProgramSourceObserve
 	
 	private final static Logger log = 
 		Logger.getLogger(ProjectModel.class.getSimpleName());
+	
+	private Date creationDate = new Date();
 	
 	private int modelCount = 0;
 	
@@ -66,9 +69,13 @@ public class ProjectModel extends AbstractModel implements IProgramSourceObserve
     
 	///////////////////////////////////////////////////////
 	
+	public Date getCreationDate() {
+		return creationDate;
+	}
+	
     public int getModelCount() {
 		return modelCount;
-	}
+    }
 
 	public void setModelCount(int modelCount) {
 		this.modelCount = modelCount;

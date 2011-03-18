@@ -5,9 +5,12 @@
 package org.lukep.javavis.visualisation.visualisers;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
+
+import javax.swing.JComponent;
 
 import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.IGenericModelNode;
@@ -64,7 +67,7 @@ public class mxGraphVisualiser extends AbstractVisualiser {
 			}
 		};
 		
-		// initialize the containing mxGraphComponent
+		// initialise the containing mxGraphComponent
 		graphComponent = new mxGraphComponent(graph)
 		{
 			private static final long serialVersionUID = 4683716829748931448L;
@@ -83,6 +86,7 @@ public class mxGraphVisualiser extends AbstractVisualiser {
 	}
 	
 	private void bindMxGraphEvents() {
+		// graph entity selection handling
 		graphComponent.getGraphControl().addMouseListener(new MouseAdapter() {
 
 			@Override
@@ -94,12 +98,24 @@ public class mxGraphVisualiser extends AbstractVisualiser {
 				}
 				super.mouseClicked(e);
 			}
+		});
+		
+		// mouse wheel zoom handling
+		graphComponent.getGraphControl().addMouseWheelListener(new MouseWheelListener() {
 			
+			@Override
+			public void mouseWheelMoved(MouseWheelEvent e) {
+				System.out.println("wheel rotation " + e.getWheelRotation());
+				if (e.getWheelRotation() < 0)
+					graphComponent.zoomIn();
+				else if (e.getWheelRotation() > 0)
+					graphComponent.zoomOut();
+			}
 		});
 	}
 	
 	@Override
-	public Component acceptVisualisation(IVisualiserVisitor visitor) {
+	public JComponent acceptVisualisation(IVisualiserVisitor visitor) {
 		visitor.visit(this, getWorkspaceContext(), graphComponent);
 		return graphComponent;
 	}

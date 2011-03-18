@@ -6,11 +6,11 @@ package org.lukep.javavis.visualisation.visualisers;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.event.MouseEvent;
 import java.util.Iterator;
 
 import javax.swing.BorderFactory;
+import javax.swing.JComponent;
 
 import org.lukep.javavis.program.generic.models.IGenericModelNode;
 import org.lukep.javavis.ui.swing.WorkspaceContext;
@@ -142,7 +142,7 @@ public class PrefuseVisualiser extends AbstractVisualiser {
 	}
 
 	@Override
-	public Component acceptVisualisation(IVisualiserVisitor visitor) {
+	public JComponent acceptVisualisation(IVisualiserVisitor visitor) {
 		display = new Display();
 		display.setOpaque(true);
 		display.setBackground( new Color(BACKGROUND_COLOR_RGB) );

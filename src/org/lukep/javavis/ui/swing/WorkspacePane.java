@@ -7,9 +7,11 @@ package org.lukep.javavis.ui.swing;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DateFormat;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -23,6 +25,7 @@ import java.util.Set;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -65,6 +68,7 @@ public class WorkspacePane extends JPanel implements
 	 */
 	private static final long serialVersionUID = 1442832577578014026L;
 	
+	private static final int TITLE_LABEL_COLOR_RGB = 0xF9FFFB;
 	private static final int DECOY_BACKGROUND_COLOR_RGB = 0xFFF9FFFB;
 	
 	class WorkspaceSplitPaneUI extends BasicSplitPaneUI {
@@ -80,6 +84,8 @@ public class WorkspacePane extends JPanel implements
 	protected JPanel mainPane;
 	protected JPanel leftPaneTop;
 	protected JPanel leftPaneBottom;
+	
+	protected JLabel titleLabel;
 	
 	protected JScrollPane projectExplorerPanel;
 	protected JScrollPane metricSelectionPanel;
@@ -118,14 +124,14 @@ public class WorkspacePane extends JPanel implements
 		// create a new ProgramModelStore in our WorkspaceContext
 		wspContext.modelStore = project;
 		
-		initialise();
+		initialise(project);
 		
 		// make the ProjectModel the subject of our attention
 		wspContext.setSelectedItem(project);
 		wspContext.setSubject(project);
 	}
 	
-	private void initialise() {
+	private void initialise(ProjectModel project) {
 		// create a panel to contain the left TOP side of the JSplitPane's components
 		leftPaneTop = new JPanel( new BorderLayout() );
 		leftPaneTop.setVisible(true);
@@ -138,24 +144,33 @@ public class WorkspacePane extends JPanel implements
 		mainPane = new JPanel( new BorderLayout() );
 		mainPane.setVisible(true);
 		
-		// create the toolbar panel
-		toolbar = new JToolBar();
-		mainPane.add(toolbar, BorderLayout.NORTH);
+//		// create the toolbar panel
+//		toolbar = new JToolBar();
+//		mainPane.add(toolbar, BorderLayout.NORTH);
+//		
+//		// add the controls to the toolbar
+//		toolbar.add(new JLabel("Metric: "));
+//		metricComboBox = new JComboBox( new MetricComboBoxModel() );
+//		metricComboBox.setEnabled(false);
+//		metricComboBox.setSelectedIndex(0);
+//		metricComboBox.addActionListener(this);
+//		toolbar.add(metricComboBox);
+//		
+//		toolbar.add(new JLabel(" Visualisation: "));
+//		visComboBox = new JComboBox( new VisualisationComboBoxModel() );
+//		visComboBox.setEnabled(false);
+//		visComboBox.setSelectedIndex(0);
+//		visComboBox.addActionListener(this);
+//		toolbar.add(visComboBox);
 		
-		// add the controls to the toolbar
-		toolbar.add(new JLabel("Metric: "));
-		metricComboBox = new JComboBox( new MetricComboBoxModel() );
-		metricComboBox.setEnabled(false);
-		metricComboBox.setSelectedIndex(0);
-		metricComboBox.addActionListener(this);
-		toolbar.add(metricComboBox);
-		
-		toolbar.add(new JLabel(" Visualisation: "));
-		visComboBox = new JComboBox( new VisualisationComboBoxModel() );
-		visComboBox.setEnabled(false);
-		visComboBox.setSelectedIndex(0);
-		visComboBox.addActionListener(this);
-		toolbar.add(visComboBox);
+		// create the "title label"
+		titleLabel = new JLabel(project.getSimpleName() + " (created " + 
+				DateFormat.getInstance().format(project.getCreationDate()) + ")");
+		titleLabel.setOpaque(true);
+		titleLabel.setBackground(new Color(TITLE_LABEL_COLOR_RGB));
+		titleLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 0));
+		titleLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		mainPane.add(titleLabel, BorderLayout.NORTH);
 		
 		// create the properties panel to show the attributes of the currently selected class
 		propertiesPane = new ClassPropertiesPanel(wspContext);
@@ -403,9 +418,11 @@ public class WorkspacePane extends JPanel implements
 				IGenericModelNode[] selectedModelsArray = new IGenericModelNode[selectedModels.size()];
 				wspContext.setSubjects(selectedModels.toArray(selectedModelsArray));
 				
-				if (wspContext.getMetric() instanceof MetricAttribute
-						&& wspContext.getVisualisation() instanceof Visualisation)
-					setVisualisation(wspContext.getVisualisation());
+				MetricAttribute metric = wspContext.getMetric();
+				Visualisation vis = wspContext.getVisualisation();
+				if (metric instanceof MetricAttribute && vis instanceof Visualisation) {
+					setVisualisation(vis);
+				}
 			}
 		} else if (metricTree == e.getSource()) {
 			DefaultMutableTreeNode node = (DefaultMutableTreeNode) metricTree.getLastSelectedPathComponent();
@@ -425,9 +442,10 @@ public class WorkspacePane extends JPanel implements
 		
 	}
 	
-	private void setVisualisationComponent(Component c) {
+	private void setVisualisationComponent(JComponent c) {
 		if (curVisualiserComponent != null)
 			mainPane.remove(curVisualiserComponent);
+		c.setBorder(BorderFactory.createEmptyBorder());
 		mainPane.add(c, BorderLayout.CENTER);
 		curVisualiserComponent = c;
 	}
@@ -455,6 +473,14 @@ public class WorkspacePane extends JPanel implements
 				setProgramStatus("Error: " + e1.getLocalizedMessage());
 				e1.printStackTrace();
 			}
+			
+			// set workspace title
+			StringBuilder sb = new StringBuilder();
+			sb.append(vis + " of " + wspContext.getMetric() + " in ");
+			for (IGenericModelNode node : wspContext.getSubjects())
+				sb.append(node.getSimpleName() + ", ");
+			String str = sb.toString();
+			titleLabel.setText(str.substring(0, str.length() - 2));
 		}
 	}
 	

@@ -4,13 +4,13 @@
  */
 package org.lukep.javavis.visualisation.visualisers;
 
-import java.awt.Component;
+import javax.swing.JComponent;
 
 import org.lukep.javavis.visualisation.views.IVisualiserVisitor;
 
 public interface IVisualiser {
 	
-	Component acceptVisualisation(IVisualiserVisitor visitor);
+	JComponent acceptVisualisation(IVisualiserVisitor visitor);
 	
 	public void setScale(double scale);
 	

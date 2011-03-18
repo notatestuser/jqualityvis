@@ -26,6 +26,8 @@ import com.mxgraph.view.mxGraph;
 
 public class mxGraphVisualiser extends AbstractVisualiser {
 	
+	private static final int BACKGROUND_COLOR_RGB = 0xF9FFFB;
+	
 	private mxGraph graph;
 	private mxGraphComponent graphComponent;
 	
@@ -73,7 +75,7 @@ public class mxGraphVisualiser extends AbstractVisualiser {
 			}
 		};
 		graphComponent.getViewport().setOpaque(false);
-		graphComponent.setBackground( new Color(0xF9FFFB) );
+		graphComponent.setBackground( new Color(BACKGROUND_COLOR_RGB) );
 		
 		// bind mxGraph events
 		bindMxGraphEvents();

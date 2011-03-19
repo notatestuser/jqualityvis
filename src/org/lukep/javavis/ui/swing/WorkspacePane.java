@@ -237,7 +237,7 @@ public class WorkspacePane extends JPanel implements
 		programTree.setModel(projectTreeModel);
 		programTree.addTreeSelectionListener(this);
 		projectExplorerPanel.setViewportView(programTree);
-		fillProjectTree(projectTreeModel);
+		fillProjectTree();
 		
 		// create the "Metrics" tree
 		metricTree = new JTree();
@@ -246,7 +246,7 @@ public class WorkspacePane extends JPanel implements
 		metricTree.setRootVisible(false);
 		metricTree.addTreeSelectionListener(this);
 		metricSelectionPanel.setViewportView(metricTree);
-		fillMetricTree(treeModel);
+		fillMetricTree();
 		
 		// put a decoy visualisation component in place so we're not staring at a drab grey canvas
 		@SuppressWarnings("serial")
@@ -264,13 +264,18 @@ public class WorkspacePane extends JPanel implements
 		setVisualisationComponent(decoy);
 	}
 	
-	private void fillProjectTree(DefaultTreeModel treeModel) {
-		ProjectModel project = wspContext.getModelStore();
+	private void fillProjectTree() {
+		DefaultTreeModel treeModel = (DefaultTreeModel) programTree.getModel();
+		
+		// clear the tree
+		((DefaultMutableTreeNode)(treeModel.getRoot())).removeAllChildren();
+		
 		Map<String, DefaultMutableTreeNode> parentNodeMap = new HashMap<String, DefaultMutableTreeNode>();
-		int i = 0;
 		
 		// add package nodes
+		ProjectModel project = wspContext.getModelStore();
 		DefaultMutableTreeNode node;
+		int i = 0;
 		for (PackageModel pkg : project.getPackageMap().values()) {
 			node = new DefaultMutableTreeNode(pkg);
 			treeModel.insertNodeInto(node, (MutableTreeNode) treeModel.getRoot(), i++);
@@ -291,7 +296,11 @@ public class WorkspacePane extends JPanel implements
 		programTree.expandRow(0);
 	}
 	
-	private void fillMetricTree(DefaultTreeModel treeModel) {
+	public void fillMetricTree() {
+		// clear the tree
+		DefaultTreeModel treeModel = (DefaultTreeModel) metricTree.getModel();
+		((DefaultMutableTreeNode)(treeModel.getRoot())).removeAllChildren();
+		
 		MutableTreeNode staticMetricsNode = new DefaultMutableTreeNode("Static Metrics");
 		MutableTreeNode qualityModelsNode = new DefaultMutableTreeNode("Quality Models");
 		treeModel.insertNodeInto(staticMetricsNode, (MutableTreeNode) treeModel.getRoot(), 0);
@@ -409,7 +418,8 @@ public class WorkspacePane extends JPanel implements
 				if (treeNode != null
 						&& treeNode.getUserObject() instanceof IGenericModelNode) {
 					modelNode = (IGenericModelNode) treeNode.getUserObject();
-					selectedModels.add(modelNode);
+					if (modelNode.getChildCount() > 0)
+						selectedModels.add(modelNode);
 					wspContext.setSelectedItem(modelNode);
 				}
 			}

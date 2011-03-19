@@ -16,6 +16,7 @@ import java.net.URL;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JDialog;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -34,6 +35,7 @@ import org.lukep.javavis.ui.swing.NewProjectWizardWindow;
 import org.lukep.javavis.ui.swing.OpenProjectWizardWindow;
 import org.lukep.javavis.ui.swing.SaveProjectWizardWindow;
 import org.lukep.javavis.ui.swing.WorkspacePane;
+import org.lukep.javavis.ui.swing.configPanes.VisualisationConfigurationPanel;
 import org.lukep.javavis.util.JavaVisConstants;
 import org.lukep.javavis.visualisation.visualisers.IVisualiser;
 
@@ -91,6 +93,19 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 		}
 	};
 	
+	private ActionListener actionVisualisationConfig = new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			JDialog dialog = new JDialog(frmJavavis, "Visualisation Manager");
+			dialog.setBounds(200, 200, 500, 300);
+			dialog.setLocationRelativeTo(frmJavavis);
+			dialog.getContentPane().add(new VisualisationConfigurationPanel(thisInstance));
+			dialog.setModal(true);
+			dialog.pack();
+			dialog.setVisible(true);
+		}
+	};
+	
 	private ActionListener actionHelp = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -130,7 +145,7 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-			        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 					
 					UIMain window = new UIMain();
 					window.frmJavavis.setVisible(true);
@@ -189,55 +204,67 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 		// ... File menu
 		JMenu mnFile = new JMenu("File");
 		menuBar.add(mnFile);
+		{
+			// ... File > Create a New Project...
+			JMenuItem mntmCreateProject = new JMenuItem("Create a New Project...", 
+					new ImageIcon(JavaVisConstants.ICON_MENU_PROJECT_CREATE));
+			mntmCreateProject.addActionListener(actionCreateProject);
+			mnFile.add(mntmCreateProject);
+			
+			mnFile.addSeparator();
+			
+			// ... File > Open a Project...
+			JMenuItem mntmOpenProject = new JMenuItem("Open Project...", 
+					new ImageIcon(JavaVisConstants.ICON_MENU_PROJECT_OPEN));
+			mntmOpenProject.addActionListener(actionOpenProject);
+			mnFile.add(mntmOpenProject);
+			
+			// ... File > Save Project...
+			mntmSaveProject = new JMenuItem("Save Project...", 
+					new ImageIcon(JavaVisConstants.ICON_MENU_PROJECT_SAVE));
+			mntmSaveProject.addActionListener(actionSaveProject);
+			mnFile.add(mntmSaveProject);
+			mntmSaveProject.setEnabled(false);
+			
+			// ... File > Close Tab
+			mntmCloseTab = new JMenuItem("Close Tab", 
+					new ImageIcon(JavaVisConstants.ICON_MENU_PROJECT_CLOSE));
+			mntmCloseTab.addActionListener(actionCloseTab);
+			mnFile.add(mntmCloseTab);
+			
+			mnFile.addSeparator();
+			
+			// ... File > Exit
+			JMenuItem mntmExit = new JMenuItem("Exit");
+			mntmExit.addActionListener(actionExit);
+			mnFile.add(mntmExit);
+		}
 		
-		// ... File > Create a New Project...
-		JMenuItem mntmCreateProject = new JMenuItem("Create a New Project...", 
-				new ImageIcon(JavaVisConstants.ICON_MENU_PROJECT_CREATE));
-		mntmCreateProject.addActionListener(actionCreateProject);
-		mnFile.add(mntmCreateProject);
-		
-		mnFile.addSeparator();
-		
-		// ... File > Open a Project...
-		JMenuItem mntmOpenProject = new JMenuItem("Open Project...", 
-				new ImageIcon(JavaVisConstants.ICON_MENU_PROJECT_OPEN));
-		mntmOpenProject.addActionListener(actionOpenProject);
-		mnFile.add(mntmOpenProject);
-		
-		// ... File > Save Project...
-		mntmSaveProject = new JMenuItem("Save Project...", 
-				new ImageIcon(JavaVisConstants.ICON_MENU_PROJECT_SAVE));
-		mntmSaveProject.addActionListener(actionSaveProject);
-		mnFile.add(mntmSaveProject);
-		mntmSaveProject.setEnabled(false);
-		
-		// ... File > Close Tab
-		mntmCloseTab = new JMenuItem("Close Tab", 
-				new ImageIcon(JavaVisConstants.ICON_MENU_PROJECT_CLOSE));
-		mntmCloseTab.addActionListener(actionCloseTab);
-		mnFile.add(mntmCloseTab);
-		
-		mnFile.addSeparator();
-		
-		// ... File > Exit
-		JMenuItem mntmExit = new JMenuItem("Exit");
-		mntmExit.addActionListener(actionExit);
-		mnFile.add(mntmExit);
+		// ... Settings menu
+		JMenu mnSettings = new JMenu("Settings");
+		menuBar.add(mnSettings);
+		{
+			// ... Settings > Visualisations...
+			JMenuItem mntmVisMgr = new JMenuItem("Edit Visualisations...");
+			mntmVisMgr.addActionListener(actionVisualisationConfig);
+			mnSettings.add(mntmVisMgr);
+		}
 		
 		// ... Help menu
 		JMenu mnHelp = new JMenu("Help");
 		menuBar.add(mnHelp);
-		
-		// ... Help > Help
-		JMenuItem mntmHelp = new JMenuItem("Help...", 
-				new ImageIcon(JavaVisConstants.ICON_MENU_HELP));
-		mntmHelp.addActionListener(actionHelp);
-		mnHelp.add(mntmHelp);
-		
-		// ... Help > About
-		JMenuItem mntmAbout = new JMenuItem("About " + JavaVisConstants.APP_NAME + "...");
-		mntmAbout.addActionListener(actionAbout);
-		mnHelp.add(mntmAbout);
+		{
+			// ... Help > Help
+			JMenuItem mntmHelp = new JMenuItem("Help...", 
+					new ImageIcon(JavaVisConstants.ICON_MENU_HELP));
+			mntmHelp.addActionListener(actionHelp);
+			mnHelp.add(mntmHelp);
+			
+			// ... Help > About
+			JMenuItem mntmAbout = new JMenuItem("About " + JavaVisConstants.APP_NAME + "...");
+			mntmAbout.addActionListener(actionAbout);
+			mnHelp.add(mntmAbout);
+		}
 	}
 	
 	private void addChildHTMLFrame(String title, URL url) {
@@ -290,6 +317,14 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 				(WorkspacePane) mainTabbedPane.getSelectedComponent();
 			
 			selectedWorkspace.setVisualisationScale((double)zoomSlider.getValue() / 1000);
+		}
+	}
+	
+	public void refreshWorkspaceMetricTrees() {
+		for (Component c : mainTabbedPane.getComponents()) {
+			if (c instanceof WorkspacePane) {
+				((WorkspacePane)(c)).fillMetricTree();
+			}
 		}
 	}
 }

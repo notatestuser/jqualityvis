@@ -15,9 +15,9 @@ public class JavaVisConstants {
 	public static final String DEFAULT_PACKAGE_NAME 	= "(default package)";
 	public static final String DEFAULT_CONSTRUCTOR_NAME = "<init>";
 	
-	public static final String METRICS_FILE_NAME 		= "metrics.xml";
-	public static final String QUALITYMODELS_FILE_NAME  = "qualityModels.xml";
-	public static final String VISUALISATIONS_FILE_NAME = "visualisations.xml";
+	public static final String METRICS_FILE_NAME 		= "config/metrics.xml";
+	public static final String QUALITYMODELS_FILE_NAME  = "config/qualityModels.xml";
+	public static final String VISUALISATIONS_FILE_NAME = "config/visualisations.xml";
 	
 	public static final String WELCOME_HTML_URL			= "assets/html/welcome.html";
 	public static final String HELP_HTML_URL			= "assets/html/help.html";
@@ -37,6 +37,8 @@ public class JavaVisConstants {
 	public static final String ICON_MENU_PROJECT_SAVE	= "assets/icons/disk-black.png";
 	public static final String ICON_MENU_PROJECT_CLOSE	= "assets/icons/cross-button.png";
 	public static final String ICON_MENU_HELP			= "assets/icons/question-frame.png";
+	public static final String ICON_CONFIG_DELETE_ENT   = "assets/icons/cross-circle.png";
+	public static final String ICON_CONFIG_SAVE_ENT     = "assets/icons/arrow-180-medium.png";
 	
 	public static final String HEADING_PROJECT_EXPLORER	= "Project Explorer";
 	public static final String HEADING_QUALITY_ANALYSIS	= "Quality Analysis";

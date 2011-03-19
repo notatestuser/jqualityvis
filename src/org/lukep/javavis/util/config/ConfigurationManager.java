@@ -4,9 +4,13 @@
  */
 package org.lukep.javavis.util.config;
 
-import java.io.InputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 import org.lukep.javavis.generated.jaxb.Metrics;
@@ -18,6 +22,8 @@ public class ConfigurationManager {
 
 	private static ConfigurationManager instance = null;
 	
+	private static JAXBContext jc;
+	
 	private static Metrics metrics = null;
 	private static QualityModels qualityModels = null;
 	private static Visualisations visualisations = null;
@@ -25,7 +31,7 @@ public class ConfigurationManager {
 	static {
 		try {
 			// create the JAXB context
-			JAXBContext jc = JAXBContext.newInstance(
+			jc = JAXBContext.newInstance(
 					Metrics.class.getPackage().getName(),
 					ConfigurationManager.class.getClassLoader());
 			
@@ -33,22 +39,16 @@ public class ConfigurationManager {
 			Unmarshaller unmarshaller = jc.createUnmarshaller();
 			
 			// load metrics xml
-			InputStream is = ConfigurationManager.class.getClassLoader().getResourceAsStream(
-					JavaVisConstants.METRICS_FILE_NAME);
-			if (is != null)
-				metrics = (Metrics) unmarshaller.unmarshal(is);
+			metrics = (Metrics) unmarshaller.unmarshal(
+					new FileInputStream(JavaVisConstants.METRICS_FILE_NAME));
 			
 			// load qualityModels xml
-			is = ConfigurationManager.class.getClassLoader().getResourceAsStream(
-					JavaVisConstants.QUALITYMODELS_FILE_NAME);
-			if (is != null)
-				qualityModels = (QualityModels) unmarshaller.unmarshal(is);
+			qualityModels = (QualityModels) unmarshaller.unmarshal(
+					new FileInputStream(JavaVisConstants.QUALITYMODELS_FILE_NAME));
 			
 			// load visualisations xml
-			is = ConfigurationManager.class.getClassLoader().getResourceAsStream(
-					JavaVisConstants.VISUALISATIONS_FILE_NAME);
-			if (is != null)
-				visualisations = (Visualisations) unmarshaller.unmarshal(is);
+			visualisations = (Visualisations) unmarshaller.unmarshal(
+					new FileInputStream(JavaVisConstants.VISUALISATIONS_FILE_NAME));
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -75,6 +75,13 @@ public class ConfigurationManager {
 	
 	public Visualisations getVisualisations() {
 		return visualisations;
+	}
+	
+	public void writeVisualisations() throws JAXBException, FileNotFoundException {
+		// export visualisations xml
+		Marshaller marshaller = jc.createMarshaller();
+		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, new Boolean(true));
+		marshaller.marshal(visualisations, new FileOutputStream(JavaVisConstants.VISUALISATIONS_FILE_NAME));
 	}
 	
 }

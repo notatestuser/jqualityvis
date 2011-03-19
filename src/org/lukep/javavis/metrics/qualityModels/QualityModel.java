@@ -26,7 +26,7 @@ public class QualityModel extends Vector<MetricAttribute> {
 		
 		for (org.lukep.javavis.generated.jaxb.QualityModels.QualityModel.DesignQualityAttributes.DesignQualityAttribute dqa
 				: sourceQualityModel.getDesignQualityAttributes().getDesignQualityAttribute()) {
-			add( new DesignQualityAttribute(dqa, registry) );
+			add( new DesignQualityAttribute(this, dqa, registry) );
 		}
 	}
 

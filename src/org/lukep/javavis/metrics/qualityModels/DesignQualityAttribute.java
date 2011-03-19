@@ -25,12 +25,12 @@ public class DesignQualityAttribute extends MetricAttribute {
 	
 	private Collection<WeightedMetricFactor> weightedMetrics;
 	
-	public DesignQualityAttribute(DesignQualityAttributes.DesignQualityAttribute sourceAttribute, 
-			MetricRegistry registry) {
+	public DesignQualityAttribute(QualityModel qm, 
+			DesignQualityAttributes.DesignQualityAttribute sourceAttribute, MetricRegistry registry) {
 		
 		// set the fields in our new DesignQualityAttribute object from the data source object
-		super(sourceAttribute.getName(), 
-				sourceAttribute.getName(),
+		super(qm.getInternalName() + " " + sourceAttribute.getName(), 
+				sourceAttribute.getName().substring(0, 4),
 				registry.getOrSetMetricType(ATTRIBUTE_METRIC_TYPE),
 				Arrays.asList(ATTRIBUTE_METRIC_APPLIES_TO));
 		

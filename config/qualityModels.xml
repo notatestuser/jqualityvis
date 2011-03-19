@@ -9,21 +9,21 @@
 	<qualityModel name="Quality Model for Object-Oriented Design" internal_name="QMOOD">
 		
 		<designQualityAttributes>
-			<designQualityAttribute name="QMOOD Reusability">
+			<designQualityAttribute name="Reusability">
 				<!-- -0.25 * Coupling + 0.25 * Cohesion + 0.5 * Messaging + 0.5 * Design Size -->
 				<weightedMetric value="+" weight="-0.25" internal_name="DCC" target="class" />
 				<weightedMetric value="+" weight="0.25" internal_name="CAM" target="class" />
 				<weightedMetric value="+" weight="0.5" internal_name="CIS" target="class" />
 				<weightedMetric value="+" weight="0.5" internal_name="DSC" target="project" />
 			</designQualityAttribute>
-			<designQualityAttribute name="QMOOD Flexibility">
+			<designQualityAttribute name="Flexibility">
 				<!-- 0.25 * Encapsulation - 0.25 * Coupling + 0.5 * Composition + 0.5 * Polymorphism -->
 				<weightedMetric value="+" weight="0.25" internal_name="DAM" target="class" />
 				<weightedMetric value="-" weight="0.25" internal_name="DCC" target="class" />
 				<weightedMetric value="+" weight="0.5" internal_name="MOA" target="class" />
 				<weightedMetric value="+" weight="0.5" internal_name="NOP" target="class" />
 			</designQualityAttribute>
-			<designQualityAttribute name="QMOOD Understandability">
+			<designQualityAttribute name="Understandability">
 				<!-- -0.33 * Abstraction + 0.33 * Encapsulation - 0.33 * Coupling + 0.33 * Cohesion -
 				      0.33 * Polymorphism - 0.33 * Complexity - 0.33 * Design Size -->
 				<weightedMetric value="+" weight="-0.33" internal_name="ANA" target="project" />
@@ -34,7 +34,7 @@
 				<weightedMetric value="-" weight="0.33" internal_name="NOM" target="class" />
 				<weightedMetric value="-" weight="0.33" internal_name="DSC" target="project" />
 			</designQualityAttribute>
-			<designQualityAttribute name="QMOOD Functionality">
+			<designQualityAttribute name="Functionality">
 				<!-- 0.12 * Cohesion + 0.22 * Polymorphism + 0.22 * Messaging + 0.22 * Design Size + 0.22 * Hierarchies -->
 				<weightedMetric value="+" weight="0.12" internal_name="CAM" target="class" />
 				<weightedMetric value="+" weight="0.22" internal_name="NOP" target="class" />
@@ -42,14 +42,14 @@
 				<weightedMetric value="+" weight="0.22" internal_name="DSC" target="project" />
 				<weightedMetric value="+" weight="0.22" internal_name="NOH" target="project" />
 			</designQualityAttribute>
-			<designQualityAttribute name="QMOOD Extendibility">
+			<designQualityAttribute name="Extendibility">
 				<!-- 0.5 * Abstraction - 0.5 * Coupling + 0.5 * Inheritance + 0.5 * Polymorphism -->
 				<weightedMetric value="+" weight="0.5" internal_name="ANA" target="project" />
 				<weightedMetric value="-" weight="0.5" internal_name="DCC" target="class" />
 				<weightedMetric value="+" weight="0.5" internal_name="MFA" target="class" />
 				<weightedMetric value="+" weight="0.5" internal_name="NOP" target="class" />
 			</designQualityAttribute>
-			<designQualityAttribute name="QMOOD Effectiveness">
+			<designQualityAttribute name="Effectiveness">
 				<!-- 0.2 * Abstraction + 0.2 * Encapsulation + 0.2 * Composition + 0.2 * Inheritance + 0.2 * Polymorphism -->
 				<weightedMetric value="+" weight="0.2" internal_name="ANA" target="project" />
 				<weightedMetric value="+" weight="0.2" internal_name="DAM" target="class" />

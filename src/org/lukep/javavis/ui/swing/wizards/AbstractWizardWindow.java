@@ -2,7 +2,7 @@
  * AbstractWizardWindow.java (JMetricVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
-package org.lukep.javavis.ui.swing;
+package org.lukep.javavis.ui.swing.wizards;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -32,6 +32,7 @@ import javax.swing.border.EmptyBorder;
 import org.lukep.javavis.program.generic.helpers.MetricPreloader;
 import org.lukep.javavis.program.generic.models.ProjectModel;
 import org.lukep.javavis.ui.UIMain;
+import org.lukep.javavis.ui.swing.WorkspacePane;
 
 @SuppressWarnings("serial")
 abstract class AbstractWizardWindow extends JDialog implements ActionListener {

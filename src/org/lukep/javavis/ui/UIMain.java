@@ -31,11 +31,11 @@ import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.lukep.javavis.ui.swing.NewProjectWizardWindow;
-import org.lukep.javavis.ui.swing.OpenProjectWizardWindow;
-import org.lukep.javavis.ui.swing.SaveProjectWizardWindow;
 import org.lukep.javavis.ui.swing.WorkspacePane;
 import org.lukep.javavis.ui.swing.configPanes.VisualisationConfigurationPanel;
+import org.lukep.javavis.ui.swing.wizards.NewProjectWizardWindow;
+import org.lukep.javavis.ui.swing.wizards.OpenProjectWizardWindow;
+import org.lukep.javavis.ui.swing.wizards.SaveProjectWizardWindow;
 import org.lukep.javavis.util.JavaVisConstants;
 import org.lukep.javavis.visualisation.visualisers.IVisualiser;
 

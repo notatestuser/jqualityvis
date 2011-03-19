@@ -2,7 +2,7 @@
  * NewProjectWizardWindow.java (JMetricVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
-package org.lukep.javavis.ui.swing;
+package org.lukep.javavis.ui.swing.wizards;
 
 import java.awt.Frame;
 import java.awt.event.ActionEvent;

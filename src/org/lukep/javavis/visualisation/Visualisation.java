@@ -4,8 +4,6 @@
  */
 package org.lukep.javavis.visualisation;
 
-import java.util.List;
-
 import org.lukep.javavis.metrics.MetricRegistry;
 import org.lukep.javavis.metrics.MetricType;
 import org.lukep.javavis.visualisation.views.IVisualiserVisitor;
@@ -17,7 +15,7 @@ public class Visualisation {
 	protected MetricType type;
 	protected Class<IVisualiser> visualiser;
 	protected Class<IVisualiserVisitor> visualiserVisitor;
-	protected List<String> arguments;
+	protected String arguments;
 	
 	@SuppressWarnings("unchecked")
 	public Visualisation(org.lukep.javavis.generated.jaxb.Visualisations.Visualisation sourceVis) throws 
@@ -28,7 +26,7 @@ public class Visualisation {
 		type = MetricRegistry.getInstance().getOrSetMetricType(sourceVis.getType());
 		visualiser = (Class<IVisualiser>) Class.forName(sourceVis.getIVisualiser());
 		visualiserVisitor = (Class<IVisualiserVisitor>) Class.forName(sourceVis.getIVisualiserVisitor());
-		arguments = sourceVis.getArguments().getArgument();
+		arguments = sourceVis.getArguments();
 	}
 
 	public String getName() {
@@ -47,7 +45,7 @@ public class Visualisation {
 		return visualiserVisitor;
 	}
 
-	public List<String> getArguments() {
+	public String getArguments() {
 		return arguments;
 	}
 

@@ -14,13 +14,7 @@
               <xsd:element name="type" type="xsd:string" />
               <xsd:element name="IVisualiser" type="xsd:string" />
               <xsd:element name="IVisualiserVisitor" type="xsd:string" />
-              <xsd:element name="arguments">
-                <xsd:complexType>
-                  <xsd:sequence>
-                    <xsd:element minOccurs="0" maxOccurs="unbounded" name="argument" type="xsd:string" />
-                  </xsd:sequence>
-                </xsd:complexType>
-              </xsd:element>
+              <xsd:element name="arguments" type="xsd:string" />
             </xsd:sequence>
             <xsd:attribute name="name" type="xsd:string" />
           </xsd:complexType>

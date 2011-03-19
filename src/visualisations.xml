@@ -19,79 +19,69 @@
 		<type>WeightedMethod</type>
 		<IVisualiser>org.lukep.javavis.visualisation.visualisers.PrefuseVisualiser</IVisualiser>
 		<IVisualiserVisitor>org.lukep.javavis.visualisation.views.ClassHierarchyView</IVisualiserVisitor>
-		<arguments>
-		</arguments>
+		<arguments></arguments>
 	</visualisation>
 	
 	<visualisation name="Class Hierarchy w/Methods (mxGraph)">
 		<type>WeightedMethod</type>
 		<IVisualiser>org.lukep.javavis.visualisation.visualisers.mxGraphVisualiser</IVisualiser>
 		<IVisualiserVisitor>org.lukep.javavis.visualisation.views.ClassHierarchyView</IVisualiserVisitor>
-		<arguments>
-		</arguments>
+		<arguments></arguments>
 	</visualisation>
 	
 	<visualisation name="Class Tree w/Methods">
 		<type>WeightedMethod</type>
 		<IVisualiser>org.lukep.javavis.visualisation.visualisers.PrefuseVisualiser</IVisualiser>
 		<IVisualiserVisitor>org.lukep.javavis.visualisation.views.ClassHierarchyTree</IVisualiserVisitor>
-		<arguments>
-		</arguments>
+		<arguments></arguments>
 	</visualisation>
 	
 	<visualisation name="Class Circle">
 		<type>WeightedClass</type>
 		<IVisualiser>org.lukep.javavis.visualisation.visualisers.PrefuseVisualiser</IVisualiser>
 		<IVisualiserVisitor>org.lukep.javavis.visualisation.views.CircleView</IVisualiserVisitor>
-		<arguments>
-		</arguments>
+		<arguments></arguments>
 	</visualisation>
 	
 	<visualisation name="Relational Circle">
 		<type>RelationalClass</type>
 		<IVisualiser>org.lukep.javavis.visualisation.visualisers.mxGraphVisualiser</IVisualiser>
 		<IVisualiserVisitor>org.lukep.javavis.visualisation.views.CircleView</IVisualiserVisitor>
-		<arguments>
-		</arguments>
+		<arguments></arguments>
 	</visualisation>
 	
 	<visualisation name="Class TreeMap">
 		<type>WeightedClass</type>
 		<IVisualiser>org.lukep.javavis.visualisation.visualisers.PrefuseVisualiser</IVisualiser>
 		<IVisualiserVisitor>org.lukep.javavis.visualisation.views.TreeMapView</IVisualiserVisitor>
-		<arguments>
-		</arguments>
+		<arguments></arguments>
 	</visualisation>
 	
 	<visualisation name="Scatter Graph">
 		<type>WeightedClass</type>
 		<IVisualiser>org.lukep.javavis.visualisation.visualisers.PrefuseVisualiser</IVisualiser>
 		<IVisualiserVisitor>org.lukep.javavis.visualisation.views.ScatterGraphView</IVisualiserVisitor>
-		<arguments>
-		</arguments>
+		<arguments></arguments>
 	</visualisation>
 	
 	<visualisation name="Bar Chart">
 		<type>WeightedClass</type>
 		<IVisualiser>org.lukep.javavis.visualisation.visualisers.Openchart2Visualiser</IVisualiser>
 		<IVisualiserVisitor>org.lukep.javavis.visualisation.views.BarChartView</IVisualiserVisitor>
-		<arguments>
-		</arguments>
+		<arguments></arguments>
 	</visualisation>
 	
 	<visualisation name="Pie Chart">
 		<type>WeightedClass</type>
 		<IVisualiser>org.lukep.javavis.visualisation.visualisers.Openchart2Visualiser</IVisualiser>
 		<IVisualiserVisitor>org.lukep.javavis.visualisation.views.PieChartView</IVisualiserVisitor>
-		<arguments>
-		</arguments>
+		<arguments></arguments>
 	</visualisation>
 	
 	<visualisation name="Radar Chart">
 		<type>WeightedClass</type>
 		<IVisualiser>org.lukep.javavis.visualisation.visualisers.Openchart2Visualiser</IVisualiser>
 		<IVisualiserVisitor>org.lukep.javavis.visualisation.views.RadarChartView</IVisualiserVisitor>
-		<arguments>
-		</arguments>
+		<arguments></arguments>
 	</visualisation>
 </visualisations>

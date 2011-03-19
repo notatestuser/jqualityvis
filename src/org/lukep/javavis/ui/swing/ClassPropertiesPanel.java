@@ -7,6 +7,7 @@ package org.lukep.javavis.ui.swing;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.util.Enumeration;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -14,8 +15,15 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
+import javax.swing.border.Border;
+import javax.swing.event.TableColumnModelListener;
+import javax.swing.table.DefaultTableColumnModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 
 import org.lukep.javavis.metrics.IMeasurableNode;
 import org.lukep.javavis.metrics.MetricAttribute;
@@ -35,29 +43,39 @@ public class ClassPropertiesPanel extends JPanel implements Observer {
 	protected WorkspaceContext wspContext;
 	protected IGenericModelNode currentModel;
 
-	public ClassPropertiesPanel(WorkspaceContext wspContext) {
-		setLayout( new GridLayout(1, 0, 3, 0) );
+	public ClassPropertiesPanel(WorkspacePane w, WorkspaceContext wspContext) {
+		setLayout( new BorderLayout(3, 0) );
 		this.wspContext = wspContext;
 		wspContext.addObserver(this);
 		
 		// create content label
 		contentLabel = new JLabel();
 		contentLabel.setVerticalAlignment(SwingConstants.TOP);
-		contentLabel.setBorder( BorderFactory.createEmptyBorder(5, 10, 0, 0) );
+		contentLabel.setBorder( BorderFactory.createEmptyBorder(5, 5, 0, 0) );
 		JPanel contentPanel = new JPanel( new BorderLayout() );
-		JScrollPane contentLabelPane = new JScrollPane(contentPanel);
-		contentPanel.add(contentLabel, BorderLayout.CENTER);
-		add(contentLabelPane);
+		JScrollPane contentLabelPane = new JScrollPane(contentLabel);
+		contentLabelPane.setBorder(BorderFactory.createEmptyBorder());
+		contentPanel.add(contentLabelPane, BorderLayout.CENTER);
+		//add(contentLabelPane);
 		
 		// add class composition component
 		classCompositionComponent = new ClassCompositionComponent(wspContext);
-		classCompositionComponent.setPreferredSize( new Dimension(100, 100) );
+		classCompositionComponent.setPreferredSize( new Dimension(80, 100) );
 		contentPanel.add(classCompositionComponent, BorderLayout.WEST);
 		
 		// create method listing table
 		methodTable = new JTable( new ClassPropertiesTableModel(null) );
 		JScrollPane methodTableScrollPane = new JScrollPane(methodTable);
-		add(methodTableScrollPane);
+		//add(methodTableScrollPane);
+		
+		// create horizontal split pane to contain context pane on the left and 
+		// the method listing table on the right
+		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, contentPanel, methodTableScrollPane);
+		splitPane.setDividerLocation(450);
+		splitPane.setDividerSize(2);
+		splitPane.setBorder(null);
+		splitPane.setUI(w.new WorkspaceSplitPaneUI());
+		add(splitPane, BorderLayout.CENTER);
 	}
 	
 	public void setCurrentModel(IGenericModelNode model) {
@@ -101,6 +119,9 @@ public class ClassPropertiesPanel extends JPanel implements Observer {
 		ClassPropertiesTableModel methodTableModel = 
 			(ClassPropertiesTableModel) methodTable.getModel();
 		methodTableModel.setSubject(model);
+		TableColumnModel tcm = methodTable.getColumnModel();
+		if (tcm.getColumnCount() > 0)
+			tcm.getColumn(0).setPreferredWidth(300);
 		
 		// update class composition component
 		classCompositionComponent.setCurrentModel(model);

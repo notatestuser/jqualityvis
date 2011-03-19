@@ -68,7 +68,7 @@ public class ClassPropertiesTableModel extends AbstractTableModel {
 							JavaVisConstants.METRIC_APPLIES_TO_CLASS);
 			else
 				return "( Unknown )";
-			return supportMap.get(column - 1).getName();
+			return supportMap.get(column - 1).getInternalName();
 		}
 	}
 

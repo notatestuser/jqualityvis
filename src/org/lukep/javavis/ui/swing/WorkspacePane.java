@@ -71,7 +71,7 @@ public class WorkspacePane extends JPanel implements
 	private static final int TITLE_LABEL_COLOR_RGB = 0xF9FFFB;
 	private static final int DECOY_BACKGROUND_COLOR_RGB = 0xFFF9FFFB;
 	
-	class WorkspaceSplitPaneUI extends BasicSplitPaneUI {
+	public class WorkspaceSplitPaneUI extends BasicSplitPaneUI {
 		@Override
 		public BasicSplitPaneDivider createDefaultDivider() {
 			return new BasicSplitPaneDivider(this) {
@@ -173,7 +173,7 @@ public class WorkspacePane extends JPanel implements
 		mainPane.add(titleLabel, BorderLayout.NORTH);
 		
 		// create the properties panel to show the attributes of the currently selected class
-		propertiesPane = new ClassPropertiesPanel(wspContext);
+		propertiesPane = new ClassPropertiesPanel(this, wspContext);
 		propertiesPane.setVisible(true);
 		
 		// create the right split pane that contains the graph component on the top and the class

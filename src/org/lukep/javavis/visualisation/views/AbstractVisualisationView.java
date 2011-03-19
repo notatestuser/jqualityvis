@@ -143,14 +143,23 @@ public class AbstractVisualisationView implements IVisualiserVisitor {
 		
 		// construct a DataSet for each series (container) with its constituent classes mapped to metric measurements
 		i = 0; int j;
+		boolean doFix = true;
 		for (Map.Entry<IGenericModelNode, ClassModel[]> seriesEntry 
 				: nodeChildClasses.entrySet()) {
 			j = 0;
 			Double[] values = new Double[seriesEntry.getValue().length];
 			for (ClassModel clazz : seriesEntry.getValue()) {
 				columnsVec.add(clazz);
-				values[j++] = metric.measureTargetCached(clazz).getResult();
+				values[j] = metric.measureTargetCached(clazz).getResult();
+				if (values[j] != 0.0)
+					doFix = false;
+				j++;
 			}
+			
+			// TODO replace hackish bugfix that mitigates a freezing issue with openchart2
+			if (i == 0 && doFix && values.length > 0)
+				values[0] += 0.00000001; // insignificant value isn't noticeable on chart
+			
 			dataSets[i++] = new DefaultDataSet(values, seriesEntry.getValue(), 0, 
 					seriesEntry.getKey().getQualifiedName());
 		}
@@ -171,6 +180,7 @@ public class AbstractVisualisationView implements IVisualiserVisitor {
 		String[] series = new String[classCount];
 		
 		int i = 0;
+		boolean doFix = true;
 		for (ClassModel clazz : allClasses) {
 			// add the ClassModel object as a column
 			columns[i] = clazz;
@@ -179,8 +189,15 @@ public class AbstractVisualisationView implements IVisualiserVisitor {
 			// add the metric measurement as a data value in series 0
 			data[i][0] = metric.measureTargetCached(clazz).getResult();
 			
+			if (data[i][0] != 0.0)
+				doFix = false;
+			
 			i++;
 		}
+		
+		// TODO replace hackish bugfix that mitigates a freezing issue with openchart2
+		if (doFix && data.length >= 1)
+			data[0][0] += 0.00000001; // insignificant value isn't noticeable on chart
 		
 		return new ObjectChartDataModel(data, columns, series);
 	}

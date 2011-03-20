@@ -165,7 +165,8 @@ public class WorkspacePane extends JPanel implements
 		
 		// create the "title label"
 		titleLabel = new JLabel(project.getSimpleName() + " (created " + 
-				DateFormat.getInstance().format(project.getCreationDate()) + ")");
+				DateFormat.getInstance().format(project.getCreationDate()) +
+				" by "+project.getCreationUser()+")");
 		titleLabel.setOpaque(true);
 		titleLabel.setBackground(new Color(TITLE_LABEL_COLOR_RGB));
 		titleLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 0));

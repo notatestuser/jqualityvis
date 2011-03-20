@@ -28,6 +28,7 @@ public class ProjectModel extends AbstractModel implements IProgramSourceObserve
 		Logger.getLogger(ProjectModel.class.getSimpleName());
 	
 	private Date creationDate = new Date();
+	private String creationUser = System.getProperty("user.name");
 	
 	private int modelCount = 0;
 	
@@ -73,7 +74,11 @@ public class ProjectModel extends AbstractModel implements IProgramSourceObserve
 		return creationDate;
 	}
 	
-    public int getModelCount() {
+    public String getCreationUser() {
+		return creationUser;
+	}
+
+	public int getModelCount() {
 		return modelCount;
     }
 

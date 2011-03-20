@@ -106,7 +106,7 @@ public class OpenProjectWizardWindow extends AbstractWizardWindow {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (btnOpenBrowse == e.getSource()) {
-			selectedFile = browseFileSaveLocation();
+			selectedFile = browseFileOpenLocation();
 			if (selectedFile != null) {
 				txtOpenFilename.setText(selectedFile.getAbsolutePath());
 				refreshActionable();
@@ -158,7 +158,8 @@ public class OpenProjectWizardWindow extends AbstractWizardWindow {
 							progressBar.getModel());
 					notifyLoadComplete(project);
 				} catch (Exception e) {
-					showError(e.getLocalizedMessage());
+					showError(e.getMessage());
+					e.printStackTrace();
 				}
 			}
 		});
@@ -167,12 +168,12 @@ public class OpenProjectWizardWindow extends AbstractWizardWindow {
 		return true;
 	}
 	
-	private File browseFileSaveLocation() {
+	private File browseFileOpenLocation() {
 		JFileChooser fc = new JFileChooser();
 		fc.setDialogTitle("Open Project");
 		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		fc.setMultiSelectionEnabled(false);
-		int returnVal = fc.showSaveDialog(this);
+		int returnVal = fc.showOpenDialog(this);
 		if (returnVal == JFileChooser.APPROVE_OPTION)
 			return fc.getSelectedFile();
 		return null;

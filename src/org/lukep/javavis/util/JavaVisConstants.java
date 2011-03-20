@@ -15,30 +15,32 @@ public class JavaVisConstants {
 	public static final String DEFAULT_PACKAGE_NAME 	= "(default package)";
 	public static final String DEFAULT_CONSTRUCTOR_NAME = "<init>";
 	
-	public static final String METRICS_FILE_NAME 		= "config/metrics.xml";
-	public static final String QUALITYMODELS_FILE_NAME  = "config/qualityModels.xml";
-	public static final String VISUALISATIONS_FILE_NAME = "config/visualisations.xml";
+	public static final String WORKING_DIR 				= System.getProperty("user.dir");
 	
-	public static final String WELCOME_HTML_URL			= "assets/html/welcome.html";
-	public static final String HELP_HTML_URL			= "assets/html/help.html";
+	public static final String METRICS_FILE_NAME 		= WORKING_DIR + "/config/metrics.xml";
+	public static final String QUALITYMODELS_FILE_NAME  = WORKING_DIR + "/config/qualityModels.xml";
+	public static final String VISUALISATIONS_FILE_NAME = WORKING_DIR + "/config/visualisations.xml";
 	
-	public static final String IMG_DECOY_PANEL_BG		= "assets/img/decoyPanelBackground.png";
+	public static final String WELCOME_HTML_URL			= WORKING_DIR + "/assets/html/welcome.html";
+	public static final String HELP_HTML_URL			= WORKING_DIR + "/assets/html/help.html";
 	
-	public static final String ICON_PROJECT_EXPLORER	= "assets/icons/folder.png";
-	public static final String ICON_QUALITY_ANALYSIS	= "assets/icons/chart_curve.png";
-	public static final String ICON_METRICS				= "assets/icons/chart_bar.png";
-	public static final String ICON_WARNINGS			= "assets/icons/exclamation.png";
-	public static final String ICON_PROJECT_WIZARD_NEW	= "assets/icons/application-blue.png";
-	public static final String ICON_PROJECT_WIZARD_OPEN	= "assets/icons/folder-horizontal.png";
-	public static final String ICON_PROJECT_WIZARD_SAVE = "assets/icons/document-text.png";
+	public static final String IMG_DECOY_PANEL_BG		= WORKING_DIR + "/assets/img/decoyPanelBackground.png";
 	
-	public static final String ICON_MENU_PROJECT_CREATE	= "assets/icons/document.png";
-	public static final String ICON_MENU_PROJECT_OPEN	= "assets/icons/folder-import.png";
-	public static final String ICON_MENU_PROJECT_SAVE	= "assets/icons/disk-black.png";
-	public static final String ICON_MENU_PROJECT_CLOSE	= "assets/icons/cross-button.png";
-	public static final String ICON_MENU_HELP			= "assets/icons/question-frame.png";
-	public static final String ICON_CONFIG_DELETE_ENT   = "assets/icons/cross-circle.png";
-	public static final String ICON_CONFIG_SAVE_ENT     = "assets/icons/arrow-180-medium.png";
+	public static final String ICON_PROJECT_EXPLORER	= WORKING_DIR + "/assets/icons/folder.png";
+	public static final String ICON_QUALITY_ANALYSIS	= WORKING_DIR + "/assets/icons/chart_curve.png";
+	public static final String ICON_METRICS				= WORKING_DIR + "/assets/icons/chart_bar.png";
+	public static final String ICON_WARNINGS			= WORKING_DIR + "/assets/icons/exclamation.png";
+	public static final String ICON_PROJECT_WIZARD_NEW	= WORKING_DIR + "/assets/icons/application-blue.png";
+	public static final String ICON_PROJECT_WIZARD_OPEN	= WORKING_DIR + "/assets/icons/folder-horizontal.png";
+	public static final String ICON_PROJECT_WIZARD_SAVE = WORKING_DIR + "/assets/icons/document-text.png";
+	
+	public static final String ICON_MENU_PROJECT_CREATE	= WORKING_DIR + "/assets/icons/document.png";
+	public static final String ICON_MENU_PROJECT_OPEN	= WORKING_DIR + "/assets/icons/folder-import.png";
+	public static final String ICON_MENU_PROJECT_SAVE	= WORKING_DIR + "/assets/icons/disk-black.png";
+	public static final String ICON_MENU_PROJECT_CLOSE	= WORKING_DIR + "/assets/icons/cross-button.png";
+	public static final String ICON_MENU_HELP			= WORKING_DIR + "/assets/icons/question-frame.png";
+	public static final String ICON_CONFIG_DELETE_ENT   = WORKING_DIR + "/assets/icons/cross-circle.png";
+	public static final String ICON_CONFIG_SAVE_ENT     = WORKING_DIR + "/assets/icons/arrow-180-medium.png";
 	
 	public static final String HEADING_PROJECT_EXPLORER	= "Project Explorer";
 	public static final String HEADING_QUALITY_ANALYSIS	= "Quality Analysis";

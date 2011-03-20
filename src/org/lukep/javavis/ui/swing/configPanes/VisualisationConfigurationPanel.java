@@ -109,7 +109,15 @@ public class VisualisationConfigurationPanel extends AbstractConfigurationPanel 
 				listModel.addElement(vis);
 	}
 	
-	private void updateFormFields() {
+	@Override
+	protected String getSelectedEntityName() {
+		if (currentVis != null)
+			return currentVis.getName();
+		return "";
+	}
+
+	@Override
+	protected void updateFormFields() {
 		setEntityTitle("Visualisation: " + currentVis.getName());
 		txtName.setText(currentVis.getName());
 		txtType.setText(currentVis.getSource().getType());
@@ -119,21 +127,15 @@ public class VisualisationConfigurationPanel extends AbstractConfigurationPanel 
 				currentVis.getSource().getIVisualiserVisitor());
 		txtArguments.setText(currentVis.getArguments());
 	}
-	
-	private void resetFormFields() {
+
+	@Override
+	protected void resetFormFields() {
 		setEntityTitle(UNSAVED_ENTITY_TITLE);
 		txtName.setText(null);
 		txtType.setText(null);
 		txtIVisualiserClass.setText(null);
 		txtIVisualiserVisitorClass.setText(null);
 		txtArguments.setText(null);
-	}
-	
-	@Override
-	protected String getSelectedEntityName() {
-		if (currentVis != null)
-			return currentVis.getName();
-		return "";
 	}
 
 	@Override

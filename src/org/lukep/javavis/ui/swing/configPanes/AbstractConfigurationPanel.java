@@ -220,6 +220,8 @@ abstract class AbstractConfigurationPanel extends JPanel implements
 	protected abstract void reloadListModel();
 	protected abstract void initialiseFormControls();
 	protected abstract String getSelectedEntityName();
+	protected abstract void updateFormFields();
+	protected abstract void resetFormFields();
 	protected abstract void setSelectedEntity(Object entity);
 	protected abstract void saveCurrentEntity() throws FormValidationException;
 	protected abstract void deleteCurrentEntity();

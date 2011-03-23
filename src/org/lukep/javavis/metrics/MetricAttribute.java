@@ -6,18 +6,18 @@ package org.lukep.javavis.metrics;
 
 import java.util.List;
 
-import org.lukep.javavis.generated.jaxb.Metrics.Metric;
-
 public class MetricAttribute {
 	
-	protected String name;
-	protected String nameInternal;
-	protected MetricType type;
-	protected List<String> appliesTo;
-	protected Class<IMeasurableVisitor> visitor;
-	protected String argument;
-	protected double cold;
-	protected double hot;
+	private org.lukep.javavis.generated.jaxb.Metrics.Metric source;
+	
+	private String name;
+	private String nameInternal;
+	private MetricType type;
+	private List<String> appliesTo;
+	private Class<IMeasurableVisitor> visitor;
+	private String argument;
+	private double cold;
+	private double hot;
 	
 	public MetricAttribute(String name, String nameInternal, MetricType type, List<String> appliesTo) {
 		this.name = name;
@@ -27,21 +27,27 @@ public class MetricAttribute {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public MetricAttribute(Metric sourceMetric, MetricRegistry registry) throws ClassNotFoundException {
-		
+	public MetricAttribute(org.lukep.javavis.generated.jaxb.Metrics.Metric source, 
+			MetricRegistry registry) throws ClassNotFoundException {
 		// set the fields in our new MetricAttribute object from the data source object
-		this(sourceMetric.getName(), 
-				sourceMetric.getInternalName(), 
-				registry.getOrSetMetricType(sourceMetric.getType()), 
-				sourceMetric.getAppliesTo().getMeasurable());
+		this(source.getName(), 
+				source.getInternalName(), 
+				registry.getOrSetMetricType(source.getType()), 
+				source.getAppliesTo().getMeasurable());
+		
+		this.source = source;
 		
 		// set static metric specific fields
-		visitor = (Class<IMeasurableVisitor>) Class.forName(sourceMetric.getVisitor());
-		argument = sourceMetric.getArgument();
-		cold = sourceMetric.getCold();
-		hot = sourceMetric.getHot();
+		visitor = (Class<IMeasurableVisitor>) Class.forName(source.getVisitor());
+		argument = source.getArgument();
+		cold = source.getCold();
+		hot = source.getHot();
 	}
 	
+	public org.lukep.javavis.generated.jaxb.Metrics.Metric getSource() {
+		return source;
+	}
+
 	public MetricMeasurement measureTarget(IMeasurableNode target) {
 		// if this metric applies to the target's type - run it!
 		if (testAppliesTo(target.getModelTypeName()))

@@ -35,7 +35,6 @@ import prefuse.render.AbstractShapeRenderer;
 import prefuse.render.DefaultRendererFactory;
 import prefuse.render.LabelRenderer;
 import prefuse.util.ColorLib;
-import prefuse.util.ColorMap;
 import prefuse.util.FontLib;
 import prefuse.util.PrefuseLib;
 import prefuse.visual.DecoratorItem;
@@ -226,7 +225,7 @@ public class TreeMapView extends AbstractVisualisationView {
 	
     // ------------------------------------------------------------------------
     
-	public static class Suze extends ColorAction {
+	/*public static class Suze extends ColorAction {
 		
 		public Suze(String group) {
 			super(group, VisualItem.TEXTCOLOR);
@@ -246,7 +245,7 @@ public class TreeMapView extends AbstractVisualisationView {
 			return ColorLib.rgb(0xFF - ColorLib.red(rgb), 0xFF - ColorLib.green(rgb), 0xFF - ColorLib.blue(rgb));
 		}
 		
-	}
+	}*/
 	
     /**
      * Set the stroke color for drawing treemap node outlines. A graded
@@ -281,7 +280,7 @@ public class TreeMapView extends AbstractVisualisationView {
      * in pink, while normal nodes are shaded according to their
      * depth in the tree.
      */
-    public static class FillColorAction extends ColorAction {
+    /*public static class FillColorAction extends ColorAction {
         private ColorMap cmap = new ColorMap(
             ColorLib.getInterpolatedPalette(10,
                 ColorLib.rgb(85,85,85), ColorLib.rgb(0,0,0)), 0, 9);
@@ -307,7 +306,7 @@ public class TreeMapView extends AbstractVisualisationView {
             }
         }
         
-    }
+    }*/
     
     /**
      * Set label positions. Labels are assumed to be DecoratorItem instances,

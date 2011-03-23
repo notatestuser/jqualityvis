@@ -55,8 +55,8 @@ public class JavaSourceLoaderThread implements ISourceLoaderThread {
 		// recursively scan through input directory to locate java files
 		directoryCount = 0;
 		ArrayList<File> inputFiles = 
-			FileSystemUtils.ListFilesRecursive(selectedDirectory, JAVA_SOURCE_EXTENSIONS, new IFileSystemScanObserver() {
-				
+			FileSystemUtils.listFilesRecursive(selectedDirectory, JAVA_SOURCE_EXTENSIONS, 
+					new IFileSystemScanObserver() {
 				@Override
 				public void notifyScanDirectoryChange(File directory) {
 					notifyStatusChange("Scanning for source files in " + directory.toString() + "...");

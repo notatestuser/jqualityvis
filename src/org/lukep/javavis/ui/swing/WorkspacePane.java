@@ -9,8 +9,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.util.Collection;
 import java.util.HashMap;
@@ -60,8 +58,7 @@ import org.lukep.javavis.visualisation.VisualisationRegistry;
 import org.lukep.javavis.visualisation.views.IVisualiserVisitor;
 import org.lukep.javavis.visualisation.visualisers.IVisualiser;
 
-public class WorkspacePane extends JPanel implements 
-		Observer, ActionListener, TreeSelectionListener {
+public class WorkspacePane extends JPanel implements Observer, TreeSelectionListener {
 	
 	/**
 	 * 
@@ -368,39 +365,6 @@ public class WorkspacePane extends JPanel implements
 				if (vis != null)
 					setVisualisation(vis);
 				break;
-			}
-		}
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (metricComboBox == e.getSource()
-				&& metricComboBox.isEnabled()) {
-			
-			if (metricComboBox.getSelectedItem() instanceof MetricAttribute) {
-				
-				MetricAttribute metric = (MetricAttribute) metricComboBox.getSelectedItem();
-				
-				wspContext.setMetric(metric);
-				
-				List<Visualisation> visualisations = 
-					VisualisationRegistry.getInstance().getVisualisationsByType(metric.getType());
-				((VisualisationComboBoxModel)(visComboBox.getModel())).setVisualisations(visualisations);
-				visComboBox.setEnabled(true);
-				
-			} else {
-				wspContext.setMetric(null);
-				wspContext.setVisualisation(null);
-				visComboBox.setEnabled(false);
-			}
-		} else if (visComboBox == e.getSource()
-				&& visComboBox.isEnabled()) {
-			
-			if (visComboBox.getSelectedItem() instanceof Visualisation) {
-				Visualisation vis = (Visualisation) visComboBox.getSelectedItem();
-				wspContext.setVisualisation(vis);
-			} else {
-				wspContext.setVisualisation(null);
 			}
 		}
 	}

@@ -66,9 +66,9 @@ public class ClassModel extends AbstractModel {
 		return totalStatements;
 	}
 	
-	public float getAvgCyclomaticComplexity() {
+	public double getAvgCyclomaticComplexity() {
 		int count = 0;
-		float avgComplexity = 0;
+		double avgComplexity = 0;
 		MetricMeasurement result;
 		
 		Vector<MethodModel> methods = getMethods();

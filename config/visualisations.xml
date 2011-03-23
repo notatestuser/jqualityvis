@@ -15,26 +15,30 @@
 		                        prepare and display this visualisation in the specified IVisualiser.
 		   arguments:	      : The arguments to pass to the IVisualiserVisitor.
 	-->
+	<!--
 	<visualisation name="Class Hierarchy w/Methods">
 		<type>WeightedMethod</type>
 		<IVisualiser>org.lukep.javavis.visualisation.visualisers.PrefuseVisualiser</IVisualiser>
 		<IVisualiserVisitor>org.lukep.javavis.visualisation.views.ClassHierarchyView</IVisualiserVisitor>
 		<arguments></arguments>
 	</visualisation>
+	-->
 	
-	<visualisation name="Class Hierarchy w/Methods (mxGraph)">
+	<visualisation name="Class-Method Hierarchy">
 		<type>WeightedMethod</type>
 		<IVisualiser>org.lukep.javavis.visualisation.visualisers.mxGraphVisualiser</IVisualiser>
 		<IVisualiserVisitor>org.lukep.javavis.visualisation.views.ClassHierarchyView</IVisualiserVisitor>
 		<arguments></arguments>
 	</visualisation>
 	
+	<!--
 	<visualisation name="Class Tree w/Methods">
 		<type>WeightedMethod</type>
 		<IVisualiser>org.lukep.javavis.visualisation.visualisers.PrefuseVisualiser</IVisualiser>
 		<IVisualiserVisitor>org.lukep.javavis.visualisation.views.ClassHierarchyTree</IVisualiserVisitor>
 		<arguments></arguments>
 	</visualisation>
+	-->
 	
 	<visualisation name="Class Circle">
 		<type>WeightedClass</type>

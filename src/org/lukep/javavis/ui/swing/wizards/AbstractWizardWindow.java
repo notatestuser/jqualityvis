@@ -29,15 +29,14 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.border.EmptyBorder;
 
-import org.lukep.javavis.program.generic.helpers.MetricPreloader;
+import org.lukep.javavis.metrics.MetricPreloader;
 import org.lukep.javavis.program.generic.models.ProjectModel;
 import org.lukep.javavis.ui.UIMain;
 import org.lukep.javavis.ui.swing.WorkspacePane;
 
 @SuppressWarnings("serial")
 abstract class AbstractWizardWindow extends JDialog implements ActionListener {
-
-	AbstractWizardWindow thisInstance;
+	
 	UIMain uiInstance;
 	
 	private JPanel pnlForm;
@@ -68,7 +67,7 @@ abstract class AbstractWizardWindow extends JDialog implements ActionListener {
 		new Thread.UncaughtExceptionHandler() {
 		@Override
 		public void uncaughtException(Thread t, Throwable e) {
-			showError(e.getLocalizedMessage());
+			showError(e.getMessage());
 		}
 	};
 	
@@ -80,7 +79,6 @@ abstract class AbstractWizardWindow extends JDialog implements ActionListener {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		getContentPane().setLayout(new BorderLayout(0, 0));
 		
-		this.thisInstance = this;
 		this.uiInstance = uiInstance;
 		
 		initialise(title, icon);
@@ -224,7 +222,7 @@ abstract class AbstractWizardWindow extends JDialog implements ActionListener {
 			setVisible(false);
 			dispose();
 		} catch (Exception e) {
-			showError("Error creating workspace: " + e.getLocalizedMessage());
+			showError("Error creating workspace: " + e.getMessage());
 		}
 	}
 	

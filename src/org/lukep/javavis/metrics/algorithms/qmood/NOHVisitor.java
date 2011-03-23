@@ -19,6 +19,8 @@ public class NOHVisitor extends AbstractMeasurableVisitor {
 	private Set<String> loneWolves = new HashSet<String>();
 	// ... and a set of all dependent classes
 	private Set<String> dependents = new HashSet<String>();
+	// we'll need to take an intersection of the two sets
+	private Set<String> intersection = new HashSet<String>();
 	
 	@Override
 	public MetricMeasurement visit(MetricAttribute metric, ProjectModel project) {
@@ -37,8 +39,8 @@ public class NOHVisitor extends AbstractMeasurableVisitor {
 			}
 		}
 		
-		// find the intersection of the two classes and count
-		Set<String> intersection = new HashSet<String>(loneWolves);
+		// find the intersection of the two sets and count
+		intersection = new HashSet<String>(loneWolves);
 		intersection.retainAll(dependents);
 		
 		return new MetricMeasurement(project, metric, intersection.size());
@@ -50,6 +52,8 @@ public class NOHVisitor extends AbstractMeasurableVisitor {
 			loneWolves.clear();
 		if (dependents.size() > 0)
 			dependents.clear();
+		if (intersection.size() > 0)
+			intersection.clear();
 	}
 
 }

@@ -10,7 +10,7 @@ import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.MethodModel;
 import org.lukep.javavis.util.JavaVisConstants;
 
-public class CyclomaticComplexityVisitor extends AbstractMeasurableVisitor {
+public class ComplexityVisitor extends AbstractMeasurableVisitor {
 	
 	private double complexity;
 	

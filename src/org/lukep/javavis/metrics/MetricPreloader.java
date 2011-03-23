@@ -2,7 +2,7 @@
  * MetricPreloader.java (JMetricVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
-package org.lukep.javavis.program.generic.helpers;
+package org.lukep.javavis.metrics;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -11,9 +11,6 @@ import java.util.Set;
 
 import javax.swing.BoundedRangeModel;
 
-import org.lukep.javavis.metrics.IMeasurableNode;
-import org.lukep.javavis.metrics.MetricAttribute;
-import org.lukep.javavis.metrics.MetricRegistry;
 import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.IGenericModelNodeVisitor;
 import org.lukep.javavis.program.generic.models.MethodModel;

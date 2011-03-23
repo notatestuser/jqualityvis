@@ -40,8 +40,6 @@ import org.lukep.javavis.util.JavaVisConstants;
 import org.lukep.javavis.visualisation.visualisers.IVisualiser;
 
 public class UIMain implements IProgramStatusReporter, ChangeListener {
-
-	private UIMain thisInstance;
 	
 	private JFrame frmJavavis;
 	private JTabbedPane mainTabbedPane;
@@ -56,7 +54,7 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 	private ActionListener actionCreateProject = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			NewProjectWizardWindow pww = new NewProjectWizardWindow(frmJavavis, thisInstance);
+			NewProjectWizardWindow pww = new NewProjectWizardWindow(frmJavavis, UIMain.this);
 			pww.setVisible(true);
 		}
 	};
@@ -64,7 +62,7 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 	private ActionListener actionOpenProject = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			OpenProjectWizardWindow opw = new OpenProjectWizardWindow(frmJavavis, thisInstance);
+			OpenProjectWizardWindow opw = new OpenProjectWizardWindow(frmJavavis, UIMain.this);
 			opw.setVisible(true);
 		}
 	};
@@ -73,7 +71,7 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			WorkspacePane selectedWorkspace = (WorkspacePane) mainTabbedPane.getSelectedComponent();
-			SaveProjectWizardWindow spw = new SaveProjectWizardWindow(frmJavavis, thisInstance, 
+			SaveProjectWizardWindow spw = new SaveProjectWizardWindow(frmJavavis, UIMain.this, 
 					selectedWorkspace.getContext().getModelStore());
 			spw.setVisible(true);
 		}
@@ -99,7 +97,7 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 			JDialog dialog = new JDialog(frmJavavis, "Visualisation Manager");
 			dialog.setBounds(200, 200, 500, 300);
 			dialog.setLocationRelativeTo(frmJavavis);
-			dialog.getContentPane().add(new VisualisationConfigurationPanel(thisInstance));
+			dialog.getContentPane().add(new VisualisationConfigurationPanel(UIMain.this));
 			dialog.setModal(true);
 			dialog.pack();
 			dialog.setVisible(true);
@@ -144,8 +142,12 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
+
 				try {
 					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+					//PlafOptions.setCurrentTheme(new VistaTheme());
+					//PlafOptions.setAsLookAndFeel();
+					
 					
 					UIMain window = new UIMain();
 					window.frmJavavis.setVisible(true);
@@ -164,8 +166,6 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 		initialize();
 		addChildHTMLFrame("Welcome Page", 
 				(new java.io.File(JavaVisConstants.WELCOME_HTML_URL)).toURI().toURL());
-		
-		thisInstance = this;
 	}
 
 	/**

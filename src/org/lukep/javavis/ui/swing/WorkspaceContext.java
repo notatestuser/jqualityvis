@@ -14,8 +14,8 @@ import org.lukep.javavis.visualisation.Visualisation;
 public class WorkspaceContext extends Observable {
 
 	public static enum ChangeEvent {
-		MODELSTORE_CHANGE, RELATIONS_CHANGE, SUBJECT_CHANGE,
-		METRIC_CHANGE, VISUALISATION_CHANGE, SELECTED_CHANGE
+		MODELSTORE_CHANGE, SUBJECT_CHANGE, METRIC_CHANGE, 
+		VISUALISATION_CHANGE, SELECTED_CHANGE
 	}
 	
 	///////////////////////////////////////////////////////

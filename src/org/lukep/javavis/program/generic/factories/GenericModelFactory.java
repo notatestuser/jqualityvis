@@ -38,7 +38,7 @@ public class GenericModelFactory {
 	
 	private static ModelFactoryJavaMethodUtils methodUtils = new ModelFactoryJavaMethodUtils();
 	
-	public static ClassModel createClassInfoFromJava(GenericModelFactoryState s, 
+	public static ClassModel createClassModelFromJava(GenericModelFactoryState s, 
 			ClassTree classTree, TreePath path, Trees trees) {
 		
 		TypeElement e = (TypeElement) trees.getElement(path);
@@ -91,7 +91,7 @@ public class GenericModelFactory {
 		return newClassModel;
 	}
 	
-	public static MethodModel createMethodInfoFromJava(GenericModelFactoryState s, 
+	public static MethodModel createMethodModelFromJava(GenericModelFactoryState s, 
 			MethodTree methodTree, TreePath path, Trees trees) {
 		
 		MethodSymbol e = (MethodSymbol) trees.getElement(path);

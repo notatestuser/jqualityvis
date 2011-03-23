@@ -21,11 +21,11 @@ public class MethodCountVisitor extends AbstractMeasurableVisitor {
 		
 		resetInstanceAttributes();
 		
-		if (metric.isArgumentSet(ARG_POLYMORPHIC)) {
+		if (metric.isArgumentSet(ARG_POLYMORPHIC)) { // NOP
 			for (MethodModel method : clazz.getMethods())
 				if (method.isAbstract())
 					methodCount++;
-		} else if (metric.isArgumentSet(ARG_PUBLIC)) {
+		} else if (metric.isArgumentSet(ARG_PUBLIC)) { // CIS
 			for (MethodModel method : clazz.getMethods())
 				if (method.isPublic())
 					methodCount++;

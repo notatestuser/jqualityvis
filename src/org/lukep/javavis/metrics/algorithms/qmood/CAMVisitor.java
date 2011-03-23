@@ -15,8 +15,8 @@ import org.lukep.javavis.program.generic.models.MethodModel;
 
 public class CAMVisitor extends AbstractMeasurableVisitor {
 
-	private float numerator;
-	private float denominator;
+	private double numerator;
+	private double denominator;
 	
 	private Set<String> paramTypes = new HashSet<String>();
 	

@@ -105,7 +105,6 @@ public class mxGraphVisualiser extends AbstractVisualiser {
 			
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
-				System.out.println("wheel rotation " + e.getWheelRotation());
 				if (e.getWheelRotation() < 0)
 					graphComponent.zoomIn();
 				else if (e.getWheelRotation() > 0)

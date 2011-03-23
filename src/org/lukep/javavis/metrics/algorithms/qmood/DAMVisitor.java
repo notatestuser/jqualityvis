@@ -29,8 +29,8 @@ public class DAMVisitor extends AbstractMeasurableVisitor {
 			}
 		}
 		
-		float dam = (float)(hiddenAttributeCount) / (float)(attributeCount);
-		return new MetricMeasurement(clazz, metric, Float.isNaN(dam) ? 1.0f : dam);
+		double dam = (double)(hiddenAttributeCount) / (double)(attributeCount);
+		return new MetricMeasurement(clazz, metric, Double.isNaN(dam) ? 1.0 : dam);
 	}
 
 	@Override

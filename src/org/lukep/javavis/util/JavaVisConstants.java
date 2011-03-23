@@ -6,7 +6,7 @@ package org.lukep.javavis.util;
 
 public class JavaVisConstants {
 	
-	public static final String APP_NAME					= "JMetricVis";
+	public static final String APP_NAME					= "JQualityVis";
 	public static final String APP_VERSION				= "pre-delivery alpha";
 	public static final String APP_WEBPAGE				= "http://www.lancs.ac.uk/ug/plaster";
 	

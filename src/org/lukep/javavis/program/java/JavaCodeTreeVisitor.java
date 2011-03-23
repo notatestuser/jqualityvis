@@ -38,7 +38,7 @@ public class JavaCodeTreeVisitor extends TreePathScanner<Object, Trees> {
 	public Object visitClass(ClassTree classTree, Trees trees) {
 		TreePath path = getCurrentPath();
 		ClassModel newClassModel = 
-			GenericModelFactory.createClassInfoFromJava(codeUnitState, classTree, path, trees);
+			GenericModelFactory.createClassModelFromJava(codeUnitState, classTree, path, trees);
 		
 		// notify observers
 		if (newClassModel != null) {
@@ -53,7 +53,7 @@ public class JavaCodeTreeVisitor extends TreePathScanner<Object, Trees> {
 	public Object visitMethod(MethodTree methodTree, Trees trees) {
 		TreePath path = getCurrentPath();
 		MethodModel newMethodInfo = 
-			GenericModelFactory.createMethodInfoFromJava(codeUnitState, methodTree, path, trees);
+			GenericModelFactory.createMethodModelFromJava(codeUnitState, methodTree, path, trees);
 		
 		// notify observers
 		for (IProgramSourceObserver observer : observers)

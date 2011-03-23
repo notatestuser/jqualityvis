@@ -155,7 +155,7 @@ public class SaveProjectWizardWindow extends AbstractWizardWindow {
 					ModelSerializer.serializeProjectToFile(selectedSaveFile, project, fxml, fgzip);
 					notifySerializationComplete();
 				} catch (IOException e) {
-					showError(e.getLocalizedMessage());
+					showError(e.getMessage());
 				}
 			}
 		});

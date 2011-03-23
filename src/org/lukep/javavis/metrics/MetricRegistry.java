@@ -14,7 +14,6 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.lukep.javavis.generated.jaxb.Metrics;
-import org.lukep.javavis.generated.jaxb.Metrics.Metric;
 import org.lukep.javavis.generated.jaxb.QualityModels;
 import org.lukep.javavis.metrics.qualityModels.QualityModel;
 import org.lukep.javavis.program.generic.models.ProjectModel;
@@ -51,7 +50,8 @@ public class MetricRegistry { // singleton
 		Metrics metrics = ConfigurationManager.getInstance().getMetrics();
 		if (metrics != null) {
 			try {
-				for (Metric metric : metrics.getMetric()) {
+				for (org.lukep.javavis.generated.jaxb.Metrics.Metric metric 
+						: metrics.getMetric()) {
 					newMetric = new MetricAttribute(metric, this);
 					registerMetric(newMetric);
 				}

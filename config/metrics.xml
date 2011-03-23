@@ -24,7 +24,7 @@
 		<applies_to>
 			<measurable>method</measurable>
 		</applies_to>
-		<visitor>org.lukep.javavis.metrics.algorithms.CyclomaticComplexityVisitor</visitor>
+		<visitor>org.lukep.javavis.metrics.algorithms.ComplexityVisitor</visitor>
 		<argument></argument>
 		<cold>0.0</cold>
 		<hot>30.0</hot>
@@ -35,7 +35,7 @@
 		<applies_to>
 			<measurable>class</measurable>
 		</applies_to>
-		<visitor>org.lukep.javavis.metrics.algorithms.CyclomaticComplexityVisitor</visitor>
+		<visitor>org.lukep.javavis.metrics.algorithms.ComplexityVisitor</visitor>
 		<argument></argument>
 		<cold>0.0</cold>
 		<hot>30.0</hot>
@@ -46,7 +46,7 @@
 		<applies_to>
 			<measurable>class</measurable>
 		</applies_to>
-		<visitor>org.lukep.javavis.metrics.algorithms.CyclomaticComplexityVisitor</visitor>
+		<visitor>org.lukep.javavis.metrics.algorithms.ComplexityVisitor</visitor>
 		<argument></argument>
 		<cold>0.0</cold>
 		<hot>30.0</hot>

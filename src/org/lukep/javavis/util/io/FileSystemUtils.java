@@ -12,7 +12,8 @@ import java.util.Queue;
 
 public final class FileSystemUtils {
 
-	public static ArrayList<File> ListFilesRecursive(File rootDirectory, final String[] extensions, IFileSystemScanObserver observer) {
+	public static ArrayList<File> listFilesRecursive(File rootDirectory, 
+			final String[] extensions, IFileSystemScanObserver observer) {
 		File currentDirectory;
 		ArrayList<File> results = new ArrayList<File>();
 		Queue<File> directoriesToScan = new ArrayDeque<File>();

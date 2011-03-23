@@ -193,6 +193,7 @@
 			<measurable>class</measurable>
 		</applies_to>
 		<visitor>org.lukep.javavis.metrics.algorithms.MethodCountVisitor</visitor>
+		<argument></argument>
 		<cold>0.0</cold>
 		<hot>100.0</hot>
 	</metric>

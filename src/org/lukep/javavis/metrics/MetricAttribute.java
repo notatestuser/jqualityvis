@@ -86,7 +86,7 @@ public class MetricAttribute {
 	
 	public boolean isArgumentSet(String argument) {
 		if (argument != null)
-			return argument.contains(argument);
+			return this.argument.contains(argument);
 		return false;
 	}
 

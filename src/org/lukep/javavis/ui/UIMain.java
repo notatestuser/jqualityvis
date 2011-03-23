@@ -31,6 +31,7 @@ import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.lukep.javavis.ui.swing.MetricCalculatorDialog;
 import org.lukep.javavis.ui.swing.WorkspacePane;
 import org.lukep.javavis.ui.swing.configPanes.VisualisationConfigurationPanel;
 import org.lukep.javavis.ui.swing.wizards.NewProjectWizardWindow;
@@ -50,6 +51,7 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 	
 	private JMenuItem mntmSaveProject;
 	private JMenuItem mntmCloseTab;
+	private JMenuItem mntmBatchCalc;
 	
 	private ActionListener actionCreateProject = new ActionListener() {
 		@Override
@@ -101,6 +103,15 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 			dialog.setModal(true);
 			dialog.pack();
 			dialog.setVisible(true);
+		}
+	};
+	
+	private ActionListener actionBatchCalc = new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			MetricCalculatorDialog mcd = new MetricCalculatorDialog(
+					(WorkspacePane) mainTabbedPane.getSelectedComponent());
+			mcd.setVisible(true);
 		}
 	};
 	
@@ -250,6 +261,17 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 			mnSettings.add(mntmVisMgr);
 		}
 		
+		// ... Tools menu
+		JMenu mnTools = new JMenu("Tools");
+		menuBar.add(mnTools);
+		{
+			// ... Tools > Batch Metric Calculator...
+			mntmBatchCalc = new JMenuItem("Batch Metric Calculator...");
+			mntmBatchCalc.addActionListener(actionBatchCalc);
+			mnTools.add(mntmBatchCalc);
+			mntmBatchCalc.setEnabled(false);
+		}
+		
 		// ... Help menu
 		JMenu mnHelp = new JMenu("Help");
 		menuBar.add(mnHelp);
@@ -305,11 +327,14 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 			else
 				mntmCloseTab.setEnabled(true);
 			
-			// "Save Project" action availability handling
-			if (selectedTab instanceof WorkspacePane)
+			// "Save Project" and "Batch Metric Calculator" action availability handling
+			if (selectedTab instanceof WorkspacePane) {
 				mntmSaveProject.setEnabled(true);
-			else
+				mntmBatchCalc.setEnabled(true);
+			} else {
 				mntmSaveProject.setEnabled(false);
+				mntmBatchCalc.setEnabled(false);
+			}
 			
 		} else if (zoomSlider == e.getSource()
 				&& mainTabbedPane.getSelectedComponent() instanceof WorkspacePane) {

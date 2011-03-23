@@ -5,6 +5,7 @@
 package org.lukep.javavis.program.generic.models;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.lukep.javavis.metrics.IMeasurableNode;
@@ -89,7 +90,7 @@ abstract class AbstractModel implements IMeasurableNode {
 	public void addChild(IGenericModelNode child, RelationshipType type) {
 		// lazy instantiated list of child models
 		if (children == null)
-			children = new HashSet<Relationship>();
+			children = new LinkedHashSet<Relationship>();
 		children.add( new Relationship(this, child, type) );
 	}
 	

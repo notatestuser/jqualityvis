@@ -183,6 +183,12 @@ public class ClassModel extends AbstractModel {
 		return methodCount;
 	}
 	
+	public int getConstructorlessMethodCount() {
+		if (constructorMethod != null)
+			return methodCount - 1;
+		return methodCount;
+	}
+	
 	public void addVariable(VariableModel variable) {
 		addChild(variable, RelationshipType.MEMBER_OF);
 		variableCount++;

@@ -13,6 +13,7 @@ public class MFAVisitor extends
 		AbstractMeasurableVisitor {
 
 	private int inheritedMethods;
+	private int actualMethods;
 	private int totalMethods;
 	
 	@Override
@@ -21,14 +22,16 @@ public class MFAVisitor extends
 		resetInstanceAttributes();
 		
 		inheritedMethods = clazz.getInheritedMethodCount();
-		totalMethods = inheritedMethods + clazz.getMethodCount();
+		totalMethods = inheritedMethods + clazz.getConstructorlessMethodCount();
 		
-		return new MetricMeasurement(clazz, metric, (float)(inheritedMethods) / totalMethods);
+		double result = (double)(inheritedMethods) / totalMethods;
+		return new MetricMeasurement(clazz, metric, (Double.isNaN(result) ? 0.0 : result));
 	}
 
 	@Override
 	public void resetInstanceAttributes() {
 		inheritedMethods = 0;
+		actualMethods = 0;
 		totalMethods = 0;
 	}
 

@@ -124,6 +124,7 @@ public class GenericModelFactory {
 		// set constructor method or just add to the parent class's list of methods
 		if (newMethodModel.getName().equals(JavaVisConstants.DEFAULT_CONSTRUCTOR_NAME)) {
 			s.lastClass.setConstructorMethod(newMethodModel);
+			s.lastClass.addMethod(newMethodModel);
 			
 			log.info("Added constructor method to " + s.lastClass.getSimpleName());
 		} else if (s.lastClass != null) {

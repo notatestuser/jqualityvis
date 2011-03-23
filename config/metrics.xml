@@ -63,6 +63,17 @@
 		<hot>20.0</hot>
 	</metric>
 	
+	<metric name="Number of Children" internal_name="NOC">
+		<type>WeightedClass</type>
+		<applies_to>
+			<measurable>class</measurable>
+		</applies_to>
+		<visitor>org.lukep.javavis.metrics.algorithms.ChildCountVisitor</visitor>
+		<argument></argument>
+		<cold>0.0</cold>
+		<hot>20.0</hot>
+	</metric>
+	
 	<metric name="Number of Statements" internal_name="NOS">
 		<type>WeightedMethod</type>
 		<applies_to>

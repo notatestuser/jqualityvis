@@ -4,17 +4,23 @@
  */
 package org.lukep.javavis.metrics;
 
+import java.io.FileNotFoundException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import javax.xml.bind.JAXBException;
+
 import org.lukep.javavis.generated.jaxb.Metrics;
+import org.lukep.javavis.generated.jaxb.Metrics.Metric;
 import org.lukep.javavis.generated.jaxb.QualityModels;
+import org.lukep.javavis.metrics.qualityModels.DesignQualityAttribute;
 import org.lukep.javavis.metrics.qualityModels.QualityModel;
 import org.lukep.javavis.program.generic.models.ProjectModel;
 import org.lukep.javavis.util.JavaVisConstants;
@@ -81,7 +87,7 @@ public class MetricRegistry { // singleton
 		return instance;
 	}
 	
-	private void registerMetric(MetricAttribute newMetric) {
+	public void registerMetric(MetricAttribute newMetric) {
 		metricMap.put(newMetric.getInternalName(), newMetric);
 		
 		// add the support info
@@ -220,6 +226,28 @@ public class MetricRegistry { // singleton
 			getInstance().setMetricMeasurement(target, attribute, measurement);
 		
 		return measurement;
+	}
+
+	public void deleteMetric(MetricAttribute currentMetric) {
+		if (metricMap.containsKey(currentMetric.getInternalName()))
+				metricMap.remove(currentMetric.getInternalName());
+	}
+
+	public void saveAllMetrics() throws FileNotFoundException, JAXBException {
+		// get the Visualisations from configuration data source
+		ConfigurationManager configMgr = ConfigurationManager.getInstance();
+		Metrics metrics = configMgr.getMetrics();
+		List<Metric> metricList = metrics.getMetric();
+		
+		// clear the list and re-add the metrics we have synced as local MetricAttribute objects
+		metricList.clear();
+		for (MetricAttribute m : getMetricAttributes())
+			// exclude design attributes - we can't save them to metrics.xml!
+			if ( !(m instanceof DesignQualityAttribute) )
+				metricList.add(m.getSource());
+		
+		// marshal the list back to XML
+		configMgr.writeMetrics();
 	}
 	
 }

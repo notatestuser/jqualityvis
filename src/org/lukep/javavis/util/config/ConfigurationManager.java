@@ -84,4 +84,11 @@ public class ConfigurationManager {
 		marshaller.marshal(visualisations, new FileOutputStream(JavaVisConstants.VISUALISATIONS_FILE_NAME));
 	}
 	
+	public void writeMetrics() throws JAXBException, FileNotFoundException {
+		// export metrics xml
+		Marshaller marshaller = jc.createMarshaller();
+		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, new Boolean(true));
+		marshaller.marshal(metrics, new FileOutputStream(JavaVisConstants.METRICS_FILE_NAME));
+	}
+	
 }

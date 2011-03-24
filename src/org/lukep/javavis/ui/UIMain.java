@@ -33,6 +33,7 @@ import javax.swing.event.ChangeListener;
 
 import org.lukep.javavis.ui.swing.MetricCalculatorDialog;
 import org.lukep.javavis.ui.swing.WorkspacePane;
+import org.lukep.javavis.ui.swing.configPanes.MetricConfigurationPanel;
 import org.lukep.javavis.ui.swing.configPanes.VisualisationConfigurationPanel;
 import org.lukep.javavis.ui.swing.wizards.NewProjectWizardWindow;
 import org.lukep.javavis.ui.swing.wizards.OpenProjectWizardWindow;
@@ -90,6 +91,19 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 			}
 			if (mainTabbedPane.getTabCount() > 0)
 				mainTabbedPane.removeTabAt(mainTabbedPane.getSelectedIndex());
+		}
+	};
+	
+	private ActionListener actionMetricConfig = new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			JDialog dialog = new JDialog(frmJavavis, "Metric Manager");
+			dialog.setBounds(200, 200, 500, 300);
+			dialog.setLocationRelativeTo(frmJavavis);
+			dialog.getContentPane().add(new MetricConfigurationPanel(UIMain.this));
+			dialog.setModal(true);
+			dialog.pack();
+			dialog.setVisible(true);
 		}
 	};
 	
@@ -255,6 +269,11 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 		JMenu mnSettings = new JMenu("Settings");
 		menuBar.add(mnSettings);
 		{
+			// ... Settings > Metrics...
+			JMenuItem mntmMetricMgr = new JMenuItem("Edit Metrics...");
+			mntmMetricMgr.addActionListener(actionMetricConfig);
+			mnSettings.add(mntmMetricMgr);
+			
 			// ... Settings > Visualisations...
 			JMenuItem mntmVisMgr = new JMenuItem("Edit Visualisations...");
 			mntmVisMgr.addActionListener(actionVisualisationConfig);

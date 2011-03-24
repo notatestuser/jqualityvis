@@ -25,8 +25,6 @@ public class VisualisationConfigurationPanel extends AbstractConfigurationPanel 
 	
 	private static final String UNSAVED_ENTITY_TITLE = "New Visualisation [Unsaved]";
 	
-	private DefaultListModel visListModel;
-	
 	private Visualisation currentVis;
 	
 	private JTextField txtName;
@@ -58,6 +56,7 @@ public class VisualisationConfigurationPanel extends AbstractConfigurationPanel 
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,}));
 		
+		// name
 		JLabel lblName = new JLabel("Name:");
 		lblName.setHorizontalAlignment(SwingConstants.RIGHT);
 		addFormControl(lblName, "2, 2, right, default");
@@ -66,6 +65,7 @@ public class VisualisationConfigurationPanel extends AbstractConfigurationPanel 
 		addFormControl(txtName, "4, 2, fill, default");
 		txtName.setColumns(10);
 		
+		// type
 		JLabel lblType = new JLabel("Type:");
 		lblType.setHorizontalAlignment(SwingConstants.RIGHT);
 		addFormControl(lblType, "2, 4, right, default");
@@ -74,6 +74,7 @@ public class VisualisationConfigurationPanel extends AbstractConfigurationPanel 
 		addFormControl(txtType, "4, 4, fill, default");
 		txtType.setColumns(10);
 		
+		// IVisualiser
 		JLabel lblIVisualiserClass = new JLabel("IVisualiser Class:");
 		lblIVisualiserClass.setHorizontalAlignment(SwingConstants.RIGHT);
 		addFormControl(lblIVisualiserClass, "2, 6, right, default");
@@ -82,6 +83,7 @@ public class VisualisationConfigurationPanel extends AbstractConfigurationPanel 
 		addFormControl(txtIVisualiserClass, "4, 6, fill, default");
 		txtIVisualiserClass.setColumns(10);
 		
+		// IVisualiserVisitor
 		JLabel lblIVisualiserVisitorClass = new JLabel("IVisualiserVisitor Class:");
 		lblIVisualiserVisitorClass.setHorizontalAlignment(SwingConstants.RIGHT);
 		addFormControl(lblIVisualiserVisitorClass, "2, 8, right, default");
@@ -90,6 +92,7 @@ public class VisualisationConfigurationPanel extends AbstractConfigurationPanel 
 		addFormControl(txtIVisualiserVisitorClass, "4, 8, fill, default");
 		txtIVisualiserVisitorClass.setColumns(10);
 		
+		// arguments
 		JLabel lblArguments = new JLabel("Arguments:");
 		lblArguments.setHorizontalAlignment(SwingConstants.RIGHT);
 		addFormControl(lblArguments, "2, 10, right, default");
@@ -152,7 +155,7 @@ public class VisualisationConfigurationPanel extends AbstractConfigurationPanel 
 	}
 	
 	@Override
-	protected void saveCurrentEntity() throws FormValidationException {
+	protected boolean saveCurrentEntity() throws FormValidationException {
 		Visualisation newVis = Visualisation.validateAndCreateOrUpdate(currentVis, txtName.getText(), 
 				txtType.getText(), txtIVisualiserClass.getText(), txtIVisualiserVisitorClass.getText(), 
 				txtArguments.getText());
@@ -161,6 +164,7 @@ public class VisualisationConfigurationPanel extends AbstractConfigurationPanel 
 			reloadListModel();
 		}
 		setSelectedEntity(newVis);
+		return true;
 	}
 	
 	@Override

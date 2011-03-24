@@ -22,6 +22,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
@@ -83,7 +84,9 @@ abstract class AbstractConfigurationPanel extends JPanel implements
 		listEntities.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listEntities.getModel().addListDataListener(this);
 		listEntities.addListSelectionListener(this);
-		leftPane.add(listEntities, BorderLayout.CENTER);
+		JScrollPane listScroller = new JScrollPane(listEntities);
+		listScroller.setPreferredSize(new Dimension(200, 400));
+		leftPane.add(listScroller, BorderLayout.CENTER);
 		
 		JPanel listButtonPane = new JPanel();
 		leftPane.add(listButtonPane, BorderLayout.SOUTH);
@@ -150,10 +153,11 @@ abstract class AbstractConfigurationPanel extends JPanel implements
 			listEntities.setSelectedIndices(new int[] {});
 		} else if (btnSaveEntity == e.getSource()) {
 			try {
-				saveCurrentEntity();
-				uiMain.refreshWorkspaceMetricTrees();
-				JOptionPane.showMessageDialog(this, "'"+getSelectedEntityName()+"' saved/updated in memory.", 
-						"Saved", JOptionPane.INFORMATION_MESSAGE);
+				if (saveCurrentEntity()) {
+					uiMain.refreshWorkspaceMetricTrees();
+					JOptionPane.showMessageDialog(this, "'"+getSelectedEntityName()+"' saved/updated in memory.", 
+							"Saved", JOptionPane.INFORMATION_MESSAGE);
+				}
 			} catch (FormValidationException ex) {
 				JOptionPane.showMessageDialog(this, ex.getMessage(), 
 						"Form Validation Error", JOptionPane.ERROR_MESSAGE);
@@ -223,7 +227,7 @@ abstract class AbstractConfigurationPanel extends JPanel implements
 	protected abstract void updateFormFields();
 	protected abstract void resetFormFields();
 	protected abstract void setSelectedEntity(Object entity);
-	protected abstract void saveCurrentEntity() throws FormValidationException;
+	protected abstract boolean saveCurrentEntity() throws FormValidationException;
 	protected abstract void deleteCurrentEntity();
 	protected abstract void saveAllToSource() throws Exception;
 	

@@ -32,6 +32,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.lukep.javavis.ui.swing.MetricCalculatorDialog;
+import org.lukep.javavis.ui.swing.ProjectConfigurationFrame;
+import org.lukep.javavis.ui.swing.WorkspaceContext;
 import org.lukep.javavis.ui.swing.WorkspacePane;
 import org.lukep.javavis.ui.swing.configPanes.MetricConfigurationPanel;
 import org.lukep.javavis.ui.swing.configPanes.VisualisationConfigurationPanel;
@@ -91,6 +93,15 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 			}
 			if (mainTabbedPane.getTabCount() > 0)
 				mainTabbedPane.removeTabAt(mainTabbedPane.getSelectedIndex());
+		}
+	};
+	
+	private ActionListener actionProjectSettings = new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			WorkspaceContext wspContext = 
+				((WorkspacePane)(mainTabbedPane.getSelectedComponent())).getContext();
+			new ProjectConfigurationFrame(frmJavavis, UIMain.this, wspContext.getModelStore()).setVisible(true);
 		}
 	};
 	
@@ -160,6 +171,7 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 			System.exit(0);
 		}
 	};
+	private JMenuItem mntmProjectSettings;
 
 	/**
 	 * Launch the application.
@@ -269,6 +281,14 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 		JMenu mnSettings = new JMenu("Settings");
 		menuBar.add(mnSettings);
 		{
+			// ... Settings > Project Settings...
+			mntmProjectSettings = new JMenuItem("Project Settings...");
+			mntmProjectSettings.addActionListener(actionProjectSettings);
+			mnSettings.add(mntmProjectSettings);
+			mntmProjectSettings.setEnabled(false);
+			
+			mnSettings.addSeparator();
+			
 			// ... Settings > Metrics...
 			JMenuItem mntmMetricMgr = new JMenuItem("Edit Metrics...");
 			mntmMetricMgr.addActionListener(actionMetricConfig);
@@ -348,9 +368,11 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 			
 			// "Save Project" and "Batch Metric Calculator" action availability handling
 			if (selectedTab instanceof WorkspacePane) {
+				mntmProjectSettings.setEnabled(true);
 				mntmSaveProject.setEnabled(true);
 				mntmBatchCalc.setEnabled(true);
 			} else {
+				mntmProjectSettings.setEnabled(false);
 				mntmSaveProject.setEnabled(false);
 				mntmBatchCalc.setEnabled(false);
 			}
@@ -367,7 +389,9 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 	public void refreshWorkspaceMetricTrees() {
 		for (Component c : mainTabbedPane.getComponents()) {
 			if (c instanceof WorkspacePane) {
-				((WorkspacePane)(c)).fillMetricTree();
+				WorkspacePane wsp = (WorkspacePane) c;
+				wsp.fillMetricTree();
+				wsp.fillWarningsTree(wsp.getContext().getModelStore());
 			}
 		}
 	}

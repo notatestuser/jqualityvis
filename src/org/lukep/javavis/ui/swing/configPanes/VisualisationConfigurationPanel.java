@@ -34,7 +34,7 @@ public class VisualisationConfigurationPanel extends AbstractConfigurationPanel 
 	private JTextField txtArguments;
 	
 	public VisualisationConfigurationPanel(UIMain uiMain) {
-		super(uiMain, UNSAVED_ENTITY_TITLE);
+		super(uiMain, UNSAVED_ENTITY_TITLE, false);
 	}
 	
 	@Override

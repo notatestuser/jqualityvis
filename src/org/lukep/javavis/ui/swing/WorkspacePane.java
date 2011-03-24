@@ -38,18 +38,25 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.plaf.basic.BasicSplitPaneDivider;
 import javax.swing.plaf.basic.BasicSplitPaneUI;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreePath;
 
+import org.lukep.javavis.metrics.IMeasurableNode;
 import org.lukep.javavis.metrics.MetricAttribute;
 import org.lukep.javavis.metrics.MetricRegistry;
+import org.lukep.javavis.metrics.MetricThreshold;
 import org.lukep.javavis.metrics.qualityModels.DesignQualityAttribute;
 import org.lukep.javavis.metrics.qualityModels.QualityModel;
 import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.IGenericModelNode;
+import org.lukep.javavis.program.generic.models.IGenericModelNodeVisitor;
+import org.lukep.javavis.program.generic.models.MethodModel;
 import org.lukep.javavis.program.generic.models.PackageModel;
 import org.lukep.javavis.program.generic.models.ProjectModel;
+import org.lukep.javavis.program.generic.models.Relationship;
+import org.lukep.javavis.program.generic.models.VariableModel;
 import org.lukep.javavis.ui.IProgramStatusReporter;
 import org.lukep.javavis.ui.swing.WorkspaceContext.ChangeEvent;
 import org.lukep.javavis.util.JavaVisConstants;
@@ -106,6 +113,13 @@ public class WorkspacePane extends JPanel implements Observer, TreeSelectionList
 	protected IProgramStatusReporter statusTarget;
 	
 	protected WorkspaceContext wspContext;
+
+	private JScrollPane warningsPanel;
+
+	private JTree warningTree;
+	
+	// maintain a mapping of warning TreeNodes to the models they represent
+	Map<MutableTreeNode, IGenericModelNode> warningMap = new HashMap<MutableTreeNode, IGenericModelNode>();
 	
 	public WorkspacePane(ProjectModel project, IProgramStatusReporter statusTarget) throws Exception {
 		super();
@@ -217,17 +231,20 @@ public class WorkspacePane extends JPanel implements Observer, TreeSelectionList
 		leftPaneBottom.add(new HeaderLabel(JavaVisConstants.HEADING_QUALITY_ANALYSIS, 
 						new ImageIcon(JavaVisConstants.ICON_QUALITY_ANALYSIS)), BorderLayout.NORTH);
 		
-		// ... create the "Metrics" tab + tree
+		// ... create the "Metrics" tab + JScrollPane
 		metricSelectionPanel = new JScrollPane();
 		metricSelectionPanel.setLayout(new ScrollPaneLayout());
 		metricSelectionPanel.setBorder(BorderFactory.createEmptyBorder());
-		qualityAnalysisPane.add("Metrics", metricSelectionPanel);
+		//qualityAnalysisPane.add(JavaVisConstants.HEADING_METRICS, metricSelectionPanel);
 		qualityAnalysisPane.addTab(JavaVisConstants.HEADING_METRICS, 
 				new ImageIcon(JavaVisConstants.ICON_METRICS), metricSelectionPanel);
 		
-		// ... create the "Warnings" tab
+		// ... create the "Warnings" tab + JScrollPane
+		warningsPanel = new JScrollPane();
+		warningsPanel.setLayout(new ScrollPaneLayout());
+		warningsPanel.setBorder(BorderFactory.createEmptyBorder());
 		qualityAnalysisPane.addTab(JavaVisConstants.HEADING_WARNINGS, 
-				new ImageIcon(JavaVisConstants.ICON_WARNINGS), new JPanel());
+				new ImageIcon(JavaVisConstants.ICON_WARNINGS), warningsPanel);
 		
 		// create the "Project" tree
 		programTree = new JTree();
@@ -246,6 +263,19 @@ public class WorkspacePane extends JPanel implements Observer, TreeSelectionList
 		metricSelectionPanel.setViewportView(metricTree);
 		fillMetricTree();
 		
+		// create the "Warnings" tree
+		warningTree = new JTree();
+		treeModel = new DefaultTreeModel( new DefaultMutableTreeNode("root") );
+		warningTree.setModel( treeModel );
+		warningTree.setRootVisible(false);
+		// set the leaf node icon
+		DefaultTreeCellRenderer cellRenderer = new DefaultTreeCellRenderer();
+		cellRenderer.setLeafIcon(new ImageIcon(JavaVisConstants.ICON_WARNINGS));
+		warningTree.setCellRenderer(cellRenderer);
+		warningTree.addTreeSelectionListener(this);
+		warningsPanel.setViewportView(warningTree);
+		fillWarningsTree(project);
+		
 		// put a decoy visualisation component in place so we're not staring at a drab grey canvas
 		@SuppressWarnings("serial")
 		JPanel decoy = new JPanel() {
@@ -263,6 +293,7 @@ public class WorkspacePane extends JPanel implements Observer, TreeSelectionList
 	}
 	
 	private void fillProjectTree() {
+		
 		DefaultTreeModel treeModel = (DefaultTreeModel) programTree.getModel();
 		
 		// clear the tree
@@ -295,8 +326,10 @@ public class WorkspacePane extends JPanel implements Observer, TreeSelectionList
 	}
 	
 	public void fillMetricTree() {
-		// clear the tree
+		
 		DefaultTreeModel treeModel = (DefaultTreeModel) metricTree.getModel();
+		
+		// clear the tree
 		((DefaultMutableTreeNode)(treeModel.getRoot())).removeAllChildren();
 		
 		MutableTreeNode staticMetricsNode = new DefaultMutableTreeNode("Static Metrics");
@@ -354,6 +387,88 @@ public class WorkspacePane extends JPanel implements Observer, TreeSelectionList
 		}
 	}
 	
+	public void fillWarningsTree(ProjectModel project) {
+		
+		final DefaultTreeModel treeModel = (DefaultTreeModel) warningTree.getModel();
+		
+		// clear the tree and warning mappings
+		((DefaultMutableTreeNode)(treeModel.getRoot())).removeAllChildren();
+		warningMap.clear();
+		
+		// build up the list of metrics that we have threshold objects for
+		final List<MetricThreshold> thresholds = wspContext.getModelStore().getMetricThresholds();
+		
+		// build up a list of targets we actually care about (for optimisation)
+		final Set<String> thresMetricTargets = new HashSet<String>();
+		for (MetricThreshold thres : thresholds)
+			thresMetricTargets.addAll(thres.getMetric().getAppliesTo());
+		
+		// visit all of the nodes in the graph and test applicable ones
+		new IGenericModelNodeVisitor() {
+			
+			private int warningIdx = 0;
+			
+			private void testWarning(IMeasurableNode model) {
+				
+				// do we have a thresMetricTarget for this node type?
+				if (thresMetricTargets.contains(model.getModelTypeName())) {
+					
+					// gather the metric measurements and test our results
+					for (MetricThreshold thres : thresholds) {
+						
+						// skip if the metric doesn't apply to this model
+						if (!thres.getMetric().testAppliesTo(model.getModelTypeName()))
+							continue;
+						
+						// do bound checking
+						double bound1 = thres.getBound1(),
+						       bound2 = thres.getBound2(),
+						       result = thres.getMetric().measureTargetCached(model).getResult();
+						if (!(result <= bound2 && result >= bound1)
+								&& !(result >= bound2 && result <= bound1)) {
+							// raise a warning
+							DefaultMutableTreeNode treeNode = new DefaultMutableTreeNode(
+									thres.getName() + ": " + model.getSimpleName() 
+									+ " (" + result + " out of " + bound1 + "-" + bound2 + ")");
+							treeModel.insertNodeInto(treeNode, (MutableTreeNode) treeModel.getRoot(), warningIdx++);
+							warningMap.put(treeNode, model);
+						}
+					}
+				}
+				
+				// visit all of the child nodes of this measurable node
+				if (model.getChildren() != null)
+					for (Relationship r : model.getChildren())
+						r.getTarget().accept(this);
+			}
+			
+			@Override
+			public void visit(VariableModel model) {
+				testWarning(model);
+			}
+			@Override
+			public void visit(MethodModel model) {
+				testWarning(model);
+			}
+			@Override
+			public void visit(ClassModel model) {
+				testWarning(model);
+			}
+			@Override
+			public void visit(PackageModel model) {
+				testWarning(model);
+			}
+			@Override
+			public void visit(ProjectModel model) {
+				testWarning(model);
+			}
+		}.visit(project);
+		
+		// refresh and reload the TreeModel
+		treeModel.reload();
+		warningTree.expandRow(0);
+	}
+	
 	@Override
 	public void update(Observable o, Object arg) {
 
@@ -372,6 +487,7 @@ public class WorkspacePane extends JPanel implements Observer, TreeSelectionList
 	@Override
 	public void valueChanged(TreeSelectionEvent e) {
 
+		// program tree selection events
 		if (programTree == e.getSource()
 				&& programTree.getSelectionPaths() != null) {
 			Set<IGenericModelNode> selectedModels = new HashSet<IGenericModelNode>();
@@ -399,6 +515,7 @@ public class WorkspacePane extends JPanel implements Observer, TreeSelectionList
 					setVisualisation(vis);
 				}
 			}
+		// metric tree selection events
 		} else if (metricTree == e.getSource()) {
 			DefaultMutableTreeNode node = (DefaultMutableTreeNode) metricTree.getLastSelectedPathComponent();
 			
@@ -412,6 +529,14 @@ public class WorkspacePane extends JPanel implements Observer, TreeSelectionList
 				
 				wspContext.setMetric(metric);
 				wspContext.setVisualisation(vis);
+			}
+		// warning tree selection events
+		} else if (warningTree == e.getSource()) {
+			MutableTreeNode node = (MutableTreeNode) warningTree.getLastSelectedPathComponent();
+			
+			if (node != null
+					&& warningMap.containsKey(node)) {
+				wspContext.setSelectedItem(warningMap.get(node));
 			}
 		}
 		

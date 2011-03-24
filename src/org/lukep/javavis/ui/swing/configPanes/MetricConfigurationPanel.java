@@ -44,7 +44,7 @@ public class MetricConfigurationPanel extends AbstractConfigurationPanel {
 	private JTextField txtHotBox;
 	
 	public MetricConfigurationPanel(UIMain uiMain) {
-		super(uiMain, UNSAVED_ENTITY_TITLE);
+		super(uiMain, UNSAVED_ENTITY_TITLE, false);
 	}
 
 	@Override

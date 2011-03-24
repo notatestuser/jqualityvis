@@ -7,12 +7,15 @@ package org.lukep.javavis.program.generic.models;
 import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.lukep.javavis.metrics.IMeasurableVisitor;
 import org.lukep.javavis.metrics.MetricAttribute;
 import org.lukep.javavis.metrics.MetricMeasurement;
+import org.lukep.javavis.metrics.MetricThreshold;
 import org.lukep.javavis.program.generic.models.Relationship.RelationshipType;
 import org.lukep.javavis.ui.IProgramSourceObserver;
 import org.lukep.javavis.util.JavaVisConstants;
@@ -35,6 +38,8 @@ public class ProjectModel extends AbstractModel implements IProgramSourceObserve
     private Map<String, ClassModel> classMap;
     private Map<String, PackageModel> packageMap;
     
+    private List<MetricThreshold> metricThresholds = new Vector<MetricThreshold>();
+    
     ///////////////////////////////////////////////////////
 
     public ProjectModel() {
@@ -47,6 +52,7 @@ public class ProjectModel extends AbstractModel implements IProgramSourceObserve
     	setSimpleName(name);
     	setQualifiedName(name);
     	
+    	// initialise class and package maps
     	classMap = Collections.synchronizedMap(new LinkedHashMap<String, ClassModel>());
     	packageMap = Collections.synchronizedMap(new LinkedHashMap<String, PackageModel>());
     }
@@ -74,7 +80,11 @@ public class ProjectModel extends AbstractModel implements IProgramSourceObserve
 		return creationDate;
 	}
 	
-    public String getCreationUser() {
+    public void setCreationUser(String creationUser) {
+		this.creationUser = creationUser;
+	}
+
+	public String getCreationUser() {
 		return creationUser;
 	}
 
@@ -123,7 +133,13 @@ public class ProjectModel extends AbstractModel implements IProgramSourceObserve
     }
     
     ///////////////////////////////////////////////////////
-
+    
+	public List<MetricThreshold> getMetricThresholds() {
+		return metricThresholds;
+	}
+    
+    ///////////////////////////////////////////////////////
+    
 	@Override
 	public void notifyFindClass(ClassModel clazz) {
 		addClass(clazz.getQualifiedName(), clazz);

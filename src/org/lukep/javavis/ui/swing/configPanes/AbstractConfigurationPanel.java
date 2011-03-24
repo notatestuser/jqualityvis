@@ -54,14 +54,15 @@ abstract class AbstractConfigurationPanel extends JPanel implements
 	protected JButton btnDeleteEntity;
 	protected JButton btnSaveEntity;
 	
-	public AbstractConfigurationPanel(UIMain uiMain, String unsavedEntityName) {
+	public AbstractConfigurationPanel(UIMain uiMain, String unsavedEntityName, boolean deferReload) {
 		setLayout(new BorderLayout(0, 0));
 		
 		this.uiMain = uiMain;
 		
 		initialise(unsavedEntityName);
 		initialiseFormControls();
-		reloadListModel();
+		if (!deferReload)
+			reloadListModel();
 	}
 	
 	private void initialise(String unsavedEntityName) {
@@ -85,7 +86,7 @@ abstract class AbstractConfigurationPanel extends JPanel implements
 		listEntities.getModel().addListDataListener(this);
 		listEntities.addListSelectionListener(this);
 		JScrollPane listScroller = new JScrollPane(listEntities);
-		listScroller.setPreferredSize(new Dimension(200, 400));
+		listScroller.setPreferredSize(new Dimension(250, 400));
 		leftPane.add(listScroller, BorderLayout.CENTER);
 		
 		JPanel listButtonPane = new JPanel();
@@ -219,6 +220,10 @@ abstract class AbstractConfigurationPanel extends JPanel implements
 	
 	protected void addFormControl(Component comp, Object constraints) {
 		pnlForm.add(comp, constraints);
+	}
+	
+	protected void hideSaveToSourceButton() {
+		btnSaveToSource.setVisible(false);
 	}
 	
 	protected abstract void reloadListModel();

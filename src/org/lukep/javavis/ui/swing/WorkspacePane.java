@@ -398,71 +398,78 @@ public class WorkspacePane extends JPanel implements Observer, TreeSelectionList
 		// build up the list of metrics that we have threshold objects for
 		final List<MetricThreshold> thresholds = wspContext.getModelStore().getMetricThresholds();
 		
-		// build up a list of targets we actually care about (for optimisation)
-		final Set<String> thresMetricTargets = new HashSet<String>();
-		for (MetricThreshold thres : thresholds)
-			thresMetricTargets.addAll(thres.getMetric().getAppliesTo());
-		
-		// visit all of the nodes in the graph and test applicable ones
-		new IGenericModelNodeVisitor() {
+		if (thresholds.size() > 0) {
+			// build up a list of targets we actually care about (for optimisation)
+			final Set<String> thresMetricTargets = new HashSet<String>();
+			for (MetricThreshold thres : thresholds)
+				thresMetricTargets.addAll(thres.getMetric().getAppliesTo());
 			
-			private int warningIdx = 0;
-			
-			private void testWarning(IMeasurableNode model) {
+			// visit all of the nodes in the graph and test applicable ones
+			new IGenericModelNodeVisitor() {
 				
-				// do we have a thresMetricTarget for this node type?
-				if (thresMetricTargets.contains(model.getModelTypeName())) {
+				private int warningIdx = 0;
+				
+				private void testWarning(IMeasurableNode model) {
 					
-					// gather the metric measurements and test our results
-					for (MetricThreshold thres : thresholds) {
+					// do we have a thresMetricTarget for this node type?
+					if (thresMetricTargets.contains(model.getModelTypeName())) {
 						
-						// skip if the metric doesn't apply to this model
-						if (!thres.getMetric().testAppliesTo(model.getModelTypeName()))
-							continue;
-						
-						// do bound checking
-						double bound1 = thres.getBound1(),
-						       bound2 = thres.getBound2(),
-						       result = thres.getMetric().measureTargetCached(model).getResult();
-						if (!(result <= bound2 && result >= bound1)
-								&& !(result >= bound2 && result <= bound1)) {
-							// raise a warning
-							DefaultMutableTreeNode treeNode = new DefaultMutableTreeNode(
-									thres.getName() + ": " + model.getSimpleName() 
-									+ " (" + result + " out of " + bound1 + "-" + bound2 + ")");
-							treeModel.insertNodeInto(treeNode, (MutableTreeNode) treeModel.getRoot(), warningIdx++);
-							warningMap.put(treeNode, model);
+						// gather the metric measurements and test our results
+						for (MetricThreshold thres : thresholds) {
+							
+							// skip if the metric doesn't apply to this model
+							if (!thres.getMetric().testAppliesTo(model.getModelTypeName()))
+								continue;
+							
+							// do bound checking
+							double bound1 = thres.getBound1(),
+							       bound2 = thres.getBound2(),
+							       result = thres.getMetric().measureTargetCached(model).getResult();
+							if (!(result <= bound2 && result >= bound1)
+									&& !(result >= bound2 && result <= bound1)) {
+								// raise a warning
+								DefaultMutableTreeNode treeNode = new DefaultMutableTreeNode(
+										thres.getName() + ": " + model.getSimpleName() 
+										+ " (" + result + " out of " + bound1 + "-" + bound2 + ")");
+								treeModel.insertNodeInto(treeNode, (MutableTreeNode) treeModel.getRoot(), warningIdx++);
+								warningMap.put(treeNode, model);
+							}
 						}
 					}
+					
+					// visit all of the child nodes of this measurable node
+					if (model.getChildren() != null)
+						for (Relationship r : model.getChildren())
+							r.getTarget().accept(this);
 				}
 				
-				// visit all of the child nodes of this measurable node
-				if (model.getChildren() != null)
-					for (Relationship r : model.getChildren())
-						r.getTarget().accept(this);
-			}
-			
-			@Override
-			public void visit(VariableModel model) {
-				testWarning(model);
-			}
-			@Override
-			public void visit(MethodModel model) {
-				testWarning(model);
-			}
-			@Override
-			public void visit(ClassModel model) {
-				testWarning(model);
-			}
-			@Override
-			public void visit(PackageModel model) {
-				testWarning(model);
-			}
-			@Override
-			public void visit(ProjectModel model) {
-				testWarning(model);
-			}
-		}.visit(project);
+				@Override
+				public void visit(VariableModel model) {
+					testWarning(model);
+				}
+				@Override
+				public void visit(MethodModel model) {
+					testWarning(model);
+				}
+				@Override
+				public void visit(ClassModel model) {
+					testWarning(model);
+				}
+				@Override
+				public void visit(PackageModel model) {
+					testWarning(model);
+				}
+				@Override
+				public void visit(ProjectModel model) {
+					testWarning(model);
+				}
+			}.visit(project);
+		} else {
+			// no thresholds defined
+			treeModel.insertNodeInto(new DefaultMutableTreeNode(
+					"No thresholds defined for " + project.getSimpleName()), 
+					(MutableTreeNode) treeModel.getRoot(), 0);
+		}
 		
 		// refresh and reload the TreeModel
 		treeModel.reload();

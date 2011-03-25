@@ -2,7 +2,7 @@
 <!--
 	Document    : metrics.xml
 	Author      : Luke Plaster
-	Description : Defines the static metrics utilized by the JMetricVis tool to evalute program code.
+	Description : Defines the static metrics utilized by the JQualityVis tool to evalute program code.
 -->
 <metrics>
 	<!--
@@ -10,6 +10,8 @@
 		   name          : Friendly name to display in the user interface.
 		   internal_name : This is bound to the internals of the program. You can add new ones.
 		   type          : This groups metrics to visualisations. They can be made up.
+		   characteristic: The object-oriented attribute measured by this metric.
+		   description   : A description of this metric's functionality.
 		   applies_to    : A list of measurable objects applicable to this metric.
 		                   Values: project, package, class, method, variable
 		   visitor       : The internal visitor class implementing IMeasurableVisitor that is used  
@@ -21,6 +23,8 @@
 	-->	
 	<metric name="McCabe Cyclomatic Complexity" internal_name="CC">
 		<type>WeightedMethod</type>
+		<characteristic>Complexity</characteristic>
+		<description>Determines the number of possible singular execution paths through a method block.</description>
 		<applies_to>
 			<measurable>method</measurable>
 		</applies_to>
@@ -32,6 +36,8 @@
 	
 	<metric name="McCabe Cyclomatic Complexity Avg" internal_name="CC_AVG">
 		<type>WeightedMethod</type>
+		<characteristic>Complexity</characteristic>
+		<description>The average Cyclomatic Complexity encountered across all of the methods in a class.</description>
 		<applies_to>
 			<measurable>class</measurable>
 		</applies_to>
@@ -43,6 +49,8 @@
 	
 	<metric name="McCabe Cyclomatic Complexity Max" internal_name="CC_MAX">
 		<type>WeightedClass</type>
+		<characteristic>Complexity</characteristic>
+		<description>The maximum Cyclomatic Complexity encountered across all of the methods in a class.</description>
 		<applies_to>
 			<measurable>class</measurable>
 		</applies_to>
@@ -54,6 +62,8 @@
 	
 	<metric name="Number of Ancestor Classes" internal_name="NAC">
 		<type>WeightedClass</type>
+		<characteristic>Inheritance</characteristic>
+		<description>The number of classes that a class inherits from.</description>
 		<applies_to>
 			<measurable>class</measurable>
 		</applies_to>
@@ -65,6 +75,8 @@
 	
 	<metric name="Number of Children" internal_name="NOC">
 		<type>WeightedClass</type>
+		<characteristic>Inheritance</characteristic>
+		<description>The number of children a class has in the inheritance tree.</description>
 		<applies_to>
 			<measurable>class</measurable>
 		</applies_to>
@@ -76,6 +88,8 @@
 	
 	<metric name="Number of Statements" internal_name="NOS">
 		<type>WeightedMethod</type>
+		<characteristic>Size</characteristic>
+		<description>The number of statement tokens within a method.</description>
 		<applies_to>
 			<measurable>class</measurable>
 			<measurable>method</measurable>
@@ -88,8 +102,10 @@
 	
 	<!-- QMOOD Metrics by Bansiya and Davis -->
 	
-	<metric name="QMOOD Design Size in Classes" internal_name="DSC">
+	<metric name="Design Size in Classes (QMOOD)" internal_name="DSC">
 		<type>Project</type>
+		<characteristic>Design Size</characteristic>
+		<description>The number of classes in the entire project.</description>
 		<applies_to>
 			<measurable>project</measurable>
 		</applies_to>
@@ -99,8 +115,10 @@
 		<hot>0.0</hot>
 	</metric>
 	
-	<metric name="QMOOD Number of Hierarchies" internal_name="NOH">
+	<metric name="Number of Hierarchies (QMOOD)" internal_name="NOH">
 		<type>Project</type>
+		<characteristic>Hierarchies</characteristic>
+		<description>The number of class hierarchies in the project.</description>
 		<applies_to>
 			<measurable>project</measurable>
 		</applies_to>
@@ -110,8 +128,10 @@
 		<hot>0.0</hot>
 	</metric>
 	
-	<metric name="QMOOD Average Number of Ancestors" internal_name="ANA">
+	<metric name="Average Number of Ancestors (QMOOD)" internal_name="ANA">
 		<type>Project</type>
+		<characteristic>Abstraction</characteristic>
+		<description>The average number of ancestor classes, across the entire project, that each individual class has.</description>
 		<applies_to>
 			<measurable>project</measurable>
 		</applies_to>
@@ -121,8 +141,10 @@
 		<hot>10.0</hot>
 	</metric>
 	
-	<metric name="QMOOD Data Access Metric" internal_name="DAM">
+	<metric name="Data Access Metric (QMOOD)" internal_name="DAM">
 		<type>WeightedClass</type>
+		<characteristic>Encapsulation</characteristic>
+		<description>The ratio of exclusively accessible attributes of a class to the total.</description>
 		<applies_to>
 			<measurable>class</measurable>
 		</applies_to>
@@ -132,8 +154,10 @@
 		<hot>0.0</hot>
 	</metric>
 	
-	<metric name="QMOOD Direct Class Coupling" internal_name="DCC">
+	<metric name="Direct Class Coupling (QMOOD)" internal_name="DCC">
 		<type>RelationalClass</type>
+		<characteristic>Coupling</characteristic>
+		<description>A count of the different number of classes that a class is directly related to through attribute declarations and message passing.</description>
 		<applies_to>
 			<measurable>class</measurable>
 		</applies_to>
@@ -143,8 +167,10 @@
 		<hot>30.0</hot>
 	</metric>
 	
-	<metric name="QMOOD Cohesion Among Methods of Class" internal_name="CAM">
+	<metric name="Cohesion Among Methods of Class (QMOOD)" internal_name="CAM">
 		<type>WeightedClass</type>
+		<characteristic>Cohesion</characteristic>
+		<description>Measures how cohesive a class's methods are based upon the similarity of their parameters.</description>
 		<applies_to>
 			<measurable>class</measurable>
 		</applies_to>
@@ -154,8 +180,10 @@
 		<hot>0.0</hot>
 	</metric>
 	
-	<metric name="QMOOD Measure of Aggregation" internal_name="MOA">
+	<metric name="Measure of Aggregation (QMOOD)" internal_name="MOA">
 		<type>WeightedClass</type>
+		<characteristic>Composition</characteristic>
+		<description>A count of the number of data declarations whose types are user defined classes.</description>
 		<applies_to>
 			<measurable>class</measurable>
 		</applies_to>
@@ -165,8 +193,10 @@
 		<hot>50.0</hot>
 	</metric>
 	
-	<metric name="QMOOD Measure of Functional Abstraction" internal_name="MFA">
+	<metric name="Measure of Functional Abstraction (QMOOD)" internal_name="MFA">
 		<type>WeightedClass</type>
+		<characteristic>Inheritance</characteristic>
+		<description>The ratio of inherited methods to the total number of methods exposed by a class.</description>
 		<applies_to>
 			<measurable>class</measurable>
 		</applies_to>
@@ -176,8 +206,10 @@
 		<hot>0.0</hot>
 	</metric>
 	
-	<metric name="QMOOD Number of Polymorphic Methods" internal_name="NOP">
+	<metric name="Number of Polymorphic Methods (QMOOD)" internal_name="NOP">
 		<type>WeightedClass</type>
+		<characteristic>Polymorphism</characteristic>
+		<description>The number of abstract methods in a class.</description>
 		<applies_to>
 			<measurable>class</measurable>
 		</applies_to>
@@ -187,8 +219,10 @@
 		<hot>0.0</hot>
 	</metric>
 	
-	<metric name="QMOOD Class Interface Size" internal_name="CIS">
+	<metric name="Class Interface Size (QMOOD)" internal_name="CIS">
 		<type>WeightedClass</type>
+		<characteristic>Messaging</characteristic>
+		<description>The number of public methods in a class.</description>
 		<applies_to>
 			<measurable>class</measurable>
 		</applies_to>
@@ -198,8 +232,10 @@
 		<hot>0.0</hot>
 	</metric>
 	
-	<metric name="QMOOD Number of Methods" internal_name="NOM">
+	<metric name="Number of Methods (QMOOD)" internal_name="NOM">
 		<type>WeightedClass</type>
+		<characteristic>Complexity</characteristic>
+		<description>The number of all of the methods in a class.</description>
 		<applies_to>
 			<measurable>class</measurable>
 		</applies_to>

@@ -34,11 +34,23 @@ public class DesignQualityAttribute extends MetricAttribute {
 				registry.getOrSetMetricType(ATTRIBUTE_METRIC_TYPE),
 				Arrays.asList(ATTRIBUTE_METRIC_APPLIES_TO));
 		
+		// set the characteristic and description fields
+		setCharacteristic(sourceAttribute.getName());
+		StringBuilder sb = new StringBuilder("Derived from ");
+		
 		// load in the weighted metrics from the data source object
 		weightedMetrics = new Vector<WeightedMetricFactor>(sourceAttribute.getWeightedMetric().size());
+		boolean first = true;
 		for (WeightedMetric sourceWeightedMetric : sourceAttribute.getWeightedMetric()) {
 			weightedMetrics.add( new WeightedMetricFactor(sourceWeightedMetric, registry) );
+			
+			if (!first)
+				sb.append(", ");
+			else
+				first = false;
+			sb.append(sourceWeightedMetric.getInternalName() + "(" + sourceWeightedMetric.getValue() + ")");
 		}
+		setDescription(sb.toString());
 	}
 
 	@Override

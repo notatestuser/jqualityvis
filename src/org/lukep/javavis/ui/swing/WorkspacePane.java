@@ -9,8 +9,12 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.util.Collection;
+import java.util.Formatter;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -29,7 +33,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
-import javax.swing.JToolBar;
 import javax.swing.JTree;
 import javax.swing.ScrollPaneLayout;
 import javax.swing.border.Border;
@@ -65,7 +68,8 @@ import org.lukep.javavis.visualisation.VisualisationRegistry;
 import org.lukep.javavis.visualisation.views.IVisualiserVisitor;
 import org.lukep.javavis.visualisation.visualisers.IVisualiser;
 
-public class WorkspacePane extends JPanel implements Observer, TreeSelectionListener {
+public class WorkspacePane extends JPanel implements 
+		Observer, ActionListener, TreeSelectionListener {
 	
 	/**
 	 * 
@@ -85,41 +89,42 @@ public class WorkspacePane extends JPanel implements Observer, TreeSelectionList
 		}
 	}
 	
-	protected JPanel mainPane;
-	protected JPanel leftPaneTop;
-	protected JPanel leftPaneBottom;
+	private JPanel mainPane;
+	private JPanel leftPaneTop;
+	private JPanel leftPaneBottom;
+	private JLabel titleLabel;
 	
-	protected JLabel titleLabel;
-	
-	protected JScrollPane projectExplorerPanel;
-	protected JScrollPane metricSelectionPanel;
-	
-	protected JSplitPane rightSplitPane;
-	protected JSplitPane leftSplitPane;
-	protected JSplitPane outerSplitPane;
-	
-	protected JToolBar toolbar;
-	protected JComboBox metricComboBox;
-	protected JComboBox visComboBox;
-	
-	protected JTree programTree;
-	protected JTree metricTree;
-	
-	protected IVisualiser curVisualiser;
-	protected Component curVisualiserComponent;
-	
-	protected ClassPropertiesPanel propertiesPane;
-	
-	protected IProgramStatusReporter statusTarget;
-	
-	protected WorkspaceContext wspContext;
-
+	private JScrollPane projectExplorerPanel;
 	private JScrollPane warningsPanel;
-
+	private JScrollPane metricsTreePanel;
+	private JPanel metricFancyPanel;
+	
+	private JSplitPane rightSplitPane;
+	private JSplitPane leftSplitPane;
+	private JSplitPane outerSplitPane;
+	
+	private JComboBox metricComboBox;
+	private JComboBox visComboBox;
+	
+	private JTree programTree;
+	private JTree metricTree;
 	private JTree warningTree;
+	
+	private IVisualiser curVisualiser;
+	private Component curVisualiserComponent;
+	
+	private ClassPropertiesPanel propertiesPane;
+	
+	private IProgramStatusReporter statusTarget;
+	
+	private WorkspaceContext wspContext;
 	
 	// maintain a mapping of warning TreeNodes to the models they represent
 	Map<MutableTreeNode, IGenericModelNode> warningMap = new HashMap<MutableTreeNode, IGenericModelNode>();
+
+	private JLabel lblMetricDescription;
+
+	private JLabel lblVisDescription;
 	
 	public WorkspacePane(ProjectModel project, IProgramStatusReporter statusTarget) throws Exception {
 		super();
@@ -154,25 +159,6 @@ public class WorkspacePane extends JPanel implements Observer, TreeSelectionList
 		// create a panel to contain the graph component and toolbar
 		mainPane = new JPanel( new BorderLayout() );
 		mainPane.setVisible(true);
-		
-//		// create the toolbar panel
-//		toolbar = new JToolBar();
-//		mainPane.add(toolbar, BorderLayout.NORTH);
-//		
-//		// add the controls to the toolbar
-//		toolbar.add(new JLabel("Metric: "));
-//		metricComboBox = new JComboBox( new MetricComboBoxModel() );
-//		metricComboBox.setEnabled(false);
-//		metricComboBox.setSelectedIndex(0);
-//		metricComboBox.addActionListener(this);
-//		toolbar.add(metricComboBox);
-//		
-//		toolbar.add(new JLabel(" Visualisation: "));
-//		visComboBox = new JComboBox( new VisualisationComboBoxModel() );
-//		visComboBox.setEnabled(false);
-//		visComboBox.setSelectedIndex(0);
-//		visComboBox.addActionListener(this);
-//		toolbar.add(visComboBox);
 		
 		// create the "title label"
 		titleLabel = new JLabel(project.getSimpleName() + " (created " + 
@@ -212,7 +198,7 @@ public class WorkspacePane extends JPanel implements Observer, TreeSelectionList
 		// component on the right side of the window
 		outerSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftSplitPane, rightSplitPane);
 		outerSplitPane.setOneTouchExpandable(true);
-		outerSplitPane.setDividerLocation(250);
+		outerSplitPane.setDividerLocation(280);
 		outerSplitPane.setDividerSize(2);
 		outerSplitPane.setBorder(null);
 		outerSplitPane.setUI(new WorkspaceSplitPaneUI());
@@ -231,18 +217,80 @@ public class WorkspacePane extends JPanel implements Observer, TreeSelectionList
 		leftPaneBottom.add(new HeaderLabel(JavaVisConstants.HEADING_QUALITY_ANALYSIS, 
 						new ImageIcon(JavaVisConstants.ICON_QUALITY_ANALYSIS)), BorderLayout.NORTH);
 		
-		// ... create the "Metrics" tab + JScrollPane
-		metricSelectionPanel = new JScrollPane();
-		metricSelectionPanel.setLayout(new ScrollPaneLayout());
-		metricSelectionPanel.setBorder(BorderFactory.createEmptyBorder());
-		//qualityAnalysisPane.add(JavaVisConstants.HEADING_METRICS, metricSelectionPanel);
-		qualityAnalysisPane.addTab(JavaVisConstants.HEADING_METRICS, 
-				new ImageIcon(JavaVisConstants.ICON_METRICS), metricSelectionPanel);
+		// create the "Metrics (fancy)" tab
+		metricFancyPanel = new JPanel( new GridLayout(2, 1) );
+		metricFancyPanel.setBackground(new Color(0xFFFFFF));
+		metricFancyPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		{
+			// create top and bottom panels
+			JPanel metricSelectionTop = new JPanel(new BorderLayout());
+			JPanel metricSelectionBottom = new JPanel(new BorderLayout());
+			metricSelectionTop.setOpaque(false);
+			metricSelectionBottom.setOpaque(false);
+			metricFancyPanel.add(metricSelectionTop);
+			metricFancyPanel.add(metricSelectionBottom);
+			
+			// create metric combo box to sit in the north portion of the metricSelectionTop
+			metricComboBox = new JComboBox( new MetricComboBoxModel() );
+			metricComboBox.setEnabled(true);
+			metricComboBox.setSelectedIndex(0);
+			metricComboBox.addActionListener(this);
+			metricSelectionTop.add(metricComboBox, BorderLayout.NORTH);
+			
+			// create visualisation combo box to sit in the north portion of the metricSelectionBottom
+			visComboBox = new JComboBox( new VisualisationComboBoxModel() );
+			visComboBox.setEnabled(false);
+			visComboBox.setSelectedIndex(0);
+			visComboBox.addActionListener(this);
+			metricSelectionBottom.add(visComboBox, BorderLayout.NORTH);
+			
+			// initialise a description label for metrics
+			lblMetricDescription = new JLabel("<html><p>Select a metric to view information.</p></html>");
+			lblMetricDescription.setFont(new Font("Tahoma", Font.BOLD, 11));
+			metricSelectionTop.add(lblMetricDescription, BorderLayout.CENTER);
+			
+			// initialise a description label for visualisations
+			lblVisDescription = new JLabel("<html><p>Select a visualisation to view information.</p></html>");
+			lblVisDescription.setFont(new Font("Tahoma", Font.BOLD, 11));
+			metricSelectionBottom.add(lblVisDescription, BorderLayout.CENTER);
+		}
+		qualityAnalysisPane.addTab(JavaVisConstants.HEADING_METRICS_FANCY, 
+				new ImageIcon(JavaVisConstants.ICON_METRICS), metricFancyPanel);
+		
+		// ... create the "Metrics (tree)" tab
+		metricsTreePanel = new JScrollPane();
+		metricsTreePanel.setLayout(new ScrollPaneLayout());
+		{
+			// initialise the tree
+			metricTree = new JTree();
+			DefaultTreeModel treeModel = new DefaultTreeModel( new DefaultMutableTreeNode("root") );
+			metricTree.setModel( treeModel );
+			metricTree.setRootVisible(false);
+			metricTree.addTreeSelectionListener(this);
+			metricsTreePanel.setViewportView(metricTree);
+			fillMetricTree();
+		}
+		qualityAnalysisPane.addTab(JavaVisConstants.HEADING_METRICS_TREE,
+				new ImageIcon(JavaVisConstants.ICON_METRICS), metricsTreePanel);
 		
 		// ... create the "Warnings" tab + JScrollPane
 		warningsPanel = new JScrollPane();
 		warningsPanel.setLayout(new ScrollPaneLayout());
 		warningsPanel.setBorder(BorderFactory.createEmptyBorder());
+		{
+			// create the "Warnings" tree
+			warningTree = new JTree();
+			DefaultTreeModel treeModel = new DefaultTreeModel( new DefaultMutableTreeNode("root") );
+			warningTree.setModel( treeModel );
+			warningTree.setRootVisible(false);
+			// set the leaf node icon
+			DefaultTreeCellRenderer cellRenderer = new DefaultTreeCellRenderer();
+			cellRenderer.setLeafIcon(new ImageIcon(JavaVisConstants.ICON_WARNINGS));
+			warningTree.setCellRenderer(cellRenderer);
+			warningTree.addTreeSelectionListener(this);
+			warningsPanel.setViewportView(warningTree);
+			fillWarningsTree(project);
+		}
 		qualityAnalysisPane.addTab(JavaVisConstants.HEADING_WARNINGS, 
 				new ImageIcon(JavaVisConstants.ICON_WARNINGS), warningsPanel);
 		
@@ -253,28 +301,6 @@ public class WorkspacePane extends JPanel implements Observer, TreeSelectionList
 		programTree.addTreeSelectionListener(this);
 		projectExplorerPanel.setViewportView(programTree);
 		fillProjectTree();
-		
-		// create the "Metrics" tree
-		metricTree = new JTree();
-		DefaultTreeModel treeModel = new DefaultTreeModel( new DefaultMutableTreeNode("root") );
-		metricTree.setModel( treeModel );
-		metricTree.setRootVisible(false);
-		metricTree.addTreeSelectionListener(this);
-		metricSelectionPanel.setViewportView(metricTree);
-		fillMetricTree();
-		
-		// create the "Warnings" tree
-		warningTree = new JTree();
-		treeModel = new DefaultTreeModel( new DefaultMutableTreeNode("root") );
-		warningTree.setModel( treeModel );
-		warningTree.setRootVisible(false);
-		// set the leaf node icon
-		DefaultTreeCellRenderer cellRenderer = new DefaultTreeCellRenderer();
-		cellRenderer.setLeafIcon(new ImageIcon(JavaVisConstants.ICON_WARNINGS));
-		warningTree.setCellRenderer(cellRenderer);
-		warningTree.addTreeSelectionListener(this);
-		warningsPanel.setViewportView(warningTree);
-		fillWarningsTree(project);
 		
 		// put a decoy visualisation component in place so we're not staring at a drab grey canvas
 		@SuppressWarnings("serial")
@@ -368,25 +394,6 @@ public class WorkspacePane extends JPanel implements Observer, TreeSelectionList
 		metricTree.expandRow(0);
 	}
 	
-	private void addMetricsToTreeNode(Collection<MetricAttribute> metrics, DefaultTreeModel treeModel, 
-			MutableTreeNode parentNode, boolean skipQualityAttributes) {
-		
-		int i = 0;
-		for (MetricAttribute metric : metrics) {
-			if (skipQualityAttributes && metric instanceof DesignQualityAttribute)
-				continue;
-			
-			MutableTreeNode metricTreeNode = new DefaultMutableTreeNode(metric);
-			treeModel.insertNodeInto(metricTreeNode, parentNode, i++);
-			
-			// ... add applicable visualisations
-			List<Visualisation> visualisations = 
-				VisualisationRegistry.getInstance().getVisualisationsByType(metric.getType());
-			for (Visualisation vis : visualisations)
-				treeModel.insertNodeInto(new DefaultMutableTreeNode(vis), metricTreeNode, 0);
-		}
-	}
-	
 	public void fillWarningsTree(ProjectModel project) {
 		
 		final DefaultTreeModel treeModel = (DefaultTreeModel) warningTree.getModel();
@@ -476,6 +483,37 @@ public class WorkspacePane extends JPanel implements Observer, TreeSelectionList
 		warningTree.expandRow(0);
 	}
 	
+	public void reloadMetricCombo() {
+		metricComboBox.setModel( new MetricComboBoxModel() );
+		metricComboBox.setSelectedIndex(0);
+		lblMetricDescription.setText(null);
+	}
+	
+	public void reloadVisualisationCombo() {
+		visComboBox.setModel( new VisualisationComboBoxModel() );
+		visComboBox.setSelectedIndex(0);
+		lblVisDescription.setText(null);
+	}
+	
+	private void addMetricsToTreeNode(Collection<MetricAttribute> metrics, DefaultTreeModel treeModel, 
+			MutableTreeNode parentNode, boolean skipQualityAttributes) {
+		
+		int i = 0;
+		for (MetricAttribute metric : metrics) {
+			if (skipQualityAttributes && metric instanceof DesignQualityAttribute)
+				continue;
+			
+			MutableTreeNode metricTreeNode = new DefaultMutableTreeNode(metric);
+			treeModel.insertNodeInto(metricTreeNode, parentNode, i++);
+			
+			// ... add applicable visualisations
+			List<Visualisation> visualisations = 
+				VisualisationRegistry.getInstance().getVisualisationsByType(metric.getType());
+			for (Visualisation vis : visualisations)
+				treeModel.insertNodeInto(new DefaultMutableTreeNode(vis), metricTreeNode, 0);
+		}
+	}
+	
 	@Override
 	public void update(Observable o, Object arg) {
 
@@ -487,6 +525,56 @@ public class WorkspacePane extends JPanel implements Observer, TreeSelectionList
 				if (vis != null)
 					setVisualisation(vis);
 				break;
+			}
+		}
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (metricComboBox == e.getSource()
+				&& metricComboBox.isEnabled()) {
+			
+			if (metricComboBox.getSelectedItem() instanceof MetricAttribute) {
+				// set the currently selected metric
+				MetricAttribute metric = (MetricAttribute) metricComboBox.getSelectedItem();
+				
+				wspContext.setMetric(metric);
+				
+				List<Visualisation> visualisations = 
+					VisualisationRegistry.getInstance().getVisualisationsByType(metric.getType());
+				((VisualisationComboBoxModel)(visComboBox.getModel())).setVisualisations(visualisations);
+				visComboBox.setEnabled(true);
+				
+				// set the metric description label
+				lblMetricDescription.setText(
+						new Formatter().format("<html><p style=\"font-weight:normal;\">Measures %s</p><p>%s</p></html>", 
+								metric.getCharacteristic(), metric.getDescription()).toString());
+				
+			} else {
+				// clear the currently selected metric + visualisation
+				wspContext.setMetric(null);
+				wspContext.setVisualisation(null);
+				visComboBox.setEnabled(false);
+				
+				lblMetricDescription.setText(null);
+			}
+		} else if (visComboBox == e.getSource()
+				&& visComboBox.isEnabled()) {
+			
+			if (visComboBox.getSelectedItem() instanceof Visualisation) {
+				// set the currently selected visualisation
+				Visualisation vis = (Visualisation) visComboBox.getSelectedItem();
+				wspContext.setVisualisation(vis);
+				
+				// set the visualisation description label
+				lblVisDescription.setText(
+						new Formatter().format("<html><p style=\"font-weight:normal;\">%s</p><p>%s</p></html>", 
+								vis.getType(), vis.getDescription()).toString());
+			} else {
+				// clear the currently selected visualisation
+				wspContext.setVisualisation(null);
+				
+				lblVisDescription.setText(null);
 			}
 		}
 	}

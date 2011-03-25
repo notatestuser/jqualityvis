@@ -55,6 +55,7 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 	private JMenuItem mntmSaveProject;
 	private JMenuItem mntmCloseTab;
 	private JMenuItem mntmBatchCalc;
+	private JMenuItem mntmProjectSettings;
 	
 	private ActionListener actionCreateProject = new ActionListener() {
 		@Override
@@ -109,7 +110,7 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			JDialog dialog = new JDialog(frmJavavis, "Metric Manager");
-			dialog.setBounds(200, 200, 500, 300);
+			dialog.setBounds(200, 200, 700, 300);
 			dialog.setLocationRelativeTo(frmJavavis);
 			dialog.getContentPane().add(new MetricConfigurationPanel(UIMain.this));
 			dialog.setModal(true);
@@ -122,7 +123,7 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			JDialog dialog = new JDialog(frmJavavis, "Visualisation Manager");
-			dialog.setBounds(200, 200, 500, 300);
+			dialog.setBounds(200, 200, 700, 300);
 			dialog.setLocationRelativeTo(frmJavavis);
 			dialog.getContentPane().add(new VisualisationConfigurationPanel(UIMain.this));
 			dialog.setModal(true);
@@ -171,7 +172,6 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 			System.exit(0);
 		}
 	};
-	private JMenuItem mntmProjectSettings;
 
 	/**
 	 * Launch the application.
@@ -182,9 +182,6 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 
 				try {
 					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-					//PlafOptions.setCurrentTheme(new VistaTheme());
-					//PlafOptions.setAsLookAndFeel();
-					
 					
 					UIMain window = new UIMain();
 					window.frmJavavis.setVisible(true);
@@ -218,13 +215,13 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 		frmJavavis.setVisible(true);
 		frmJavavis.getContentPane().setLayout(new BorderLayout(0, 0));
 		
-		// initialize main tabbed pane
+		// initialise main tabbed pane
 		mainTabbedPane = new JTabbedPane();
 		mainTabbedPane.addChangeListener(this);
 		frmJavavis.getContentPane().add(mainTabbedPane);
 		mainTabbedPane.setBackground(Color.LIGHT_GRAY);
 		
-		// initialize bottom panel
+		// initialise bottom panel
 		bottomPanel = new JPanel( new BorderLayout() );
 		mainStatusBar = new JLabel("Ready!");
 		mainStatusBar.setBorder( BorderFactory.createEmptyBorder(0, 10, 0, 0) );
@@ -234,7 +231,7 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 		bottomPanel.add(zoomSlider, BorderLayout.EAST);
 		frmJavavis.getContentPane().add(bottomPanel, BorderLayout.SOUTH);
 		
-		// initialize menu bar and actions
+		// initialise menu bar and actions
 		JMenuBar menuBar = new JMenuBar();
 		frmJavavis.setJMenuBar(menuBar);
 		
@@ -392,6 +389,8 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 				WorkspacePane wsp = (WorkspacePane) c;
 				wsp.fillMetricTree();
 				wsp.fillWarningsTree(wsp.getContext().getModelStore());
+				wsp.reloadMetricCombo();
+				wsp.reloadVisualisationCombo();
 			}
 		}
 	}

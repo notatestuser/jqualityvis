@@ -33,6 +33,8 @@ public class MetricConfigurationPanel extends AbstractConfigurationPanel {
 	private JTextField txtName;
 	private JTextField txtInternalName;
 	private JTextField txtType;
+	private JTextField txtCharacteristic;
+	private JTextField txtDescription;
 	private JTextField txtAppliesTo;
 	private JTextField txtIMeasurableVisitorClass;
 	private JTextField txtArguments;
@@ -84,6 +86,10 @@ public class MetricConfigurationPanel extends AbstractConfigurationPanel {
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,}));
 		
 		// name
@@ -93,7 +99,7 @@ public class MetricConfigurationPanel extends AbstractConfigurationPanel {
 		
 		txtName = new JTextField();
 		addFormControl(txtName, "4, 2, fill, default");
-		txtName.setColumns(10);
+		txtName.setColumns(50);
 		
 		// internal name
 		JLabel lblIntName = new JLabel("Internal Name:");
@@ -113,40 +119,58 @@ public class MetricConfigurationPanel extends AbstractConfigurationPanel {
 		addFormControl(txtType, "4, 6, fill, default");
 		txtType.setColumns(10);
 		
+		// characteristic
+		JLabel lblCharacteristic = new JLabel("Characteristic:");
+		lblCharacteristic.setHorizontalAlignment(SwingConstants.RIGHT);
+		addFormControl(lblCharacteristic, "2, 8, right, default");
+		
+		txtCharacteristic = new JTextField();
+		addFormControl(txtCharacteristic, "4, 8, fill, default");
+		txtCharacteristic.setColumns(10);
+		
+		// description
+		JLabel lblDescription = new JLabel("Description:");
+		lblDescription.setHorizontalAlignment(SwingConstants.RIGHT);
+		addFormControl(lblDescription, "2, 10, right, default");
+		
+		txtDescription = new JTextField();
+		addFormControl(txtDescription, "4, 10, fill, default");
+		txtDescription.setColumns(10);
+		
 		// applies to
 		JLabel lblAppliesTo = new JLabel("Applies to models:");
 		lblAppliesTo.setHorizontalAlignment(SwingConstants.RIGHT);
-		addFormControl(lblAppliesTo, "2, 8, right, default");
+		addFormControl(lblAppliesTo, "2, 12, right, default");
 		
 		txtAppliesTo = new JTextField();
-		addFormControl(txtAppliesTo, "4, 8, fill, default");
+		addFormControl(txtAppliesTo, "4, 12, fill, default");
 		txtAppliesTo.setColumns(10);
 		
 		// IMeasurableVisitor
 		JLabel lblIMeasurableVisitor = new JLabel("IMeasurableVisitor Class:");
 		lblIMeasurableVisitor.setHorizontalAlignment(SwingConstants.RIGHT);
-		addFormControl(lblIMeasurableVisitor, "2, 10, right, default");
+		addFormControl(lblIMeasurableVisitor, "2, 14, right, default");
 		
 		txtIMeasurableVisitorClass = new JTextField();
-		addFormControl(txtIMeasurableVisitorClass, "4, 10, fill, default");
+		addFormControl(txtIMeasurableVisitorClass, "4, 14, fill, default");
 		txtIMeasurableVisitorClass.setColumns(10);
 		
 		// argument
 		JLabel lblArguments = new JLabel("Arguments:");
 		lblArguments.setHorizontalAlignment(SwingConstants.RIGHT);
-		addFormControl(lblArguments, "2, 12, right, default");
+		addFormControl(lblArguments, "2, 16, right, default");
 		
 		txtArguments = new JTextField();
-		addFormControl(txtArguments, "4, 12, fill, default");
+		addFormControl(txtArguments, "4, 16, fill, default");
 		txtArguments.setColumns(10);
 		
 		// cold
-		JLabel lblColdValue = new JLabel("Cold threshold: ");
+		JLabel lblColdValue = new JLabel("Default bound 1 threshold: ");
 		lblColdValue.setHorizontalAlignment(SwingConstants.RIGHT);
-		addFormControl(lblColdValue, "2, 14, fill, default");
+		addFormControl(lblColdValue, "2, 18, fill, default");
 		
 		sldCold = new JSlider(SwingConstants.HORIZONTAL, -100, 100, 0);
-		addFormControl(sldCold, "4, 14, fill, default");
+		addFormControl(sldCold, "4, 18, fill, default");
 		sldCold.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
@@ -156,16 +180,16 @@ public class MetricConfigurationPanel extends AbstractConfigurationPanel {
 		
 		// ... cold value textbox
 		txtColdBox = new JTextField("0.0");
-		addFormControl(txtColdBox, "6, 14, fill, default");
+		addFormControl(txtColdBox, "6, 18, fill, default");
 		txtColdBox.setColumns(5);
 		
 		// hot
-		JLabel lblHotValue = new JLabel("Hot threshold: ");
+		JLabel lblHotValue = new JLabel("Default bound 1 threshold: ");
 		lblHotValue.setHorizontalAlignment(SwingConstants.RIGHT);
-		addFormControl(lblHotValue, "2, 16, fill, default");
+		addFormControl(lblHotValue, "2, 20, fill, default");
 		
 		sldHot = new JSlider(SwingConstants.HORIZONTAL, -100, 100, 0);
-		addFormControl(sldHot, "4, 16, fill, default");
+		addFormControl(sldHot, "4, 20, fill, default");
 		sldHot.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
@@ -175,7 +199,7 @@ public class MetricConfigurationPanel extends AbstractConfigurationPanel {
 		
 		// ... hot value textbox
 		txtHotBox = new JTextField("0.0");
-		addFormControl(txtHotBox, "6, 16, fill, default");
+		addFormControl(txtHotBox, "6, 20, fill, default");
 		txtHotBox.setColumns(5);
 	}
 	
@@ -192,6 +216,8 @@ public class MetricConfigurationPanel extends AbstractConfigurationPanel {
 		txtName.setText(currentMetric.getName());
 		txtInternalName.setText(currentMetric.getInternalName());
 		txtType.setText(currentMetric.getType().getName());
+		txtCharacteristic.setText(currentMetric.getCharacteristic());
+		txtDescription.setText(currentMetric.getDescription());
 		txtArguments.setText(currentMetric.getArgument());
 		
 		sldCold.setValue((int) currentMetric.getCold());
@@ -220,6 +246,8 @@ public class MetricConfigurationPanel extends AbstractConfigurationPanel {
 		txtName.setText(null);
 		txtInternalName.setText(null);
 		txtType.setText(null);
+		txtCharacteristic.setText(null);
+		txtDescription.setText(null);
 		txtAppliesTo.setText(null);
 		txtIMeasurableVisitorClass.setText(null);
 		txtArguments.setText(null);
@@ -245,16 +273,28 @@ public class MetricConfigurationPanel extends AbstractConfigurationPanel {
 	@Override
 	protected boolean saveCurrentEntity() throws FormValidationException {
 		try {
-			MetricAttribute newMetric = MetricAttribute.validateAndCreateOrUpdate(currentMetric, txtName.getText(), 
-					txtInternalName.getText(), txtType.getText(), txtAppliesTo.getText().split(","), 
-					txtIMeasurableVisitorClass.getText(), 
-					txtArguments.getText(), Double.parseDouble(
-							txtColdBox.getText()), Double.parseDouble(txtHotBox.getText()));
+			// validate the fields and create our new MetricAttribute
+			MetricAttribute newMetric = MetricAttribute.validateAndCreateOrUpdate(
+					currentMetric, txtName.getText(), 
+					txtInternalName.getText(),
+					txtType.getText(),
+					txtCharacteristic.getText(),
+					txtDescription.getText(),
+					txtAppliesTo.getText().split(","),
+					txtIMeasurableVisitorClass.getText(),
+					txtArguments.getText(), 
+					Double.parseDouble(txtColdBox.getText()),
+					Double.parseDouble(txtHotBox.getText()));
+			
+			// if the metric is new, register it with the registry
 			if (currentMetric != newMetric) {
 				MetricRegistry.getInstance().registerMetric(newMetric);
 				reloadListModel();
 			}
+			
+			// select this new entity in the configuration pane
 			setSelectedEntity(newMetric);
+			
 		} catch (NumberFormatException nfe) {
 			JOptionPane.showMessageDialog(this, "Enter a valid Double.", 
 					"Form Validation Error", JOptionPane.ERROR_MESSAGE);

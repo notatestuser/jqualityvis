@@ -19,6 +19,8 @@ public class MetricAttribute {
 	private String name;
 	private String nameInternal;
 	private MetricType type;
+	private String characteristic;
+	private String description;
 	private List<String> appliesTo;
 	private Class<IMeasurableVisitor> visitor;
 	private String argument;
@@ -46,6 +48,8 @@ public class MetricAttribute {
 		name = source.getName();
 		nameInternal = source.getInternalName();
 		type = registry.getOrSetMetricType(source.getType());
+		characteristic = source.getCharacteristic();
+		description = source.getDescription();
 		appliesTo = source.getAppliesTo().getMeasurable();
 		visitor = (Class<IMeasurableVisitor>) Class.forName(source.getVisitor());
 		argument = source.getArgument();
@@ -81,6 +85,22 @@ public class MetricAttribute {
 		return type;
 	}
 
+	public String getCharacteristic() {
+		return characteristic;
+	}
+
+	public void setCharacteristic(String characteristic) {
+		this.characteristic = characteristic;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	public List<String> getAppliesTo() {
 		return appliesTo;
 	}
@@ -109,12 +129,13 @@ public class MetricAttribute {
 
 	@Override
 	public String toString() {
-		return name;// + " " + appliesTo;
+		return nameInternal + " - " + name;
 	}
 	
 	@SuppressWarnings("rawtypes")
 	public static MetricAttribute validateAndCreateOrUpdate(MetricAttribute toUpdate, String name, String internalName, 
-			String type, String[] appliesTo, String visitor, String arguments, double cold, double hot) 
+			String type, String characteristic, String description, String[] appliesTo, String visitor, String arguments, 
+			double cold, double hot) 
 				throws FormValidationException {
 		
 		// field length checks (name, internalName, type, visitor)
@@ -124,6 +145,8 @@ public class MetricAttribute {
 			throw new FormValidationException("internalName", "cannot be blank");
 		if (type.length() <= 0)
 			throw new FormValidationException("type", "cannot be blank");
+		if (characteristic.length() <= 0)
+			throw new FormValidationException("characteristic", "cannot be blank");
 		if (visitor.length() <= 0)
 			throw new FormValidationException("IMeasurableVisitor", "cannot be blank");
 		
@@ -144,6 +167,8 @@ public class MetricAttribute {
 		newMetricSource.setName(name);
 		newMetricSource.setInternalName(internalName);
 		newMetricSource.setType(type);
+		newMetricSource.setCharacteristic(characteristic);
+		newMetricSource.setDescription(description);
 		newMetricSource.setVisitor(visitor);
 		newMetricSource.setArgument(arguments);
 		newMetricSource.setCold(cold);

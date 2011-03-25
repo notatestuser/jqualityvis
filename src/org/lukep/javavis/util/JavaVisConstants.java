@@ -44,7 +44,8 @@ public class JavaVisConstants {
 	
 	public static final String HEADING_PROJECT_EXPLORER	= "Project Explorer";
 	public static final String HEADING_QUALITY_ANALYSIS	= "Quality Analysis";
-	public static final String HEADING_METRICS			= "Metrics";
+	public static final String HEADING_METRICS_FANCY	= "Metrics (fancy)";
+	public static final String HEADING_METRICS_TREE		= "Metrics (tree)";
 	public static final String HEADING_WARNINGS			= "Thresholds";
 	
 	public static final String METRIC_NUM_OF_STATEMENTS	= "NOS";

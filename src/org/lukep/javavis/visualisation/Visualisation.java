@@ -17,6 +17,7 @@ public class Visualisation {
 	
 	private String name;
 	private MetricType type;
+	private String description;
 	private Class<IVisualiser> visualiser;
 	private Class<IVisualiserVisitor> visualiserVisitor;
 	private String arguments;
@@ -35,6 +36,7 @@ public class Visualisation {
 		// set the fields in our new VisualisationView object from the data source object
 		name = source.getName();
 		type = MetricRegistry.getInstance().getOrSetMetricType(source.getType());
+		description = source.getDescription();
 		visualiser = (Class<IVisualiser>) Class.forName(source.getIVisualiser());
 		visualiserVisitor = (Class<IVisualiserVisitor>) Class.forName(source.getIVisualiserVisitor());
 		arguments = source.getArguments();
@@ -50,6 +52,14 @@ public class Visualisation {
 
 	public MetricType getType() {
 		return type;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public Class<IVisualiser> getVisualiserClass() {
@@ -71,7 +81,8 @@ public class Visualisation {
 	
 	@SuppressWarnings("rawtypes")
 	public static Visualisation validateAndCreateOrUpdate(Visualisation toUpdate, String name, String type, 
-			String visualiser, String visualiserVisitor, String arguments) throws FormValidationException {
+			String description, String visualiser, String visualiserVisitor, String arguments) 
+				throws FormValidationException {
 		
 		// field length checks (name, type, IVisualier, IVisualiserVisitor)
 		if (name.length() <= 0)
@@ -105,6 +116,7 @@ public class Visualisation {
 			(toUpdate == null ? new ObjectFactory().createVisualisationsVisualisation() : toUpdate.getSource());
 		newVisSource.setName(name);
 		newVisSource.setType(type);
+		newVisSource.setDescription(description);
 		newVisSource.setIVisualiser(visualiser);
 		newVisSource.setIVisualiserVisitor(visualiserVisitor);
 		newVisSource.setArguments(arguments);

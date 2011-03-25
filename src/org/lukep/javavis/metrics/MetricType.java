@@ -23,7 +23,7 @@ public class MetricType {
 
 	@Override
 	public String toString() {
-		return "MetricType [name=" + name + "]";
+		return name;
 	}
 	
 }

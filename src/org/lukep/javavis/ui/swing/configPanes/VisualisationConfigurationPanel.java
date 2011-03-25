@@ -29,6 +29,7 @@ public class VisualisationConfigurationPanel extends AbstractConfigurationPanel 
 	
 	private JTextField txtName;
 	private JTextField txtType;
+	private JTextField txtDescription;
 	private JTextField txtIVisualiserClass;
 	private JTextField txtIVisualiserVisitorClass;
 	private JTextField txtArguments;
@@ -45,6 +46,8 @@ public class VisualisationConfigurationPanel extends AbstractConfigurationPanel 
 				FormFactory.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("default:grow"),},
 			new RowSpec[] {
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.RELATED_GAP_ROWSPEC,
@@ -74,31 +77,40 @@ public class VisualisationConfigurationPanel extends AbstractConfigurationPanel 
 		addFormControl(txtType, "4, 4, fill, default");
 		txtType.setColumns(10);
 		
+		// description
+		JLabel lblDescription = new JLabel("Description:");
+		lblDescription.setHorizontalAlignment(SwingConstants.RIGHT);
+		addFormControl(lblDescription, "2, 6, right, default");
+		
+		txtDescription = new JTextField();
+		addFormControl(txtDescription, "4, 6, fill, default");
+		txtDescription.setColumns(10);
+		
 		// IVisualiser
 		JLabel lblIVisualiserClass = new JLabel("IVisualiser Class:");
 		lblIVisualiserClass.setHorizontalAlignment(SwingConstants.RIGHT);
-		addFormControl(lblIVisualiserClass, "2, 6, right, default");
+		addFormControl(lblIVisualiserClass, "2, 8, right, default");
 		
 		txtIVisualiserClass = new JTextField();
-		addFormControl(txtIVisualiserClass, "4, 6, fill, default");
+		addFormControl(txtIVisualiserClass, "4, 8, fill, default");
 		txtIVisualiserClass.setColumns(10);
 		
 		// IVisualiserVisitor
 		JLabel lblIVisualiserVisitorClass = new JLabel("IVisualiserVisitor Class:");
 		lblIVisualiserVisitorClass.setHorizontalAlignment(SwingConstants.RIGHT);
-		addFormControl(lblIVisualiserVisitorClass, "2, 8, right, default");
+		addFormControl(lblIVisualiserVisitorClass, "2, 10, right, default");
 		
 		txtIVisualiserVisitorClass = new JTextField();
-		addFormControl(txtIVisualiserVisitorClass, "4, 8, fill, default");
+		addFormControl(txtIVisualiserVisitorClass, "4, 10, fill, default");
 		txtIVisualiserVisitorClass.setColumns(10);
 		
 		// arguments
 		JLabel lblArguments = new JLabel("Arguments:");
 		lblArguments.setHorizontalAlignment(SwingConstants.RIGHT);
-		addFormControl(lblArguments, "2, 10, right, default");
+		addFormControl(lblArguments, "2, 12, right, default");
 		
 		txtArguments = new JTextField();
-		addFormControl(txtArguments, "4, 10, fill, default");
+		addFormControl(txtArguments, "4, 12, fill, default");
 		txtArguments.setColumns(10);
 	}
 	
@@ -124,6 +136,7 @@ public class VisualisationConfigurationPanel extends AbstractConfigurationPanel 
 		setEntityTitle("Visualisation: " + currentVis.getName());
 		txtName.setText(currentVis.getName());
 		txtType.setText(currentVis.getSource().getType());
+		txtDescription.setText(currentVis.getSource().getDescription());
 		txtIVisualiserClass.setText(
 				currentVis.getSource().getIVisualiser());
 		txtIVisualiserVisitorClass.setText(
@@ -136,6 +149,7 @@ public class VisualisationConfigurationPanel extends AbstractConfigurationPanel 
 		setEntityTitle(UNSAVED_ENTITY_TITLE);
 		txtName.setText(null);
 		txtType.setText(null);
+		txtDescription.setText(null);
 		txtIVisualiserClass.setText(null);
 		txtIVisualiserVisitorClass.setText(null);
 		txtArguments.setText(null);
@@ -156,13 +170,22 @@ public class VisualisationConfigurationPanel extends AbstractConfigurationPanel 
 	
 	@Override
 	protected boolean saveCurrentEntity() throws FormValidationException {
-		Visualisation newVis = Visualisation.validateAndCreateOrUpdate(currentVis, txtName.getText(), 
-				txtType.getText(), txtIVisualiserClass.getText(), txtIVisualiserVisitorClass.getText(), 
+		// validate the fields and create our new Visualisation
+		Visualisation newVis = Visualisation.validateAndCreateOrUpdate(currentVis, 
+				txtName.getText(), 
+				txtType.getText(), 
+				txtDescription.getText(), 
+				txtIVisualiserClass.getText(), 
+				txtIVisualiserVisitorClass.getText(), 
 				txtArguments.getText());
+		
+		// if the Visualisation is new, register it with the registry
 		if (currentVis != newVis) {
 			VisualisationRegistry.getInstance().addVisualisation(newVis);
 			reloadListModel();
 		}
+		
+		// select this new entity in the configuration pane
 		setSelectedEntity(newVis);
 		return true;
 	}

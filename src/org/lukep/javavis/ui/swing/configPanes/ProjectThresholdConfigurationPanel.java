@@ -215,8 +215,10 @@ public class ProjectThresholdConfigurationPanel extends
 
 	@Override
 	protected void deleteCurrentEntity() {
-		// TODO Auto-generated method stub
-
+		if (currentThres != null) {
+			project.getMetricThresholds().remove(currentThres);
+			reloadListModel();
+		}
 	}
 
 	@Override

@@ -64,6 +64,9 @@ public class ClassHierarchyView extends AbstractVisualisationView {
 		// bind graph layout manager
 		mxGraphLayout graphLayout = new mxCompactTreeLayout(graph);
 		
+		// set a smaller scale beforehand
+		graphComponent.zoomTo(0.6, false);
+		
 		// create package vertices
 		ProjectModel modelStore = wspContext.getModelStore();
 		HashMap<IGenericModelNode, mxCell> parentCellMap = 

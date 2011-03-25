@@ -37,7 +37,7 @@ public class BarChartView extends AbstractVisualisationView {
 		ObjectChartDataModel model = getContainerSeriesObjectChartDataModel(filteredClasses, metric);
 		
 		// initialise the chart itself
-		ExtendedChartPanel chart = new ExtendedChartPanel(model, metric.getName());
+		ExtendedChartPanel chart = new ExtendedChartPanel(model, " ");
 		
 		// create a coordinate system object and renderer
 		ClassicCoordSystem coord = new ClassicCoordSystem(model);

@@ -78,6 +78,8 @@ public class WorkspacePane extends JPanel implements
 	
 	private static final int TITLE_LABEL_COLOR_RGB = 0xF9FFFB;
 	private static final int DECOY_BACKGROUND_COLOR_RGB = 0xFFF9FFFB;
+	private static final int PROJECT_EXPLORER_BGCOLOR_RGB = 0xFFF9FFFB;
+	private static final int QUALITY_ANALYSIS_BGCOLOR_RGB = 0xFFF9FFFB;
 	
 	public class WorkspaceSplitPaneUI extends BasicSplitPaneUI {
 		@Override
@@ -265,6 +267,7 @@ public class WorkspacePane extends JPanel implements
 		{
 			// initialise the tree
 			metricTree = new JTree();
+			metricsTreePanel.setBackground(new Color(PROJECT_EXPLORER_BGCOLOR_RGB));
 			DefaultTreeModel treeModel = new DefaultTreeModel( new DefaultMutableTreeNode("root") );
 			metricTree.setModel( treeModel );
 			metricTree.setRootVisible(false);

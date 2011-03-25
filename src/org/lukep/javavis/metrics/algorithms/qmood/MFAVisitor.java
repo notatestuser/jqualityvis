@@ -13,7 +13,6 @@ public class MFAVisitor extends
 		AbstractMeasurableVisitor {
 
 	private int inheritedMethods;
-	private int actualMethods;
 	private int totalMethods;
 	
 	@Override
@@ -31,7 +30,6 @@ public class MFAVisitor extends
 	@Override
 	public void resetInstanceAttributes() {
 		inheritedMethods = 0;
-		actualMethods = 0;
 		totalMethods = 0;
 	}
 

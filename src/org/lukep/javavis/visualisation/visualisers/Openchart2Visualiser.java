@@ -4,6 +4,7 @@
  */
 package org.lukep.javavis.visualisation.visualisers;
 
+import java.awt.Color;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JComponent;
@@ -15,6 +16,7 @@ import com.approximatrix.charting.swing.ExtendedChartPanel;
 
 public class Openchart2Visualiser extends AbstractVisualiser {
 
+	private static final int BACKGROUND_COLOR_RGB = 0xF9FFFB;
 	private static final int MOUSE_BUTTON_DYNAMIC_ZOOM = MouseEvent.BUTTON2;
 	
 	private ExtendedChartPanel currentChartPanel;
@@ -27,6 +29,7 @@ public class Openchart2Visualiser extends AbstractVisualiser {
 	public JComponent acceptVisualisation(IVisualiserVisitor visitor) {
 		currentChartPanel = visitor.visit(this, getWorkspaceContext());
 		currentChartPanel.setZoomMouseButton(MOUSE_BUTTON_DYNAMIC_ZOOM);
+		currentChartPanel.setBackground(new Color(BACKGROUND_COLOR_RGB));
 		return currentChartPanel;
 	}
 

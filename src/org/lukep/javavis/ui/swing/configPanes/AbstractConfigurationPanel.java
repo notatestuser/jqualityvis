@@ -111,7 +111,7 @@ abstract class AbstractConfigurationPanel extends JPanel implements
 		pnlForm = new JPanel();
 		mainPane.add(pnlForm, BorderLayout.CENTER);
 		pnlForm.setBorder(new EmptyBorder(0, 15, 15, 15));
-		pnlForm.setPreferredSize(new Dimension(450, 200));
+		pnlForm.setPreferredSize(new Dimension(500, 200));
 		
 		// --- end form, begin main button pane and title
 		

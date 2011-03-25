@@ -158,9 +158,9 @@ public class MetricCharacteristicGraph implements Observer {
 		ChangeEvent ce = (ChangeEvent) arg;
 		switch (ce) {
 		case METRIC_CHANGE:
-			
 			// update the metric we're visualising
-			setMetricToDisplay(wspContext.getMetric());
+			if (wspContext.getMetric() != null)
+				setMetricToDisplay(wspContext.getMetric());
 			break;
 		}
 	}

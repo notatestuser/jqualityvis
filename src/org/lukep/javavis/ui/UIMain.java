@@ -181,8 +181,10 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 			public void run() {
 
 				try {
+					// set UIManager look and feel
 					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 					
+					// create the program window
 					UIMain window = new UIMain();
 					window.frmJavavis.setVisible(true);
 				} catch (Exception e) {
@@ -198,6 +200,11 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 	 */
 	public UIMain() throws Exception {
 		initialize();
+		
+		// set window icon
+		frmJavavis.setIconImage(new ImageIcon(JavaVisConstants.APP_ICON).getImage());
+		
+		// create the welcome page
 		addChildHTMLFrame("Welcome Page", 
 				(new java.io.File(JavaVisConstants.WELCOME_HTML_URL)).toURI().toURL());
 	}

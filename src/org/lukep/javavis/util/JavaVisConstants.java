@@ -6,16 +6,17 @@ package org.lukep.javavis.util;
 
 public class JavaVisConstants {
 	
+	public static final String WORKING_DIR 				= System.getProperty("user.dir");
+	
 	public static final String APP_NAME					= "JQualityVis";
 	public static final String APP_VERSION				= "pre-delivery alpha";
 	public static final String APP_WEBPAGE				= "http://www.lancs.ac.uk/ug/plaster";
+	public static final String APP_ICON                 = WORKING_DIR + "/assets/icons/magnifier.png";
 	
 	public static final String SUPPORTED_LANG_JAVA_6	= "Java 6";
 	
 	public static final String DEFAULT_PACKAGE_NAME 	= "(default package)";
 	public static final String DEFAULT_CONSTRUCTOR_NAME = "<init>";
-	
-	public static final String WORKING_DIR 				= System.getProperty("user.dir");
 	
 	public static final String METRICS_FILE_NAME 		= WORKING_DIR + "/config/metrics.xml";
 	public static final String QUALITYMODELS_FILE_NAME  = WORKING_DIR + "/config/qualityModels.xml";
@@ -29,6 +30,7 @@ public class JavaVisConstants {
 	public static final String ICON_PROJECT_EXPLORER	= WORKING_DIR + "/assets/icons/folder.png";
 	public static final String ICON_QUALITY_ANALYSIS	= WORKING_DIR + "/assets/icons/chart_curve.png";
 	public static final String ICON_METRICS				= WORKING_DIR + "/assets/icons/chart_bar.png";
+	public static final String ICON_BREAKDOWN           = WORKING_DIR + "/assets/icons/block.png";
 	public static final String ICON_WARNINGS			= WORKING_DIR + "/assets/icons/exclamation.png";
 	public static final String ICON_PROJECT_WIZARD_NEW	= WORKING_DIR + "/assets/icons/application-blue.png";
 	public static final String ICON_PROJECT_WIZARD_OPEN	= WORKING_DIR + "/assets/icons/folder-horizontal.png";
@@ -46,6 +48,7 @@ public class JavaVisConstants {
 	public static final String HEADING_QUALITY_ANALYSIS	= "Quality Analysis";
 	public static final String HEADING_METRICS_FANCY	= "Metrics (fancy)";
 	public static final String HEADING_METRICS_TREE		= "Metrics (tree)";
+	public static final String HEADING_CHARACTERISTICS  = "Breakdown";
 	public static final String HEADING_WARNINGS			= "Thresholds";
 	
 	public static final String METRIC_NUM_OF_STATEMENTS	= "NOS";

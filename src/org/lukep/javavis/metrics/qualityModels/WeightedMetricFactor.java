@@ -8,9 +8,9 @@ import org.lukep.javavis.generated.jaxb.QualityModels.QualityModel.DesignQuality
 import org.lukep.javavis.metrics.MetricAttribute;
 import org.lukep.javavis.metrics.MetricRegistry;
 
-class WeightedMetricFactor {
+public class WeightedMetricFactor {
 
-	protected static enum Value { 
+	public static enum Value { 
 		POSITIVE, NEGATIVE;
 		
 		public static Value stringToValue(String val) {

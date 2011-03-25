@@ -115,6 +115,8 @@ public class WorkspacePane extends JPanel implements
 	
 	private ClassPropertiesPanel propertiesPane;
 	
+	private MetricCharacteristicGraph metricCharacteristicGraph;
+	
 	private IProgramStatusReporter statusTarget;
 	
 	private WorkspaceContext wspContext;
@@ -272,6 +274,12 @@ public class WorkspacePane extends JPanel implements
 		}
 		qualityAnalysisPane.addTab(JavaVisConstants.HEADING_METRICS_TREE,
 				new ImageIcon(JavaVisConstants.ICON_METRICS), metricsTreePanel);
+		
+		// ... create the "Overview" tab containing the MetricCharacteristicGraph
+		metricCharacteristicGraph = new MetricCharacteristicGraph(wspContext);
+		qualityAnalysisPane.addTab(JavaVisConstants.HEADING_CHARACTERISTICS,
+				new ImageIcon(JavaVisConstants.ICON_BREAKDOWN), 
+				metricCharacteristicGraph.getGraphComponent());
 		
 		// ... create the "Warnings" tab + JScrollPane
 		warningsPanel = new JScrollPane();

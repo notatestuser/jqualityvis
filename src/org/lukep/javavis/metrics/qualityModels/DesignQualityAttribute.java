@@ -90,5 +90,9 @@ public class DesignQualityAttribute extends MetricAttribute {
 		}
 		return null;
 	}
+
+	public Collection<WeightedMetricFactor> getWeightedMetrics() {
+		return weightedMetrics;
+	}
 	
 }

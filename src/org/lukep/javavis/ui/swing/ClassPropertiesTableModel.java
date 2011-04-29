@@ -1,5 +1,5 @@
 /*
- * ClassPropertiesTableModel.java (JMetricVis)
+ * ClassPropertiesTableModel.java (JQualityVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
 package org.lukep.javavis.ui.swing;
@@ -18,22 +18,38 @@ import org.lukep.javavis.program.generic.models.Relationship;
 import org.lukep.javavis.util.JavaVisConstants;
 
 // TODO clean this up
+/**
+ * The Class ClassPropertiesTableModel.
+ */
 @SuppressWarnings("serial")
 public class ClassPropertiesTableModel extends AbstractTableModel {
 
 	protected IGenericModelNode subject;
 
+	/**
+	 * Instantiates a new class properties table model.
+	 *
+	 * @param subject the subject
+	 */
 	public ClassPropertiesTableModel(IGenericModelNode subject) {
 		super();
 		this.subject = subject;
 	}
 
+	/**
+	 * Sets the subject.
+	 *
+	 * @param subject the new subject
+	 */
 	public void setSubject(IGenericModelNode subject) {
 		this.subject = subject;
 		fireTableStructureChanged();
 		fireTableDataChanged();
 	}
 
+	/* (non-Javadoc)
+	 * @see javax.swing.table.TableModel#getRowCount()
+	 */
 	@Override
 	public int getRowCount() {
 		if (subject instanceof ClassModel)
@@ -43,6 +59,9 @@ public class ClassPropertiesTableModel extends AbstractTableModel {
 		return 0;
 	}
 
+	/* (non-Javadoc)
+	 * @see javax.swing.table.TableModel#getColumnCount()
+	 */
 	@Override
 	public int getColumnCount() {
 		if (subject instanceof ClassModel)
@@ -54,6 +73,9 @@ public class ClassPropertiesTableModel extends AbstractTableModel {
 		return 0;
 	}
 	
+	/* (non-Javadoc)
+	 * @see javax.swing.table.AbstractTableModel#getColumnName(int)
+	 */
 	@Override
 	public String getColumnName(int column) {
 		if (column == 0) {
@@ -72,6 +94,9 @@ public class ClassPropertiesTableModel extends AbstractTableModel {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see javax.swing.table.TableModel#getValueAt(int, int)
+	 */
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		if (subject == null)
@@ -110,6 +135,9 @@ public class ClassPropertiesTableModel extends AbstractTableModel {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see javax.swing.table.AbstractTableModel#isCellEditable(int, int)
+	 */
 	@Override
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
 		return false;

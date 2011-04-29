@@ -1,5 +1,5 @@
 /*
- * OpenProjectWizardWindow.java (JMetricVis)
+ * OpenProjectWizardWindow.java (JQualityVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
 package org.lukep.javavis.ui.swing.wizards;
@@ -27,19 +27,26 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 
+/**
+ * The Class OpenProjectWizardWindow.
+ */
 @SuppressWarnings("serial")
 public class OpenProjectWizardWindow extends AbstractWizardWindow {
 
 	private JTextField txtOpenFilename;
 	private JButton btnOpenBrowse;
 	private File selectedFile;
-	
 	private JCheckBox chckbxUnserialiseXML;
 	private JCheckBox chckbxGZIPDecompress;
 	private JCheckBox chckbxPreloadMetricMeasurements;
-	
 	private Thread workerThread;
 	
+	/**
+	 * Instantiates a new OpenProjectWizardWindow.
+	 *
+	 * @param parent the parent
+	 * @param uiInstance the ui instance
+	 */
 	public OpenProjectWizardWindow(Frame parent, UIMain uiInstance) {
 		super(parent, uiInstance, 
 				"Open an Existing Project",
@@ -47,6 +54,9 @@ public class OpenProjectWizardWindow extends AbstractWizardWindow {
 		setActionButtonText("Load Project File");
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.awt.Window#dispose()
+	 */
 	@Override
 	public void dispose() {
 		//if (workerThread != null)
@@ -54,6 +64,9 @@ public class OpenProjectWizardWindow extends AbstractWizardWindow {
 		super.dispose();
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.swing.wizards.AbstractWizardWindow#initialiseFormControls()
+	 */
 	@Override
 	protected void initialiseFormControls() {
 		setFormLayout(new FormLayout(new ColumnSpec[] {
@@ -103,6 +116,9 @@ public class OpenProjectWizardWindow extends AbstractWizardWindow {
 		addFormControl(chckbxPreloadMetricMeasurements, "4, 6");
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.swing.wizards.AbstractWizardWindow#actionPerformed(java.awt.event.ActionEvent)
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (btnOpenBrowse == e.getSource()) {
@@ -115,6 +131,9 @@ public class OpenProjectWizardWindow extends AbstractWizardWindow {
 		super.actionPerformed(e);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.swing.wizards.AbstractWizardWindow#validateFormControls()
+	 */
 	@Override
 	protected boolean validateFormControls() {
 		String saveFilename = txtOpenFilename.getText();
@@ -127,6 +146,9 @@ public class OpenProjectWizardWindow extends AbstractWizardWindow {
 		return false;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.swing.wizards.AbstractWizardWindow#lockFormControls()
+	 */
 	@Override
 	protected void lockFormControls() {
 		txtOpenFilename.setEnabled(false);
@@ -134,6 +156,9 @@ public class OpenProjectWizardWindow extends AbstractWizardWindow {
 		btnPerformAction.setEnabled(false);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.swing.wizards.AbstractWizardWindow#unlockFormControls()
+	 */
 	@Override
 	protected void unlockFormControls() {
 		txtOpenFilename.setEnabled(true);
@@ -141,6 +166,9 @@ public class OpenProjectWizardWindow extends AbstractWizardWindow {
 		refreshActionable();
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.swing.wizards.AbstractWizardWindow#performAction()
+	 */
 	@Override
 	protected boolean performAction() throws Exception {
 		progressBar.setMaximum(1);
@@ -168,6 +196,11 @@ public class OpenProjectWizardWindow extends AbstractWizardWindow {
 		return true;
 	}
 	
+	/**
+	 * Browse for the location to open the serialised ProjectModel from.
+	 *
+	 * @return the file
+	 */
 	private File browseFileOpenLocation() {
 		JFileChooser fc = new JFileChooser();
 		fc.setDialogTitle("Open Project");
@@ -179,6 +212,11 @@ public class OpenProjectWizardWindow extends AbstractWizardWindow {
 		return null;
 	}
 	
+	/**
+	 * Notify that the process has completed successfully.
+	 *
+	 * @param project the Project
+	 */
 	public void notifyLoadComplete(ProjectModel project) {
 		if (project != null) {
 			if (chckbxPreloadMetricMeasurements.isSelected())

@@ -1,5 +1,5 @@
 /*
- * UIMain.java (JMetricVis)
+ * UIMain.java (JQualityVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
 package org.lukep.javavis.ui;
@@ -43,13 +43,20 @@ import org.lukep.javavis.ui.swing.wizards.SaveProjectWizardWindow;
 import org.lukep.javavis.util.JavaVisConstants;
 import org.lukep.javavis.visualisation.visualisers.IVisualiser;
 
+/**
+ * The main entry point of the program. This class creates the program's window in the user's operating system.
+ */
 public class UIMain implements IProgramStatusReporter, ChangeListener {
 	
 	private JFrame frmJavavis;
 	private JTabbedPane mainTabbedPane;
+	
 	private JPanel bottomPanel;
+	
 	private JLabel mainStatusBar;
+	
 	private JSlider zoomSlider;
+	
 	private int workspaces = 0;
 	
 	private JMenuItem mntmSaveProject;
@@ -57,6 +64,7 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 	private JMenuItem mntmBatchCalc;
 	private JMenuItem mntmProjectSettings;
 	
+	/** The action create project. */
 	private ActionListener actionCreateProject = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
@@ -65,6 +73,7 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 		}
 	};
 	
+	/** The action open project. */
 	private ActionListener actionOpenProject = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -73,6 +82,7 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 		}
 	};
 	
+	/** The action save project. */
 	private ActionListener actionSaveProject = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -83,6 +93,7 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 		}
 	};
 	
+	/** The action close tab. */
 	private ActionListener actionCloseTab = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -97,6 +108,7 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 		}
 	};
 	
+	/** The action project settings. */
 	private ActionListener actionProjectSettings = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -106,6 +118,7 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 		}
 	};
 	
+	/** The action metric config. */
 	private ActionListener actionMetricConfig = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -119,6 +132,7 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 		}
 	};
 	
+	/** The action visualisation config. */
 	private ActionListener actionVisualisationConfig = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -132,6 +146,7 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 		}
 	};
 	
+	/** The action batch calc. */
 	private ActionListener actionBatchCalc = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -141,6 +156,7 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 		}
 	};
 	
+	/** The action help. */
 	private ActionListener actionHelp = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -154,6 +170,7 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 		}
 	};
 	
+	/** The action about. */
 	private ActionListener actionAbout = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -166,6 +183,7 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 		}
 	};
 	
+	/** The action exit. */
 	private ActionListener actionExit = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
@@ -175,6 +193,8 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 
 	/**
 	 * Launch the application.
+	 *
+	 * @param args the arguments
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -196,7 +216,8 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 
 	/**
 	 * Create the application.
-	 * @throws Exception 
+	 *
+	 * @throws Exception the exception
 	 */
 	public UIMain() throws Exception {
 		initialize();
@@ -211,7 +232,8 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 
 	/**
 	 * Initialise the contents of the frame.
-	 * @throws Exception 
+	 *
+	 * @throws Exception the exception
 	 */
 	private void initialize() throws Exception {
 		frmJavavis = new JFrame();
@@ -332,6 +354,12 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 		}
 	}
 	
+	/**
+	 * Adds the child html frame.
+	 *
+	 * @param title the title
+	 * @param url the url
+	 */
 	private void addChildHTMLFrame(String title, URL url) {
 		JEditorPane newPane = null;
 		try {
@@ -347,18 +375,29 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 		}
 	}
 	
+	/**
+	 * Adds the child workspace frame.
+	 *
+	 * @param workspace the workspace
+	 */
 	public void addChildWorkspaceFrame(WorkspacePane workspace) {
 		mainTabbedPane.addTab( "Workspace " + (++workspaces) 
 				+ " (" + workspace.getContext().getModelStore() + ")", (Component) workspace );
 		mainTabbedPane.setSelectedIndex(mainTabbedPane.getTabCount()-1);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.IProgramStatusReporter#setProgramStatus(java.lang.String)
+	 */
 	@Override
 	public synchronized void setProgramStatus(String status) {
 		mainStatusBar.setText(status);
 		mainStatusBar.repaint();
 	}
 
+	/* (non-Javadoc)
+	 * @see javax.swing.event.ChangeListener#stateChanged(javax.swing.event.ChangeEvent)
+	 */
 	@Override
 	public void stateChanged(ChangeEvent e) {
 		if (mainTabbedPane == e.getSource()) {
@@ -390,6 +429,9 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 		}
 	}
 	
+	/**
+	 * Refresh workspace metric trees.
+	 */
 	public void refreshWorkspaceMetricTrees() {
 		for (Component c : mainTabbedPane.getComponents()) {
 			if (c instanceof WorkspacePane) {

@@ -1,5 +1,5 @@
 /*
- * DCCVisitor.java (JMetricVis)
+ * DCCVisitor.java (JQualityVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
 package org.lukep.javavis.metrics.algorithms.qmood;
@@ -17,6 +17,9 @@ import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.MethodModel;
 import org.lukep.javavis.program.generic.models.ProjectModel;
 
+/**
+ * The Class DCCVisitor.
+ */
 public class DCCVisitor extends AbstractMeasurableVisitor {
 
 	private static final String ARG_INCLUDE_RELATIONS	= "includeClassRelations";
@@ -24,9 +27,15 @@ public class DCCVisitor extends AbstractMeasurableVisitor {
 	private static final String[] PRIMITIVE_TYPE_EXCLUSIONS = 
 			{ "byte", "short", "int", "long", "float", "double", "char", "boolean" };
 	
+	/** The coupled classes. */
 	private Set<String> coupledClasses = new HashSet<String>();
+	
+	/** The couple occurrences. */
 	private Map<String, Short> coupleOccurrences = new HashMap<String, Short>();
 	
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.metrics.algorithms.AbstractMeasurableVisitor#visit(org.lukep.javavis.metrics.MetricAttribute, org.lukep.javavis.program.generic.models.ClassModel)
+	 */
 	@Override
 	public MetricMeasurement visit(MetricAttribute metric, ClassModel clazz) {
 		
@@ -70,6 +79,11 @@ public class DCCVisitor extends AbstractMeasurableVisitor {
 		return measurement;
 	}
 	
+	/**
+	 * Adds the coupled class.
+	 *
+	 * @param className the class name
+	 */
 	private void addCoupledClass(String className) {
 		coupledClasses.add(className);
 		short occurrences = 0;
@@ -78,6 +92,12 @@ public class DCCVisitor extends AbstractMeasurableVisitor {
 		coupleOccurrences.put(className, occurrences += 1);
 	}
 	
+	/**
+	 * Checks if is type not primitive.
+	 *
+	 * @param type the type
+	 * @return true, if is type not primitive
+	 */
 	private static boolean isTypeNotPrimitive(String type) {
 		for (String prim : PRIMITIVE_TYPE_EXCLUSIONS)
 			if (prim.equals(type))
@@ -85,6 +105,9 @@ public class DCCVisitor extends AbstractMeasurableVisitor {
 		return true;
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.metrics.algorithms.AbstractMeasurableVisitor#resetInstanceAttributes()
+	 */
 	@Override
 	public void resetInstanceAttributes() {
 		if (coupledClasses.size() > 0)

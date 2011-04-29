@@ -1,5 +1,5 @@
 /*
- * ConfigurationManager.java (JMetricVis)
+ * ConfigurationManager.java (JQualityVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
 package org.lukep.javavis.util.config;
@@ -18,12 +18,14 @@ import org.lukep.javavis.generated.jaxb.QualityModels;
 import org.lukep.javavis.generated.jaxb.Visualisations;
 import org.lukep.javavis.util.JavaVisConstants;
 
+/**
+ * The Class ConfigurationManager.
+ */
 public class ConfigurationManager {
 
 	private static ConfigurationManager instance = null;
 	
 	private static JAXBContext jc;
-	
 	private static Metrics metrics = null;
 	private static QualityModels qualityModels = null;
 	private static Visualisations visualisations = null;
@@ -55,28 +57,57 @@ public class ConfigurationManager {
 		}
 	}
 	
+	/**
+	 * Instantiates a new configuration manager.
+	 */
 	private ConfigurationManager() {
 		// singleton
 	}
 
+	/**
+	 * Gets the single instance of ConfigurationManager.
+	 *
+	 * @return single instance of ConfigurationManager
+	 */
 	public static ConfigurationManager getInstance() {
 		if (instance == null)
 			instance = new ConfigurationManager();
 		return instance;
 	}
 	
+	/**
+	 * Gets the metrics.
+	 *
+	 * @return the metrics
+	 */
 	public Metrics getMetrics() {
 		return metrics;
 	}
 	
+	/**
+	 * Gets the quality models.
+	 *
+	 * @return the quality models
+	 */
 	public QualityModels getQualityModels() {
 		return qualityModels;
 	}
 	
+	/**
+	 * Gets the visualisations.
+	 *
+	 * @return the visualisations
+	 */
 	public Visualisations getVisualisations() {
 		return visualisations;
 	}
 	
+	/**
+	 * Write visualisations.
+	 *
+	 * @throws JAXBException the jAXB exception
+	 * @throws FileNotFoundException the file not found exception
+	 */
 	public void writeVisualisations() throws JAXBException, FileNotFoundException {
 		// export visualisations xml
 		Marshaller marshaller = jc.createMarshaller();
@@ -84,6 +115,12 @@ public class ConfigurationManager {
 		marshaller.marshal(visualisations, new FileOutputStream(JavaVisConstants.VISUALISATIONS_FILE_NAME));
 	}
 	
+	/**
+	 * Write metrics.
+	 *
+	 * @throws JAXBException the jAXB exception
+	 * @throws FileNotFoundException the file not found exception
+	 */
 	public void writeMetrics() throws JAXBException, FileNotFoundException {
 		// export metrics xml
 		Marshaller marshaller = jc.createMarshaller();

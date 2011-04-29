@@ -1,5 +1,5 @@
 /*
- * SaveProjectWizardWindow.java (JMetricVis)
+ * SaveProjectWizardWindow.java (JQualityVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
 package org.lukep.javavis.ui.swing.wizards;
@@ -29,20 +29,23 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 
+/**
+ * The Save Project window is an implementation of AbstractWizardWindow that allows users to save projects.
+ */
 @SuppressWarnings("serial")
 public class SaveProjectWizardWindow extends AbstractWizardWindow {
 	
 	private ProjectModel project;
-	
 	private JTextField txtSaveFilename;
 	private JButton btnSaveBrowse;
 	private File selectedSaveFile;
-	
 	private JCheckBox chckbxSerialiseXML;
 	private JCheckBox chckbxGZIPCompress;
-	
 	private Thread workerThread;
 	
+	/**
+	 * Instantiates a new SaveProjectWizardWindow.
+	 */
 	public SaveProjectWizardWindow(Frame parent, UIMain uiInstance, ProjectModel project) {
 		super(parent, uiInstance, 
 				"Save Project '" + project.getSimpleName() + "'",
@@ -52,6 +55,9 @@ public class SaveProjectWizardWindow extends AbstractWizardWindow {
 		this.project = project;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.awt.Window#dispose()
+	 */
 	@Override
 	public void dispose() {
 		//if (workerThread != null)
@@ -59,6 +65,9 @@ public class SaveProjectWizardWindow extends AbstractWizardWindow {
 		super.dispose();
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.swing.wizards.AbstractWizardWindow#initialiseFormControls()
+	 */
 	@Override
 	protected void initialiseFormControls() {
 		setFormLayout(new FormLayout(new ColumnSpec[] {
@@ -102,6 +111,9 @@ public class SaveProjectWizardWindow extends AbstractWizardWindow {
 		addFormControl(pnlOptions, "4, 4, fill, default");
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.swing.wizards.AbstractWizardWindow#actionPerformed(java.awt.event.ActionEvent)
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (btnSaveBrowse == e.getSource()) {
@@ -114,6 +126,9 @@ public class SaveProjectWizardWindow extends AbstractWizardWindow {
 		super.actionPerformed(e);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.swing.wizards.AbstractWizardWindow#validateFormControls()
+	 */
 	@Override
 	protected boolean validateFormControls() {
 		String saveFilename = txtSaveFilename.getText();
@@ -126,6 +141,9 @@ public class SaveProjectWizardWindow extends AbstractWizardWindow {
 		return false;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.swing.wizards.AbstractWizardWindow#lockFormControls()
+	 */
 	@Override
 	protected void lockFormControls() {
 		txtSaveFilename.setEnabled(false);
@@ -133,6 +151,9 @@ public class SaveProjectWizardWindow extends AbstractWizardWindow {
 		btnPerformAction.setEnabled(false);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.swing.wizards.AbstractWizardWindow#unlockFormControls()
+	 */
 	@Override
 	protected void unlockFormControls() {
 		txtSaveFilename.setEnabled(true);
@@ -140,6 +161,9 @@ public class SaveProjectWizardWindow extends AbstractWizardWindow {
 		refreshActionable();
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.swing.wizards.AbstractWizardWindow#performAction()
+	 */
 	@Override
 	protected boolean performAction() throws Exception {
 		progressBar.setMaximum(1);
@@ -164,6 +188,11 @@ public class SaveProjectWizardWindow extends AbstractWizardWindow {
 		return true;
 	}
 
+	/**
+	 * Browse for the file save location.
+	 *
+	 * @return the file selected
+	 */
 	private File browseFileSaveLocation() {
 		JFileChooser fc = new JFileChooser();
 		fc.setDialogTitle("Save Project");
@@ -173,6 +202,9 @@ public class SaveProjectWizardWindow extends AbstractWizardWindow {
 		return null;
 	}
 	
+	/**
+	 * Notify that a save has completed successfully.
+	 */
 	public void notifySerializationComplete() {
 		setProgramStatus("Save successful.", false, progressBar.getMaximum());
 		JOptionPane.showMessageDialog(this, "Project saved to " + selectedSaveFile.getName() + ".", 

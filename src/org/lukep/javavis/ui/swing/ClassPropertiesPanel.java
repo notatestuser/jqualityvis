@@ -1,5 +1,5 @@
 /*
- * ClassPropertiesPanel.java (JMetricVis)
+ * ClassPropertiesPanel.java (JQualityVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
 package org.lukep.javavis.ui.swing;
@@ -25,6 +25,9 @@ import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.IGenericModelNode;
 import org.lukep.javavis.ui.swing.WorkspaceContext.ChangeEvent;
 
+/**
+ * The Class ClassPropertiesPanel.
+ */
 @SuppressWarnings("serial")
 public class ClassPropertiesPanel extends JPanel implements Observer {
 	
@@ -34,8 +37,15 @@ public class ClassPropertiesPanel extends JPanel implements Observer {
 	ClassCompositionComponent classCompositionComponent;
 	
 	protected WorkspaceContext wspContext;
+	
 	protected IGenericModelNode currentModel;
 
+	/**
+	 * Instantiates a new class properties panel.
+	 *
+	 * @param w the w
+	 * @param wspContext the wsp context
+	 */
 	public ClassPropertiesPanel(WorkspacePane w, WorkspaceContext wspContext) {
 		setLayout( new BorderLayout(3, 0) );
 		this.wspContext = wspContext;
@@ -71,6 +81,11 @@ public class ClassPropertiesPanel extends JPanel implements Observer {
 		add(splitPane, BorderLayout.CENTER);
 	}
 	
+	/**
+	 * Sets the current model.
+	 *
+	 * @param model the new current model
+	 */
 	public void setCurrentModel(IGenericModelNode model) {
 		currentModel = model;
 		
@@ -120,6 +135,9 @@ public class ClassPropertiesPanel extends JPanel implements Observer {
 		classCompositionComponent.setCurrentModel(model);
 	}
 
+	/* (non-Javadoc)
+	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
+	 */
 	@Override
 	public void update(Observable o, Object arg) {
 		if (ChangeEvent.SELECTED_CHANGE == (ChangeEvent) arg

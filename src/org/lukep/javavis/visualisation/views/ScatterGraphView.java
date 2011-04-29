@@ -1,5 +1,5 @@
 /*
- * ScatterGraphView.java (JMetricVis)
+ * ScatterGraphView.java (JQualityVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
 package org.lukep.javavis.visualisation.views;
@@ -25,15 +25,21 @@ import prefuse.util.ColorLib;
 import prefuse.visual.VisualItem;
 import prefuse.visual.expression.VisiblePredicate;
 
+/**
+ * This is a scatter graph implemented in the Prefuse library.
+ */
 public class ScatterGraphView extends AbstractVisualisationView {
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.visualisation.views.AbstractVisualisationView#visit(org.lukep.javavis.visualisation.visualisers.PrefuseVisualiser, org.lukep.javavis.ui.swing.WorkspaceContext, prefuse.Display)
+	 */
 	@Override
 	public void visit(PrefuseVisualiser visualiser,
 			WorkspaceContext wspContext, Display display) {
 
 		display.reset();
 		
-		// -- 1. load the data ------------------------------------------------
+		// load the data
 		
 		ProjectModel modelStore = wspContext.getModelStore();
 		
@@ -64,7 +70,7 @@ public class ScatterGraphView extends AbstractVisualisationView {
 
 		}
 		
-		// -- 2. the visualisation --------------------------------------------
+		// the visualisation
 		
 		Visualization m_vis = new Visualization();
 		m_vis.add("data", t);
@@ -77,8 +83,7 @@ public class ScatterGraphView extends AbstractVisualisationView {
 		
 		m_vis.setRendererFactory(new DefaultRendererFactory(r));
         
-        // --------------------------------------------------------------------
-        // STEP 2: create actions to process the visual data
+        // create actions to process the visual data
         
         // set up the actions
         AxisLayout x_axis = new AxisLayout("data", "metricMeasurement", 
@@ -113,8 +118,7 @@ public class ScatterGraphView extends AbstractVisualisationView {
         draw.add(new RepaintAction());
         m_vis.putAction("draw", draw);
         
-        // --------------------------------------------------------------------        
-        // STEP 4: launching the visualization
+        // launching the visualisation
         
         display.setVisualization(m_vis);
         m_vis.run("draw");

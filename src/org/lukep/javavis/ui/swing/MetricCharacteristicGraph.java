@@ -26,6 +26,9 @@ import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.util.mxConstants;
 import com.mxgraph.view.mxGraph;
 
+/**
+ * Displays a visual representation of the metrics and characteristics that contribute to a displayed visualisation.
+ */
 public class MetricCharacteristicGraph implements Observer {
 
 	private WorkspaceContext wspContext;
@@ -39,6 +42,11 @@ public class MetricCharacteristicGraph implements Observer {
 	private Map<String, mxCell> characteristicCellMap = 
 		new HashMap<String, mxCell>();
 	
+	/**
+	 * Instantiates a new metric characteristic graph.
+	 *
+	 * @param wspContext the wsp context
+	 */
 	public MetricCharacteristicGraph(WorkspaceContext wspContext) {
 		graphComponent = new mxGraphComponent(graph);
 		graph.setCellsLocked(true);
@@ -52,6 +60,11 @@ public class MetricCharacteristicGraph implements Observer {
 		wspContext.addObserver(this);
 	}
 	
+	/**
+	 * Sets the metric to display.
+	 *
+	 * @param metric the new metric to display
+	 */
 	public void setMetricToDisplay(MetricAttribute metric) {
 		
 		// start the mxGraph transaction and clear model
@@ -109,10 +122,21 @@ public class MetricCharacteristicGraph implements Observer {
 		graphModel.endUpdate();
 	}
 
+	/**
+	 * Gets the graph component.
+	 *
+	 * @return the graph component
+	 */
 	public mxGraphComponent getGraphComponent() {
 		return graphComponent;
 	}
 	
+	/**
+	 * Adds the source metric.
+	 *
+	 * @param metric the metric
+	 * @param value the value
+	 */
 	private void addSourceMetric(MetricAttribute metric, Value value) {
 		// create metric cell
 		mxCell mCell = (mxCell) graph.insertVertex(graph.getDefaultParent(), 
@@ -153,6 +177,9 @@ public class MetricCharacteristicGraph implements Observer {
 		graph.insertEdge(graph.getDefaultParent(), null, "measures", mCell, cCell);
 	}
 
+	/* (non-Javadoc)
+	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
+	 */
 	@Override
 	public void update(Observable o, Object arg) {
 		ChangeEvent ce = (ChangeEvent) arg;

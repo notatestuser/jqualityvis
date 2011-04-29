@@ -1,5 +1,5 @@
 /*
- * ClassCompositionComponent.java (JMetricVis)
+ * ClassCompositionComponent.java (JQualityVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
 package org.lukep.javavis.ui.swing;
@@ -20,6 +20,9 @@ import org.lukep.javavis.program.generic.models.MethodModel;
 import org.lukep.javavis.ui.swing.WorkspaceContext.ChangeEvent;
 import org.lukep.javavis.util.JavaVisConstants;
 
+/**
+ * The Class ClassCompositionComponent.
+ */
 @SuppressWarnings("serial")
 public class ClassCompositionComponent extends JComponent implements Observer {
 
@@ -30,22 +33,40 @@ public class ClassCompositionComponent extends JComponent implements Observer {
 	protected WorkspaceContext wspContext;
 	protected IGenericModelNode currentModel;
 
+	/**
+	 * Instantiates a new class composition component.
+	 *
+	 * @param wspContext the wsp context
+	 */
 	public ClassCompositionComponent(WorkspaceContext wspContext) {
 		super();
 		this.wspContext = wspContext;
 		wspContext.addObserver(this);
 	}
 	
+	/**
+	 * Instantiates a new class composition component.
+	 *
+	 * @param modelTarget the model target
+	 */
 	public ClassCompositionComponent(IGenericModelNode modelTarget) {
 		super();
 		this.currentModel = modelTarget;
 	}
 	
+	/**
+	 * Sets the current model.
+	 *
+	 * @param model the new current model
+	 */
 	public void setCurrentModel(IGenericModelNode model) {
 		currentModel = model;
 		repaint();
 	}
 
+	/* (non-Javadoc)
+	 * @see javax.swing.JComponent#paint(java.awt.Graphics)
+	 */
 	@Override
 	public void paint(Graphics g) {
 		if (currentModel != null
@@ -80,7 +101,7 @@ public class ClassCompositionComponent extends JComponent implements Observer {
 				g.setColor(BORDER_COLOR);
 				g.drawRect(0, rectY, getWidth() - 1, rectHeight);
 				
-				// TODO revise this awfulness - move metrics to XML
+				// TODO revise
 				complexity = method.getMetricMeasurement(
 						MetricRegistry.getInstance().getMetricAttribute(
 							JavaVisConstants.METRIC_CYCLO_COMPLEX)).getResult();
@@ -103,6 +124,9 @@ public class ClassCompositionComponent extends JComponent implements Observer {
 		super.paint(g);
 	}
 
+	/* (non-Javadoc)
+	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
+	 */
 	@Override
 	public void update(Observable o, Object arg) {
 		if (ChangeEvent.SELECTED_CHANGE == (ChangeEvent) arg

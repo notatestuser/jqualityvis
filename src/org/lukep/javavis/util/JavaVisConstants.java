@@ -9,7 +9,7 @@ public class JavaVisConstants {
 	public static final String WORKING_DIR 				= System.getProperty("user.dir");
 	
 	public static final String APP_NAME					= "JQualityVis";
-	public static final String APP_VERSION				= "pre-delivery alpha";
+	public static final String APP_VERSION				= "FYP delivery 1.0";
 	public static final String APP_WEBPAGE				= "http://www.lancs.ac.uk/ug/plaster";
 	public static final String APP_ICON                 = WORKING_DIR + "/assets/icons/magnifier.png";
 	

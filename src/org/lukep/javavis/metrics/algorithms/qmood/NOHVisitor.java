@@ -1,5 +1,5 @@
 /*
- * NOHVisitor.java (JMetricVis)
+ * NOHVisitor.java (JQualityVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
 package org.lukep.javavis.metrics.algorithms.qmood;
@@ -13,15 +13,24 @@ import org.lukep.javavis.metrics.algorithms.AbstractMeasurableVisitor;
 import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.ProjectModel;
 
+/**
+ * The Class NOHVisitor.
+ */
 public class NOHVisitor extends AbstractMeasurableVisitor {
 
 	// build up a set of all classes that don't inherit from another class (except Object)
+	/** The lone wolves. */
 	private Set<String> loneWolves = new HashSet<String>();
 	// ... and a set of all dependent classes
+	/** The dependents. */
 	private Set<String> dependents = new HashSet<String>();
 	// we'll need to take an intersection of the two sets
+	/** The intersection of both. */
 	private Set<String> intersection = new HashSet<String>();
 	
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.metrics.algorithms.AbstractMeasurableVisitor#visit(org.lukep.javavis.metrics.MetricAttribute, org.lukep.javavis.program.generic.models.ProjectModel)
+	 */
 	@Override
 	public MetricMeasurement visit(MetricAttribute metric, ProjectModel project) {
 		
@@ -46,6 +55,9 @@ public class NOHVisitor extends AbstractMeasurableVisitor {
 		return new MetricMeasurement(project, metric, intersection.size());
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.metrics.algorithms.AbstractMeasurableVisitor#resetInstanceAttributes()
+	 */
 	@Override
 	public void resetInstanceAttributes() {
 		if (loneWolves.size() > 0)

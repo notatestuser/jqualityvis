@@ -1,5 +1,5 @@
 /*
- * PieChartView.java (JMetricVis)
+ * PieChartView.java (JQualityVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
 package org.lukep.javavis.visualisation.views;
@@ -20,8 +20,14 @@ import com.approximatrix.charting.model.ObjectChartDataModel;
 import com.approximatrix.charting.render.PieChartRenderer;
 import com.approximatrix.charting.swing.ExtendedChartPanel;
 
+/**
+ * It's a pie chart using Openchart2!
+ */
 public class PieChartView extends AbstractVisualisationView {
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.visualisation.views.AbstractVisualisationView#visit(org.lukep.javavis.visualisation.visualisers.Openchart2Visualiser, org.lukep.javavis.ui.swing.WorkspaceContext)
+	 */
 	@Override
 	public ExtendedChartPanel visit(Openchart2Visualiser visualiser,
 			WorkspaceContext wspContext) {

@@ -1,5 +1,5 @@
 /*
- * ClassHierarchyTree.java (JMetricVis)
+ * ClassHierarchyTree.java (JQualityVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
 package org.lukep.javavis.visualisation.views;
@@ -34,8 +34,14 @@ import prefuse.render.LabelRenderer;
 import prefuse.util.ColorLib;
 import prefuse.visual.VisualItem;
 
+/**
+ * The Class ClassHierarchyTree.
+ */
 public class ClassHierarchyTree extends AbstractVisualisationView {
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.visualisation.views.AbstractVisualisationView#visit(org.lukep.javavis.visualisation.visualisers.PrefuseVisualiser, org.lukep.javavis.ui.swing.WorkspaceContext, prefuse.Display)
+	 */
 	@Override
 	public void visit(PrefuseVisualiser visualiser,
 			WorkspaceContext wspContext, Display display) {

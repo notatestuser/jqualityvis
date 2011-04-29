@@ -1,5 +1,5 @@
 /*
- * ClassHierarchyView.java (JMetricVis)
+ * ClassHierarchyView.java (JQualityVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
 package org.lukep.javavis.visualisation.views;
@@ -48,8 +48,14 @@ import com.mxgraph.util.mxEventObject;
 import com.mxgraph.util.mxEventSource.mxIEventListener;
 import com.mxgraph.view.mxGraph;
 
+/**
+ * The Class ClassHierarchyView.
+ */
 public class ClassHierarchyView extends AbstractVisualisationView {
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.visualisation.views.AbstractVisualisationView#visit(org.lukep.javavis.visualisation.visualisers.mxGraphVisualiser, org.lukep.javavis.ui.swing.WorkspaceContext, com.mxgraph.swing.mxGraphComponent)
+	 */
 	@Override
 	public void visit(mxGraphVisualiser visualiser, final WorkspaceContext wspContext,
 			final mxGraphComponent graphComponent) {
@@ -131,6 +137,9 @@ public class ClassHierarchyView extends AbstractVisualisationView {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.visualisation.views.AbstractVisualisationView#visit(org.lukep.javavis.visualisation.visualisers.PrefuseVisualiser, org.lukep.javavis.ui.swing.WorkspaceContext, prefuse.Display)
+	 */
 	@Override
 	public void visit(PrefuseVisualiser visualiser, WorkspaceContext wspContext,
 			Display display) {

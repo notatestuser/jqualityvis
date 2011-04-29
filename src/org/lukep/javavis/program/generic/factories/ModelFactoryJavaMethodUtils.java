@@ -1,5 +1,5 @@
 /*
- * ModelFactoryJavaMethodUtils.java (JMetricVis)
+ * ModelFactoryJavaMethodUtils.java (JQualityVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
 package org.lukep.javavis.program.generic.factories;
@@ -30,8 +30,18 @@ import com.sun.source.tree.VariableTree;
 import com.sun.source.tree.WhileLoopTree;
 import com.sun.source.util.TreeScanner;
 
+/**
+ * Carries out some token visitation outside of the compiling task that calculates the total number of statements 
+ * in each method and the number of independent code paths though each.
+ */
 public class ModelFactoryJavaMethodUtils extends TreeScanner<Object, MethodModel> {
 
+	/**
+	 * Populate method statement heuristics counters.
+	 *
+	 * @param method the method
+	 * @param methodModel the method model
+	 */
 	public void populateMethodStatementHeuristics(MethodTree method, 
 			MethodModel methodModel) {
 		BlockTree methodTree = method.getBody();
@@ -46,6 +56,9 @@ public class ModelFactoryJavaMethodUtils extends TreeScanner<Object, MethodModel
 	 * 		http://leepoint.net/notes-java/principles_and_practices/complexity/complexity-java-method.html
 	 */
 
+	/* (non-Javadoc)
+	 * @see com.sun.source.util.TreeScanner#visitAssert(com.sun.source.tree.AssertTree, java.lang.Object)
+	 */
 	@Override
 	public Object visitAssert(AssertTree tree, MethodModel methodModel) {
 		methodModel.incStatementCount(1);
@@ -53,6 +66,9 @@ public class ModelFactoryJavaMethodUtils extends TreeScanner<Object, MethodModel
 		return super.visitAssert(tree, methodModel);
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.sun.source.util.TreeScanner#visitBinary(com.sun.source.tree.BinaryTree, java.lang.Object)
+	 */
 	@Override
 	public Object visitBinary(BinaryTree tree, MethodModel methodModel) {
 		
@@ -69,6 +85,9 @@ public class ModelFactoryJavaMethodUtils extends TreeScanner<Object, MethodModel
 		return super.visitBinary(tree, methodModel);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sun.source.util.TreeScanner#visitBreak(com.sun.source.tree.BreakTree, java.lang.Object)
+	 */
 	@Override
 	public Object visitBreak(BreakTree tree, MethodModel methodModel) {
 		methodModel.incStatementCount(1);
@@ -79,6 +98,9 @@ public class ModelFactoryJavaMethodUtils extends TreeScanner<Object, MethodModel
 		return super.visitBreak(tree, methodModel);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sun.source.util.TreeScanner#visitCase(com.sun.source.tree.CaseTree, java.lang.Object)
+	 */
 	@Override
 	public Object visitCase(CaseTree tree, MethodModel methodModel) {
 		
@@ -88,6 +110,9 @@ public class ModelFactoryJavaMethodUtils extends TreeScanner<Object, MethodModel
 		return super.visitCase(tree, methodModel);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sun.source.util.TreeScanner#visitConditionalExpression(com.sun.source.tree.ConditionalExpressionTree, java.lang.Object)
+	 */
 	@Override
 	public Object visitConditionalExpression(ConditionalExpressionTree tree,
 			MethodModel methodModel) {
@@ -101,6 +126,9 @@ public class ModelFactoryJavaMethodUtils extends TreeScanner<Object, MethodModel
 		return super.visitConditionalExpression(tree, methodModel);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sun.source.util.TreeScanner#visitContinue(com.sun.source.tree.ContinueTree, java.lang.Object)
+	 */
 	@Override
 	public Object visitContinue(ContinueTree tree, MethodModel methodModel) {
 		methodModel.incStatementCount(1);
@@ -111,6 +139,9 @@ public class ModelFactoryJavaMethodUtils extends TreeScanner<Object, MethodModel
 		return super.visitContinue(tree, methodModel);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sun.source.util.TreeScanner#visitDoWhileLoop(com.sun.source.tree.DoWhileLoopTree, java.lang.Object)
+	 */
 	@Override
 	public Object visitDoWhileLoop(DoWhileLoopTree tree, MethodModel methodModel) {
 		methodModel.incStatementCount(1);
@@ -121,6 +152,9 @@ public class ModelFactoryJavaMethodUtils extends TreeScanner<Object, MethodModel
 		return super.visitDoWhileLoop(tree, methodModel);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sun.source.util.TreeScanner#visitEmptyStatement(com.sun.source.tree.EmptyStatementTree, java.lang.Object)
+	 */
 	@Override
 	public Object visitEmptyStatement(EmptyStatementTree tree, MethodModel methodModel) {
 		methodModel.incStatementCount(1);
@@ -128,6 +162,9 @@ public class ModelFactoryJavaMethodUtils extends TreeScanner<Object, MethodModel
 		return super.visitEmptyStatement(tree, methodModel);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sun.source.util.TreeScanner#visitEnhancedForLoop(com.sun.source.tree.EnhancedForLoopTree, java.lang.Object)
+	 */
 	@Override
 	public Object visitEnhancedForLoop(EnhancedForLoopTree tree, MethodModel methodModel) {
 		methodModel.incStatementCount(1);
@@ -138,6 +175,9 @@ public class ModelFactoryJavaMethodUtils extends TreeScanner<Object, MethodModel
 		return super.visitEnhancedForLoop(tree, methodModel);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sun.source.util.TreeScanner#visitExpressionStatement(com.sun.source.tree.ExpressionStatementTree, java.lang.Object)
+	 */
 	@Override
 	public Object visitExpressionStatement(ExpressionStatementTree tree,
 			MethodModel methodModel) {
@@ -150,6 +190,9 @@ public class ModelFactoryJavaMethodUtils extends TreeScanner<Object, MethodModel
 		return super.visitExpressionStatement(tree, methodModel);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sun.source.util.TreeScanner#visitForLoop(com.sun.source.tree.ForLoopTree, java.lang.Object)
+	 */
 	@Override
 	public Object visitForLoop(ForLoopTree tree, MethodModel methodModel) {
 		methodModel.incStatementCount(1);
@@ -160,6 +203,9 @@ public class ModelFactoryJavaMethodUtils extends TreeScanner<Object, MethodModel
 		return super.visitForLoop(tree, methodModel);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sun.source.util.TreeScanner#visitIf(com.sun.source.tree.IfTree, java.lang.Object)
+	 */
 	@Override
 	public Object visitIf(IfTree tree, MethodModel methodModel) {
 		methodModel.incStatementCount(1);
@@ -173,6 +219,9 @@ public class ModelFactoryJavaMethodUtils extends TreeScanner<Object, MethodModel
 		return super.visitIf(tree, methodModel);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sun.source.util.TreeScanner#visitLabeledStatement(com.sun.source.tree.LabeledStatementTree, java.lang.Object)
+	 */
 	@Override
 	public Object visitLabeledStatement(LabeledStatementTree tree, MethodModel methodModel) {
 		methodModel.incStatementCount(1);
@@ -180,6 +229,9 @@ public class ModelFactoryJavaMethodUtils extends TreeScanner<Object, MethodModel
 		return super.visitLabeledStatement(tree, methodModel);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sun.source.util.TreeScanner#visitReturn(com.sun.source.tree.ReturnTree, java.lang.Object)
+	 */
 	@Override
 	public Object visitReturn(ReturnTree tree, MethodModel methodModel) {
 		methodModel.incStatementCount(1);
@@ -191,6 +243,9 @@ public class ModelFactoryJavaMethodUtils extends TreeScanner<Object, MethodModel
 		return super.visitReturn(tree, methodModel);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sun.source.util.TreeScanner#visitSwitch(com.sun.source.tree.SwitchTree, java.lang.Object)
+	 */
 	@Override
 	public Object visitSwitch(SwitchTree tree, MethodModel methodModel) {
 		methodModel.incStatementCount(1);
@@ -198,6 +253,9 @@ public class ModelFactoryJavaMethodUtils extends TreeScanner<Object, MethodModel
 		return super.visitSwitch(tree, methodModel);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sun.source.util.TreeScanner#visitSynchronized(com.sun.source.tree.SynchronizedTree, java.lang.Object)
+	 */
 	@Override
 	public Object visitSynchronized(SynchronizedTree tree, MethodModel methodModel) {
 		methodModel.incStatementCount(1);
@@ -205,6 +263,9 @@ public class ModelFactoryJavaMethodUtils extends TreeScanner<Object, MethodModel
 		return super.visitSynchronized(tree, methodModel);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sun.source.util.TreeScanner#visitThrow(com.sun.source.tree.ThrowTree, java.lang.Object)
+	 */
 	@Override
 	public Object visitThrow(ThrowTree tree, MethodModel methodModel) {
 		methodModel.incStatementCount(1);
@@ -215,6 +276,9 @@ public class ModelFactoryJavaMethodUtils extends TreeScanner<Object, MethodModel
 		return super.visitThrow(tree, methodModel);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sun.source.util.TreeScanner#visitTry(com.sun.source.tree.TryTree, java.lang.Object)
+	 */
 	@Override
 	public Object visitTry(TryTree tree, MethodModel methodModel) {
 		methodModel.incStatementCount(1);
@@ -227,6 +291,9 @@ public class ModelFactoryJavaMethodUtils extends TreeScanner<Object, MethodModel
 		return super.visitTry(tree, methodModel);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sun.source.util.TreeScanner#visitVariable(com.sun.source.tree.VariableTree, java.lang.Object)
+	 */
 	@Override
 	public Object visitVariable(VariableTree tree, MethodModel methodModel) {
 		methodModel.incStatementCount(1);
@@ -234,6 +301,9 @@ public class ModelFactoryJavaMethodUtils extends TreeScanner<Object, MethodModel
 		return super.visitVariable(tree, methodModel);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sun.source.util.TreeScanner#visitWhileLoop(com.sun.source.tree.WhileLoopTree, java.lang.Object)
+	 */
 	@Override
 	public Object visitWhileLoop(WhileLoopTree tree, MethodModel methodModel) {
 		methodModel.incStatementCount(1);

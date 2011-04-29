@@ -1,5 +1,5 @@
 /*
- * AbstractWizardWindow.java (JMetricVis)
+ * AbstractWizardWindow.java (JQualityVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
 package org.lukep.javavis.ui.swing.wizards;
@@ -34,20 +34,19 @@ import org.lukep.javavis.program.generic.models.ProjectModel;
 import org.lukep.javavis.ui.UIMain;
 import org.lukep.javavis.ui.swing.WorkspacePane;
 
+/**
+ * An abstract wizard window. This class implements the functionality to make simple windows that allow a user to
+ * create/load/save things with ease.
+ */
 @SuppressWarnings("serial")
 abstract class AbstractWizardWindow extends JDialog implements ActionListener {
 	
 	UIMain uiInstance;
-	
 	private JPanel pnlForm;
-	
 	protected JProgressBar progressBar;
-	
 	protected JButton btnPerformAction;
 	protected boolean btnPerformActionEnabled = false;
-	
 	private JButton btnCancel;
-	
 	private JLabel lblStatus;
 	
 	protected KeyListener validationListener = new KeyListener() {
@@ -63,6 +62,7 @@ abstract class AbstractWizardWindow extends JDialog implements ActionListener {
 		}
 	};
 	
+	/** The ex handler. */
 	protected final Thread.UncaughtExceptionHandler exHandler = 
 		new Thread.UncaughtExceptionHandler() {
 		@Override
@@ -71,6 +71,14 @@ abstract class AbstractWizardWindow extends JDialog implements ActionListener {
 		}
 	};
 	
+	/**
+	 * Instantiates a new abstract wizard window.
+	 *
+	 * @param parent the parent
+	 * @param uiInstance the ui instance
+	 * @param title the title
+	 * @param icon the icon
+	 */
 	public AbstractWizardWindow(Frame parent, UIMain uiInstance, String title, ImageIcon icon) {
 		super(parent, title);
 		setModal(true);
@@ -86,6 +94,9 @@ abstract class AbstractWizardWindow extends JDialog implements ActionListener {
 		pack();
 	}
 	
+	/**
+	 * Initialise the UI components in this window.
+	 */
 	private void initialise(String title, ImageIcon icon) {
 		JPanel pnlHeader = new JPanel();
 		pnlHeader.setBackground(Color.WHITE);
@@ -154,6 +165,9 @@ abstract class AbstractWizardWindow extends JDialog implements ActionListener {
 		pnlStatus.add(lblStatus);
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		try {
@@ -172,18 +186,41 @@ abstract class AbstractWizardWindow extends JDialog implements ActionListener {
 		}
 	}
 	
+	/**
+	 * Sets the form layout.
+	 *
+	 * @param layout the new form layout passed from a child class
+	 */
 	protected void setFormLayout(LayoutManager layout) {
 		pnlForm.setLayout(layout);
 	}
 	
+	/**
+	 * Adds the form control.
+	 *
+	 * @param comp the component
+	 * @param constraints the constraints
+	 */
 	protected void addFormControl(Component comp, Object constraints) {
 		pnlForm.add(comp, constraints);
 	}
 	
+	/**
+	 * Sets the action button text.
+	 *
+	 * @param text the new action button text
+	 */
 	protected void setActionButtonText(String text) {
 		btnPerformAction.setText(text);
 	}
 	
+	/**
+	 * Sets the program status.
+	 *
+	 * @param status the status
+	 * @param indeterminate the indeterminate
+	 * @param progress the progress
+	 */
 	protected void setProgramStatus(String status, boolean indeterminate, int progress) {
 		progressBar.setIndeterminate(indeterminate);
 		progressBar.setValue(progress);
@@ -203,7 +240,7 @@ abstract class AbstractWizardWindow extends JDialog implements ActionListener {
 			btnPerformAction.setEnabled(false);
 		}
 	}
-	
+
 	protected void showError(String message) {
 		JOptionPane.showMessageDialog(this, message, "Something went awry!", 
 				JOptionPane.ERROR_MESSAGE);
@@ -213,6 +250,7 @@ abstract class AbstractWizardWindow extends JDialog implements ActionListener {
 		unlockFormControls();
 	}
 	
+
 	protected void createWorkspaceAndClose(ProjectModel project) {
 		WorkspacePane workspace = null;
 		try {
@@ -222,10 +260,12 @@ abstract class AbstractWizardWindow extends JDialog implements ActionListener {
 			setVisible(false);
 			dispose();
 		} catch (Exception e) {
+			e.printStackTrace();
 			showError("Error creating workspace: " + e.getMessage());
 		}
 	}
 	
+
 	protected void preloadMetrics(ProjectModel project) {
 		setProgramStatus("Preloading metric measurements...", false, 0);
 		MetricPreloader.preloadMetricMeasurements(project, progressBar.getModel());

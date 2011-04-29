@@ -1,5 +1,5 @@
 /*
- * WorkspacePane.java (JMetricVis)
+ * WorkspacePane.java (JQualityVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
 package org.lukep.javavis.ui.swing;
@@ -68,20 +68,26 @@ import org.lukep.javavis.visualisation.VisualisationRegistry;
 import org.lukep.javavis.visualisation.views.IVisualiserVisitor;
 import org.lukep.javavis.visualisation.visualisers.IVisualiser;
 
+/**
+ * The workspace pane is associated with a single ProjectModel and serves as a single tabbed environment in the main form.
+ */
 public class WorkspacePane extends JPanel implements 
 		Observer, ActionListener, TreeSelectionListener {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1442832577578014026L;
 	
 	private static final int TITLE_LABEL_COLOR_RGB = 0xF9FFFB;
 	private static final int DECOY_BACKGROUND_COLOR_RGB = 0xFFF9FFFB;
 	private static final int PROJECT_EXPLORER_BGCOLOR_RGB = 0xFFF9FFFB;
-	private static final int QUALITY_ANALYSIS_BGCOLOR_RGB = 0xFFF9FFFB;
 	
+	/**
+	 * The Class WorkspaceSplitPaneUI.
+	 */
 	public class WorkspaceSplitPaneUI extends BasicSplitPaneUI {
+		
+		/* (non-Javadoc)
+		 * @see javax.swing.plaf.basic.BasicSplitPaneUI#createDefaultDivider()
+		 */
 		@Override
 		public BasicSplitPaneDivider createDefaultDivider() {
 			return new BasicSplitPaneDivider(this) {
@@ -94,11 +100,13 @@ public class WorkspacePane extends JPanel implements
 	private JPanel mainPane;
 	private JPanel leftPaneTop;
 	private JPanel leftPaneBottom;
+	
 	private JLabel titleLabel;
 	
 	private JScrollPane projectExplorerPanel;
 	private JScrollPane warningsPanel;
 	private JScrollPane metricsTreePanel;
+	
 	private JPanel metricFancyPanel;
 	
 	private JSplitPane rightSplitPane;
@@ -113,12 +121,13 @@ public class WorkspacePane extends JPanel implements
 	private JTree warningTree;
 	
 	private IVisualiser curVisualiser;
+	
 	private Component curVisualiserComponent;
 	
 	private ClassPropertiesPanel propertiesPane;
 	
 	private MetricCharacteristicGraph metricCharacteristicGraph;
-	
+
 	private IProgramStatusReporter statusTarget;
 	
 	private WorkspaceContext wspContext;
@@ -127,9 +136,15 @@ public class WorkspacePane extends JPanel implements
 	Map<MutableTreeNode, IGenericModelNode> warningMap = new HashMap<MutableTreeNode, IGenericModelNode>();
 
 	private JLabel lblMetricDescription;
-
 	private JLabel lblVisDescription;
 	
+	/**
+	 * Instantiates a new workspace pane.
+	 *
+	 * @param project the project
+	 * @param statusTarget the status target
+	 * @throws Exception the exception
+	 */
 	public WorkspacePane(ProjectModel project, IProgramStatusReporter statusTarget) throws Exception {
 		super();
 		this.statusTarget = statusTarget;
@@ -329,6 +344,9 @@ public class WorkspacePane extends JPanel implements
 		setVisualisationComponent(decoy);
 	}
 	
+	/**
+	 * Fill project tree.
+	 */
 	private void fillProjectTree() {
 		
 		DefaultTreeModel treeModel = (DefaultTreeModel) programTree.getModel();
@@ -362,6 +380,9 @@ public class WorkspacePane extends JPanel implements
 		programTree.expandRow(0);
 	}
 	
+	/**
+	 * Fill metric tree.
+	 */
 	public void fillMetricTree() {
 		
 		DefaultTreeModel treeModel = (DefaultTreeModel) metricTree.getModel();
@@ -405,6 +426,11 @@ public class WorkspacePane extends JPanel implements
 		metricTree.expandRow(0);
 	}
 	
+	/**
+	 * Fill warnings tree.
+	 *
+	 * @param project the project
+	 */
 	public void fillWarningsTree(ProjectModel project) {
 		
 		final DefaultTreeModel treeModel = (DefaultTreeModel) warningTree.getModel();
@@ -494,18 +520,32 @@ public class WorkspacePane extends JPanel implements
 		warningTree.expandRow(0);
 	}
 	
+	/**
+	 * Reload metric combo.
+	 */
 	public void reloadMetricCombo() {
 		metricComboBox.setModel( new MetricComboBoxModel() );
 		metricComboBox.setSelectedIndex(0);
 		lblMetricDescription.setText(null);
 	}
 	
+	/**
+	 * Reload visualisation combo.
+	 */
 	public void reloadVisualisationCombo() {
 		visComboBox.setModel( new VisualisationComboBoxModel() );
 		visComboBox.setSelectedIndex(0);
 		lblVisDescription.setText(null);
 	}
 	
+	/**
+	 * Adds the metrics to tree node.
+	 *
+	 * @param metrics the metrics
+	 * @param treeModel the tree model
+	 * @param parentNode the parent node
+	 * @param skipQualityAttributes the skip quality attributes
+	 */
 	private void addMetricsToTreeNode(Collection<MetricAttribute> metrics, DefaultTreeModel treeModel, 
 			MutableTreeNode parentNode, boolean skipQualityAttributes) {
 		
@@ -525,6 +565,9 @@ public class WorkspacePane extends JPanel implements
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
+	 */
 	@Override
 	public void update(Observable o, Object arg) {
 
@@ -540,6 +583,9 @@ public class WorkspacePane extends JPanel implements
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (metricComboBox == e.getSource()
@@ -590,6 +636,9 @@ public class WorkspacePane extends JPanel implements
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see javax.swing.event.TreeSelectionListener#valueChanged(javax.swing.event.TreeSelectionEvent)
+	 */
 	@Override
 	public void valueChanged(TreeSelectionEvent e) {
 
@@ -648,6 +697,11 @@ public class WorkspacePane extends JPanel implements
 		
 	}
 	
+	/**
+	 * Sets the visualisation component.
+	 *
+	 * @param c the new visualisation component
+	 */
 	private void setVisualisationComponent(JComponent c) {
 		if (curVisualiserComponent != null)
 			mainPane.remove(curVisualiserComponent);
@@ -656,6 +710,11 @@ public class WorkspacePane extends JPanel implements
 		curVisualiserComponent = c;
 	}
 	
+	/**
+	 * Sets the visualisation.
+	 *
+	 * @param vis the new visualisation
+	 */
 	private void setVisualisation(Visualisation vis) {
 		
 		Class<IVisualiser> visualiser = vis.getVisualiserClass();
@@ -690,15 +749,30 @@ public class WorkspacePane extends JPanel implements
 		}
 	}
 	
+	/**
+	 * Sets the program status.
+	 *
+	 * @param status the new program status
+	 */
 	public void setProgramStatus(String status) {
 		statusTarget.setProgramStatus(status);
 	}
 	
+	/**
+	 * Sets the visualisation scale.
+	 *
+	 * @param scale the new visualisation scale
+	 */
 	public void setVisualisationScale(double scale) {
 		if (curVisualiser != null)
 			curVisualiser.setScale(scale);
 	}
 	
+	/**
+	 * Gets the context.
+	 *
+	 * @return the context
+	 */
 	public WorkspaceContext getContext() {
 		return wspContext;
 	}

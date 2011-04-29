@@ -1,5 +1,5 @@
 /*
- * NewProjectWizardWindow.java (JMetricVis)
+ * NewProjectWizardWindow.java (JQualityVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
 package org.lukep.javavis.ui.swing.wizards;
@@ -35,6 +35,9 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 
+/**
+ * This is a wizard window that creates new projects in the user interface.
+ */
 @SuppressWarnings("serial")
 public class NewProjectWizardWindow extends AbstractWizardWindow implements IProgramSourceObserver {
 
@@ -51,6 +54,12 @@ public class NewProjectWizardWindow extends AbstractWizardWindow implements IPro
 	
 	private Thread workerThread;
 	
+	/**
+	 * Instantiates a new new project wizard window.
+	 *
+	 * @param parent the parent
+	 * @param uiInstance the ui instance
+	 */
 	public NewProjectWizardWindow(Frame parent, UIMain uiInstance) {
 		super(parent, uiInstance, 
 				"Create a New Project", 
@@ -59,6 +68,9 @@ public class NewProjectWizardWindow extends AbstractWizardWindow implements IPro
 		setActionButtonText("Create Project");
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.awt.Window#dispose()
+	 */
 	@Override
 	public void dispose() {
 		//if (workerThread != null)
@@ -66,6 +78,9 @@ public class NewProjectWizardWindow extends AbstractWizardWindow implements IPro
 		super.dispose();
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.swing.wizards.AbstractWizardWindow#initialiseFormControls()
+	 */
 	@Override
 	protected void initialiseFormControls() {
 		setFormLayout(new FormLayout(new ColumnSpec[] {
@@ -133,6 +148,9 @@ public class NewProjectWizardWindow extends AbstractWizardWindow implements IPro
 		addFormControl(chckbxPreloadMetricMeasurements, "4, 10");
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.swing.wizards.AbstractWizardWindow#actionPerformed(java.awt.event.ActionEvent)
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (btnBrowseSourceRootDir == e.getSource()) {
@@ -161,6 +179,9 @@ public class NewProjectWizardWindow extends AbstractWizardWindow implements IPro
 		super.actionPerformed(e);
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.swing.wizards.AbstractWizardWindow#validateFormControls()
+	 */
 	@Override
 	protected boolean validateFormControls() {
 		if (	// validate project name text length
@@ -175,6 +196,9 @@ public class NewProjectWizardWindow extends AbstractWizardWindow implements IPro
 		return false;
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.swing.wizards.AbstractWizardWindow#lockFormControls()
+	 */
 	@Override
 	protected void lockFormControls() {
 		txtProjectName.setEnabled(false);
@@ -182,6 +206,9 @@ public class NewProjectWizardWindow extends AbstractWizardWindow implements IPro
 		btnPerformAction.setEnabled(false);
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.swing.wizards.AbstractWizardWindow#unlockFormControls()
+	 */
 	@Override
 	protected void unlockFormControls() {
 		txtProjectName.setEnabled(true);
@@ -189,12 +216,20 @@ public class NewProjectWizardWindow extends AbstractWizardWindow implements IPro
 		refreshActionable();
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.swing.wizards.AbstractWizardWindow#performAction()
+	 */
 	@Override
 	protected boolean performAction() throws Exception {
 		loadJavaCodeBase(selectedSourceRootDir);
 		return true;
 	}
 	
+	/**
+	 * Browse source root directory select.
+	 *
+	 * @return the file
+	 */
 	private File browseSourceRootDirectorySelect() {
 		JFileChooser fc = new JFileChooser();
 		fc.setDialogTitle("Browse for a directory");
@@ -206,6 +241,11 @@ public class NewProjectWizardWindow extends AbstractWizardWindow implements IPro
 		return null;
 	}
 	
+	/**
+	 * Browse an additional classpath directory.
+	 *
+	 * @return the file[]
+	 */
 	private File[] browseClasspathSelect() {
 		JFileChooser fc = new JFileChooser();
 		fc.setDialogTitle("Add an additional classpath (directory or individual .jars)");
@@ -232,6 +272,12 @@ public class NewProjectWizardWindow extends AbstractWizardWindow implements IPro
 		return null;
 	}
 	
+	/**
+	 * Load java code base.
+	 *
+	 * @param selectedDirectory the selected directory
+	 * @throws Exception the exception
+	 */
 	private void loadJavaCodeBase(File selectedDirectory) throws Exception {
 		
 		final ProjectModel project = new ProjectModel(txtProjectName.getText());
@@ -269,25 +315,40 @@ public class NewProjectWizardWindow extends AbstractWizardWindow implements IPro
 		workerThread.start();
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.IProgramSourceObserver#notifyRootNodeCount(int)
+	 */
 	@Override
 	public void notifyRootNodeCount(int rootNodes) {
 		progressBar.setMaximum(rootNodes);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.IProgramSourceObserver#notifyRootNodeProcessing(int, java.lang.String)
+	 */
 	@Override
 	public void notifyRootNodeProcessing(int rootNode, String name) {
 		setProgramStatus("Processing " + name + "...", false, rootNode);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.IProgramSourceObserver#notifyRootNodesProcessed()
+	 */
 	@Override
 	public void notifyRootNodesProcessed() {
 		setProgramStatus("Preparing to post-process elements...", true, 0);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.IProgramSourceObserver#notifyFindClass(org.lukep.javavis.program.generic.models.ClassModel)
+	 */
 	@Override
 	public void notifyFindClass(ClassModel clazz) {
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.IProgramSourceObserver#notifyFindMethod(org.lukep.javavis.program.generic.models.MethodModel)
+	 */
 	@Override
 	public void notifyFindMethod(MethodModel method) {
 	}

@@ -1,5 +1,5 @@
 /*
- * VisualisationConfigurationPanel.java (JMetricVis)
+ * VisualisationConfigurationPanel.java (JQualityVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
 package org.lukep.javavis.ui.swing.configPanes;
@@ -21,6 +21,9 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 
+/**
+ * A configuration panel implementation for Visualisation objects.
+ */
 public class VisualisationConfigurationPanel extends AbstractConfigurationPanel {
 	
 	private static final String UNSAVED_ENTITY_TITLE = "New Visualisation [Unsaved]";
@@ -34,10 +37,18 @@ public class VisualisationConfigurationPanel extends AbstractConfigurationPanel 
 	private JTextField txtIVisualiserVisitorClass;
 	private JTextField txtArguments;
 	
+	/**
+	 * Instantiates a new visualisation configuration panel.
+	 *
+	 * @param uiMain the ui main
+	 */
 	public VisualisationConfigurationPanel(UIMain uiMain) {
 		super(uiMain, UNSAVED_ENTITY_TITLE, false);
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.swing.configPanes.AbstractConfigurationPanel#initialiseFormControls()
+	 */
 	@Override
 	protected void initialiseFormControls() {
 		setFormLayout(new FormLayout(new ColumnSpec[] {
@@ -114,6 +125,9 @@ public class VisualisationConfigurationPanel extends AbstractConfigurationPanel 
 		txtArguments.setColumns(10);
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.swing.configPanes.AbstractConfigurationPanel#reloadListModel()
+	 */
 	@Override
 	protected void reloadListModel() {
 		DefaultListModel listModel = getListModel();
@@ -124,6 +138,9 @@ public class VisualisationConfigurationPanel extends AbstractConfigurationPanel 
 				listModel.addElement(vis);
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.swing.configPanes.AbstractConfigurationPanel#getSelectedEntityName()
+	 */
 	@Override
 	protected String getSelectedEntityName() {
 		if (currentVis != null)
@@ -131,6 +148,9 @@ public class VisualisationConfigurationPanel extends AbstractConfigurationPanel 
 		return "";
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.swing.configPanes.AbstractConfigurationPanel#updateFormFields()
+	 */
 	@Override
 	protected void updateFormFields() {
 		setEntityTitle("Visualisation: " + currentVis.getName());
@@ -144,6 +164,9 @@ public class VisualisationConfigurationPanel extends AbstractConfigurationPanel 
 		txtArguments.setText(currentVis.getArguments());
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.swing.configPanes.AbstractConfigurationPanel#resetFormFields()
+	 */
 	@Override
 	protected void resetFormFields() {
 		setEntityTitle(UNSAVED_ENTITY_TITLE);
@@ -155,6 +178,9 @@ public class VisualisationConfigurationPanel extends AbstractConfigurationPanel 
 		txtArguments.setText(null);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.swing.configPanes.AbstractConfigurationPanel#setSelectedEntity(java.lang.Object)
+	 */
 	@Override
 	protected void setSelectedEntity(Object entity) {
 		if (entity instanceof Visualisation) {
@@ -168,6 +194,9 @@ public class VisualisationConfigurationPanel extends AbstractConfigurationPanel 
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.swing.configPanes.AbstractConfigurationPanel#saveCurrentEntity()
+	 */
 	@Override
 	protected boolean saveCurrentEntity() throws FormValidationException {
 		// validate the fields and create our new Visualisation
@@ -190,6 +219,9 @@ public class VisualisationConfigurationPanel extends AbstractConfigurationPanel 
 		return true;
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.swing.configPanes.AbstractConfigurationPanel#deleteCurrentEntity()
+	 */
 	@Override
 	protected void deleteCurrentEntity() {
 		if (currentVis != null) {
@@ -199,6 +231,9 @@ public class VisualisationConfigurationPanel extends AbstractConfigurationPanel 
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.swing.configPanes.AbstractConfigurationPanel#saveAllToSource()
+	 */
 	@Override
 	protected void saveAllToSource() throws Exception {
 		VisualisationRegistry.getInstance().saveAllVisualisations();

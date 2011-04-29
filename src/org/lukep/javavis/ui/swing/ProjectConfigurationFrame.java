@@ -34,6 +34,9 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 
+/**
+ * The Class ProjectConfigurationFrame.
+ */
 public class ProjectConfigurationFrame extends JFrame implements ActionListener, ChangeListener {
 	
 	private ProjectModel project;
@@ -56,6 +59,10 @@ public class ProjectConfigurationFrame extends JFrame implements ActionListener,
 
 	/**
 	 * Create the frame.
+	 *
+	 * @param parent the parent
+	 * @param uiInstance the ui instance
+	 * @param project the project
 	 */
 	public ProjectConfigurationFrame(Frame parent, UIMain uiInstance, ProjectModel project) {
 		setTitle("Project Configurator");
@@ -161,6 +168,9 @@ public class ProjectConfigurationFrame extends JFrame implements ActionListener,
 		pack();
 	}
 
+	/* (non-Javadoc)
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
@@ -175,6 +185,9 @@ public class ProjectConfigurationFrame extends JFrame implements ActionListener,
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see javax.swing.event.ChangeListener#stateChanged(javax.swing.event.ChangeEvent)
+	 */
 	@Override
 	public void stateChanged(ChangeEvent e) {
 		if (tabbedPane == e.getSource()

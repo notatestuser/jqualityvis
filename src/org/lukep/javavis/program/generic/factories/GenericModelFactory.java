@@ -1,5 +1,5 @@
 /*
- * CodeUnitInfoFactory.java (JMetricVis)
+ * GenericModelFactory.java (JQualityVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
 package org.lukep.javavis.program.generic.factories;
@@ -31,13 +31,27 @@ import com.sun.tools.javac.code.Symbol;
 import com.sun.tools.javac.code.Symbol.MethodSymbol;
 import com.sun.tools.javac.code.Symbol.VarSymbol;
 
+/**
+ * A factory for creating GenericModel objects.
+ */
 public class GenericModelFactory {
 
+	/** The Constant log. */
 	protected final static Logger log = 
 		Logger.getLogger(GenericModelFactory.class.getSimpleName());
 	
+	/** The method utils. */
 	private static ModelFactoryJavaMethodUtils methodUtils = new ModelFactoryJavaMethodUtils();
 	
+	/**
+	 * Creates a new GenericModel object.
+	 *
+	 * @param s the s
+	 * @param classTree the class tree
+	 * @param path the path
+	 * @param trees the trees
+	 * @return the class model
+	 */
 	public static ClassModel createClassModelFromJava(GenericModelFactoryState s, 
 			ClassTree classTree, TreePath path, Trees trees) {
 		
@@ -91,6 +105,15 @@ public class GenericModelFactory {
 		return newClassModel;
 	}
 	
+	/**
+	 * Creates a new GenericModel object.
+	 *
+	 * @param s the s
+	 * @param methodTree the method tree
+	 * @param path the path
+	 * @param trees the trees
+	 * @return the method model
+	 */
 	public static MethodModel createMethodModelFromJava(GenericModelFactoryState s, 
 			MethodTree methodTree, TreePath path, Trees trees) {
 		
@@ -145,6 +168,15 @@ public class GenericModelFactory {
 		return newMethodModel;
 	}
 	
+	/**
+	 * Creates a new GenericModel object.
+	 *
+	 * @param s the s
+	 * @param variableTree the variable tree
+	 * @param path the path
+	 * @param trees the trees
+	 * @return the variable model
+	 */
 	public static VariableModel createVariableInfoFromJava(GenericModelFactoryState s,
 			VariableTree variableTree, TreePath path, Trees trees) {
 		
@@ -186,6 +218,14 @@ public class GenericModelFactory {
 		return newVariableModel;
 	}
 	
+	/**
+	 * Gets the or create package.
+	 *
+	 * @param packageName the package name
+	 * @param pkgMap the pkg map
+	 * @param s the s
+	 * @return the or create package
+	 */
 	private static PackageModel getOrCreatePackage(String packageName, 
 			Map<String, PackageModel> pkgMap, GenericModelFactoryState s) {
 		
@@ -230,10 +270,23 @@ public class GenericModelFactory {
 		return curPackage;
 	}
 	
+	/**
+	 * Gets the or create package.
+	 *
+	 * @param packageName the package name
+	 * @param s the s
+	 * @return the or create package
+	 */
 	private static PackageModel getOrCreatePackage(String packageName, GenericModelFactoryState s) {
 		return getOrCreatePackage(packageName, s.programStore.getPackageMap(), s);
 	}
 	
+	/**
+	 * Sets the java modifiers.
+	 *
+	 * @param modifiers the modifiers
+	 * @param model the model
+	 */
 	private static void setJavaModifiers(String modifiers, IGenericModelNode model) {
 		
 		if (modifiers.contains(Modifier.PUBLIC.toString()))

@@ -1,5 +1,5 @@
 /*
- * CircleView.java (JMetricVis)
+ * CircleView.java (JQualityVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
 package org.lukep.javavis.visualisation.views;
@@ -49,6 +49,9 @@ import com.mxgraph.util.mxEventObject;
 import com.mxgraph.util.mxEventSource.mxIEventListener;
 import com.mxgraph.view.mxGraph;
 
+/**
+ * The Class CircleView.
+ */
 public class CircleView extends AbstractVisualisationView {
 
 	private static final double MXGRAPH_VERTEX_WIDTH = 150;
@@ -61,6 +64,9 @@ public class CircleView extends AbstractVisualisationView {
 	private static final float  MXGRAPH_EDGE_WIDTH_MAX_PX = 40;
 	private static final String MXGRAPH_EDGE_FONTCOLOUR = "#000000";
 	
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.visualisation.views.AbstractVisualisationView#visit(org.lukep.javavis.visualisation.visualisers.mxGraphVisualiser, org.lukep.javavis.ui.swing.WorkspaceContext, com.mxgraph.swing.mxGraphComponent)
+	 */
 	@Override
 	public void visit(mxGraphVisualiser visualiser,
 			WorkspaceContext wspContext, mxGraphComponent graphComponent) {
@@ -147,6 +153,9 @@ public class CircleView extends AbstractVisualisationView {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.visualisation.views.AbstractVisualisationView#visit(org.lukep.javavis.visualisation.visualisers.PrefuseVisualiser, org.lukep.javavis.ui.swing.WorkspaceContext, prefuse.Display)
+	 */
 	@Override
 	public void visit(PrefuseVisualiser visualiser, WorkspaceContext wspContext,
 			Display display) {

@@ -1,5 +1,5 @@
 /*
- * MetricCalculatorDialog.java (JMetricVis)
+ * MetricCalculatorDialog.java (JQualityVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
 package org.lukep.javavis.ui.swing;
@@ -34,6 +34,9 @@ import org.lukep.javavis.program.generic.models.Relationship;
 import org.lukep.javavis.program.generic.models.VariableModel;
 import org.lukep.javavis.thirdparty.WrapLayout;
 
+/**
+ * The Class MetricCalculatorDialog.
+ */
 public class MetricCalculatorDialog extends JFrame implements ActionListener {
 
 	private WorkspacePane workspace;
@@ -41,15 +44,19 @@ public class MetricCalculatorDialog extends JFrame implements ActionListener {
 	private Set<String> targets = new HashSet<String>();
 	
 	List<MetricAttribute> metrics = new Vector<MetricAttribute>();
+	
 	Set<String> metricInternalNameExclusions = new HashSet<String>();
 	
 	private JButton btnCalculate;
 	private JEditorPane epOutput;
+	
 	private JPanel pnlNorth;
 	private JPanel pnlMetrics;
 	
 	/**
 	 * Create the dialog.
+	 *
+	 * @param workspace the workspace
 	 */
 	public MetricCalculatorDialog(WorkspacePane workspace) {
 		setTitle("Batch Metric Calculator for " + workspace.getContext().getModelStore());
@@ -84,6 +91,11 @@ public class MetricCalculatorDialog extends JFrame implements ActionListener {
 		fillMetricsPanel(pnlMetrics);
 	}
 	
+	/**
+	 * Fill target panel.
+	 *
+	 * @param pnlTargets the pnl targets
+	 */
 	private void fillTargetPanel(JPanel pnlTargets) {
 		final Set<String> targets = MetricRegistry.getInstance().getSupportedMetricTargets();
 		JCheckBox cbx;
@@ -105,6 +117,11 @@ public class MetricCalculatorDialog extends JFrame implements ActionListener {
 		}
 	}
 	
+	/**
+	 * Fill metrics panel.
+	 *
+	 * @param pnlMetrics the pnl metrics
+	 */
 	private void fillMetricsPanel(JPanel pnlMetrics) {
 		JCheckBox cbx;
 		for (MetricAttribute m : MetricRegistry.getInstance().getMetricAttributes()) {
@@ -124,6 +141,9 @@ public class MetricCalculatorDialog extends JFrame implements ActionListener {
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
@@ -134,6 +154,9 @@ public class MetricCalculatorDialog extends JFrame implements ActionListener {
 		}
 	}
 	
+	/**
+	 * Display calculations.
+	 */
 	private void displayCalculations() {
 		metrics.clear();
 		

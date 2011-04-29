@@ -1,5 +1,5 @@
 /*
- * JavaSourceLoaderThread.java (JMetricVis)
+ * JavaSourceLoaderThread.java (JQualityVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
 package org.lukep.javavis.program.java;
@@ -25,27 +25,40 @@ import org.lukep.javavis.ui.IProgramSourceObserver;
 import org.lukep.javavis.util.io.FileSystemUtils;
 import org.lukep.javavis.util.io.IFileSystemScanObserver;
 
+/**
+ * Following the construction of a list of "compilation units", the JavaSourceLoaderThread adds a custom 
+ * JavaCodeProcessor (an implementation of AbstractProcessor) to the compiler’s CompilationTask. 
+ * When the task is executed, the JavaCodeTreeVisitor scans the parsed tokens and calls methods in the GenericModelFactory 
+ * to produce descendants of AbstractModel.
+ */
 public class JavaSourceLoaderThread implements ISourceLoaderThread {
 
 	static final String[] JAVA_SOURCE_EXTENSIONS = { "java" };
 	
 	private StandardJavaFileManager fileManager;
 	private DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
-	
 	private ProjectModel programStore;
 	private Vector<IProgramSourceObserver> observers = new Vector<IProgramSourceObserver>();
-	
 	private File selectedDirectory;
 	private int directoryCount;
-	
 	private List<String> compilerOptions;
 	
+	/**
+	 * Instantiates a new JavaSourceLoaderThread.
+	 *
+	 * @param selectedDirectory the selected directory
+	 * @param programStore the program store
+	 * @param compilerOptions the compiler options
+	 */
 	public JavaSourceLoaderThread(File selectedDirectory, ProjectModel programStore, List<String> compilerOptions) {
 		this.selectedDirectory = selectedDirectory;
 		this.programStore = programStore;
 		this.compilerOptions = compilerOptions;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Runnable#run()
+	 */
 	@Override
 	public void run() {
 		// initialise compiler and file manager
@@ -89,16 +102,27 @@ public class JavaSourceLoaderThread implements ISourceLoaderThread {
 		statusFinished();
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.program.ISourceLoaderThread#notifyStatusChange(java.lang.String)
+	 */
 	@Override
 	public void notifyStatusChange(String message) {
 		// override in caller
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.program.ISourceLoaderThread#statusFinished()
+	 */
 	@Override
 	public void statusFinished() {
 		// override in caller
 	}
 	
+	/**
+	 * Adds an observer wishing to be notified about status updates.
+	 *
+	 * @param observer the observer to add
+	 */
 	public void addObserver(IProgramSourceObserver observer) {
 		observers.add(observer);
 	}

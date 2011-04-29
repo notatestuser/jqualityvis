@@ -1,5 +1,5 @@
 /*
- * JavaCodeTreeVisitor.java (JMetricVis)
+ * JavaCodeTreeVisitor.java (JQualityVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
 package org.lukep.javavis.program.java;
@@ -21,11 +21,23 @@ import com.sun.source.util.TreePath;
 import com.sun.source.util.TreePathScanner;
 import com.sun.source.util.Trees;
 
+/**
+ * The Class JavaCodeTreeVisitor.
+ */
 public class JavaCodeTreeVisitor extends TreePathScanner<Object, Trees> {
 
+	/** The observers. */
 	protected Vector<IProgramSourceObserver> observers;
+	
+	/** The GenericModelFactory state object. */
 	protected GenericModelFactoryState codeUnitState;
 	
+	/**
+	 * Instantiates a new java code tree visitor.
+	 *
+	 * @param observers the observers
+	 * @param programStore the program store
+	 */
 	public JavaCodeTreeVisitor(Vector<IProgramSourceObserver> observers,
 			ProjectModel programStore) {
 		super();
@@ -34,6 +46,9 @@ public class JavaCodeTreeVisitor extends TreePathScanner<Object, Trees> {
 		this.codeUnitState = new GenericModelFactoryState(programStore);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sun.source.util.TreeScanner#visitClass(com.sun.source.tree.ClassTree, java.lang.Object)
+	 */
 	@Override
 	public Object visitClass(ClassTree classTree, Trees trees) {
 		TreePath path = getCurrentPath();
@@ -49,6 +64,9 @@ public class JavaCodeTreeVisitor extends TreePathScanner<Object, Trees> {
 		return super.visitClass(classTree, trees);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sun.source.util.TreeScanner#visitMethod(com.sun.source.tree.MethodTree, java.lang.Object)
+	 */
 	@Override
 	public Object visitMethod(MethodTree methodTree, Trees trees) {
 		TreePath path = getCurrentPath();
@@ -62,6 +80,9 @@ public class JavaCodeTreeVisitor extends TreePathScanner<Object, Trees> {
 		return super.visitMethod(methodTree, trees);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sun.source.util.TreeScanner#visitVariable(com.sun.source.tree.VariableTree, java.lang.Object)
+	 */
 	@Override
 	public Object visitVariable(VariableTree variableTree, Trees trees) {
 		TreePath path = getCurrentPath();

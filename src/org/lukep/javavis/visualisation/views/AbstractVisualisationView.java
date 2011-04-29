@@ -1,5 +1,5 @@
 /*
- * AbstractVisualisationView.java (JMetricVis)
+ * AbstractVisualisationView.java (JQualityVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
 package org.lukep.javavis.visualisation.views;
@@ -28,11 +28,19 @@ import com.approximatrix.charting.model.ObjectChartDataModel;
 import com.approximatrix.charting.swing.ExtendedChartPanel;
 import com.mxgraph.swing.mxGraphComponent;
 
+/**
+ * Represents a visualisation view - as in a class that implements IVisualiserVisitor. 
+ * Sub-classes can selectively implement the visualisers they'd like to without having to pull in 
+ * the whole interface.
+ */
 public class AbstractVisualisationView implements IVisualiserVisitor {
 
 	private static final String UNSUPPORTED_VISUALISATION_EXCEPTION = 
 		"This Visualisation is unsupported by the current Workspace.";
 	
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.visualisation.views.IVisualiserVisitor#visit(org.lukep.javavis.visualisation.visualisers.mxGraphVisualiser, org.lukep.javavis.ui.swing.WorkspaceContext, com.mxgraph.swing.mxGraphComponent)
+	 */
 	@Override
 	public void visit(mxGraphVisualiser visualiser, WorkspaceContext wspContext, 
 			mxGraphComponent graphComponent) {
@@ -41,6 +49,9 @@ public class AbstractVisualisationView implements IVisualiserVisitor {
 		throw new UnsupportedOperationException(UNSUPPORTED_VISUALISATION_EXCEPTION);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.visualisation.views.IVisualiserVisitor#visit(org.lukep.javavis.visualisation.visualisers.PrefuseVisualiser, org.lukep.javavis.ui.swing.WorkspaceContext, prefuse.Display)
+	 */
 	@Override
 	public void visit(PrefuseVisualiser visualiser, WorkspaceContext wspContext, 
 			Display display) {
@@ -49,6 +60,9 @@ public class AbstractVisualisationView implements IVisualiserVisitor {
 		throw new UnsupportedOperationException(UNSUPPORTED_VISUALISATION_EXCEPTION);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.visualisation.views.IVisualiserVisitor#visit(org.lukep.javavis.visualisation.visualisers.Openchart2Visualiser, org.lukep.javavis.ui.swing.WorkspaceContext)
+	 */
 	@Override
 	public ExtendedChartPanel visit(Openchart2Visualiser visualiser, WorkspaceContext wspContext) {
 		
@@ -56,6 +70,13 @@ public class AbstractVisualisationView implements IVisualiserVisitor {
 		throw new UnsupportedOperationException(UNSUPPORTED_VISUALISATION_EXCEPTION);
 	}
 	
+	/**
+	 * Gets the filtered selection classes.
+	 *
+	 * @param project the project
+	 * @param subjects the subject nodes
+	 * @return the list of classes that were present in the selection
+	 */
 	protected static Map<IGenericModelNode, ClassModel[]> getFilteredClasses(ProjectModel project, 
 			IGenericModelNode[] subjects) {
 		
@@ -83,6 +104,12 @@ public class AbstractVisualisationView implements IVisualiserVisitor {
 		return nodeChildClasses;
 	}
 	
+	/**
+	 * Gets a collection of all of the classes in the map's arrays.
+	 *
+	 * @param nodeChildClasses the node child classes
+	 * @return the all classes in filter
+	 */
 	protected static List<ClassModel> getAllClassesInFilter(Map<IGenericModelNode, ClassModel[]> nodeChildClasses) {
 		// compile a collection of all of the classes in the map's arrays
 		List<ClassModel> allClasses = new Vector<ClassModel>();
@@ -93,6 +120,13 @@ public class AbstractVisualisationView implements IVisualiserVisitor {
 		return allClasses;
 	}
 	
+	/**
+	 * Gets an ObjectChartDataModel with a single series containing all classes.
+	 *
+	 * @param classes the classes
+	 * @param metric the metric to measure
+	 * @return the object chart data model
+	 */
 	protected static ObjectChartDataModel getSingleSeriesObjectChartDataModel(
 			Collection<ClassModel> classes, MetricAttribute metric) {
 		
@@ -115,6 +149,13 @@ public class AbstractVisualisationView implements IVisualiserVisitor {
 		return new ObjectChartDataModel(data, columns, new String[] { metric.getInternalName() });
 	}
 	
+	/**
+	 * Gets an ObjectChartDataModel with series for each individual container.
+	 *
+	 * @param nodeChildClasses the node child classes
+	 * @param metric the metric
+	 * @return the container series object chart data model
+	 */
 	protected static ObjectChartDataModel getContainerSeriesObjectChartDataModel(
 			Map<IGenericModelNode, ClassModel[]> nodeChildClasses, MetricAttribute metric) {
 		
@@ -167,6 +208,13 @@ public class AbstractVisualisationView implements IVisualiserVisitor {
 		return new ObjectChartDataModel(dataSets, columnsVec.toArray());
 	}
 	
+	/**
+	 * Gets an ObjectChartDataModel with a series for each individual class.
+	 *
+	 * @param nodeChildClasses the node child classes
+	 * @param metric the metric
+	 * @return the class series object chart data model
+	 */
 	protected static ObjectChartDataModel getClassSeriesObjectChartDataModel(
 			Map<IGenericModelNode, ClassModel[]> nodeChildClasses, MetricAttribute metric) {
 		

@@ -1,5 +1,5 @@
 /*
- * PrefuseVisualiser.java (JMetricVis)
+ * PrefuseVisualiser.java (JQualityVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
 package org.lukep.javavis.visualisation.visualisers;
@@ -28,6 +28,9 @@ import prefuse.visual.EdgeItem;
 import prefuse.visual.NodeItem;
 import prefuse.visual.VisualItem;
 
+/**
+ * The Class PrefuseVisualiser.
+ */
 public class PrefuseVisualiser extends AbstractVisualiser {
 
 	private static final int BACKGROUND_COLOR_RGB = 0xFFF9FFFB;
@@ -38,12 +41,21 @@ public class PrefuseVisualiser extends AbstractVisualiser {
 	
 	private NodeItem currentSelectedNode;
 	
+	/**
+	 * Instantiates a new prefuse visualiser.
+	 *
+	 * @param wspContext the wsp context
+	 * @throws Exception the exception
+	 */
 	public PrefuseVisualiser(WorkspaceContext wspContext)
 			throws Exception {
 
 		super(wspContext);
 	}
 	
+	/**
+	 * Bind prefuse events.
+	 */
 	@SuppressWarnings("unchecked")
 	private void bindPrefuseEvents() {
 		display.addControlListener(new ZoomToFitControl());
@@ -141,6 +153,9 @@ public class PrefuseVisualiser extends AbstractVisualiser {
 		});
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.visualisation.visualisers.AbstractVisualiser#acceptVisualisation(org.lukep.javavis.visualisation.views.IVisualiserVisitor)
+	 */
 	@Override
 	public JComponent acceptVisualisation(IVisualiserVisitor visitor) {
 		display = new Display();
@@ -155,6 +170,9 @@ public class PrefuseVisualiser extends AbstractVisualiser {
 		return display;
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.visualisation.visualisers.AbstractVisualiser#setScale(double)
+	 */
 	@Override
 	public void setScale(double scale) {
 		display.zoom(display.getLocation(), scale);

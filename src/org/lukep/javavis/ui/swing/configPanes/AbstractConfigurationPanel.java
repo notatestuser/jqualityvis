@@ -1,5 +1,5 @@
 /*
- * ConfigurationPanel.java (JMetricVis)
+ * AbstractConfigurationPanel.java (JQualityVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
 package org.lukep.javavis.ui.swing.configPanes;
@@ -35,25 +35,30 @@ import org.lukep.javavis.ui.UIMain;
 import org.lukep.javavis.util.FormValidationException;
 import org.lukep.javavis.util.JavaVisConstants;
 
+/**
+ * The Class AbstractConfigurationPanel.
+ */
 abstract class AbstractConfigurationPanel extends JPanel implements 
 		ActionListener, ListDataListener, ListSelectionListener {
 	
 	private UIMain uiMain;
-	
 	private DefaultListModel listModel;
-	
 	private JList listEntities;
 	private JLabel lblEntitiesCount;
 	private JButton btnSaveToSource;
 	private JButton btnNewEntity;
-	
 	private JLabel lblEntityTitle;
-	
 	private JPanel pnlForm;
-	
 	protected JButton btnDeleteEntity;
 	protected JButton btnSaveEntity;
 	
+	/**
+	 * Instantiates a new abstract configuration panel.
+	 *
+	 * @param uiMain the ui main
+	 * @param unsavedEntityName the unsaved entity name
+	 * @param deferReload the defer reload
+	 */
 	public AbstractConfigurationPanel(UIMain uiMain, String unsavedEntityName, boolean deferReload) {
 		setLayout(new BorderLayout(0, 0));
 		
@@ -65,6 +70,11 @@ abstract class AbstractConfigurationPanel extends JPanel implements
 			reloadListModel();
 	}
 	
+	/**
+	 * Initialise.
+	 *
+	 * @param unsavedEntityName the unsaved entity name
+	 */
 	private void initialise(String unsavedEntityName) {
 		JPanel leftPane = new JPanel();
 		add(leftPane, BorderLayout.WEST);
@@ -141,12 +151,18 @@ abstract class AbstractConfigurationPanel extends JPanel implements
 		mainTitlePane.add(lblEntityTitle);
 	}
 	
+	/* (non-Javadoc)
+	 * @see javax.swing.JComponent#setVisible(boolean)
+	 */
 	@Override
 	public void setVisible(boolean arg0) {
 		System.out.println("setVisible");
 		super.setVisible(arg0);
 	}
 
+	/* (non-Javadoc)
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (btnNewEntity == e.getSource()) {
@@ -185,19 +201,31 @@ abstract class AbstractConfigurationPanel extends JPanel implements
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see javax.swing.event.ListDataListener#contentsChanged(javax.swing.event.ListDataEvent)
+	 */
 	@Override
 	public void contentsChanged(ListDataEvent e) {
 	}
 
+	/* (non-Javadoc)
+	 * @see javax.swing.event.ListDataListener#intervalAdded(javax.swing.event.ListDataEvent)
+	 */
 	@Override
 	public void intervalAdded(ListDataEvent e) {
 		lblEntitiesCount.setText(listEntities.getModel().getSize() + " item(s) in program memory");
 	}
 
+	/* (non-Javadoc)
+	 * @see javax.swing.event.ListDataListener#intervalRemoved(javax.swing.event.ListDataEvent)
+	 */
 	@Override
 	public void intervalRemoved(ListDataEvent e) {
 	}
 
+	/* (non-Javadoc)
+	 * @see javax.swing.event.ListSelectionListener#valueChanged(javax.swing.event.ListSelectionEvent)
+	 */
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 
@@ -206,34 +234,102 @@ abstract class AbstractConfigurationPanel extends JPanel implements
 			setSelectedEntity(listEntities.getSelectedValue());
 	}
 	
+	/**
+	 * Gets the list model.
+	 *
+	 * @return the list model
+	 */
 	protected DefaultListModel getListModel() {
 		return listModel;
 	}
 	
+	/**
+	 * Sets the entity title.
+	 *
+	 * @param title the new entity title
+	 */
 	protected void setEntityTitle(String title) {
 		lblEntityTitle.setText(title);
 	}
 	
+	/**
+	 * Sets the form layout.
+	 *
+	 * @param layout the new form layout
+	 */
 	protected void setFormLayout(LayoutManager layout) {
 		pnlForm.setLayout(layout);
 	}
 	
+	/**
+	 * Adds the form control.
+	 *
+	 * @param comp the comp
+	 * @param constraints the constraints
+	 */
 	protected void addFormControl(Component comp, Object constraints) {
 		pnlForm.add(comp, constraints);
 	}
 	
+	/**
+	 * Hide save to source button.
+	 */
 	protected void hideSaveToSourceButton() {
 		btnSaveToSource.setVisible(false);
 	}
 	
+	/**
+	 * Reload list model.
+	 */
 	protected abstract void reloadListModel();
+	
+	/**
+	 * Initialise form controls.
+	 */
 	protected abstract void initialiseFormControls();
+	
+	/**
+	 * Gets the selected entity name.
+	 *
+	 * @return the selected entity name
+	 */
 	protected abstract String getSelectedEntityName();
+	
+	/**
+	 * Update form fields.
+	 */
 	protected abstract void updateFormFields();
+	
+	/**
+	 * Reset form fields.
+	 */
 	protected abstract void resetFormFields();
+	
+	/**
+	 * Sets the selected entity.
+	 *
+	 * @param entity the new selected entity
+	 */
 	protected abstract void setSelectedEntity(Object entity);
+	
+	/**
+	 * Save current entity.
+	 *
+	 * @return true, if successful
+	 * @throws FormValidationException the form validation exception
+	 */
 	protected abstract boolean saveCurrentEntity() throws FormValidationException;
+	
+	/**
+	 * Delete current entity.
+	 */
 	protected abstract void deleteCurrentEntity();
+	
+	/**
+	 * Save all to source.
+	 *
+	 * @throws Exception the exception
+	 */
 	protected abstract void saveAllToSource() throws Exception;
 	
 }

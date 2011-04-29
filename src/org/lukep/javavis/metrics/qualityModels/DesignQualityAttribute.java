@@ -1,5 +1,5 @@
 /*
- * DesignQualityAttribute.java (JMetricVis)
+ * DesignQualityAttribute.java (JQualityVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
 package org.lukep.javavis.metrics.qualityModels;
@@ -16,15 +16,27 @@ import org.lukep.javavis.metrics.MetricMeasurement;
 import org.lukep.javavis.metrics.MetricRegistry;
 import org.lukep.javavis.util.JavaVisConstants;
 
+/**
+ * The Class DesignQualityAttribute.
+ */
 public class DesignQualityAttribute extends MetricAttribute {
 	
 	private static final String ATTRIBUTE_METRIC_TYPE = "WeightedClass";
+	
 	private static final String[] ATTRIBUTE_METRIC_APPLIES_TO = { 
 		//JavaVisConstants.METRIC_APPLIES_TO_PROJCT, 
 		JavaVisConstants.METRIC_APPLIES_TO_CLASS };
 	
+	/** The weighted metrics. */
 	private Collection<WeightedMetricFactor> weightedMetrics;
 	
+	/**
+	 * Instantiates a new design quality attribute.
+	 *
+	 * @param qm the qm
+	 * @param sourceAttribute the source attribute
+	 * @param registry the registry
+	 */
 	public DesignQualityAttribute(QualityModel qm, 
 			DesignQualityAttributes.DesignQualityAttribute sourceAttribute, MetricRegistry registry) {
 		
@@ -53,6 +65,9 @@ public class DesignQualityAttribute extends MetricAttribute {
 		setDescription(sb.toString());
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.metrics.MetricAttribute#measureTarget(org.lukep.javavis.metrics.IMeasurableNode)
+	 */
 	@Override
 	public MetricMeasurement measureTarget(IMeasurableNode target) {
 
@@ -91,6 +106,11 @@ public class DesignQualityAttribute extends MetricAttribute {
 		return null;
 	}
 
+	/**
+	 * Gets the weighted metrics.
+	 *
+	 * @return the weighted metrics
+	 */
 	public Collection<WeightedMetricFactor> getWeightedMetrics() {
 		return weightedMetrics;
 	}

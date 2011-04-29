@@ -1,5 +1,5 @@
 /*
- * HeaderLabel.java (JMetricVis)
+ * HeaderLabel.java (JQualityVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
 package org.lukep.javavis.ui.swing;
@@ -14,9 +14,18 @@ import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.border.EtchedBorder;
 
+/**
+ * Draws a nice looking header on the top of panes in the UI. E.g. "Project Explorer" and "Quality Analysis".
+ */
 @SuppressWarnings("serial")
 public class HeaderLabel extends JLabel {
 
+	/**
+	 * Instantiates a new header label.
+	 *
+	 * @param text the text to show as the heading
+	 * @param icon the icon to show on the left of the heading
+	 */
 	public HeaderLabel(String text, Icon icon) {
 		super(text);
 
@@ -31,6 +40,9 @@ public class HeaderLabel extends JLabel {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
+	 */
 	@Override
 	protected void paintComponent(Graphics g) {
 

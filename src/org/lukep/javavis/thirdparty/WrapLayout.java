@@ -1,4 +1,6 @@
 /*
+ * THIS IS A THIRD PARTY SOURCE FILE FROM A WEB-BASED LOCATION
+ * 
  * Author: Rob Camick, Java Tips Weblog
  * File sourced from http://tips4java.wordpress.com/2008/11/06/wrap-layout/
  */
@@ -18,8 +20,6 @@ import javax.swing.SwingUtilities;
  */
 public class WrapLayout extends FlowLayout
 {
-	private Dimension preferredLayoutSize;
-
 	/**
 	* Constructs a new <code>WrapLayout</code> with a left
 	* alignment and a default 5-unit horizontal and vertical gap.

@@ -1,5 +1,5 @@
 /*
- * MetricPreloader.java (JMetricVis)
+ * MetricPreloader.java (JQualityVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
 package org.lukep.javavis.metrics;
@@ -19,8 +19,18 @@ import org.lukep.javavis.program.generic.models.ProjectModel;
 import org.lukep.javavis.program.generic.models.Relationship;
 import org.lukep.javavis.program.generic.models.VariableModel;
 
+/**
+ * Helper class that pre-loads metric measurements to speed up the responsiveness of the user interface. A BoundedRangeModel
+ * is taken as a parameter so the status of the process can be shown to the user in real time.
+ */
 public class MetricPreloader {
 
+	/**
+	 * Preload metric measurements.
+	 *
+	 * @param project the project
+	 * @param progressModel the progress model
+	 */
 	public static void preloadMetricMeasurements(ProjectModel project, final BoundedRangeModel progressModel) {
 		
 		progressModel.setValueIsAdjusting(true);

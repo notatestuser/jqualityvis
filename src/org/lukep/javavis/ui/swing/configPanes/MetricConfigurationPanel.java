@@ -1,5 +1,5 @@
 /*
- * MetricConfigurationPanel.java (JMetricVis)
+ * MetricConfigurationPanel.java (JQualityVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
 package org.lukep.javavis.ui.swing.configPanes;
@@ -24,6 +24,9 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 
+/**
+ * The Class MetricConfigurationPanel.
+ */
 public class MetricConfigurationPanel extends AbstractConfigurationPanel {
 
 	private static final String UNSAVED_ENTITY_TITLE = "New Metric [Unsaved]";
@@ -38,17 +41,25 @@ public class MetricConfigurationPanel extends AbstractConfigurationPanel {
 	private JTextField txtAppliesTo;
 	private JTextField txtIMeasurableVisitorClass;
 	private JTextField txtArguments;
+	
 	private JSlider sldCold;
 	private JSlider sldHot;
-
+	
 	private JTextField txtColdBox;
-
 	private JTextField txtHotBox;
 	
+	/**
+	 * Instantiates a new metric configuration panel.
+	 *
+	 * @param uiMain the ui main
+	 */
 	public MetricConfigurationPanel(UIMain uiMain) {
 		super(uiMain, UNSAVED_ENTITY_TITLE, false);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.swing.configPanes.AbstractConfigurationPanel#reloadListModel()
+	 */
 	@Override
 	protected void reloadListModel() {
 		DefaultListModel listModel = getListModel();
@@ -61,6 +72,9 @@ public class MetricConfigurationPanel extends AbstractConfigurationPanel {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.swing.configPanes.AbstractConfigurationPanel#initialiseFormControls()
+	 */
 	@Override
 	protected void initialiseFormControls() {
 		setFormLayout(new FormLayout(new ColumnSpec[] {
@@ -203,6 +217,9 @@ public class MetricConfigurationPanel extends AbstractConfigurationPanel {
 		txtHotBox.setColumns(5);
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.swing.configPanes.AbstractConfigurationPanel#getSelectedEntityName()
+	 */
 	@Override
 	protected String getSelectedEntityName() {
 		if (currentMetric != null)
@@ -210,6 +227,9 @@ public class MetricConfigurationPanel extends AbstractConfigurationPanel {
 		return "";
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.swing.configPanes.AbstractConfigurationPanel#updateFormFields()
+	 */
 	@Override
 	protected void updateFormFields() {
 		setEntityTitle("Metric: " + currentMetric.getName());
@@ -240,6 +260,9 @@ public class MetricConfigurationPanel extends AbstractConfigurationPanel {
 		txtAppliesTo.setText(str.substring(0, str.length() - 1));
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.swing.configPanes.AbstractConfigurationPanel#resetFormFields()
+	 */
 	@Override
 	protected void resetFormFields() {
 		setEntityTitle(UNSAVED_ENTITY_TITLE);
@@ -257,6 +280,9 @@ public class MetricConfigurationPanel extends AbstractConfigurationPanel {
 		txtHotBox.setText("0");
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.swing.configPanes.AbstractConfigurationPanel#setSelectedEntity(java.lang.Object)
+	 */
 	@Override
 	protected void setSelectedEntity(Object entity) {
 		if (entity instanceof MetricAttribute) {
@@ -270,6 +296,9 @@ public class MetricConfigurationPanel extends AbstractConfigurationPanel {
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.swing.configPanes.AbstractConfigurationPanel#saveCurrentEntity()
+	 */
 	@Override
 	protected boolean saveCurrentEntity() throws FormValidationException {
 		try {
@@ -303,6 +332,9 @@ public class MetricConfigurationPanel extends AbstractConfigurationPanel {
 		return true;
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.swing.configPanes.AbstractConfigurationPanel#deleteCurrentEntity()
+	 */
 	@Override
 	protected void deleteCurrentEntity() {
 		if (currentMetric != null) {
@@ -312,6 +344,9 @@ public class MetricConfigurationPanel extends AbstractConfigurationPanel {
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.swing.configPanes.AbstractConfigurationPanel#saveAllToSource()
+	 */
 	@Override
 	protected void saveAllToSource() throws Exception {
 		MetricRegistry.getInstance().saveAllMetrics();

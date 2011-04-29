@@ -1,5 +1,5 @@
 /*
- * ChildCountVisitor.java (JMetricVis)
+ * ChildCountVisitor.java (JQualityVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
 package org.lukep.javavis.metrics.algorithms;
@@ -12,10 +12,17 @@ import org.lukep.javavis.metrics.MetricMeasurement;
 import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.ProjectModel;
 
+/**
+ * The Class ChildCountVisitor.
+ */
 public class ChildCountVisitor extends AbstractMeasurableVisitor {
 	
+	/** The children. */
 	private Set<ClassModel> children = new HashSet<ClassModel>();
 	
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.metrics.algorithms.AbstractMeasurableVisitor#visit(org.lukep.javavis.metrics.MetricAttribute, org.lukep.javavis.program.generic.models.ClassModel)
+	 */
 	@Override
 	public MetricMeasurement visit(MetricAttribute metric, ClassModel clazz) {
 
@@ -37,6 +44,9 @@ public class ChildCountVisitor extends AbstractMeasurableVisitor {
 		return new MetricMeasurement(clazz, metric, children.size());
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.metrics.algorithms.AbstractMeasurableVisitor#resetInstanceAttributes()
+	 */
 	@Override
 	public void resetInstanceAttributes() {
 		if (children.size() > 0)

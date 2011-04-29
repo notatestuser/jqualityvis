@@ -1,5 +1,5 @@
 /*
- * ModelSerializer.java (JMetricVis)
+ * ModelSerializer.java (JQualityVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
 package org.lukep.javavis.program.generic.helpers;
@@ -30,10 +30,23 @@ import org.lukep.javavis.util.JavaVisConstants;
 
 import com.thoughtworks.xstream.XStream;
 
+/**
+ * Serialises a project to file using XStreamer or Java's bog standard Serialization API. It can also GZIP
+ * stuff too. Cool!
+ */
 public class ModelSerializer {
 
 	public static final String XML_ROOT_ELEMENT_NAME = JavaVisConstants.APP_NAME + "ProjectFile";
 	
+	/**
+	 * Serialise a ProjectModel to file with boolean flags to indicate whether xml and/or gzip should be used.
+	 *
+	 * @param file the file
+	 * @param project the ProjectModel
+	 * @param xml xml flag
+	 * @param gzip gzip flag
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public static void serializeProjectToFile(File file, ProjectModel project, boolean xml, boolean gzip) 
 			throws IOException {
 		
@@ -56,6 +69,17 @@ public class ModelSerializer {
 		oos.close();
 	}
 	
+	/**
+	 * Load project from file.
+	 *
+	 * @param file the file
+	 * @param xml xml flag
+	 * @param gzip gzip flag
+	 * @param progress the progress model to use when tracking with a progressbar
+	 * @return the project model
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws ClassNotFoundException
+	 */
 	public static ProjectModel loadProjectFromFile(File file, boolean xml, boolean gzip, 
 			final BoundedRangeModel progress) throws IOException, ClassNotFoundException {
 		

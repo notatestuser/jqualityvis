@@ -1,5 +1,5 @@
 /*
- * FileSystemUtils.java (JMetricVis)
+ * FileSystemUtils.java (JQualityVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
 package org.lukep.javavis.util.io;
@@ -10,8 +10,20 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Queue;
 
+/**
+ * Contains the file system utilities utilised by JQualityVis.
+ */
 public final class FileSystemUtils {
 
+	/**
+	 * Recurse through a directory's sub-folders to produce a list of files whose extensions match the 
+	 * ones given in the extensions list.
+	 *
+	 * @param rootDirectory the root directory to scan
+	 * @param extensions the extensions to match
+	 * @param observer the observer to inform as to scan status
+	 * @return the list of files found
+	 */
 	public static ArrayList<File> listFilesRecursive(File rootDirectory, 
 			final String[] extensions, IFileSystemScanObserver observer) {
 		File currentDirectory;

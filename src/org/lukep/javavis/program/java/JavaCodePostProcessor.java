@@ -1,5 +1,5 @@
 /*
- * JavaCodePostProcessor.java (JMetricVis)
+ * JavaCodePostProcessor.java (JQualityVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
 package org.lukep.javavis.program.java;
@@ -9,6 +9,12 @@ import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.ProjectModel;
 import org.lukep.javavis.program.generic.models.VariableModel;
 
+/**
+ * Runs post-processing actions on the abstract program model tree. This is necessary 
+ * because we can't process hierarchies during the compilation process as we don't know about 
+ * the classes we haven't processed yet. When this code is executed, we're aware of these objects and
+ * are at liberty to calculate information about the inheritance tree.
+ */
 public class JavaCodePostProcessor {
 
 	private static final char     GENERIC_BRACE_CHAR           = '<';
@@ -17,15 +23,28 @@ public class JavaCodePostProcessor {
 	
 	private ProjectModel projectModel;
 
+	/**
+	 * Instantiates a new JavaCodePostProcessor.
+	 *
+	 * @param projectModel the project model
+	 */
 	public JavaCodePostProcessor(ProjectModel projectModel) {
 		super();
 		this.projectModel = projectModel;
 	}
 	
+	/**
+	 * Processes the class hierarchies in the ProjectModel we're working on. Statistics are calculated and 
+	 * accumulated in ClassAncestor objects.
+	 */
 	public void process() {
 		findClassHierarchies();
 	}
 	
+	/**
+	 * Finds the class hierarchies in the current ProjectModel. We can through each class in the model and 
+	 * call the findAncestorsRecursive() function to scan up the tree.
+	 */
 	private void findClassHierarchies() {
 		
 		for (ClassModel clazz : projectModel.getClassMap().values()) {
@@ -46,6 +65,15 @@ public class JavaCodePostProcessor {
 		}
 	}
 	
+	/**
+	 * Scans up a tree of ancestor classes recursively. One of two distinct possibilities can occur here - 
+	 * we either find a class that sits in the current project or we have to query Java's class-loader for it.
+	 * This method is able to build up statistical data for either types of class.
+	 *
+	 * @param superClassName the class's superclass that we're looking for
+	 * @param internalSuperClass the internal superclass name to use if we're already aware of the type object
+	 * @param clazz the ClassModel to dump statistics into
+	 */
 	@SuppressWarnings("rawtypes")
 	private void findAncestorsRecursive(String superClassName, 
 			Class internalSuperClass, ClassModel clazz) {

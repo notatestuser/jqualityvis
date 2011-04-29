@@ -29,13 +29,15 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 
+/**
+ * The project threshold configuration panel.
+ */
 public class ProjectThresholdConfigurationPanel extends
 		AbstractConfigurationPanel {
 	
 	private static final String UNSAVED_ENTITY_TITLE = "New Threshold [Unsaved]";
 
 	private ProjectModel project;
-	
 	private Collection<MetricAttribute> metrics;
 	
 	private MetricThreshold currentThres;
@@ -49,6 +51,12 @@ public class ProjectThresholdConfigurationPanel extends
 	private JSlider sldCold;
 	private JSlider sldHot;
 	
+	/**
+	 * Instantiates a new project threshold configuration panel.
+	 *
+	 * @param uiMain the ui main
+	 * @param project the project
+	 */
 	public ProjectThresholdConfigurationPanel(UIMain uiMain, ProjectModel project) {
 		super(uiMain, UNSAVED_ENTITY_TITLE, true); // defer reloading until we've got a project object set
 		hideSaveToSourceButton();
@@ -64,6 +72,9 @@ public class ProjectThresholdConfigurationPanel extends
 		setVisible(true);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.swing.configPanes.AbstractConfigurationPanel#reloadListModel()
+	 */
 	@Override
 	protected void reloadListModel() {
 		DefaultListModel listModel = getListModel();
@@ -73,6 +84,9 @@ public class ProjectThresholdConfigurationPanel extends
 			listModel.addElement(threshold);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.swing.configPanes.AbstractConfigurationPanel#initialiseFormControls()
+	 */
 	@Override
 	protected void initialiseFormControls() {
 		setFormLayout(new FormLayout(new ColumnSpec[] {
@@ -145,6 +159,9 @@ public class ProjectThresholdConfigurationPanel extends
 		txtHotValue.setColumns(5);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.swing.configPanes.AbstractConfigurationPanel#actionPerformed(java.awt.event.ActionEvent)
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (cmbMetric == e.getSource()) {
@@ -156,6 +173,9 @@ public class ProjectThresholdConfigurationPanel extends
 		super.actionPerformed(e);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.swing.configPanes.AbstractConfigurationPanel#getSelectedEntityName()
+	 */
 	@Override
 	protected String getSelectedEntityName() {
 		if (currentThres != null)
@@ -163,6 +183,9 @@ public class ProjectThresholdConfigurationPanel extends
 		return "";
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.swing.configPanes.AbstractConfigurationPanel#updateFormFields()
+	 */
 	@Override
 	protected void updateFormFields() {
 		txtName.setText(currentThres.getName());
@@ -174,6 +197,9 @@ public class ProjectThresholdConfigurationPanel extends
 		setCurrentThresholdValues(currentThres.getBound1(), currentThres.getBound2());
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.swing.configPanes.AbstractConfigurationPanel#resetFormFields()
+	 */
 	@Override
 	protected void resetFormFields() {
 		txtName.setText(null);
@@ -181,6 +207,9 @@ public class ProjectThresholdConfigurationPanel extends
 		setCurrentThresholdValues(0.0, 0.0);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.swing.configPanes.AbstractConfigurationPanel#setSelectedEntity(java.lang.Object)
+	 */
 	@Override
 	protected void setSelectedEntity(Object entity) {
 		if (entity instanceof MetricThreshold) {
@@ -194,6 +223,9 @@ public class ProjectThresholdConfigurationPanel extends
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.swing.configPanes.AbstractConfigurationPanel#saveCurrentEntity()
+	 */
 	@Override
 	protected boolean saveCurrentEntity() throws FormValidationException {
 		try {
@@ -213,6 +245,9 @@ public class ProjectThresholdConfigurationPanel extends
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.swing.configPanes.AbstractConfigurationPanel#deleteCurrentEntity()
+	 */
 	@Override
 	protected void deleteCurrentEntity() {
 		if (currentThres != null) {
@@ -221,12 +256,21 @@ public class ProjectThresholdConfigurationPanel extends
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.ui.swing.configPanes.AbstractConfigurationPanel#saveAllToSource()
+	 */
 	@Override
 	protected void saveAllToSource() throws Exception {
 		// TODO Auto-generated method stub
 
 	}
 	
+	/**
+	 * Sets the current threshold values.
+	 *
+	 * @param cold the cold
+	 * @param hot the hot
+	 */
 	private void setCurrentThresholdValues(double cold, double hot) {
 		// set slider, text boxes
 		sldCold.setValue((int) cold);

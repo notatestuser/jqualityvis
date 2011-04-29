@@ -1,5 +1,5 @@
 /*
- * MetricRegistry.java (JMetricVis)
+ * MetricRegistry.java (JQualityVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
 package org.lukep.javavis.metrics;
@@ -26,6 +26,13 @@ import org.lukep.javavis.program.generic.models.ProjectModel;
 import org.lukep.javavis.util.JavaVisConstants;
 import org.lukep.javavis.util.config.ConfigurationManager;
 
+/**
+ * The MetricRegistry is a singleton that stores all of the MetricAttributes and cached
+ * MetricMeasurements in the program's memory.
+ * 
+ * @see MetricAttribute
+ * @see MetricMeasurement
+ */
 public class MetricRegistry { // singleton
 
 	protected final static Logger log = 
@@ -39,6 +46,9 @@ public class MetricRegistry { // singleton
 	private Map<String, QualityModel> qualityModelMap;
 	private Map<IMeasurableNode, Map<MetricAttribute, MetricMeasurement>> measurementMap;
 	
+	/**
+	 * Instantiates a new metric registry (private constructor).
+	 */
 	private MetricRegistry() {
 		typeMap = Collections.synchronizedMap(
 					new HashMap<String, MetricType>());
@@ -81,12 +91,22 @@ public class MetricRegistry { // singleton
 		}
 	}
 	
+	/**
+	 * Gets the single instance of MetricRegistry.
+	 *
+	 * @return single instance of MetricRegistry
+	 */
 	public static MetricRegistry getInstance() {
 		if (instance == null)
 			instance = new MetricRegistry();
 		return instance;
 	}
 	
+	/**
+	 * Register a metric in the registry.
+	 *
+	 * @param newMetric the new metric
+	 */
 	public void registerMetric(MetricAttribute newMetric) {
 		metricMap.put(newMetric.getInternalName(), newMetric);
 		
@@ -111,12 +131,24 @@ public class MetricRegistry { // singleton
 	
 	// Metric Types
 	
+	/**
+	 * Gets the metric type.
+	 *
+	 * @param typeName the type name
+	 * @return the metric type
+	 */
 	public MetricType getMetricType(String typeName) {
 		if (typeMap.containsKey(typeName))
 			return typeMap.get(typeName);
 		return null;
 	}
 	
+	/**
+	 * Gets the or set metric type.
+	 *
+	 * @param typeName the type name
+	 * @return the or set metric type
+	 */
 	public MetricType getOrSetMetricType(String typeName) {
 		MetricType mt = getMetricType(typeName);
 		if (mt == null) {
@@ -126,36 +158,73 @@ public class MetricRegistry { // singleton
 		return mt;
 	}
 	
+	/**
+	 * Gets the metric types.
+	 *
+	 * @return the metric types
+	 */
 	public Set<String> getMetricTypes() {
 		return typeMap.keySet();
 	}
 	
 	// Metric Attributes
 	
+	/**
+	 * Gets the metric attribute.
+	 *
+	 * @param metricInternalName the metric internal name
+	 * @return the metric attribute
+	 */
 	public MetricAttribute getMetricAttribute(String metricInternalName) {
 		if (metricMap.containsKey(metricInternalName))
 			return metricMap.get(metricInternalName);
 		return null;
 	}
 	
+	/**
+	 * Gets the metric attributes.
+	 *
+	 * @return the metric attributes
+	 */
 	public Collection<MetricAttribute> getMetricAttributes() {
 		return metricMap.values();
 	}
 	
+	/**
+	 * Gets the metric attribute names.
+	 *
+	 * @return the metric attribute names
+	 */
 	public Set<String> getMetricAttributeNames() {
 		return metricMap.keySet();
 	}
 	
+	/**
+	 * Gets the metric attribute count.
+	 *
+	 * @return the metric attribute count
+	 */
 	public int getMetricAttributeCount() {
 		return metricMap.size();
 	}
 	
 	// Supported Metrics
 	
+	/**
+	 * Gets the supported metric targets.
+	 *
+	 * @return the supported metric targets
+	 */
 	public Set<String> getSupportedMetricTargets() {
 		return metricSupportMap.keySet();
 	}
 	
+	/**
+	 * Gets the supported metrics.
+	 *
+	 * @param measurableName the measurable name
+	 * @return the supported metrics
+	 */
 	public Vector<MetricAttribute> getSupportedMetrics(String measurableName) {
 		Vector<MetricAttribute> supportMap;
 		if (metricSupportMap.containsKey(measurableName))
@@ -165,6 +234,12 @@ public class MetricRegistry { // singleton
 		return supportMap;
 	}
 	
+	/**
+	 * Gets the supported metric count.
+	 *
+	 * @param measurableName the measurable name
+	 * @return the supported metric count
+	 */
 	public int getSupportedMetricCount(String measurableName) {
 		if (metricSupportMap.containsKey(measurableName))
 			return metricSupportMap.get(measurableName).size();
@@ -173,12 +248,24 @@ public class MetricRegistry { // singleton
 	
 	// Quality Models
 	
+	/**
+	 * Gets the quality model map.
+	 *
+	 * @return the quality model map
+	 */
 	public Map<String, QualityModel> getQualityModelMap() {
 		return qualityModelMap;
 	}
 	
 	// Metric Measurements
 	
+	/**
+	 * Gets the metric measurement.
+	 *
+	 * @param target the target
+	 * @param attribute the attribute
+	 * @return the metric measurement
+	 */
 	public MetricMeasurement getMetricMeasurement(IMeasurableNode target, MetricAttribute attribute) {
 		
 		// check for if the target IMeasurable exists in our measurement map
@@ -194,6 +281,13 @@ public class MetricRegistry { // singleton
 		return null;
 	}
 
+	/**
+	 * Sets the metric measurement.
+	 *
+	 * @param target the target
+	 * @param attribute the attribute
+	 * @param measurement the measurement
+	 */
 	public void setMetricMeasurement(IMeasurableNode target, MetricAttribute attribute, 
 			MetricMeasurement measurement) {
 		
@@ -211,6 +305,13 @@ public class MetricRegistry { // singleton
 		foundMeasurementMap.put(attribute, measurement);
 	}
 	
+	/**
+	 * Gets the cached measurement.
+	 *
+	 * @param target the target
+	 * @param attribute the attribute
+	 * @return the cached measurement
+	 */
 	public MetricMeasurement getCachedMeasurement(IMeasurableNode target, MetricAttribute attribute) {
 
 		// search for an existing measurement in the MetricRegistry
@@ -228,11 +329,22 @@ public class MetricRegistry { // singleton
 		return measurement;
 	}
 
+	/**
+	 * Delete metric.
+	 *
+	 * @param currentMetric the current metric
+	 */
 	public void deleteMetric(MetricAttribute currentMetric) {
 		if (metricMap.containsKey(currentMetric.getInternalName()))
 				metricMap.remove(currentMetric.getInternalName());
 	}
 
+	/**
+	 * Save all metrics to file.
+	 *
+	 * @throws FileNotFoundException the file not found exception
+	 * @throws JAXBException the jAXB exception
+	 */
 	public void saveAllMetrics() throws FileNotFoundException, JAXBException {
 		// get the Visualisations from configuration data source
 		ConfigurationManager configMgr = ConfigurationManager.getInstance();

@@ -1,5 +1,5 @@
 /*
- * mxGraphVisualiser.java (JMetricVis)
+ * mxGraphVisualiser.java (JQualityVis)
  * Copyright 2011 Luke Plaster. All rights reserved.
  */
 package org.lukep.javavis.visualisation.visualisers;
@@ -27,6 +27,9 @@ import com.mxgraph.swing.view.mxInteractiveCanvas;
 import com.mxgraph.view.mxCellState;
 import com.mxgraph.view.mxGraph;
 
+/**
+ * An mxGraphVisualiser.
+ */
 public class mxGraphVisualiser extends AbstractVisualiser {
 	
 	private static final int BACKGROUND_COLOR_RGB = 0xF9FFFB;
@@ -34,6 +37,12 @@ public class mxGraphVisualiser extends AbstractVisualiser {
 	private mxGraph graph;
 	private mxGraphComponent graphComponent;
 	
+	/**
+	 * Instantiates a new mx graph visualiser.
+	 *
+	 * @param wspContext the wsp context
+	 * @throws Exception the exception
+	 */
 	public mxGraphVisualiser(WorkspaceContext wspContext) throws Exception {
 
 		super(wspContext);
@@ -113,12 +122,18 @@ public class mxGraphVisualiser extends AbstractVisualiser {
 		});
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.visualisation.visualisers.AbstractVisualiser#acceptVisualisation(org.lukep.javavis.visualisation.views.IVisualiserVisitor)
+	 */
 	@Override
 	public JComponent acceptVisualisation(IVisualiserVisitor visitor) {
 		visitor.visit(this, getWorkspaceContext(), graphComponent);
 		return graphComponent;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.lukep.javavis.visualisation.visualisers.AbstractVisualiser#setScale(double)
+	 */
 	@Override
 	public void setScale(double scale) {
 		graphComponent.zoomTo(scale, true);

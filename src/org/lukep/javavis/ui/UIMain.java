@@ -25,6 +25,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
@@ -370,8 +371,10 @@ public class UIMain implements IProgramStatusReporter, ChangeListener {
 			e.printStackTrace();
 		}
 		if (newPane != null) {
-			mainTabbedPane.addTab(title, newPane);
-			mainTabbedPane.setSelectedComponent(newPane);
+			JScrollPane scroll = new JScrollPane(newPane);
+			scroll.setAutoscrolls(true);
+			mainTabbedPane.addTab(title, scroll);
+			mainTabbedPane.setSelectedComponent(scroll);
 		}
 	}
 	

@@ -22,6 +22,7 @@ import prefuse.Constants;
 import prefuse.Display;
 import prefuse.action.ActionList;
 import prefuse.action.RepaintAction;
+import prefuse.action.animate.ColorAnimator;
 import prefuse.action.assignment.ColorAction;
 import prefuse.action.assignment.DataColorAction;
 import prefuse.action.layout.Layout;
@@ -157,7 +158,7 @@ public class TreeMapView extends AbstractVisualisationView {
         vis.setRendererFactory(rf);
         
         // border colours
-        //final ColorAction borderColor = new BorderColorAction("tree.nodes");
+        final ColorAction borderColor = new BorderColorAction("tree.nodes");
         
         // create a metric palette
         int[] mPalette = ColorLib.getInterpolatedPalette(0xFFDBFFCC, 0xFF473D42);
@@ -171,16 +172,16 @@ public class TreeMapView extends AbstractVisualisationView {
         
         // create an action list containing all color and size assignments
         ActionList colour = new ActionList();
-        //colour.add(borderColor);
+        colour.add(borderColor);
         colour.add(fillMetrics);
         colour.add(fillLabels);
         //colour.add( new Suze("classLabels") );
         
         // animate paint change
-        //ActionList animatePaint = new ActionList(400);
-        //animatePaint.add(new ColorAnimator("tree.nodes"));
-        //animatePaint.add(new RepaintAction());
-        //vis.putAction("animatePaint", animatePaint);
+        ActionList animatePaint = new ActionList(400);
+        animatePaint.add(new ColorAnimator("tree.nodes"));
+        animatePaint.add(new RepaintAction());
+        vis.putAction("animatePaint", animatePaint);
         
         // create the single filtering and layout action list
         ActionList layout = new ActionList();

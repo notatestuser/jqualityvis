@@ -3,44 +3,131 @@
 	<title>Welcome</title>
 	<style>
 	body {
-		background-color: #F9FFFB;
-		font-family: "lucida grande", tahoma, verdana, arial, sans-serif;
+		background: #F9FFFB url(../img/stripe.png) repeat-x scroll top center;
+		font-family: "helvetica", tahoma, verdana, arial, sans-serif;
+		font-size: 110%;
 	}
 	h1 {
 		font-weight: normal;
+		font-size: 34px;
 	}
 	.container {
-		margin: 0 auto;
+		margin-left: 80px;
 		text-align: center;
 		padding: 5px;
 		align: center;
 		width: 900px;
 	}
-	.infobox {
-		background-color: yellow;
-		border: 1px solid #e2c822;
-		float: left;
-		margin: 0px 20px 0px 0px;
-		width: 428px;
-		align: center;
-		text-align: left;
-		padding: 10px;
+	.container p.intro {
+		margin-bottom: 40px;
+	}
+	.container table {
+		width: 100%;
+	}
+	table p {
+		margin-top: 30px;
+		text-align: center;
+		font-size: 14px;
+	}
+	.prettybox {
+		background: #FF6D56 url(../img/prettygrad_red.jpg) repeat-x scroll top center;
+		border-width: 1px;
+		border-style: outset;
+		border-color: #900;
+		padding: 5px;
+	}
+	.prettybox_vis {
+		background: #99FF87 url(../img/prettygrad_green.jpg) repeat-x scroll top center;
+		border-width: 1px;
+		border-style: outset;
+		border-color: #900;
+		padding: 5px;
+	}
+	.codesnip {
+		background: #FF0 url(../img/codesnip.jpg) no-repeat scroll left top;
+		height: 100%;
+	}
+	.chart_1 {
+		background: #FFF url(../img/treemap.png) no-repeat scroll center center;
+	}
+	.chart_2 {
+		background: #FFF url(../img/pie.png) no-repeat scroll center center;
+	}
+	.chart_3 {
+		background: #FFF url(../img/radar.png) no-repeat scroll top right;
 	}
 	</style>
 </head>
 <body>
-	<h1>Welcome to JQualityVis</h1>
-	<p>JQualityVis is a tool that allows a software developer to visualise the application of static software metrics on source code.</p>
 	<div class="container">
-		<div class="infobox">
-		<h3>Creating a Project</h3>
-		</div>
-		
-		<div class="infobox">
-		<h3>Viewing Visualisations</h3>
-		</div>
-		
-		<div style="clear: both;"></div>
+    	<h1>Welcome to JQualityVis</h1>
+		<p class="intro">
+        	JQualityVis is a tool that allows software engineers to visualise 
+        	the application of static software metrics on parsed source code.
+        </p>
+        <table>
+        	<tr>
+            	<td width="35%">
+                	<div class="prettybox">
+                    	<div class="codesnip">
+                        	<img src="../img/clear.gif" width="1" height="260" />
+                        </div>
+                    </div>
+                </td>
+                <td width="30%">
+                	<center>
+                    	<img src="../img/arrow.png" width="180" height="150" />
+                	</center>
+                </td>
+                <td width="35%">
+                	<table height="210">
+                    	<tr>
+                        	<td></td>
+                            <td>
+                            	<div class="prettybox_vis">
+                                	<div class="chart_2">
+                                		<img src="../img/clear.gif" width="1" height="100" />
+                                    </div>
+                                </div>
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                        	<td>
+                            	<div class="prettybox_vis">
+                                	<div class="chart_3">
+                                		<img src="../img/clear.gif" width="1" height="100" />
+                                    </div>
+                                </div>
+                            </td>
+                            <td></td>
+                            <td>
+                            	<div class="prettybox_vis">
+                                	<div class="chart_1">
+                                		<img src="../img/clear.gif" width="1" height="100" />
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+            	<td>
+                	<p>
+                        Analyse the source code of <strong>any Java project</strong> and apply all of the metrics in
+                        the Bansiya and Davis QMOOD Quality Model, amongst others.
+                	</p>
+                </td>
+                <td></td>
+                <td>
+                <p>
+                	View graphical representations of the quantitative and relational measurements in forms such as a 
+                    <strong>scatter graph</strong>, <strong>charts</strong> and a <strong>treemap</strong>.
+                </p>
+                </td>
+            </tr>
+        </table>
 	</div>
 </body>
 </html>

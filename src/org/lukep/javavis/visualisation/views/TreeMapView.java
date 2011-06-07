@@ -9,12 +9,14 @@ import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Vector;
 
 import org.lukep.javavis.metrics.IMeasurableNode;
 import org.lukep.javavis.metrics.MetricMeasurement;
+import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.IGenericModelNode;
 import org.lukep.javavis.program.generic.models.PackageModel;
-import org.lukep.javavis.program.generic.models.ProjectModel;
 import org.lukep.javavis.ui.swing.WorkspaceContext;
 import org.lukep.javavis.visualisation.visualisers.PrefuseVisualiser;
 
@@ -53,7 +55,13 @@ public class TreeMapView extends AbstractVisualisationView {
 	@Override
 	public void visit(PrefuseVisualiser visualiser,
 			WorkspaceContext wspContext, Display display) {
+		
+		// get the subject packages and classes
+		List<PackageModel> packages = new Vector<PackageModel>();
+		List<ClassModel> classes = new Vector<ClassModel>();
+		getFilteredPackagesAndClasses(wspContext.getSubjects(), packages, classes);
 
+		// reset the display
 		display.reset();
 		
 		// load up the models
@@ -65,13 +73,18 @@ public class TreeMapView extends AbstractVisualisationView {
 		t.addColumn("metricMeasurement", double.class);
 		
 		// create package vertices
-		ProjectModel modelStore = wspContext.getModelStore();
 		HashMap<IGenericModelNode, Node> parentNodeMap = 
 			new HashMap<IGenericModelNode, Node>(
-				modelStore.getPackageMap().size() + 10);
-		Node curNode;
+				packages.size() + 10);
+		Node curNode, nullNode;
 		
-		for (PackageModel pkg : modelStore.getPackageMap().values()) {
+		// create the nullNode (root of all parent-less packages)
+		nullNode = t.addNode();
+		nullNode.setString("type", "");
+		nullNode.setString("name", "");
+		nullNode.set("model", null);
+		
+		for (PackageModel pkg : packages) {
 			
 			// add the package node
 			curNode = t.addNode();
@@ -87,13 +100,15 @@ public class TreeMapView extends AbstractVisualisationView {
 				
 				// link to the parent package with an edge
 				t.addEdge(parentNodeMap.get(parentPackage), curNode);
+			} else {
+				t.addEdge(nullNode, curNode);
 			}
 			
 			parentNodeMap.put(pkg, curNode);
 		}
 		
 		// create class and method nodes
-		for (IGenericModelNode model : modelStore.getClassMap().values()) {
+		for (IGenericModelNode model : classes) {
 			curNode = t.addNode();
 			
 			// grab metric measurement if applicable

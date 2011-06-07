@@ -113,8 +113,10 @@ public class ClassCompositionComponent extends JComponent implements Observer {
 			
 			// draw container's simple name
 			g.setColor(LABEL_COLOR);
-			g.setFont(new Font("Tahoma", Font.PLAIN, 9));
-			g.drawString(currentClass.getParent().getSimpleName(), 5, 10);
+			if (currentClass.getParent().getSimpleName() != null) {
+				g.setFont(new Font("Tahoma", Font.PLAIN, 9));
+				g.drawString(currentClass.getParent().getSimpleName(), 5, 10);
+			}
 			
 			// draw class name
 			int fontH = g.getFontMetrics().getHeight();

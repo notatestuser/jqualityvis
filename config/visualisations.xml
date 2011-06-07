@@ -62,7 +62,7 @@
 	
 	<visualisation name="Class TreeMap">
 		<type>WeightedClass</type>
-		<description>A flat representation of data as a set of nested triangles. Fluctuations in colour brightness represent the variation of results.</description>
+		<description>A flat representation of data as a set of nested rectangles. Fluctuations in colour brightness represent the variation of results.</description>
 		<IVisualiser>org.lukep.javavis.visualisation.visualisers.PrefuseVisualiser</IVisualiser>
 		<IVisualiserVisitor>org.lukep.javavis.visualisation.views.TreeMapView</IVisualiserVisitor>
 		<arguments></arguments>

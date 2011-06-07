@@ -11,10 +11,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import org.lukep.javavis.metrics.IMeasurableNode;
 import org.lukep.javavis.metrics.MetricAttribute;
 import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.IGenericModelNode;
+import org.lukep.javavis.program.generic.models.IGenericModelNodeVisitor;
+import org.lukep.javavis.program.generic.models.MethodModel;
+import org.lukep.javavis.program.generic.models.PackageModel;
 import org.lukep.javavis.program.generic.models.ProjectModel;
+import org.lukep.javavis.program.generic.models.Relationship;
+import org.lukep.javavis.program.generic.models.VariableModel;
 import org.lukep.javavis.ui.swing.WorkspaceContext;
 import org.lukep.javavis.visualisation.visualisers.Openchart2Visualiser;
 import org.lukep.javavis.visualisation.visualisers.PrefuseVisualiser;
@@ -68,6 +74,52 @@ public class AbstractVisualisationView implements IVisualiserVisitor {
 		
 		// overridden in sub-class
 		throw new UnsupportedOperationException(UNSUPPORTED_VISUALISATION_EXCEPTION);
+	}
+	
+	protected static void getFilteredPackagesAndClasses(IGenericModelNode[] subjects,
+			final List<PackageModel> packagesOut, final List<ClassModel> classesOut)
+	{
+		if (packagesOut == null || classesOut == null)
+			return;
+		
+		for (IGenericModelNode subject : subjects) {
+			subject.accept(new IGenericModelNodeVisitor() {
+				
+				private void visitKids(IMeasurableNode model) {
+					// visit all of the child nodes of this measurable node
+					if (model.getChildren() != null)
+						for (Relationship r : model.getChildren())
+							r.getTarget().accept(this);
+				}
+				
+				@Override
+				public void visit(VariableModel model) {
+					visitKids(model);
+				}
+				
+				@Override
+				public void visit(MethodModel model) {
+					visitKids(model);
+				}
+				
+				@Override
+				public void visit(ClassModel model) {
+					classesOut.add(model);
+					visitKids(model);
+				}
+				
+				@Override
+				public void visit(PackageModel model) {
+					packagesOut.add(model);
+					visitKids(model);
+				}
+				
+				@Override
+				public void visit(ProjectModel model) {
+					visitKids(model);
+				}
+			});
+		}
 	}
 	
 	/**

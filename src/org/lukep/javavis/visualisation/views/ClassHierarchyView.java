@@ -7,7 +7,9 @@ package org.lukep.javavis.visualisation.views;
 import java.awt.Color;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
+import java.util.Vector;
 
 import org.lukep.javavis.metrics.IMeasurableNode;
 import org.lukep.javavis.program.generic.models.ClassModel;
@@ -60,6 +62,11 @@ public class ClassHierarchyView extends AbstractVisualisationView {
 	public void visit(mxGraphVisualiser visualiser, final WorkspaceContext wspContext,
 			final mxGraphComponent graphComponent) {
 		
+		// get the subject packages and classes
+		List<PackageModel> packages = new Vector<PackageModel>();
+		List<ClassModel> classes = new Vector<ClassModel>();
+		getFilteredPackagesAndClasses(wspContext.getSubjects(), packages, classes);
+		
 		// start the mxGraph transaction and clear model
 		final mxGraph graph = graphComponent.getGraph();
 		final mxIGraphModel graphModel = graphComponent.getGraph().getModel();
@@ -86,7 +93,7 @@ public class ClassHierarchyView extends AbstractVisualisationView {
 				mxConstants.STYLE_OPACITY + "=0;" +
 				mxConstants.STYLE_TEXT_OPACITY + "=0");
 		
-		for (PackageModel pkg : modelStore.getPackageMap().values()) {
+		for (PackageModel pkg : packages) {
 			
 			curCell = (mxCell) graph.insertVertex(graph.getDefaultParent(), 
 					pkg.getQualifiedName(), pkg, 250, 100, 150, 30);
@@ -110,7 +117,7 @@ public class ClassHierarchyView extends AbstractVisualisationView {
 		}
 		
 		// create class vertices
-		for (ClassModel clazz : modelStore.getClassMap().values()) {
+		for (ClassModel clazz : classes) {
 			
 			curCell = (mxCell) graph.insertVertex(graph.getDefaultParent(), null, clazz, 20, 20, 150, 50);
 			

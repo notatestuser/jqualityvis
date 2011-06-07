@@ -4,8 +4,11 @@
  */
 package org.lukep.javavis.visualisation.views;
 
+import java.util.List;
+
 import org.lukep.javavis.metrics.IMeasurableNode;
 import org.lukep.javavis.metrics.MetricMeasurement;
+import org.lukep.javavis.program.generic.models.ClassModel;
 import org.lukep.javavis.program.generic.models.IGenericModelNode;
 import org.lukep.javavis.program.generic.models.ProjectModel;
 import org.lukep.javavis.ui.swing.WorkspaceContext;
@@ -43,7 +46,12 @@ public class ScatterGraphView extends AbstractVisualisationView {
 		
 		ProjectModel modelStore = wspContext.getModelStore();
 		
-		Table t = new Table(wspContext.getModelStore().getClassMap().size(), 4);
+		// get filtered collection of classes
+		IGenericModelNode[] subjects = wspContext.getSubjects();
+		List<ClassModel> filteredClasses = getAllClassesInFilter(
+				getFilteredClasses(modelStore, subjects));
+		
+		Table t = new Table(filteredClasses.size(), 4);
 		t.addColumn("type", String.class);
 		t.addColumn("name", String.class);
 		t.addColumn("model", IGenericModelNode.class);
@@ -51,7 +59,7 @@ public class ScatterGraphView extends AbstractVisualisationView {
 		
 		// create class nodes
 		int curNode;
-		for (IGenericModelNode model : modelStore.getClassMap().values()) {
+		for (IGenericModelNode model : filteredClasses) {
 			curNode = t.addRow();
 			
 			// grab metric measurement if applicable

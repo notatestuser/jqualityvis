@@ -78,7 +78,13 @@ public class ClassHierarchyView extends AbstractVisualisationView {
 		HashMap<IGenericModelNode, mxCell> parentCellMap = 
 			new HashMap<IGenericModelNode, mxCell>(
 				modelStore.getPackageMap().size() + 10);
-		mxCell curCell;
+		mxCell curCell, nullCell;
+		
+		// create the null package (root of all parent-less packages)
+		nullCell = (mxCell) graph.insertVertex(graph.getDefaultParent(), 
+				"(project)", modelStore, 250, 100, 150, 30,
+				mxConstants.STYLE_OPACITY + "=0;" +
+				mxConstants.STYLE_TEXT_OPACITY + "=0");
 		
 		for (PackageModel pkg : modelStore.getPackageMap().values()) {
 			
@@ -94,6 +100,10 @@ public class ClassHierarchyView extends AbstractVisualisationView {
 				graph.insertEdge(graph.getDefaultParent(), null, null, 
 						parentCellMap.get(parentPackage), curCell, 
 						mxConstants.STYLE_ENDARROW + "=" + mxConstants.ARROW_OPEN);
+			} else {
+				graph.insertEdge(graph.getDefaultParent(), null, null, 
+						nullCell, curCell, 
+						mxConstants.STYLE_OPACITY + "=0");
 			}
 			
 			parentCellMap.put(pkg, curCell);

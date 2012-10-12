@@ -1,4 +1,5 @@
 JQualityVis
 ===========
 
-Visualises the results of static software metrics on parsed source code across a whole project.
+JQualityVis is a software quality analysis framework that allows engineers to 
+visualise the results of static software metrics on parsed source code.

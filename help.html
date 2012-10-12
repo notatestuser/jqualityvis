@@ -1,0 +1,221 @@
+<html>
+<head>
+	<title>Help</title>
+	<style>
+	body {
+		background: #F9FFFB url(img/stripe.png) repeat-x scroll top center;
+		font-family: "helvetica", tahoma, verdana, arial, sans-serif;
+		padding-left: 13px; 
+	}
+	h1 {
+		font-weight: normal;
+		font-size: 28px;
+	}
+	.jumpbox {
+		padding: 6px;
+		border-width: 1px;
+		font-size: 12px;
+		background:#FFF6BF;
+		color:#514721;
+		border-color:#FFD324;
+	}
+	.jumpbox h2 {
+		margin: 0 0 4px 0;
+		font-size: 100%;
+	}
+	.jumpbox ol {
+		margin-left: 25px;
+	}
+	.jumpbox li {
+		font-size: 95%;
+	}
+	.sub_steps {
+		margin-left: 10px;
+	}
+	</style>
+</head>
+<body>
+	<h1>JQualityVis Help</h1>
+    <table width="98%">
+    	<tr>
+        	<td width="75%" valign="top">
+            	
+                <h2>Creating a Project</h2>
+                <p>
+                    A Project represents a software solution and/or system being analysed by JQualityVis 
+                    and consists of several source code compilation units (source files) and some contextual settings.
+   				</p>
+                <ol>
+                    <li>Browse to <strong>File &gt; Create New Project...</strong>.</li>
+                    <li>Enter a <strong>Project Name</strong> and select the <strong>Source Root Directory</strong> containing
+                    the software's source code files.</li>
+                  <li>Select the <strong>Source Language</strong> to instruct the parser how to interpret the files.</li>
+                    <li>Configure other options such as the additional classpath string and whether to <strong>Preload Metric 
+                    Measurements</strong>.<br />
+                This may increase the responsiveness of the user interface in exchange for an additional load wait.</li>
+                    <li>Wait for the parsing and analysis processes to complete. A new workspace pane will open upon completion.</li>
+                </ol>
+                
+                
+                <h2>Loading an Existing Project File</h2>
+                <p>
+                    Projects can be loaded from serialised XML or binary file formats. Please note that metric measurements
+                    are not stored in the project file; all metrics must be computed again from the program models stored within.
+                </p>
+                <ol>
+                  <li>Browse to <strong>File &gt; Open Project...</strong>.</li>
+                  <li>Use the <strong>Browse...</strong> finder to select the Project file desired for loading.</li>
+                  <li>Select the relevant import options based on the format of the file. An incorrect selection will 
+                  yield an error.</li>
+                  <li>Choose whether to <strong>Preload Metric Measurements</strong>.This may increase the responsiveness of 
+                  the user interface in exchange for an additional load wait.</li>
+                </ol>
+                
+                <h2>Saving a Project File</h2>
+                <p>
+                    As with loading Project files, they can be saved by the program in XML or binary file formats, with the option 
+                    to compress the output file using GZIP compression.
+                </p>
+                <ol>
+                    <li>Browse to <strong>File &gt; Save Project...</strong>.</li>
+                    <li>Use the <strong>Browse...</strong> finder to select the target path in which to save the Project file.</li>
+                    <li>Select the relevant export options based on the format desired of the file. GZIP compression shall 
+                    reduce the size of the output file if chosen.</li>
+                </ol>
+                
+                
+                <h2>Displaying Metric Measurements</h2>
+                <p>
+                	Viewing the metric measurements associated with a particular structural program unit and its children is as simple as 
+                    selecting the unit in the <strong>Project Explorer</strong> and observing the lower contextual pane.
+                </p>
+                <ul>
+                    <li>
+                        The left portion of the contextual pane displays the metric measurements associated with the selected component and, 
+                        in some cases, details of its composition.
+                    </li>
+                    <li>
+                        The right portion of the contextual pane displays a tabular listing of the selected component's children and the 
+                        applicable metrics, along with their measurements when applied to each child component.
+                    </li>
+                </ul>
+                <p>
+                	<i>Note:</i> The <strong>Batch Metric Calculator</strong> accessible from the <strong>Tools</strong> menu can also be used 
+                    to calculate metrics in batch mode across an entire Project at ease.
+                </p>
+                
+                
+                <h2>Displaying a Visualisation</h2>
+                <p>
+                	Visualisations may be activated once a component and an individual metric to measure its constituent component(s) with has 
+                    been selected from the <strong>Quality Analysis</strong> pane.
+                </p>
+                <ol>
+                	<li>Ensure that a container component (such as a Project, Package or compound Class) is selected in the 
+                    <strong>Project Explorer</strong>.</li>
+                    <li>Choose either the <strong>tree</strong> or <strong>fancy</strong> metrics selector tab from within the 
+                    <strong>Quality Analysis</strong> pane and select the metric to compute.</li>
+                    <li>Select the desired visualisation to show from the second combo box (fancy selector) or the child tree node 
+                    (tree selector).</li>
+                    <li>The visualisation is now displayed in the workspace pane.</li>
+                </ol>
+                <p>
+                	<i>Note:</i> The selected program component can be changed while a metric is selected. Holding SHIFT and clicking multiple 
+                	program components will add them to the rendered visualisation.
+                </p>
+                <p>
+                	The <strong>Breakdown</strong> tab within the <strong>Quality Analysis</strong> pane shows a simple diagram depicting which 
+                    characteristics of the component are being measured to attain the visualised metric result values.
+                </p>
+                
+                
+                <h2>Managing Project Settings</h2>
+                <p>
+                	Projects have several settings associated with them that can be modified by the user. These include the Project's name, creator
+                    and a set of <strong>Metric Thresholds</strong> that are used to determine when to show warnings in the 
+                    <strong>Thresholds</strong> tab of the <strong>Quality Analysis</strong> pane.
+                </p>
+                <ol>
+                	<li>Browse to <strong>Settings &gt; Project Settings...</strong> with a Project workspace pane selected.</li>
+                    <li>Configure the displayed values using the edit boxes and configuration buttons.</li>
+                    <li>Changes will be reflected in the interface upon clicking the <strong>Save Entity</strong> button and closing the window.</li>
+                </ol>
+                <p>
+                	<i>Note:</i> Any metric can be given a threshold range and the default values are attained from that metric's definition in the 
+                    program's settings files. These defaults can be changed using the <strong>Metric Manager</strong>.
+                </p>
+                
+                
+                <h2>Managing Metrics and Visualisations</h2>
+              	<p>
+                	Metrics and Visualisations are the two principle behavioural definitions that govern the functionality that JQualityVis offers. 
+                    While they are both defined in external configuration files, the program offers a simple management interface to allow a user to 
+                    add, edit and remove them without having to open a text editor.
+                </p>
+                <ol>
+                	<li>Open the desired management window (<strong>Edit Metrics...</strong> or <strong>Edit Visualisations...</strong>) 
+           	  from the <strong>Settings</strong> menu.</li>
+              		<li>Currently available entries are displayed on the left. A form is provided on the right to enter the details required to add
+                    or amend an existing entry.</li>
+                    <li>After changes have been made, use the <strong>Commit to Disk</strong> button to write the list of entries, including their 
+                    amendments, to the external XML file. Changes will now persist between application starts.</li>
+             	</ol>
+                
+              <div class="sub_steps">
+                
+                <h3>Adding an Entry</h3>
+                <ol>
+                	<li>Click the <strong>New</strong> button to clear the form.</li>
+                    <li>Enter the attributes of the new item to be stored.</li>
+                    <li>Select <strong>Save Entry</strong> to save the item to program memory. Any form validation errors will be displayed.<br />
+                  Changes will not persist between application starts until changes are committed to disk as above.</li>
+                </ol>
+                
+                <h3>Amending an Entry</h3>
+                <ol>
+                	<li>Select the entry to be amended in the left pane. Its attributes will populate the form on the right.</li>
+                    <li>Amend the attributes displayed in the form as desired.</li>
+                    <li>Select <strong>Save Entry</strong> to save the item to program memory. Any form validation errors will be displayed.<br />
+                    Changes will not persist between application starts until changes are committed to disk as above.</li>
+                </ol>
+                
+                <h3>Deleting an Entry</h3>
+                <ol>
+                	<li>Select the entry to be deleted in the left pane.</li>
+                	<li>Select <strong>Delete Entry</strong> to delete the item from program memory.<br />
+                    Changes will not persist between application starts until changes are committed to disk as above.</li>
+                </ol>
+                
+                </div>
+                
+                
+                <h2>Managing Quality Models</h2>
+                <p>
+                    Quality Models must be managed in an external XML-based file as there is currently no way to do so through 
+                    the program's user interface. 
+                </p>
+                <p>
+                    This file is located at <i>config/qualityModels.xml</i> and contains comments within to demonstrate how the individual attributes
+                    are computed.
+                </p>
+                
+          </td>
+        	<td valign="top">
+                <div class="jumpbox">
+                    <h2>Content Overview</h2>
+                    <ol>
+                    	<li>Creating a Project</li>
+                        <li>Loading an Existing Project File</li>
+                        <li>Saving a Project File</li>
+                    	<li>Displaying Metric Measurements</li>
+                        <li>Displaying a Visualisation</li>
+                        <li>Managing Project Settings</li>
+                        <li>Managing Metrics and Visualisations</li>
+                        <li>Managing Quality Models</li>
+                    </ol>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

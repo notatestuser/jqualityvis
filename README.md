@@ -12,4 +12,7 @@ on caffeine.
 There's also a monster of a dissertation piece lingering about somewhere. No, you 
 really don't want it.
 
+Ooh, shiny
+----------
+
 Take a look at this [neat intro page!](http://notatestuser.github.com/jqualityvis)

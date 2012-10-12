@@ -15,12 +15,14 @@ really don't want it.
 Ooh, shiny
 ----------
 
-Take a look at this [neat intro page!](http://notatestuser.github.com/jqualityvis)
+Take a look at this [neat intro page](http://notatestuser.github.com/jqualityvis), 
+the [help file](http://notatestuser.github.com/jqualityvis/help.html) or the 
+[generated documentation](http://notatestuser.github.com/jqualityvis/doc).
 
 Build notes
 -----------
 
-The following libraries must be available in your classpath to build and run JQualityVis:
+The following libraries must be available in your classpath to build and run it:
 
 ```
 jgraphx.jar
